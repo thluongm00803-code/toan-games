@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phá Két Mật Mã — Toán 10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBFAF4; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
+    --steel:#3A4A7A; --gold:#E8A317; --gold-d:#B97D08; --tangerine:#FF7A1A;
+    --emerald:#1FA36B; --emerald-d:#15784E; --red:#C0392B; --line:#E4E0D4; --muted:#6A7184;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);
+    background:radial-gradient(120% 80% at 72% -10%, #E7ECF7 0%, transparent 55%),var(--paper);
+    min-height:100vh;padding:18px 14px 40px}
+  .wrap{max-width:960px;margin:0 auto}
+  header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  h1{font-family:"Fredoka",sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);
+    margin:0;letter-spacing:-.5px;color:var(--steel)}
+  h1 .dot{color:var(--gold)}
+  .sub{color:var(--muted);font-size:14px;font-weight:500}
+  .mission{background:linear-gradient(180deg,#fff,#F1F3FA);border:1px solid #D8DEF0;
+    border-radius:14px;padding:12px 16px;margin:14px 0;display:flex;align-items:center;gap:12px}
+  .mission .ctx{font-size:26px;line-height:1}.mission .txt{font-size:15px}
+  .mission .txt b{color:var(--steel)}
+
+  .stage{position:relative;background:linear-gradient(180deg,#222A45,#171D33);
+    border:1px solid #2C3554;border-radius:16px;overflow:hidden;padding:22px 18px 24px;
+    box-shadow:0 14px 34px -22px rgba(23,29,51,.9)}
+  .hud{position:absolute;top:12px;left:12px;display:flex;gap:8px;
+    font-family:"Fredoka",sans-serif;font-weight:600;font-size:13px}
+  .chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:999px;
+    padding:4px 12px;color:#CBD3F0}.chip b{color:var(--gold)}
+  .vault{text-align:center;margin-top:14px}
+  .vaultico{font-size:40px}
+  .slots{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0 6px}
+  .slot{width:54px;height:62px;border-radius:10px;background:#0E1426;border:2px solid #FFD27A;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:"JetBrains Mono",monospace;color:#FFD27A}
+  .slot .big{font-size:22px;font-weight:700;line-height:1}
+  .slot .cap{font-size:9px;color:#8FA0C8;margin-top:2px}
+  .times{color:#6B7BD6;font-weight:700;align-self:center;font-family:"JetBrains Mono",monospace}
+  .combnote{color:#8FA0C8;font-size:13px;text-align:center;margin-top:2px}
+  .countbox{margin-top:14px;text-align:center;font-family:"Fredoka",sans-serif}
+  .countbox .typ{font-size:13px;color:#86F0C0;font-weight:600;letter-spacing:.3px}
+  .countbox .expr{font-family:"JetBrains Mono",monospace;color:#E8ECFF;font-size:clamp(16px,4.2vw,22px);margin-top:4px}
+  .countbox .expr .res{color:var(--gold)}
+  .thief{margin-top:14px;background:rgba(192,57,43,.14);border:1px solid rgba(192,57,43,.35);
+    border-radius:10px;padding:8px 12px;color:#FFC9C2;font-size:12.5px;text-align:center}
+  .thief b{color:#FF8A7A}
+
+  .panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  @media(max-width:640px){.panel{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card h3{margin:0 0 12px;font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;
+    color:var(--steel);display:flex;align-items:center;gap:7px}
+  .facts{display:flex;gap:10px;margin-bottom:14px}
+  .fact{flex:1;background:#F4F6FB;border-radius:10px;padding:9px 11px;text-align:center}
+  .fact .lab{font-size:11px;color:var(--muted);font-weight:600}
+  .fact .num{font-family:"Fredoka",sans-serif;font-size:18px;color:var(--ink)}
+  .fact .sm{font-size:10.5px;color:var(--muted);font-weight:500}
+  .qrow{margin-bottom:13px}
+  .qrow .q{font-size:13px;font-weight:600;margin-bottom:8px}
+  .seg{display:flex;gap:8px}
+  .seg button{flex:1;font-family:"Fredoka",sans-serif;font-weight:600;font-size:14px;
+    border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:11px;cursor:pointer;transition:.12s}
+  .seg button.on{background:var(--steel);color:#fff;border-color:var(--steel)}
+  .seg button:disabled{opacity:.4;cursor:not-allowed}
+  .hintline{font-size:12px;color:var(--muted);min-height:16px;margin:2px 0 12px}
+  .actions{display:flex;gap:8px}
+  button.act{font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;border:none;
+    border-radius:12px;padding:12px 14px;cursor:pointer;transition:transform .08s}
+  button.act:active{transform:translateY(2px)}
+  .crack{flex:1;background:var(--gold);color:#fff;box-shadow:0 5px 0 var(--gold-d)}
+  .crack:active{box-shadow:0 3px 0 var(--gold-d)}
+  .reset{background:#EEF0F7;color:var(--indigo)}
+  .legend{font-size:12.5px;line-height:1.85;color:var(--ink)}
+  .legend .row{display:flex;gap:8px;align-items:baseline}
+  .legend .nm{font-weight:600;color:var(--steel);min-width:118px}
+  .legend code{font-family:"JetBrains Mono",monospace;color:var(--indigo);font-size:12px}
+  .tip{font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.55}
+  .tip b{color:var(--steel)}.tip.warn b{color:var(--red)}
+
+  .toast{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(10,14,28,.66);backdrop-filter:blur(2px);border-radius:16px}
+  .toast.show{display:flex}
+  .toast .box{background:#fff;border-radius:18px;padding:24px 26px;text-align:center;max-width:350px;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.6)}
+  .toast .stars{font-size:30px;letter-spacing:4px}
+  .toast h2{font-family:"Fredoka",sans-serif;margin:8px 0 4px;font-size:23px;color:var(--emerald-d)}
+  .toast.fail h2{color:var(--tangerine)}
+  .toast p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.55}
+  .toast button{width:100%}
+  .next{background:var(--emerald);color:#fff;box-shadow:0 5px 0 var(--emerald-d)}
+  .retry{background:var(--indigo);color:#fff;box-shadow:0 5px 0 #1C2A6B}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Phá Két Mật Mã<span class="dot">.</span></h1>
+    <span class="sub">Toán 10 · Quy tắc nhân · Hoán vị · Chỉnh hợp · Tổ hợp</span>
+  </header>
+
+  <div class="mission">
+    <div class="ctx" id="ctxEmoji">🔐</div>
+    <div class="txt" id="ctxText"></div>
+  </div>
+
+  <div class="stage">
+    <div class="hud">
+      <span class="chip">Két <b id="lvl">1</b>/5</span>
+      <span class="chip">Điểm <b id="score">0</b></span>
+    </div>
+    <div class="vault">
+      <div class="vaultico">🏦🔒</div>
+      <div class="slots" id="slots"></div>
+      <div class="combnote" id="combnote"></div>
+      <div class="countbox">
+        <div class="typ" id="typeName">—</div>
+        <div class="expr" id="expr">—</div>
+      </div>
+      <div class="thief" id="thief"></div>
+    </div>
+    <div class="toast" id="toast">
+      <div class="box">
+        <div class="stars" id="tStars"></div>
+        <h2 id="tTitle"></h2>
+        <p id="tMsg"></p>
+        <button id="tBtn" class="next"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="card">
+      <h3>🧩 Mô hình hoá két</h3>
+      <div class="facts">
+        <div class="fact"><div class="lab">Số ký hiệu n</div><div class="num" id="nFact">10</div><div class="sm" id="nDesc">chữ số 0–9</div></div>
+        <div class="fact"><div class="lab">Số ô / chọn k</div><div class="num" id="kFact">4</div><div class="sm">vị trí mã</div></div>
+      </div>
+      <div class="qrow">
+        <div class="q">Thứ tự có quan trọng không?</div>
+        <div class="seg" id="segOrder">
+          <button data-v="1">Có (đổi chỗ ra mã khác)</button>
+          <button data-v="0">Không</button>
+        </div>
+      </div>
+      <div class="qrow">
+        <div class="q">Một ký hiệu được lặp lại không?</div>
+        <div class="seg" id="segRep">
+          <button data-v="1">Được lặp</button>
+          <button data-v="0">Không lặp</button>
+        </div>
+      </div>
+      <div class="hintline" id="hint"></div>
+      <div class="actions">
+        <button class="act crack" id="crackBtn">Phá két! 🔓</button>
+        <button class="act reset" id="resetBtn">Chơi lại</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📖 Bốn công cụ đếm</h3>
+      <div class="legend">
+        <div class="row"><span class="nm">Quy tắc nhân</span><span>thứ tự + được lặp · <code>n^k</code></span></div>
+        <div class="row"><span class="nm">Chỉnh hợp A<sub>n</sub><sup>k</sup></span><span>thứ tự, không lặp · <code>n!/(n−k)!</code></span></div>
+        <div class="row"><span class="nm">Hoán vị P<sub>n</sub></span><span>xếp cả n phần tử · <code>n!</code></span></div>
+        <div class="row"><span class="nm">Tổ hợp C<sub>n</sub><sup>k</sup></span><span>không kể thứ tự · <code>A/k!</code></span></div>
+      </div>
+      <div class="tip" id="tip"></div>
+    </div>
+  </div>
+
+  <footer>Một hoạt động dạy học môn Toán · biến tình huống thành đúng mô hình đếm.</footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+function fact(m){let r=1;for(let i=2;i<=m;i++)r*=i;return r;}
+function A(n,k){let r=1;for(let i=0;i<k;i++)r*=(n-i);return r;}
+function C(n,k){return A(n,k)/fact(k);}
+
+const LEVELS=[
+ { emoji:"🔢", n:10,k:4, nDesc:"chữ số 0–9", order:1, rep:1,
+   text:"Két dùng <b>4 ô</b>, mỗi ô là một <b>chữ số 0–9</b>, các chữ số <b>có thể trùng nhau</b>. Két có bao nhiêu mã?",
+   tip:`Mỗi ô độc lập, đầy đủ 10 lựa chọn → đây là <b>quy tắc nhân</b> (chỉnh hợp lặp).` , warn:false },
+
+ { emoji:"🔣", n:10,k:4, nDesc:"chữ số 0–9", order:1, rep:0,
+   text:"Cũng <b>4 ô</b> chữ số 0–9, nhưng các chữ số <b>phải khác nhau</b>. Có bao nhiêu mã?",
+   tip:`Có thứ tự, không lặp → <b>chỉnh hợp</b>. Mỗi ô sau bớt đi một lựa chọn.`, warn:false },
+
+ { emoji:"🔘", n:8,k:3, nDesc:"8 nút bấm", order:0, rep:0,
+   text:"Két mở khi bấm <b>đồng thời 3 trong 8 nút</b> — <b>không phân biệt thứ tự</b> bấm. Có bao nhiêu cách?",
+   tip:`Bấm cùng lúc, đổi chỗ không tạo cách mới → <b>tổ hợp</b> C<sub>n</sub><sup>k</sup>.`, warn:false },
+
+ { emoji:"🎡", n:5,k:5, nDesc:"5 vòng quay khác nhau", order:1, rep:0,
+   text:"Phải xếp <b>cả 5 vòng quay khác nhau</b> vào 5 vị trí theo một thứ tự. Có bao nhiêu cách xếp?",
+   tip:`Xếp <b>tất cả</b> n phần tử khác nhau theo thứ tự → <b>hoán vị</b> P<sub>n</sub> = n! (trường hợp k = n của chỉnh hợp).`, warn:false },
+
+ { emoji:"🔑", n:36,k:4, nDesc:"chữ số + chữ thường (36)", order:1, rep:1,
+   text:"Mật khẩu <b>4 ký tự</b>, mỗi ký tự là <b>chữ số 0–9 hoặc chữ thường a–z</b> (36 lựa chọn), <b>được lặp</b>. Có bao nhiêu mật khẩu?",
+   tip:`Mỗi ký tự thêm vào nhân số mã lên 36 lần — vì sao mật khẩu nên dài và đa dạng!`, warn:true },
+];
+
+let lvlIdx=0, score=0, order=1, rep=1, attempts=0, cur=null;
+
+function compute(n,k,ord,rp){
+  // trả về {type, expr, value}
+  if(ord && rp) return {type:"Quy tắc nhân", expr:`${n}^${k} = ${Math.pow(n,k).toLocaleString('vi-VN')}`, value:Math.pow(n,k)};
+  if(ord && !rp){
+    if(k===n) return {type:"Hoán vị Pₙ", expr:`${n}! = ${fact(n).toLocaleString('vi-VN')}`, value:fact(n)};
+    return {type:`Chỉnh hợp A`, expr:`A(${n},${k}) = ${A(n,k).toLocaleString('vi-VN')}`, value:A(n,k)};
+  }
+  // không thứ tự → tổ hợp (không lặp)
+  return {type:`Tổ hợp C`, expr:`C(${n},${k}) = ${C(n,k).toLocaleString('vi-VN')}`, value:C(n,k)};
+}
+
+function fmtTime(sec){
+  if(sec<60) return Math.round(sec)+" giây";
+  if(sec<3600) return (sec/60).toFixed(1).replace('.',',')+" phút";
+  if(sec<86400) return (sec/3600).toFixed(1).replace('.',',')+" giờ";
+  if(sec<31536000) return (sec/86400).toFixed(1).replace('.',',')+" ngày";
+  return (sec/31536000).toFixed(1).replace('.',',')+" năm";
+}
+
+function render(){
+  const L=cur, ord=order, rp=rep;
+  // ô slot
+  const slots=$('slots'); slots.innerHTML="";
+  const showK=Math.min(L.k,8);
+  if(ord){
+    for(let i=0;i<showK;i++){
+      const choices = rp ? L.n : (L.n-i);
+      const d=document.createElement('div'); d.className="slot";
+      d.innerHTML=`<span class="big">${choices}</span><span class="cap">ô ${i+1}</span>`;
+      slots.appendChild(d);
+      if(i<showK-1){ const t=document.createElement('div'); t.className="times"; t.textContent="×"; slots.appendChild(t); }
+    }
+    $('combnote').textContent = rp ? "" : "mỗi ô sau bớt 1 lựa chọn (không lặp)";
+  } else {
+    // tổ hợp: minh hoạ chọn k trong n
+    const d=document.createElement('div'); d.className="slot"; d.style.width="auto"; d.style.padding="0 16px";
+    d.innerHTML=`<span class="big">${L.k}/${L.n}</span><span class="cap">chọn, không thứ tự</span>`;
+    slots.appendChild(d);
+    $('combnote').textContent = "đổi chỗ các nút đã chọn KHÔNG tạo cách mới → chia cho k!";
+  }
+  const r=compute(L.n,L.k,ord,rp);
+  $('typeName').textContent=r.type;
+  $('expr').innerHTML=r.expr.replace(/= ([\d.,]+)$/, '= <span class="res">$1</span>');
+  $('thief').innerHTML=`🕵️ Kẻ trộm thử 1 mã/giây sẽ mất tối đa <b>${fmtTime(r.value)}</b> để dò hết.`;
+  // trạng thái nút
+  [...$('segOrder').children].forEach(b=>b.classList.toggle('on',+b.dataset.v===ord));
+  const repBtns=[...$('segRep').children];
+  repBtns.forEach(b=>{ b.disabled = (ord===0); b.classList.toggle('on', ord===0 ? (+b.dataset.v===0) : (+b.dataset.v===rp)); });
+}
+
+function setLevel(i){
+  lvlIdx=i; cur=LEVELS[i]; order=1; rep=1; attempts=0;
+  $('lvl').textContent=i+1; $('ctxEmoji').textContent=cur.emoji; $('ctxText').innerHTML=cur.text;
+  $('score').textContent=score;
+  $('nFact').textContent=cur.n; $('nDesc').textContent=cur.nDesc; $('kFact').textContent=cur.k;
+  $('hint').textContent="";
+  $('tip').className='tip '+(cur.warn?'warn':''); $('tip').innerHTML=cur.tip;
+  render();
+}
+
+function crack(){
+  const L=cur, ord=order, rp=(order===0?0:rep);
+  if(ord===L.order && rp===L.rep){
+    const r=compute(L.n,L.k,L.order,L.rep), s=attempts===0?3:attempts===1?2:1;
+    score+=10*s; $('score').textContent=score;
+    const last=lvlIdx===LEVELS.length-1;
+    showToast(true,'★'.repeat(s)+'☆'.repeat(3-s),'Két đã mở!',
+      `Đúng mô hình: <b>${r.type}</b>. Số mã = <b>${r.expr.split('= ')[1]}</b>.`,
+      last?'Chơi lại từ đầu':'Két tiếp theo','next',
+      ()=>{ if(last){score=0;setLevel(0);} else setLevel(lvlIdx+1); });
+  } else {
+    attempts++;
+    let h="Chưa khớp. Đọc lại: ";
+    if(ord!==L.order) h += L.order? "đổi chỗ các ký hiệu có ra mã khác → thứ tự CÓ quan trọng. " : "đổi chỗ không tạo cách mới → thứ tự KHÔNG quan trọng. ";
+    else if(rp!==L.rep) h += L.rep? "đề cho phép các ký hiệu trùng nhau → ĐƯỢC lặp. " : "đề yêu cầu các ký hiệu khác nhau → KHÔNG lặp. ";
+    $('hint').textContent=h;
+    showToast(false,'','Két chưa mở',h,'Thử lại','retry',()=>{});
+  }
+}
+function showToast(ok,star,title,msg,btn,cls,act){
+  const t=$('toast'); t.className='toast show'+(ok?'':' fail');
+  $('tStars').textContent=star; $('tStars').style.display=ok?'block':'none';
+  $('tTitle').textContent=title; $('tMsg').innerHTML=msg;
+  const b=$('tBtn'); b.textContent=btn; b.className=cls; b.onclick=()=>{ t.className='toast'; act(); };
+}
+
+$('segOrder').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;order=+b.dataset.v;if(order===0)rep=0;render();});
+$('segRep').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;rep=+b.dataset.v;render();});
+$('crackBtn').addEventListener('click',crack);
+$('resetBtn').addEventListener('click',()=>{score=0;$('toast').className='toast';setLevel(0);});
+
+setLevel(0);
+</script>
+</body>
+</html>
