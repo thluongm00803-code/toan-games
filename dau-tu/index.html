@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đầu Tư Thông Minh — Toán 11</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBFAF4; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
+    --gold:#E8A317; --gold-d:#B97D08; --tangerine:#FF7A1A; --emerald:#1FA36B;
+    --emerald-d:#15784E; --red:#C0392B; --line:#E4E0D4; --muted:#6A7184;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);
+    background:radial-gradient(120% 80% at 72% -10%, #FBF1DC 0%, transparent 55%),var(--paper);
+    min-height:100vh;padding:18px 14px 40px}
+  .wrap{max-width:960px;margin:0 auto}
+  header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  h1{font-family:"Fredoka",sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);
+    margin:0;letter-spacing:-.5px;color:var(--indigo)}
+  h1 .dot{color:var(--gold)}
+  .sub{color:var(--muted);font-size:14px;font-weight:500}
+  .mission{background:linear-gradient(180deg,#fff,#FFF9EC);border:1px solid #F3E2BC;
+    border-radius:14px;padding:12px 16px;margin:14px 0;display:flex;align-items:center;gap:12px}
+  .mission .ctx{font-size:26px;line-height:1}.mission .txt{font-size:15px}
+  .mission .txt b{color:var(--gold-d)}
+  .stage{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:0 10px 30px -18px rgba(42,59,143,.4)}
+  canvas{display:block;width:100%;height:auto}
+  .hud{position:absolute;top:10px;left:10px;display:flex;gap:8px;
+    font-family:"Fredoka",sans-serif;font-weight:600;font-size:13px}
+  .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;
+    padding:4px 12px;color:var(--indigo)}.chip b{color:var(--gold-d)}
+  .panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  @media(max-width:640px){.panel{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card h3{margin:0 0 12px;font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;
+    color:var(--indigo);display:flex;align-items:center;gap:7px}
+  .readout{display:flex;gap:10px;margin-bottom:12px}
+  .ro{flex:1;background:#F4F6FB;border-radius:10px;padding:10px 12px;text-align:center}
+  .ro .lab{font-size:11.5px;color:var(--muted);font-weight:600}
+  .ro .num{font-family:"Fredoka",sans-serif;font-size:19px;color:var(--ink)}
+  .ctrl{margin-bottom:14px}
+  .ctrl label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:7px}
+  .ctrl label .val{font-family:"Fredoka",sans-serif;color:var(--gold-d)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:999px;
+    background:linear-gradient(90deg,var(--gold),var(--gold-d));outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;
+    background:#fff;border:4px solid var(--gold);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+  input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:4px solid var(--gold);cursor:pointer}
+  .toggle{display:none;gap:8px;margin-bottom:14px}
+  .toggle.show{display:flex}
+  .toggle button{flex:1;font-family:"Fredoka",sans-serif;font-weight:600;font-size:14px;
+    border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:10px;cursor:pointer}
+  .toggle button.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+  .status{font-size:13px;font-weight:600;padding:9px 12px;border-radius:10px;margin-bottom:12px}
+  .status.ok{background:#E8F7EE;color:var(--emerald-d)}
+  .status.bad{background:#FDF0E8;color:var(--gold-d)}
+  .actions{display:flex;gap:8px}
+  button.act{font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;border:none;
+    border-radius:12px;padding:12px 14px;cursor:pointer;transition:transform .08s}
+  button.act:active{transform:translateY(2px)}
+  .confirm{flex:1;background:var(--gold);color:#fff;box-shadow:0 5px 0 var(--gold-d)}
+  .confirm:active{box-shadow:0 3px 0 var(--gold-d)}
+  .reset{background:#EEF0F7;color:var(--indigo)}
+  .sys{background:#0F1530;color:#E8ECFF;border-radius:12px;padding:14px 16px;font-family:"Fredoka",sans-serif}
+  .sys .formula{font-size:clamp(17px,4vw,21px);font-weight:600;letter-spacing:.3px}
+  .sys .formula .v{color:#FFD27A}
+  .sys .seq{font-size:13px;color:#AAB4E0;margin-top:10px;line-height:1.7}
+  .sys .seq b{color:#86F0C0}
+  .tip{font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.55}
+  .tip b{color:var(--indigo)}
+  .tip.warn b{color:var(--red)}
+  .toast{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(15,21,48,.55);backdrop-filter:blur(2px)}
+  .toast.show{display:flex}
+  .toast .box{background:#fff;border-radius:18px;padding:24px 26px;text-align:center;max-width:350px;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
+  .toast .stars{font-size:30px;letter-spacing:4px}
+  .toast h2{font-family:"Fredoka",sans-serif;margin:8px 0 4px;font-size:23px;color:var(--gold-d)}
+  .toast.fail h2{color:var(--tangerine)}
+  .toast p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.55}
+  .toast button{width:100%}
+  .next{background:var(--emerald);color:#fff;box-shadow:0 5px 0 var(--emerald-d)}
+  .retry{background:var(--indigo);color:#fff;box-shadow:0 5px 0 #1C2A6B}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Đầu Tư Thông Minh<span class="dot">.</span></h1>
+    <span class="sub">Toán 11 · Cấp số nhân &amp; lãi kép · giáo dục tài chính</span>
+  </header>
+
+  <div class="mission">
+    <div class="ctx" id="ctxEmoji">🏦</div>
+    <div class="txt" id="ctxText"></div>
+  </div>
+
+  <div class="stage">
+    <div class="hud">
+      <span class="chip">Màn <b id="lvl">1</b>/4</span>
+      <span class="chip">Điểm <b id="score">0</b></span>
+    </div>
+    <canvas id="cv" width="900" height="520"></canvas>
+    <div class="toast" id="toast">
+      <div class="box">
+        <div class="stars" id="tStars"></div>
+        <h2 id="tTitle"></h2>
+        <p id="tMsg"></p>
+        <button id="tBtn" class="next"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="card">
+      <h3>🎚️ Lựa chọn của bạn</h3>
+      <div class="readout">
+        <div class="ro"><div class="lab" id="periodLab">Số năm</div><div class="num"><span id="nVal">0</span></div></div>
+        <div class="ro"><div class="lab">Số tiền</div><div class="num"><span id="amtVal">0</span> <small>tr</small></div></div>
+        <div class="ro"><div class="lab">Mục tiêu</div><div class="num">≥ <span id="goalVal">0</span></div></div>
+      </div>
+      <div class="ctrl">
+        <label id="nLabel">Số năm gửi <span class="val" id="nShow">0</span></label>
+        <input type="range" id="nRange" min="0" max="12" step="1" value="0">
+      </div>
+      <div class="toggle" id="toggle">
+        <button data-k="kep" class="on">Lãi kép</button>
+        <button data-k="don">Lãi đơn</button>
+      </div>
+      <div class="status ok" id="status"></div>
+      <div class="actions">
+        <button class="act confirm" id="confirmBtn">Chốt phương án ✅</button>
+        <button class="act reset" id="resetBtn">Chơi lại</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🧮 Công thức &amp; dãy số</h3>
+      <div class="sys">
+        <div class="formula" id="formula"></div>
+        <div class="seq" id="seqNote"></div>
+      </div>
+      <div class="tip" id="tip"></div>
+    </div>
+  </div>
+
+  <footer>Một hoạt động dạy học môn Toán · cấp số nhân hiện hình trong tiền bạc thật.</footer>
+</div>
+
+<script>
+const cv=document.getElementById('cv'), ctx=cv.getContext('2d'), $=id=>document.getElementById(id);
+const fmt=v=>v.toFixed(1).replace('.',',');
+
+// ===== Các màn =====
+const LEVELS=[
+ { emoji:"🏦", unit:"năm", nMax:12, goal:150, P:100, r:0.08, kind:"single",
+   text:"Gửi <b>100 triệu</b> vào ngân hàng, lãi <b>8%/năm</b> (lãi kép). Cần ít nhất <b>150 triệu</b>. Gửi <b>bao nhiêu năm là đủ</b> (và sớm nhất)?",
+   formula:n=>`A = 100 · (1,08)<sup>${n}</sup>`,
+   seq:()=>`Mỗi năm tiền nhân với công bội <b>q = 1 + 8% = 1,08</b>.<br>Đây là cấp số nhân: 100 → 108 → 116,64 → …` ,
+   tipClass:"", tip:`<b>Cấp số nhân:</b> số dư sau n năm là số hạng tổng quát <b>u_n = u_1·q^n</b> với q = 1 + lãi suất.` },
+
+ { emoji:"⚖️", unit:"năm", nMax:8, goal:200, P:100, r:0.10, kind:"vs",
+   text:"Cùng <b>100 triệu</b>, lãi <b>10%/năm</b>. Muốn <b>gấp đôi (200 triệu)</b> trong tối đa 8 năm. Chọn gói nào và mấy năm?",
+   formula:(n,sel)=> sel==="don" ? `A = 100·(1 + 0,10·${n})` : `A = 100·(1,10)<sup>${n}</sup>`,
+   seq:()=>`<b>Lãi đơn</b> = cấp số cộng (tăng đều mỗi năm 10 triệu).<br><b>Lãi kép</b> = cấp số nhân (nhân 1,10 mỗi năm).`,
+   tipClass:"", tip:`<b>So sánh:</b> lãi kép (hàm mũ) luôn vượt lãi đơn (tuyến tính) khi thời gian đủ dài.` },
+
+ { emoji:"📈", unit:"năm", nMax:10, goal:150, dep:20, r:0.07, kind:"annuity",
+   text:"Mỗi cuối năm gửi góp <b>20 triệu</b>, lãi <b>7%/năm</b>. Sau bao nhiêu năm tích luỹ đạt <b>150 triệu</b> (sớm nhất)?",
+   formula:n=>`S = 20 · <span style="white-space:nowrap">[(1,07)<sup>${n}</sup> − 1] / 0,07</span>`,
+   seq:()=>`Tổng các khoản gửi là <b>tổng cấp số nhân</b>:<br>S = 20·(1 + 1,07 + 1,07² + … + 1,07<sup>n−1</sup>).`,
+   tipClass:"", tip:`<b>Sức mạnh gửi đều &amp; bắt đầu sớm:</b> tổng CSN tích luỹ nhanh hơn ta tưởng nhờ lãi mẹ đẻ lãi con.` },
+
+ { emoji:"⚠️", unit:"tháng", nMax:24, goal:60, P:30, r:0.05, kind:"debt",
+   text:"Vay nóng <b>30 triệu</b>, lãi <b>5%/tháng</b> mà <b>chưa trả gì</b>. Hãy dự đoán: sau bao nhiêu <b>tháng</b> món nợ <b>tăng gấp đôi</b> (60 triệu)?",
+   formula:n=>`Nợ = 30 · (1,05)<sup>${n}</sup>`,
+   seq:()=>`Nợ cũng là cấp số nhân với <b>q = 1,05</b> — nhưng lần này nó chống lại bạn.`,
+   tipClass:"warn", tip:`<b>Bẫy nợ &amp; quy tắc 72:</b> số kỳ để gấp đôi ≈ 72 ÷ lãi(%). Với 5%/tháng ≈ 72/5 ≈ 14–15 tháng!` },
+];
+
+let lvlIdx=0, score=0, n=0, sel="kep", cur=null;
+
+// giá trị theo loại
+function value(L,k,kind){
+  kind=kind||L.kind;
+  if(kind==="single"||kind==="debt") return L.P*Math.pow(1+L.r,k);
+  if(kind==="annuity") return k===0?0 : L.dep*(Math.pow(1+L.r,k)-1)/L.r;
+  if(kind==="kep") return L.P*Math.pow(1+L.r,k);
+  if(kind==="don") return L.P*(1+L.r*k);
+  return 0;
+}
+function primary(L,k){
+  if(L.kind==="vs") return value(L,k,sel);
+  return value(L,k);
+}
+function nMin(L){ // số kỳ nhỏ nhất đạt mục tiêu (với lựa chọn hiện tại nếu vs)
+  for(let k=0;k<=L.nMax;k++){ if(primary(L,k)>=L.goal-1e-9) return k; }
+  return Infinity;
+}
+
+// ===== Biểu đồ =====
+let M={l:48,r:16,t:18,b:38}, plotW=0, plotH=0;
+function fit(){
+  const cssW=cv.clientWidth, cssH=cssW*(520/900), dpr=window.devicePixelRatio||1;
+  cv.width=Math.round(cssW*dpr); cv.height=Math.round(cssH*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+  plotW=cssW-M.l-M.r; plotH=cssH-M.t-M.b;
+}
+function yMaxFor(L){
+  let mx=L.goal;
+  for(let k=0;k<=L.nMax;k++){ mx=Math.max(mx, value(L,k,L.kind==="vs"?"kep":L.kind)); }
+  return mx*1.12;
+}
+function draw(){
+  fit(); const L=cur, cssW=cv.clientWidth, cssH=cssW*(520/900);
+  ctx.clearRect(0,0,cssW,cssH);
+  const yMax=yMaxFor(L);
+  const X=k=>M.l+ (k/L.nMax)*plotW;
+  const Y=v=>M.t+plotH - (v/yMax)*plotH;
+  // lưới ngang
+  ctx.font='11px "Be Vietnam Pro"';
+  for(let g=0;g<=5;g++){ const v=yMax*g/5, y=Y(v);
+    ctx.strokeStyle='#EEF1F6'; ctx.lineWidth=1; ctx.beginPath();ctx.moveTo(M.l,y);ctx.lineTo(M.l+plotW,y);ctx.stroke();
+    ctx.fillStyle='#9098AC'; ctx.fillText(Math.round(v), 6, y+4); }
+  // đường mục tiêu
+  ctx.strokeStyle='#1FA36B'; ctx.lineWidth=2; ctx.setLineDash([6,5]);
+  ctx.beginPath();ctx.moveTo(M.l,Y(L.goal));ctx.lineTo(M.l+plotW,Y(L.goal));ctx.stroke();
+  ctx.setLineDash([]); ctx.fillStyle='#1FA36B';
+  ctx.font='bold 11px "Be Vietnam Pro"'; ctx.fillText('Mục tiêu '+L.goal, M.l+plotW-92, Y(L.goal)-6);
+  // trục x nhãn
+  ctx.fillStyle='#9098AC'; ctx.font='11px "Be Vietnam Pro"';
+  for(let k=0;k<=L.nMax;k+=(L.nMax>14?3:1)){ ctx.fillText(k, X(k)-3, M.t+plotH+18); }
+  ctx.fillText(L.unit, M.l+plotW-18, M.t+plotH+30);
+  // cột (cấp số) tới n
+  const reached = primary(L,n) >= L.goal-1e-9;
+  const barW=Math.max(4, plotW/(L.nMax+1)*0.62);
+  for(let k=0;k<=n;k++){
+    const v=primary(L,k), x=X(k), h=(v/yMax)*plotH;
+    const last=k===n;
+    if(L.kind==="debt"){ ctx.fillStyle=last?'#C0392B':'#E08A82'; }
+    else ctx.fillStyle=last?(reached?'#1FA36B':'#E8A317'):'#F1C778';
+    ctx.fillRect(x-barW/2, M.t+plotH-h, barW, h);
+  }
+  // đường so sánh (chỉ màn vs): gói còn lại
+  if(L.kind==="vs"){
+    const other=sel==="kep"?"don":"kep";
+    ctx.strokeStyle='#9AA6D8'; ctx.lineWidth=2; ctx.setLineDash([4,4]); ctx.beginPath();
+    for(let k=0;k<=L.nMax;k++){ const p=X(k),q=Y(value(L,k,other)); k?ctx.lineTo(p,q):ctx.moveTo(p,q); }
+    ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle='#6B7BD6'; ctx.font='bold 11px "Be Vietnam Pro"';
+    ctx.fillText(other==="kep"?"Lãi kép":"Lãi đơn", X(L.nMax)-58, Y(value(L,L.nMax,other))-6);
+  }
+  // nhãn giá trị cột cuối
+  const vNow=primary(L,n);
+  ctx.fillStyle='#1C2438'; ctx.font='bold 13px "Fredoka"';
+  if(n>0){ const tx=Math.min(X(n), M.l+plotW-44); ctx.fillText(fmt(vNow), tx-14, Y(vNow)-8); }
+}
+
+// ===== Bảng =====
+function updatePanel(){
+  const L=cur;
+  $('nVal').textContent=n; $('nShow').textContent=n;
+  $('amtVal').textContent=fmt(primary(L,n));
+  $('goalVal').textContent=L.goal;
+  $('formula').innerHTML=L.formula(n,sel);
+  $('seqNote').innerHTML=L.seq();
+  const st=$('status'), reached=primary(L,n)>=L.goal-1e-9;
+  if(n===0){ st.className='status bad'; st.textContent='Kéo thanh trượt để chọn số '+L.unit+'.'; }
+  else if(reached){ st.className='status ok'; st.textContent='✓ Đã đạt mục tiêu ở '+n+' '+L.unit+'.'; }
+  else { st.className='status bad'; st.textContent='Chưa đạt — còn thiếu '+fmt(L.goal-primary(L,n))+' triệu.'; }
+}
+function draw_(){ draw(); updatePanel(); }
+
+function setLevel(i){
+  lvlIdx=i; cur=LEVELS[i]; n=0; sel="kep";
+  $('lvl').textContent=i+1; $('ctxEmoji').textContent=cur.emoji; $('ctxText').innerHTML=cur.text;
+  $('score').textContent=score;
+  $('periodLab').textContent= cur.unit==="tháng"?"Số tháng":"Số năm";
+  $('nLabel').firstChild.textContent= (cur.unit==="tháng"?"Số tháng":"Số năm gửi")+" ";
+  $('confirmBtn').textContent = cur.kind==="debt" ? "Chốt dự đoán ✅" : "Chốt phương án ✅";
+  const rng=$('nRange'); rng.max=cur.nMax; rng.value=0;
+  $('toggle').classList.toggle('show', cur.kind==="vs");
+  [...document.querySelectorAll('#toggle button')].forEach(b=>b.classList.toggle('on',b.dataset.k==="kep"));
+  $('tip').className='tip '+(cur.tipClass||''); $('tip').innerHTML=cur.tip;
+  draw_();
+}
+
+function stars(extra){ return extra===0?3 : extra===1?2 : 1; }
+function confirmPlan(){
+  const L=cur, reached=primary(L,n)>=L.goal-1e-9, nm=nMin(L);
+  if(!reached){
+    let extra='';
+    if(L.kind==="vs" && sel==="don") extra=' Gói lãi đơn không thể gấp đôi trong 8 năm — hãy thử lãi kép.';
+    showToast(false,'', L.kind==="debt"?'Chưa tới mốc':'Chưa đạt mục tiêu',
+      `Ở ${n} ${L.unit} mới có ${fmt(primary(L,n))} triệu (cần ${L.goal}).${extra}`,
+      'Thử lại','retry',()=>{});
+    return;
+  }
+  const extra=n-nm, s=stars(extra);
+  score+=10*s; $('score').textContent=score;
+  let title, msg;
+  if(L.kind==="debt"){
+    title = extra===0?'Đúng tháng gấp đôi!':'Có hơi trễ';
+    msg = `Nợ chạm 60 triệu ngay ở tháng ${nm}. ${extra===0?'Bạn ước lượng chính xác!':'Mốc gấp đôi sớm nhất là tháng '+nm+'.'} Thấy nợ lãi cao đáng sợ chưa?`;
+  } else {
+    title = extra===0?'Tối ưu thời gian!':'Đạt mục tiêu!';
+    msg = extra===0?`Đúng mốc sớm nhất: ${nm} ${L.unit}.`
+                   :`Đạt rồi, nhưng sớm nhất chỉ cần ${nm} ${L.unit} (bạn chọn ${n}).`;
+  }
+  const last=lvlIdx===LEVELS.length-1;
+  showToast(true,'★'.repeat(s)+'☆'.repeat(3-s), title, msg,
+    last?'Chơi lại từ đầu':'Màn tiếp theo','next',
+    ()=>{ if(last){score=0;setLevel(0);} else setLevel(lvlIdx+1); });
+}
+function showToast(ok,star,title,msg,btn,cls,act){
+  const t=$('toast'); t.className='toast show'+(ok?'':' fail');
+  $('tStars').textContent=star; $('tStars').style.display=ok?'block':'none';
+  $('tTitle').textContent=title; $('tMsg').innerHTML=msg;
+  const b=$('tBtn'); b.textContent=btn; b.className=cls;
+  b.onclick=()=>{ t.className='toast'; act(); };
+}
+
+$('nRange').addEventListener('input',e=>{n=+e.target.value;draw_();});
+document.getElementById('toggle').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  sel=b.dataset.k;
+  [...document.querySelectorAll('#toggle button')].forEach(x=>x.classList.toggle('on',x===b));
+  draw_();
+});
+$('confirmBtn').addEventListener('click',confirmPlan);
+$('resetBtn').addEventListener('click',()=>{score=0;$('toast').className='toast';setLevel(0);});
+window.addEventListener('resize',draw_);
+
+setLevel(0);
+</script>
+</body>
+</html>
