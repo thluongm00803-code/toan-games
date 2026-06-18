@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nông Trại Tối Ưu — Toán 10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBFAF4; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
+    --tangerine:#FF7A1A; --emerald:#1FA36B; --emerald-d:#15784E;
+    --line:#E4E0D4; --muted:#6A7184; --field:#1FA36B;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);
+    background:radial-gradient(120% 80% at 70% -10%, #EAF6EE 0%, transparent 55%),var(--paper);
+    min-height:100vh;padding:18px 14px 40px;
+  }
+  .wrap{max-width:960px;margin:0 auto}
+  header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  h1{font-family:"Fredoka",sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);
+    margin:0;letter-spacing:-.5px;color:var(--emerald-d)}
+  h1 .dot{color:var(--tangerine)}
+  .sub{color:var(--muted);font-size:14px;font-weight:500}
+  .mission{background:linear-gradient(180deg,#fff,#F0FAF3);border:1px solid #C7EAD4;
+    border-radius:14px;padding:12px 16px;margin:14px 0;display:flex;align-items:center;gap:12px}
+  .mission .ctx{font-size:26px;line-height:1}
+  .mission .txt{font-size:15px}
+  .mission .txt b{color:var(--emerald-d)}
+  .stage{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:0 10px 30px -18px rgba(31,163,107,.45)}
+  canvas{display:block;width:100%;height:auto;touch-action:none;cursor:grab}
+  canvas:active{cursor:grabbing}
+  .hud{position:absolute;top:10px;left:10px;display:flex;gap:8px;
+    font-family:"Fredoka",sans-serif;font-weight:600;font-size:13px}
+  .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;
+    padding:4px 12px;color:var(--emerald-d)}
+  .chip b{color:var(--tangerine)}
+  .panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  @media(max-width:640px){.panel{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card h3{margin:0 0 12px;font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;
+    color:var(--emerald-d);display:flex;align-items:center;gap:7px}
+  .readout{display:flex;gap:10px;margin-bottom:12px}
+  .ro{flex:1;background:#F4F8F5;border-radius:10px;padding:10px 12px}
+  .ro .lab{font-size:11.5px;color:var(--muted);font-weight:600}
+  .ro .num{font-family:"Fredoka",sans-serif;font-size:20px;color:var(--ink)}
+  .ro .num small{font-size:12px;color:var(--muted);font-weight:500}
+  .profit{background:#0F1530;color:#E8ECFF;border-radius:12px;padding:12px 16px;
+    display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-family:"Fredoka",sans-serif}
+  .profit .lab{font-size:13px;color:#AAB4E0}
+  .profit .val{font-size:24px;font-weight:600}
+  .profit .val small{font-size:13px;color:#8FB0FF}
+  .status{font-size:13px;font-weight:600;padding:8px 12px;border-radius:10px;margin-bottom:12px}
+  .status.ok{background:#E8F7EE;color:var(--emerald-d)}
+  .status.bad{background:#FDECEC;color:#C0392B}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  button{font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;border:none;
+    border-radius:12px;padding:12px 14px;cursor:pointer;transition:transform .08s,filter .15s}
+  button:active{transform:translateY(2px)}
+  .harvest{flex:1;background:var(--emerald);color:#fff;box-shadow:0 5px 0 var(--emerald-d)}
+  .harvest:active{box-shadow:0 3px 0 var(--emerald-d)}
+  .ghint{background:#FFF3E8;color:#C9650E;border:1px solid #FBD9B6}
+  .ghint.on{background:var(--tangerine);color:#fff;border-color:var(--tangerine)}
+  .reset{background:#EEF0F7;color:var(--indigo)}
+  .sys{background:#0F1530;color:#E8ECFF;border-radius:12px;padding:14px 16px;font-family:"Fredoka",sans-serif}
+  .sys .legend{font-size:12.5px;color:#AAB4E0;margin-bottom:10px;line-height:1.6}
+  .sys .legend b{color:#86F0C0}
+  .sys .ineq{font-size:15px;line-height:2;letter-spacing:.3px}
+  .sys .ineq .tag{font-size:11px;color:#8FB0FF;margin-left:8px}
+  .sys .obj{margin-top:8px;padding-top:10px;border-top:1px solid #2A3556;font-size:16px}
+  .sys .obj b{color:#FFB169}
+  .tip{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5}
+  .tip b{color:var(--emerald-d)}
+  .toast{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(15,21,48,.55);backdrop-filter:blur(2px)}
+  .toast.show{display:flex}
+  .toast .box{background:#fff;border-radius:18px;padding:24px 26px;text-align:center;max-width:340px;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
+  .toast .stars{font-size:30px;letter-spacing:4px}
+  .toast h2{font-family:"Fredoka",sans-serif;margin:8px 0 4px;color:var(--emerald-d);font-size:23px}
+  .toast.fail h2{color:var(--tangerine)}
+  .toast p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.5}
+  .toast button{width:100%}
+  .next{background:var(--emerald);color:#fff;box-shadow:0 5px 0 var(--emerald-d)}
+  .retry{background:var(--indigo);color:#fff;box-shadow:0 5px 0 #1C2A6B}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+  footer a{color:var(--emerald-d)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Nông Trại Tối Ưu<span class="dot">.</span></h1>
+    <span class="sub">Toán 10 · Hệ bất phương trình bậc nhất hai ẩn &amp; bài toán tối ưu</span>
+  </header>
+
+  <div class="mission">
+    <div class="ctx" id="ctxEmoji">🌾</div>
+    <div class="txt" id="ctxText"></div>
+  </div>
+
+  <div class="stage">
+    <div class="hud">
+      <span class="chip">Vụ <b id="lvl">1</b>/3</span>
+      <span class="chip">Tổng lãi <b id="score">0</b></span>
+    </div>
+    <canvas id="cv" width="900" height="600"></canvas>
+    <div class="toast" id="toast">
+      <div class="box">
+        <div class="stars" id="tStars"></div>
+        <h2 id="tTitle"></h2>
+        <p id="tMsg"></p>
+        <button id="tBtn" class="next"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="card">
+      <h3>🚜 Kế hoạch canh tác</h3>
+      <div class="readout">
+        <div class="ro"><div class="lab" id="lab1">Lúa</div><div class="num"><span id="xVal">0</span> <small>ha</small></div></div>
+        <div class="ro"><div class="lab" id="lab2">Cá</div><div class="num"><span id="yVal">0</span> <small>ha</small></div></div>
+      </div>
+      <div class="profit">
+        <span class="lab">Lợi nhuận F</span>
+        <span class="val"><span id="fVal">0</span> <small>triệu</small></span>
+      </div>
+      <div class="status ok" id="status">Hợp lệ — kéo điểm trên đồng để tìm lãi cao nhất.</div>
+      <div class="actions">
+        <button class="harvest" id="harvestBtn">Thu hoạch! 🌾</button>
+        <button class="ghint" id="hintBtn">Gợi ý đỉnh 💡</button>
+        <button class="reset" id="resetBtn">Chơi lại</button>
+      </div>
+      <div class="tip"><b>Kéo</b> điểm vàng trên đồng (hoặc bấm vào vị trí muốn chọn). Điểm phải nằm trong <b>vùng xanh</b> — vùng thỏa mọi nguồn lực.</div>
+    </div>
+
+    <div class="card">
+      <h3>📋 Ràng buộc &amp; mục tiêu</h3>
+      <div class="sys">
+        <div class="legend" id="legend"></div>
+        <div class="ineq" id="ineqList"></div>
+        <div class="obj" id="objLine"></div>
+      </div>
+      <div class="tip"><b>Mẹo toán học:</b> lợi nhuận lớn nhất luôn đạt tại một <b>đỉnh</b> của vùng xanh. Bật "Gợi ý đỉnh" để xem và thử từng đỉnh.</div>
+    </div>
+  </div>
+
+  <footer>Một hoạt động dạy học môn Toán · điều khiển trực tiếp miền nghiệm và hàm mục tiêu.</footer>
+</div>
+
+<script>
+const cv=document.getElementById('cv'), ctx=cv.getContext('2d'), $=id=>document.getElementById(id);
+
+// ===== Dữ liệu các vụ (mô hình thực tế ĐBSCL) =====
+// Ràng buộc dạng a*x + b*y <= c. Biến x,y >= 0 mặc định.
+const LEVELS=[
+ { emoji:"🌾", crop1:"Lúa", crop2:"Cá",
+   text:"Bác Tư có ruộng ở <b>Đồng Tháp</b>. Trồng <b>lúa</b> (x ha) hay nuôi <b>cá</b> (y ha) sao cho lãi cao nhất?",
+   cons:[ {a:1,b:1,c:8,tag:"đất (ha)"}, {a:2,b:3,c:18,tag:"vốn (triệu)"} ],
+   obj:{a:4,b:5}, world:{x:10,y:9} },
+
+ { emoji:"🦐", crop1:"Tôm", crop2:"Cá tra",
+   text:"Trại thủy sản nuôi <b>tôm</b> (x ha) và <b>cá tra</b> (y ha). Phân bổ ao thế nào để lãi nhất?",
+   cons:[ {a:5,b:3,c:35,tag:"vốn (chục triệu)"}, {a:1,b:4,c:24,tag:"công chăm (ngày)"} ],
+   obj:{a:2,b:3}, world:{x:8,y:8} },
+
+ { emoji:"🥭", crop1:"Xoài", crop2:"Sen",
+   text:"Trang trại tổng hợp trồng <b>xoài</b> (x ha) và <b>sen</b> (y ha) với ba nguồn lực giới hạn.",
+   cons:[ {a:1,b:2,c:10,tag:"vốn (chục triệu)"}, {a:3,b:1,c:15,tag:"công (ngày)"}, {a:1,b:1,c:6,tag:"đất (ha)"} ],
+   obj:{a:3,b:4}, world:{x:7,y:7} },
+];
+
+let lvlIdx=0, score=0, P={x:0,y:0}, showHints=false, dragging=false;
+let cur=null; // {cons, world, vertices, optPt, optF}
+const EPS=1e-6;
+
+// ===== Hình học =====
+function allLines(L){ return [...L.cons, {a:1,b:0,c:0}, {a:0,b:1,c:0}]; } // + trục x=0,y=0 (a*x+b*y=c dạng =)
+function intersect(L1,L2){
+  const d=L1.a*L2.b-L2.a*L1.b; if(Math.abs(d)<EPS) return null;
+  return { x:(L1.c*L2.b-L2.c*L1.b)/d, y:(L1.a*L2.c-L2.a*L1.c)/d };
+}
+function feasible(p,L){
+  if(p.x<-EPS||p.y<-EPS) return null;
+  for(const c of L.cons){ if(c.a*p.x+c.b*p.y > c.c+1e-4) return c; }
+  return false; // false = hợp lệ
+}
+function computeVertices(L){
+  const lines=allLines(L), pts=[];
+  for(let i=0;i<lines.length;i++) for(let j=i+1;j<lines.length;j++){
+    const p=intersect(lines[i],lines[j]); if(!p) continue;
+    if(p.x<-EPS||p.y<-EPS) continue;
+    let ok=true;
+    for(const c of L.cons){ if(c.a*p.x+c.b*p.y>c.c+1e-4){ok=false;break;} }
+    if(ok) pts.push(p);
+  }
+  // khử trùng
+  const uniq=[];
+  for(const p of pts){ if(!uniq.some(q=>Math.abs(q.x-p.x)<1e-3&&Math.abs(q.y-p.y)<1e-3)) uniq.push(p); }
+  // sắp theo góc quanh trọng tâm
+  const cx=uniq.reduce((s,p)=>s+p.x,0)/uniq.length, cy=uniq.reduce((s,p)=>s+p.y,0)/uniq.length;
+  uniq.sort((a,b)=>Math.atan2(a.y-cy,a.x-cx)-Math.atan2(b.y-cy,b.x-cx));
+  return uniq;
+}
+const Fval=(p,L)=>L.obj.a*p.x+L.obj.b*p.y;
+
+// ===== Toạ độ màn hình =====
+let M={l:46,r:18,t:18,b:40}, sx=1, sy=1, plotW=0, plotH=0;
+function fit(){
+  const cssW=cv.clientWidth, cssH=cssW*(600/900), dpr=window.devicePixelRatio||1;
+  cv.width=Math.round(cssW*dpr); cv.height=Math.round(cssH*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+  plotW=cssW-M.l-M.r; plotH=cssH-M.t-M.b;
+  sx=plotW/cur.world.x; sy=plotH/cur.world.y;
+}
+const X=x=>M.l+x*sx, Y=y=>M.t+plotH-y*sy;
+const invX=px=>(px-M.l)/sx, invY=py=>(M.t+plotH-py)/sy;
+
+// ===== Vẽ =====
+function drawGrid(){
+  const cssW=cv.clientWidth, cssH=cssW*(600/900);
+  ctx.clearRect(0,0,cssW,cssH);
+  ctx.lineWidth=1;
+  for(let x=0;x<=cur.world.x;x++){ ctx.strokeStyle=x%2===0?'#C9D8EC':'#E6EEF6';
+    ctx.beginPath();ctx.moveTo(X(x),Y(0));ctx.lineTo(X(x),Y(cur.world.y));ctx.stroke();}
+  for(let y=0;y<=cur.world.y;y++){ ctx.strokeStyle=y%2===0?'#C9D8EC':'#E6EEF6';
+    ctx.beginPath();ctx.moveTo(X(0),Y(y));ctx.lineTo(X(cur.world.x),Y(y));ctx.stroke();}
+}
+function drawRegion(){
+  if(cur.vertices.length<3) return;
+  ctx.beginPath();
+  cur.vertices.forEach((p,i)=>{ const px=X(p.x),py=Y(p.y); i?ctx.lineTo(px,py):ctx.moveTo(px,py); });
+  ctx.closePath();
+  ctx.fillStyle='rgba(31,163,107,.16)'; ctx.fill();
+  ctx.strokeStyle='var(--emerald)'; ctx.strokeStyle='#1FA36B'; ctx.lineWidth=2; ctx.stroke();
+}
+function drawConstraintLines(){
+  ctx.save(); ctx.beginPath(); ctx.rect(X(0),Y(cur.world.y),plotW,plotH); ctx.clip();
+  ctx.lineWidth=1.5; ctx.setLineDash([6,5]); ctx.strokeStyle='#9AA6D8';
+  for(const c of cur.cons){
+    // điểm trên đường a x + b y = c, vẽ qua khung
+    let p1,p2;
+    if(Math.abs(c.b)>EPS){ p1={x:0,y:c.c/c.b}; p2={x:cur.world.x,y:(c.c-c.a*cur.world.x)/c.b}; }
+    else { p1={x:c.c/c.a,y:0}; p2={x:c.c/c.a,y:cur.world.y}; }
+    ctx.beginPath(); ctx.moveTo(X(p1.x),Y(p1.y)); ctx.lineTo(X(p2.x),Y(p2.y)); ctx.stroke();
+  }
+  ctx.setLineDash([]); ctx.restore();
+}
+function drawAxes(){
+  ctx.strokeStyle='#1C2438'; ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(X(0),Y(0));ctx.lineTo(X(cur.world.x),Y(0));ctx.stroke();
+  ctx.beginPath();ctx.moveTo(X(0),Y(0));ctx.lineTo(X(0),Y(cur.world.y));ctx.stroke();
+  ctx.fillStyle='#6A7184'; ctx.font='12px "Be Vietnam Pro"';
+  ctx.fillText('O',X(0)-13,Y(0)+15);
+  ctx.fillText('x · '+LEVELS[lvlIdx].crop1,X(cur.world.x)-72,Y(0)+24);
+  ctx.save();ctx.translate(X(0)-30,Y(cur.world.y)+40);ctx.rotate(-Math.PI/2);
+  ctx.fillText('y · '+LEVELS[lvlIdx].crop2,0,0);ctx.restore();
+}
+function drawObjLine(){
+  // đường mức F = F(P) và mũi tên hướng tăng lợi nhuận
+  const a=cur.obj.a, b=cur.obj.b, F=Fval(P,cur);
+  ctx.save(); ctx.beginPath(); ctx.rect(X(0),Y(cur.world.y),plotW,plotH); ctx.clip();
+  ctx.strokeStyle='rgba(255,122,26,.85)'; ctx.lineWidth=2; ctx.setLineDash([2,4]);
+  let p1,p2;
+  if(Math.abs(b)>EPS){ p1={x:-1,y:(F-a*-1)/b}; p2={x:cur.world.x+1,y:(F-a*(cur.world.x+1))/b}; }
+  else { p1={x:F/a,y:-1}; p2={x:F/a,y:cur.world.y+1}; }
+  ctx.beginPath();ctx.moveTo(X(p1.x),Y(p1.y));ctx.lineTo(X(p2.x),Y(p2.y));ctx.stroke();
+  ctx.setLineDash([]);
+  // mũi tên gradient
+  const n=Math.hypot(a,b), ux=a/n, uy=b/n, len=0.9;
+  const tipX=P.x+ux*len, tipY=P.y+uy*len;
+  ctx.strokeStyle='#FF7A1A'; ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.moveTo(X(P.x),Y(P.y));ctx.lineTo(X(tipX),Y(tipY));ctx.stroke();
+  ctx.fillStyle='#FF7A1A';
+  const ang=Math.atan2(-(uy),(ux));
+  ctx.beginPath();ctx.moveTo(X(tipX),Y(tipY));
+  ctx.lineTo(X(tipX)-8*Math.cos(ang-.5),Y(tipY)+8*Math.sin(ang-.5));
+  ctx.lineTo(X(tipX)-8*Math.cos(ang+.5),Y(tipY)+8*Math.sin(ang+.5));
+  ctx.closePath();ctx.fill();
+  ctx.restore();
+}
+function drawVertices(){
+  if(!showHints) return;
+  cur.vertices.forEach(p=>{
+    const isOpt=Math.abs(p.x-cur.optPt.x)<1e-3&&Math.abs(p.y-cur.optPt.y)<1e-3;
+    ctx.fillStyle=isOpt?'#FF7A1A':'#2A3B8F';
+    ctx.beginPath();ctx.arc(X(p.x),Y(p.y),isOpt?7:5,0,7);ctx.fill();
+    ctx.fillStyle='#1C2438'; ctx.font='bold 11px "Be Vietnam Pro"';
+    const f=Fval(p,cur);
+    ctx.fillText(f.toFixed(0), X(p.x)+9, Y(p.y)-7);
+  });
+}
+function drawPoint(){
+  ctx.fillStyle='#FF7A1A'; ctx.strokeStyle='#C95C09'; ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.arc(X(P.x),Y(P.y),10,0,7);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(X(P.x),Y(P.y),3,0,7);ctx.fill();
+}
+function render(){
+  fit(); drawGrid(); drawRegion(); drawConstraintLines(); drawAxes();
+  drawObjLine(); drawVertices(); drawPoint();
+  updatePanel();
+}
+
+// ===== Bảng thông tin =====
+function updatePanel(){
+  $('xVal').textContent=P.x.toFixed(1);
+  $('yVal').textContent=P.y.toFixed(1);
+  $('fVal').textContent=Fval(P,cur).toFixed(1);
+  const v=feasible(P,cur), st=$('status');
+  if(v===false){ st.className='status ok'; st.textContent='✓ Hợp lệ — đang trong vùng nguồn lực cho phép.'; }
+  else { st.className='status bad'; st.textContent='✗ Vượt quá '+v.tag+' — hãy kéo điểm vào vùng xanh.'; }
+}
+function buildSystem(){
+  const L=LEVELS[lvlIdx];
+  $('lab1').textContent=L.crop1; $('lab2').textContent=L.crop2;
+  $('legend').innerHTML=`<b>x</b> = ha ${L.crop1} &nbsp;·&nbsp; <b>y</b> = ha ${L.crop2}`;
+  const fmt=(a,b)=>{
+    const t=[]; if(a) t.push((a===1?'':a)+'x'); if(b) t.push((b===1?'':b)+'y');
+    return t.join(' + ');
+  };
+  $('ineqList').innerHTML =
+    L.cons.map(c=>`${fmt(c.a,c.b)} ≤ ${c.c} <span class="tag">${c.tag}</span>`).join('<br>')
+    + `<br>x ≥ 0,&nbsp; y ≥ 0`;
+  $('objLine').innerHTML=`F = ${fmt(L.obj.a,L.obj.b)} <b>→ tối đa</b>`;
+}
+
+// ===== Vào / qua vụ =====
+function setLevel(i){
+  lvlIdx=i;
+  const L=LEVELS[i];
+  cur={cons:L.cons,obj:L.obj,world:L.world,vertices:computeVertices(L)};
+  let best={f:-Infinity,p:null};
+  cur.vertices.forEach(p=>{const f=Fval(p,cur); if(f>best.f) best={f,p};});
+  cur.optPt=best.p; cur.optF=best.f;
+  P={x:0,y:0}; showHints=false; $('hintBtn').classList.remove('on');
+  $('lvl').textContent=i+1; $('ctxEmoji').textContent=L.emoji; $('ctxText').innerHTML=L.text;
+  buildSystem(); render();
+}
+
+function stars(ratio){ return ratio>=0.999?3 : ratio>=0.92?2 : ratio>=0.75?1 : 0; }
+
+function harvest(){
+  const v=feasible(P,cur);
+  if(v!==false){
+    showToast(false,'','Vượt nguồn lực!',
+      `Kế hoạch này vượt quá ${v.tag}. Hãy đưa điểm trở lại vùng xanh rồi thu hoạch.`,
+      'Thử lại','retry',()=>{});
+    return;
+  }
+  const f=Fval(P,cur), ratio=f/cur.optF, s=stars(ratio);
+  if(s===0){
+    showToast(false,'','Lãi còn thấp!',
+      `Bạn đạt ${f.toFixed(0)} triệu, mới ${(ratio*100).toFixed(0)}% mức tối đa. Thử kéo điểm tới một đỉnh của vùng xanh.`,
+      'Thử lại','retry',()=>{});
+    return;
+  }
+  score+=Math.round(f); $('score').textContent=score;
+  const optTxt=`Tối đa là <b>${cur.optF.toFixed(0)} triệu</b> tại đỉnh (${cur.optPt.x.toFixed(0)}; ${cur.optPt.y.toFixed(0)}).`;
+  const last=lvlIdx===LEVELS.length-1;
+  showToast(true,'★'.repeat(s)+'☆'.repeat(3-s),
+    s===3?'Tối ưu hoàn hảo!':'Thu hoạch tốt!',
+    `Bạn đạt ${f.toFixed(0)} triệu. ${s<3?optTxt:'Đúng đỉnh cho lãi cao nhất.'}`,
+    last?'Chơi lại từ đầu':'Vụ tiếp theo', 'next',
+    ()=>{ if(last){score=0;$('score').textContent=0;setLevel(0);} else setLevel(lvlIdx+1); });
+}
+
+function showToast(ok,starStr,title,msg,btn,cls,act){
+  const t=$('toast'); t.className='toast show'+(ok?'':' fail');
+  $('tStars').textContent=starStr; $('tStars').style.display=ok?'block':'none';
+  $('tTitle').textContent=title; $('tMsg').innerHTML=msg;
+  const b=$('tBtn'); b.textContent=btn; b.className=cls;
+  b.onclick=()=>{ t.className='toast'; act(); render(); };
+}
+
+// ===== Tương tác kéo điểm =====
+function setFromEvent(e){
+  const r=cv.getBoundingClientRect();
+  const cxp=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
+  const cyp=(e.touches?e.touches[0].clientY:e.clientY)-r.top;
+  let x=invX(cxp), y=invY(cyp);
+  x=Math.max(0,Math.min(cur.world.x,Math.round(x*2)/2));
+  y=Math.max(0,Math.min(cur.world.y,Math.round(y*2)/2));
+  // nếu bật gợi ý: hút về đỉnh gần nếu rất sát
+  if(showHints){
+    for(const vtx of cur.vertices){
+      if(Math.hypot(vtx.x-x,vtx.y-y)<0.6){ x=vtx.x; y=vtx.y; break; }
+    }
+  }
+  P={x,y}; render();
+}
+cv.addEventListener('pointerdown',e=>{dragging=true;cv.setPointerCapture(e.pointerId);setFromEvent(e);});
+cv.addEventListener('pointermove',e=>{if(dragging)setFromEvent(e);});
+cv.addEventListener('pointerup',()=>dragging=false);
+cv.addEventListener('pointercancel',()=>dragging=false);
+
+$('harvestBtn').addEventListener('click',harvest);
+$('hintBtn').addEventListener('click',e=>{showHints=!showHints;e.target.classList.toggle('on',showHints);render();});
+$('resetBtn').addEventListener('click',()=>{score=0;$('score').textContent=0;$('toast').className='toast';setLevel(0);});
+window.addEventListener('resize',()=>render());
+
+setLevel(0);
+</script>
+</body>
+</html>
