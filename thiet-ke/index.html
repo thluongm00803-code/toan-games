@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nhà Thiết Kế — Toán 12</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBFAF4; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
+    --tangerine:#FF7A1A; --tang-d:#C95C09; --emerald:#1FA36B; --emerald-d:#15784E;
+    --red:#C0392B; --gold:#E8A317; --line:#E4E0D4; --muted:#6A7184;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);
+    background:radial-gradient(120% 80% at 72% -10%, #EAF2FF 0%, transparent 55%),var(--paper);
+    min-height:100vh;padding:18px 14px 40px}
+  .wrap{max-width:960px;margin:0 auto}
+  header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  h1{font-family:"Fredoka",sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);
+    margin:0;letter-spacing:-.5px;color:var(--indigo)}
+  h1 .dot{color:var(--tangerine)}
+  .sub{color:var(--muted);font-size:14px;font-weight:500}
+  .mission{background:linear-gradient(180deg,#fff,#F1F3FA);border:1px solid #D8DEF0;
+    border-radius:14px;padding:12px 16px;margin:14px 0;display:flex;align-items:center;gap:12px}
+  .mission .ctx{font-size:26px}.mission .txt{font-size:15px}.mission .txt b{color:var(--indigo)}
+  .stage{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:0 10px 30px -18px rgba(42,59,143,.4)}
+  canvas#cv{display:block;width:100%;height:auto}
+  .hud{position:absolute;top:10px;left:10px;display:flex;gap:8px;
+    font-family:"Fredoka",sans-serif;font-weight:600;font-size:13px}
+  .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;
+    padding:4px 12px;color:var(--indigo)}.chip b{color:var(--tangerine)}
+  .panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  @media(max-width:640px){.panel{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card h3{margin:0 0 12px;font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;
+    color:var(--indigo);display:flex;align-items:center;gap:7px}
+  canvas#obj{display:block;width:100%;height:140px;background:#F7F9FD;border-radius:10px;margin-bottom:12px}
+  .ctrl label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:7px}
+  .ctrl label .val{font-family:"JetBrains Mono",monospace;color:var(--tang-d)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:999px;
+    background:linear-gradient(90deg,var(--indigo-soft),var(--indigo));outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;
+    background:#fff;border:4px solid var(--tangerine);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+  input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:4px solid var(--tangerine);cursor:pointer}
+  .reads{display:flex;gap:8px;margin:12px 0}
+  .rd{flex:1;background:#F4F6FB;border-radius:10px;padding:9px;text-align:center}
+  .rd .lab{font-size:11px;color:var(--muted);font-weight:600}
+  .rd .num{font-family:"Fredoka",sans-serif;font-size:17px;color:var(--ink)}
+  .slope{border-radius:10px;padding:9px 12px;font-size:13px;font-weight:600;margin-bottom:12px;text-align:center}
+  .slope.pos{background:#FDF0E8;color:var(--tang-d)} .slope.neg{background:#EEF1FB;color:var(--indigo)}
+  .slope.zero{background:#E8F7EE;color:var(--emerald-d)}
+  .slope .mono{font-family:"JetBrains Mono",monospace}
+  .actions{display:flex;gap:8px}
+  button.act{font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;border:none;
+    border-radius:12px;padding:12px 14px;cursor:pointer;transition:transform .08s}
+  button.act:active{transform:translateY(2px)}
+  .lock{flex:1;background:var(--tangerine);color:#fff;box-shadow:0 5px 0 var(--tang-d)}
+  .lock:active{box-shadow:0 3px 0 var(--tang-d)}
+  .reset{background:#EEF0F7;color:var(--indigo)}
+  .formula{background:#0F1530;color:#E8ECFF;border-radius:12px;padding:14px 16px;font-family:"Fredoka",sans-serif}
+  .formula .row{font-size:15px;line-height:2}
+  .formula .row .mono{font-family:"JetBrains Mono",monospace;color:#FFD27A}
+  .formula .row b{color:#86F0C0}
+  .tip{font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.55}.tip b{color:var(--indigo)}
+  .toast{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(15,21,48,.55);backdrop-filter:blur(2px)}
+  .toast.show{display:flex}
+  .toast .box{background:#fff;border-radius:18px;padding:24px 26px;text-align:center;max-width:350px;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
+  .toast .stars{font-size:30px;letter-spacing:4px}
+  .toast h2{font-family:"Fredoka",sans-serif;margin:8px 0 4px;font-size:23px;color:var(--emerald-d)}
+  .toast.fail h2{color:var(--tangerine)}
+  .toast p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.55}
+  .toast button{width:100%}
+  .next{background:var(--emerald);color:#fff;box-shadow:0 5px 0 var(--emerald-d)}
+  .retry{background:var(--indigo);color:#fff;box-shadow:0 5px 0 #1C2A6B}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Nhà Thiết Kế<span class="dot">.</span></h1>
+    <span class="sub">Toán 12 · Ứng dụng đạo hàm · bài toán tối ưu</span>
+  </header>
+
+  <div class="mission">
+    <div class="ctx" id="ctxEmoji">🌱</div>
+    <div class="txt" id="ctxText"></div>
+  </div>
+
+  <div class="stage">
+    <div class="hud">
+      <span class="chip">Bản vẽ <b id="lvl">1</b>/4</span>
+      <span class="chip">Điểm <b id="score">0</b></span>
+    </div>
+    <canvas id="cv" width="900" height="500"></canvas>
+    <div class="toast" id="toast">
+      <div class="box">
+        <div class="stars" id="tStars"></div>
+        <h2 id="tTitle"></h2>
+        <p id="tMsg"></p>
+        <button id="tBtn" class="next"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="card">
+      <h3>🛠️ Bàn thiết kế</h3>
+      <canvas id="obj" width="600" height="280"></canvas>
+      <div class="ctrl">
+        <label id="xLabel">Tham số <span class="val" id="xShow">0</span></label>
+        <input type="range" id="xRange" min="0" max="20" step="0.5" value="0">
+      </div>
+      <div class="reads" id="reads"></div>
+      <div class="slope" id="slope"></div>
+      <div class="actions">
+        <button class="act lock" id="lockBtn">Chốt thiết kế ✅</button>
+        <button class="act reset" id="resetBtn">Chơi lại</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🧮 Hàm số &amp; đạo hàm</h3>
+      <div class="formula"><div class="row" id="fRow"></div><div class="row" id="fpRow"></div></div>
+      <div class="tip" id="tip"></div>
+    </div>
+  </div>
+
+  <footer>Một hoạt động dạy học môn Toán · tối ưu hiện hình khi tiếp tuyến nằm ngang.</footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const cv=$('cv'), ctx=cv.getContext('2d'), oc=$('obj'), octx=oc.getContext('2d');
+const fmt=v=>(Math.round(v*100)/100).toLocaleString('vi-VN');
+const PI=Math.PI;
+
+// ===== Các bản vẽ =====
+const LEVELS=[
+ { emoji:"🌱", goal:"max", xMin:0,xMax:20,step:0.5, optX:10,optVal:200,
+   text:"Rào một vườn rau hình chữ nhật <b>cạnh con sông</b> (sông là một cạnh, không cần rào). Tổng hàng rào <b>40 m</b>. Tìm bề rộng <b>x</b> để <b>diện tích lớn nhất</b>.",
+   f:x=>x*(40-2*x), fp:x=>40-4*x,
+   fLabel:"Diện tích", unit:"m²",
+   reads:x=>[["rộng x",fmt(x)+" m"],["dài 40−2x",fmt(40-2*x)+" m"],["diện tích",fmt(x*(40-2*x))+" m²"]],
+   frow:"A(x) = x·(40 − 2x) = 40x − 2x²", fprow:"A'(x) = 40 − 4x",
+   draw:(x)=>drawFence(x),
+   tip:`Diện tích lớn nhất khi <b>A'(x)=0</b> ⇒ x = 10. Trên đồ thị, đó là lúc <b>tiếp tuyến nằm ngang</b>.` },
+
+ { emoji:"📦", goal:"max", xMin:0,xMax:6,step:0.25, optX:2,optVal:128,
+   text:"Cắt 4 góc vuông cạnh <b>x</b> từ tấm bìa vuông <b>12×12</b> rồi gấp thành <b>hộp không nắp</b>. Tìm x để <b>thể tích lớn nhất</b>.",
+   f:x=>x*(12-2*x)**2, fp:x=>12*x*x-96*x+144,
+   fLabel:"Thể tích", unit:"đv³",
+   reads:x=>[["cắt góc x",fmt(x)],["đáy 12−2x",fmt(12-2*x)],["thể tích",fmt(x*(12-2*x)**2)]],
+   frow:"V(x) = x·(12 − 2x)²", fprow:"V'(x) = 12x² − 96x + 144 = 12(x−2)(x−6)",
+   draw:(x)=>drawBox(x),
+   tip:`V'(x)=0 cho x=2 hoặc x=6; x=6 làm đáy bằng 0 nên loại. <b>x = 2</b> cho thể tích lớn nhất.` },
+
+ { emoji:"🥫", goal:"min", xMin:1,xMax:4,step:0.1, optX:2,optVal:24*PI,
+   text:"Thiết kế <b>lon nước hình trụ</b> thể tích cố định <b>16π</b>. Tìm bán kính <b>r</b> để <b>tốn ít vật liệu nhất</b> (diện tích toàn phần nhỏ nhất).",
+   f:r=>2*PI*r*r+32*PI/r, fp:r=>4*PI*r-32*PI/(r*r),
+   fLabel:"Vật liệu", unit:"đv²",
+   reads:r=>[["bán kính r",fmt(r)],["cao h=16/r²",fmt(16/(r*r))],["vật liệu S",fmt(2*PI*r*r+32*PI/r)]],
+   frow:"S(r) = 2πr² + 32π/r", fprow:"S'(r) = 4πr − 32π/r²",
+   draw:(r)=>drawCan(r),
+   tip:`S'(r)=0 ⇒ r³=8 ⇒ <b>r=2</b>, khi đó <b>h=4=2r</b> (chiều cao bằng đường kính) — vật liệu ít nhất.` },
+
+ { emoji:"🪣", goal:"min", xMin:1,xMax:8,step:0.25, optX:4,optVal:48,
+   text:"Làm <b>bể nước đáy vuông, không nắp</b>, thể tích <b>32</b>. Tìm cạnh đáy <b>x</b> để <b>tốn ít vật liệu nhất</b>.",
+   f:x=>x*x+128/x, fp:x=>2*x-128/(x*x),
+   fLabel:"Vật liệu", unit:"đv²",
+   reads:x=>[["cạnh đáy x",fmt(x)],["cao h=32/x²",fmt(32/(x*x))],["vật liệu S",fmt(x*x+128/x)]],
+   frow:"S(x) = x² + 4·(32/x²)·x = x² + 128/x", fprow:"S'(x) = 2x − 128/x²",
+   draw:(x)=>drawTank(x),
+   tip:`S'(x)=0 ⇒ x³=64 ⇒ <b>x=4</b> (cao h=2). Tiếp tuyến nằm ngang tại đáy đường cong.` },
+];
+
+let lvlIdx=0, score=0, x=0, cur=null, attempts=0;
+
+// ===== Đồ thị f(x) =====
+let M={l:54,r:18,t:18,b:38}, plotW=0, plotH=0, yLo=0, yHi=1;
+function fit(){
+  const cssW=cv.clientWidth, cssH=cssW*(500/900), dpr=window.devicePixelRatio||1;
+  cv.width=Math.round(cssW*dpr);cv.height=Math.round(cssH*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+  plotW=cssW-M.l-M.r; plotH=cssH-M.t-M.b;
+}
+function yRange(){
+  let lo=Infinity,hi=-Infinity;
+  for(let t=cur.xMin;t<=cur.xMax+1e-9;t+=(cur.xMax-cur.xMin)/120){const v=cur.f(t);lo=Math.min(lo,v);hi=Math.max(hi,v);}
+  const pad=(hi-lo)*0.12; yLo=Math.max(0,lo-pad); yHi=hi+pad;
+}
+const PX=t=>M.l+(t-cur.xMin)/(cur.xMax-cur.xMin)*plotW;
+const PY=v=>M.t+plotH-(v-yLo)/(yHi-yLo)*plotH;
+
+function drawGraph(){
+  fit(); yRange(); const cssW=cv.clientWidth,cssH=cssW*(500/900);
+  ctx.clearRect(0,0,cssW,cssH);
+  // lưới + nhãn y
+  ctx.font='11px "Be Vietnam Pro"';
+  for(let g=0;g<=4;g++){const v=yLo+(yHi-yLo)*g/4,y=PY(v);
+    ctx.strokeStyle='#EEF1F6';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(M.l,y);ctx.lineTo(M.l+plotW,y);ctx.stroke();
+    ctx.fillStyle='#9098AC';ctx.fillText(Math.round(v),6,y+4);}
+  // trục x nhãn
+  ctx.fillStyle='#9098AC';
+  for(let t=Math.ceil(cur.xMin);t<=cur.xMax;t+= (cur.xMax-cur.xMin>10?2:1)){ctx.fillText(t,PX(t)-3,M.t+plotH+18);}
+  ctx.fillStyle='#6A7184';ctx.font='12px "Be Vietnam Pro"';
+  ctx.fillText(cur.fLabel, 6, M.t-4); ctx.fillText('tham số', M.l+plotW-52, M.t+plotH+30);
+  // đường cong
+  ctx.strokeStyle='#2A3B8F';ctx.lineWidth=3;ctx.beginPath();
+  let first=true;
+  for(let t=cur.xMin;t<=cur.xMax+1e-9;t+=(cur.xMax-cur.xMin)/200){const px=PX(t),py=PY(cur.f(t));first?(ctx.moveTo(px,py),first=false):ctx.lineTo(px,py);}
+  ctx.stroke();
+  // tiếp tuyến tại x
+  const y0=cur.f(x), m=cur.fp(x), flat=Math.abs(m)<0.6;
+  ctx.strokeStyle=flat?'#1FA36B':'#FF7A1A';ctx.lineWidth=2.5;ctx.setLineDash([]);
+  const dxw=(cur.xMax-cur.xMin)*0.22;
+  ctx.beginPath();
+  ctx.moveTo(PX(x-dxw),PY(y0+m*(-dxw)));
+  ctx.lineTo(PX(x+dxw),PY(y0+m*(dxw)));
+  ctx.stroke();
+  // điểm hiện tại
+  ctx.fillStyle='#FF7A1A';ctx.strokeStyle='#fff';ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(PX(x),PY(y0),8,0,7);ctx.fill();ctx.stroke();
+  // đường gióng xuống trục
+  ctx.strokeStyle='#FFB169';ctx.setLineDash([4,4]);ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(PX(x),PY(y0));ctx.lineTo(PX(x),M.t+plotH);ctx.stroke();ctx.setLineDash([]);
+}
+
+// ===== Vẽ vật thể (canvas nhỏ) =====
+function clearObj(){const w=oc.clientWidth,h=140;const dpr=window.devicePixelRatio||1;
+  oc.width=Math.round(w*dpr);oc.height=Math.round(h*dpr);octx.setTransform(dpr,0,0,dpr,0,0);octx.clearRect(0,0,w,h);return{w,h};}
+function drawFence(x){const{w,h}=clearObj();const L=40,s=Math.min((w-60)/L,(h-50)/20);
+  const rw=(L-2*x)*s, rh=x*s, ox=(w-rw)/2, oy=h-20-rh;
+  octx.strokeStyle='#3AA0E0';octx.lineWidth=4;octx.beginPath();octx.moveTo(ox-15,oy);octx.lineTo(ox+rw+15,oy);octx.stroke();
+  octx.fillStyle='#3AA0E0';octx.font='11px "Be Vietnam Pro"';octx.fillText('sông',ox+rw/2-12,oy-6);
+  octx.strokeStyle='#15784E';octx.lineWidth=3;
+  octx.beginPath();octx.moveTo(ox,oy);octx.lineTo(ox,oy+rh);octx.lineTo(ox+rw,oy+rh);octx.lineTo(ox+rw,oy);octx.stroke();
+  octx.fillStyle='rgba(31,163,107,.12)';octx.fillRect(ox,oy,rw,rh);
+  octx.fillStyle='#1C2438';octx.font='bold 11px "Be Vietnam Pro"';
+  octx.fillText('x',ox-14,oy+rh/2);octx.fillText('40−2x',ox+rw/2-18,oy+rh+15);}
+function drawBox(x){const{w,h}=clearObj();const a=12,s=Math.min((w-60)/a,(h-40)/a),side=a*s,ox=(w-side)/2,oy=(h-side)/2,cs=x*s;
+  octx.strokeStyle='#B97D08';octx.lineWidth=2;octx.strokeRect(ox,oy,side,side);
+  octx.fillStyle='rgba(232,163,23,.12)';octx.fillRect(ox,oy,side,side);
+  octx.fillStyle='rgba(192,57,43,.35)';
+  [[ox,oy],[ox+side-cs,oy],[ox,oy+side-cs],[ox+side-cs,oy+side-cs]].forEach(c=>octx.fillRect(c[0],c[1],cs,cs));
+  octx.fillStyle='#1C2438';octx.font='bold 11px "Be Vietnam Pro"';octx.fillText('cắt x',ox+2,oy+cs/2+4);}
+function drawCan(r){const{w,h}=clearObj();const hh=16/(r*r),s=Math.min((w-70)/8,(h-40)/8);
+  const cw=2*r*s, ch=hh*s, ox=w/2, oy=h-20;
+  octx.strokeStyle='#C0392B';octx.fillStyle='rgba(192,57,43,.10)';octx.lineWidth=2;
+  octx.beginPath();octx.rect(ox-cw/2,oy-ch,cw,ch);octx.fill();octx.stroke();
+  octx.beginPath();octx.ellipse(ox,oy-ch,cw/2,cw/6,0,0,7);octx.stroke();
+  octx.fillStyle='#1C2438';octx.font='bold 11px "Be Vietnam Pro"';
+  octx.fillText('r',ox+2,oy-ch-cw/6-3);octx.fillText('h',ox+cw/2+4,oy-ch/2);}
+function drawTank(x){const{w,h}=clearObj();const hh=32/(x*x),s=Math.min((w-70)/8,(h-40)/8);
+  const bw=x*s, bh=hh*s, d=bw*0.35, ox=w/2-bw/2, oy=h-20-bh;
+  octx.strokeStyle='#2A3B8F';octx.fillStyle='rgba(42,59,143,.10)';octx.lineWidth=2;
+  octx.beginPath();octx.rect(ox,oy,bw,bh);octx.fill();octx.stroke();
+  octx.beginPath();octx.moveTo(ox,oy);octx.lineTo(ox+d,oy-d*0.6);octx.lineTo(ox+bw+d,oy-d*0.6);octx.lineTo(ox+bw,oy);octx.stroke();
+  octx.setLineDash([3,3]);octx.beginPath();octx.moveTo(ox+bw,oy);octx.lineTo(ox+bw+d,oy-d*0.6);octx.stroke();octx.setLineDash([]);
+  octx.fillStyle='#1C2438';octx.font='bold 11px "Be Vietnam Pro"';
+  octx.fillText('x',ox+bw/2-3,oy+bh+14);octx.fillText('h',ox-12,oy+bh/2);}
+
+// ===== Bảng =====
+function updatePanel(){
+  $('xShow').textContent=fmt(x);
+  const rd=cur.reads(x); $('reads').innerHTML=rd.map(r=>`<div class="rd"><div class="lab">${r[0]}</div><div class="num">${r[1]}</div></div>`).join('');
+  const m=cur.fp(x), sl=$('slope');
+  if(Math.abs(m)<0.6){ sl.className='slope zero'; sl.innerHTML=`Độ dốc <span class="mono">f'(x) ≈ 0</span> — tiếp tuyến gần nằm ngang! 🎯`; }
+  else if(m>0){ sl.className='slope pos'; sl.innerHTML=`Độ dốc <span class="mono">f'(x) = ${fmt(m)} &gt; 0</span> — hàm đang tăng.`; }
+  else { sl.className='slope neg'; sl.innerHTML=`Độ dốc <span class="mono">f'(x) = ${fmt(m)} &lt; 0</span> — hàm đang giảm.`; }
+}
+function render(){ drawGraph(); cur.draw(x); updatePanel(); }
+
+function setLevel(i){
+  lvlIdx=i; cur=LEVELS[i]; attempts=0; x=cur.xMin;
+  $('lvl').textContent=i+1; $('ctxEmoji').textContent=cur.emoji; $('ctxText').innerHTML=cur.text;
+  $('score').textContent=score;
+  const rng=$('xRange'); rng.min=cur.xMin; rng.max=cur.xMax; rng.step=cur.step; rng.value=cur.xMin;
+  $('xLabel').firstChild.textContent = (cur.goal==="max"?"Tăng/giảm tham số để TỐI ĐA ":"Điều chỉnh để TỐI THIỂU ")+ "" ;
+  $('fRow').innerHTML=`<span class="mono">${cur.frow}</span>`;
+  $('fpRow').innerHTML=`<span class="mono">${cur.fprow}</span> → <b>cho ='0'</b>`;
+  $('tip').innerHTML=cur.tip;
+  $('lockBtn').textContent="Chốt thiết kế ✅";
+  render();
+}
+
+function lock(){
+  const diff=Math.abs(x-cur.optX), tol=cur.step;
+  if(diff>4*tol){
+    const dir = (cur.goal==="max") ? "Đại lượng chưa lớn nhất" : "Vật liệu chưa ít nhất";
+    showToast(false,'',dir,`Hãy tìm chỗ <b>tiếp tuyến nằm ngang</b> (f'(x)=0) — đó là điểm tối ưu.`,'Thử lại','retry',()=>{});
+    return;
+  }
+  const s = diff<tol*0.5?3 : diff<=2*tol?2 : 1;
+  score+=10*s; $('score').textContent=score;
+  const last=lvlIdx===LEVELS.length-1;
+  const goalTxt=cur.goal==="max"?`đạt giá trị lớn nhất ≈ ${fmt(cur.optVal)} ${cur.unit}`:`tốn ít vật liệu nhất ≈ ${fmt(cur.optVal)} ${cur.unit}`;
+  showToast(true,'★'.repeat(s)+'☆'.repeat(3-s), s===3?'Thiết kế tối ưu!':'Đạt yêu cầu!',
+    `Tại <b>x = ${fmt(cur.optX)}</b>, f'(x)=0 và ${goalTxt}.`,
+    last?'Chơi lại từ đầu':'Bản vẽ tiếp','next',()=>{ if(last){score=0;setLevel(0);} else setLevel(lvlIdx+1); });
+}
+function showToast(ok,star,title,msg,btn,cls,act){
+  const t=$('toast'); t.className='toast show'+(ok?'':' fail');
+  $('tStars').textContent=star; $('tStars').style.display=ok?'block':'none';
+  $('tTitle').textContent=title; $('tMsg').innerHTML=msg;
+  const b=$('tBtn'); b.textContent=btn; b.className=cls; b.onclick=()=>{t.className='toast';act();};
+}
+
+$('xRange').addEventListener('input',e=>{x=+e.target.value;render();});
+$('lockBtn').addEventListener('click',lock);
+$('resetBtn').addEventListener('click',()=>{score=0;$('toast').className='toast';setLevel(0);});
+window.addEventListener('resize',render);
+
+setLevel(0);
+</script>
+</body>
+</html>
