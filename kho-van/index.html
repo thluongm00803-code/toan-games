@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kho Vận 3D — Toán 12</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBFAF4; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
+    --tangerine:#FF7A1A; --tang-d:#C95C09; --emerald:#1FA36B; --emerald-d:#15784E;
+    --red:#C0392B; --gold:#E8A317; --line:#E4E0D4; --muted:#6A7184;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);
+    background:radial-gradient(120% 80% at 72% -10%, #E7ECF7 0%, transparent 55%),var(--paper);
+    min-height:100vh;padding:18px 14px 40px}
+  .wrap{max-width:960px;margin:0 auto}
+  header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  h1{font-family:"Fredoka",sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);
+    margin:0;letter-spacing:-.5px;color:var(--indigo)}
+  h1 .dot{color:var(--tangerine)}
+  .sub{color:var(--muted);font-size:14px;font-weight:500}
+  .mission{background:linear-gradient(180deg,#fff,#F1F3FA);border:1px solid #D8DEF0;
+    border-radius:14px;padding:12px 16px;margin:14px 0;display:flex;align-items:center;gap:12px}
+  .mission .ctx{font-size:26px}.mission .txt{font-size:15px}.mission .txt b{color:var(--indigo)}
+  .stage{position:relative;background:linear-gradient(180deg,#F7FAFF,#EAF0FA);
+    border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    box-shadow:0 10px 30px -18px rgba(42,59,143,.4)}
+  canvas{display:block;width:100%;height:auto;touch-action:none;cursor:grab}
+  canvas:active{cursor:grabbing}
+  .hud{position:absolute;top:10px;left:10px;display:flex;gap:8px;
+    font-family:"Fredoka",sans-serif;font-weight:600;font-size:13px}
+  .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;
+    padding:4px 12px;color:var(--indigo)}.chip b{color:var(--tangerine)}
+  .rothint{position:absolute;bottom:10px;right:12px;font-size:11.5px;color:var(--muted);
+    background:rgba(255,255,255,.85);border-radius:8px;padding:3px 9px}
+  .panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  @media(max-width:640px){.panel{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card h3{margin:0 0 12px;font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;
+    color:var(--indigo);display:flex;align-items:center;gap:7px}
+  .stepper{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .stepper .axis{font-family:"Fredoka",sans-serif;font-weight:600;width:18px;text-align:center}
+  .stepper .axis.x{color:var(--red)}.stepper .axis.y{color:var(--emerald)}.stepper .axis.z{color:var(--indigo)}
+  .stepper button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);
+    background:#F4F6FB;font-size:20px;font-family:"Fredoka",sans-serif;cursor:pointer;color:var(--ink)}
+  .stepper button:active{transform:translateY(1px)}
+  .stepper .v{flex:1;text-align:center;font-family:"JetBrains Mono",monospace;font-weight:600;
+    font-size:20px;background:#0F1530;color:#FFD27A;border-radius:10px;padding:7px}
+  .picks{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+  .picks button{font-family:"Be Vietnam Pro";font-weight:600;font-size:14px;border:1px solid var(--line);
+    background:#fff;border-radius:10px;padding:11px 13px;cursor:pointer;text-align:left;display:flex;justify-content:space-between}
+  .picks button.on{border-color:var(--indigo);background:#EEF1FB}
+  .picks button .d{font-family:"JetBrains Mono",monospace;color:var(--indigo)}
+  .actions{display:flex;gap:8px;margin-top:4px}
+  button.act{font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;border:none;
+    border-radius:12px;padding:12px 14px;cursor:pointer;transition:transform .08s}
+  button.act:active{transform:translateY(2px)}
+  .go{flex:1;background:var(--tangerine);color:#fff;box-shadow:0 5px 0 var(--tang-d)}
+  .go:active{box-shadow:0 3px 0 var(--tang-d)}
+  .reset{background:#EEF0F7;color:var(--indigo)}
+  .info{background:#0F1530;color:#E8ECFF;border-radius:12px;padding:14px 16px;font-family:"Fredoka",sans-serif}
+  .info .line{font-size:14px;line-height:1.9}
+  .info .line .mono{font-family:"JetBrains Mono",monospace;color:#FFD27A}
+  .info .line b{color:#86F0C0}
+  .tip{font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.55}.tip b{color:var(--indigo)}
+  .toast{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(15,21,48,.55);backdrop-filter:blur(2px)}
+  .toast.show{display:flex}
+  .toast .box{background:#fff;border-radius:18px;padding:24px 26px;text-align:center;max-width:350px;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
+  .toast .stars{font-size:30px;letter-spacing:4px}
+  .toast h2{font-family:"Fredoka",sans-serif;margin:8px 0 4px;font-size:23px;color:var(--emerald-d)}
+  .toast.fail h2{color:var(--tangerine)}
+  .toast p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.55}
+  .toast button{width:100%}
+  .next{background:var(--emerald);color:#fff;box-shadow:0 5px 0 var(--emerald-d)}
+  .retry{background:var(--indigo);color:#fff;box-shadow:0 5px 0 #1C2A6B}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Kho Vận 3D<span class="dot">.</span></h1>
+    <span class="sub">Toán 12 · Tọa độ Oxyz · khoảng cách · trung điểm · vectơ</span>
+  </header>
+
+  <div class="mission">
+    <div class="ctx" id="ctxEmoji">📦</div>
+    <div class="txt" id="ctxText"></div>
+  </div>
+
+  <div class="stage">
+    <div class="hud">
+      <span class="chip">Nhiệm vụ <b id="lvl">1</b>/4</span>
+      <span class="chip">Điểm <b id="score">0</b></span>
+    </div>
+    <canvas id="cv" width="900" height="560"></canvas>
+    <div class="rothint">Kéo để xoay khung cảnh ↻</div>
+    <div class="toast" id="toast">
+      <div class="box">
+        <div class="stars" id="tStars"></div>
+        <h2 id="tTitle"></h2>
+        <p id="tMsg"></p>
+        <button id="tBtn" class="next"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="card">
+      <h3>🎮 Điều khiển</h3>
+      <div id="moveCtrl">
+        <div class="stepper"><span class="axis x">x</span><button data-a="x" data-d="-1">−</button><span class="v" id="vx">0</span><button data-a="x" data-d="1">+</button></div>
+        <div class="stepper"><span class="axis y">y</span><button data-a="y" data-d="-1">−</button><span class="v" id="vy">0</span><button data-a="y" data-d="1">+</button></div>
+        <div class="stepper"><span class="axis z">z</span><button data-a="z" data-d="-1">−</button><span class="v" id="vz">0</span><button data-a="z" data-d="1">+</button></div>
+      </div>
+      <div class="picks" id="pickCtrl" style="display:none"></div>
+      <div class="actions">
+        <button class="act go" id="goBtn">Giao hàng! 🚁</button>
+        <button class="act reset" id="resetBtn">Chơi lại</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>📐 Số liệu &amp; công thức</h3>
+      <div class="info"><div class="line" id="infoLine"></div></div>
+      <div class="tip" id="tip"></div>
+    </div>
+  </div>
+
+  <footer>Một hoạt động dạy học môn Toán · nhìn thấy tọa độ không gian từ mọi góc.</footer>
+</div>
+
+<script>
+const cv=document.getElementById('cv'), ctx=cv.getContext('2d'), $=id=>document.getElementById(id);
+const fmt=v=>v.toFixed(2).replace('.',',');
+function dist(a,b){const s=(a.x-b.x)**2+(a.y-b.y)**2+(a.z-b.z)**2;return {s,v:Math.sqrt(s)};}
+const eq=(a,b)=>a.x===b.x&&a.y===b.y&&a.z===b.z;
+const COL={x:'#C0392B',y:'#1FA36B',z:'#2A3B8F'};
+
+// ===== Các nhiệm vụ =====
+const LEVELS=[
+ { emoji:"📦", mode:"move", drone:{x:0,y:0,z:0},
+   text:"Một <b>kiện hàng</b> đang lơ lửng trong kho. Hãy xoay khung cảnh, đọc tọa độ rồi đưa <b>drone</b> tới đúng vị trí kiện hàng.",
+   pts:[{name:"Kiện hàng",c:{x:4,y:2,z:3},color:'#E8A317',hideCoord:true}],
+   target:{x:4,y:2,z:3},
+   tip:`Mỗi điểm trong không gian có tọa độ <b>(x; y; z)</b>. Cây cột đứng giúp bạn đọc độ cao z.` },
+
+ { emoji:"🏬", mode:"pick",
+   text:"Đơn hàng cần giao tới điểm <b>P</b>. Có 3 kho. Hãy xoay để quan sát rồi chọn <b>kho gần P nhất</b> (khoảng cách nhỏ nhất).",
+   pts:[{name:"P (điểm giao)",c:{x:3,y:3,z:2},color:'#FF7A1A'},
+        {name:"Kho A",c:{x:1,y:1,z:0},color:'#2A3B8F'},
+        {name:"Kho B",c:{x:5,y:2,z:1},color:'#2A3B8F'},
+        {name:"Kho C",c:{x:0,y:5,z:3},color:'#2A3B8F'}],
+   P:{x:3,y:3,z:2}, answer:"Kho B",
+   tip:`Khoảng cách hai điểm: <b>√((Δx)²+(Δy)²+(Δz)²)</b>. Nhìn phẳng dễ nhầm — phải xoay mới biết kho nào thật sự gần.` },
+
+ { emoji:"🛰️", mode:"move", drone:{x:0,y:0,z:0},
+   text:"Đặt một <b>trạm trung chuyển</b> ngay <b>chính giữa</b> hai kho A và B (trung điểm đoạn AB).",
+   pts:[{name:"Kho A",c:{x:1,y:1,z:1},color:'#2A3B8F'},
+        {name:"Kho B",c:{x:5,y:3,z:5},color:'#2A3B8F'}],
+   A:{x:1,y:1,z:1}, B:{x:5,y:3,z:5}, target:{x:3,y:2,z:3},
+   tip:`Trung điểm: <b>M = ((xA+xB)/2; (yA+yB)/2; (zA+zB)/2)</b>. Tại M, khoảng cách tới A bằng tới B.` },
+
+ { emoji:"🚁", mode:"move", drone:{x:0,y:0,z:0},
+   text:"Drone xuất phát từ <b>A(1; 0; 2)</b> và bay theo vectơ <b>v = (2; 3; 1)</b>. Đưa drone tới đúng <b>điểm hạ cánh</b>.",
+   pts:[{name:"A (xuất phát)",c:{x:1,y:0,z:2},color:'#2A3B8F'}],
+   A:{x:1,y:0,z:2}, v:{x:2,y:3,z:1}, target:{x:3,y:3,z:3},
+   tip:`Điểm cuối của vectơ: <b>B = A + v</b>, cộng theo từng tọa độ. Độ dài quãng bay |v| = √(2²+3²+1²).` },
+];
+
+let lvlIdx=0, score=0, cur=null, drone={x:0,y:0,z:0}, picked=null, attempts=0;
+let A=0.9, E=0.5, dragging=false, lastX=0, lastY=0;
+const GRID=6, LOOK={x:3,y:3,z:1.6};
+
+// ===== Chiếu 3D → 2D =====
+let cx=0, cy=0, sc=40;
+function fit(){
+  const cssW=cv.clientWidth, cssH=cssW*(560/900), dpr=window.devicePixelRatio||1;
+  cv.width=Math.round(cssW*dpr); cv.height=Math.round(cssH*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+  cx=cssW/2; cy=cssH*0.6; sc=cssW/12.5;
+}
+function basis(){
+  return { rx:-Math.sin(A), ry:Math.cos(A), rz:0,
+           ux:-Math.sin(E)*Math.cos(A), uy:-Math.sin(E)*Math.sin(A), uz:Math.cos(E) };
+}
+function proj(p){
+  const b=basis(), dx=p.x-LOOK.x, dy=p.y-LOOK.y, dz=p.z-LOOK.z;
+  return { X:cx+(dx*b.rx+dy*b.ry+dz*b.rz)*sc, Y:cy-(dx*b.ux+dy*b.uy+dz*b.uz)*sc };
+}
+function line(a,bp,color,w,dash){ ctx.strokeStyle=color;ctx.lineWidth=w||1;ctx.setLineDash(dash||[]);
+  const p=proj(a),q=proj(bp); ctx.beginPath();ctx.moveTo(p.X,p.Y);ctx.lineTo(q.X,q.Y);ctx.stroke();ctx.setLineDash([]);}
+
+function drawScene(){
+  fit(); const cssW=cv.clientWidth, cssH=cssW*(560/900);
+  ctx.clearRect(0,0,cssW,cssH);
+  // sàn kho
+  for(let i=0;i<=GRID;i++){
+    line({x:i,y:0,z:0},{x:i,y:GRID,z:0},'#D5DEEC',1);
+    line({x:0,y:i,z:0},{x:GRID,y:i,z:0},'#D5DEEC',1);
+  }
+  // trục
+  line({x:0,y:0,z:0},{x:GRID,y:0,z:0},COL.x,2.5);
+  line({x:0,y:0,z:0},{x:0,y:GRID,z:0},COL.y,2.5);
+  line({x:0,y:0,z:0},{x:0,y:0,z:GRID},COL.z,2.5);
+  const lx=proj({x:GRID+0.3,y:0,z:0}), ly=proj({x:0,y:GRID+0.3,z:0}), lz=proj({x:0,y:0,z:GRID+0.3});
+  ctx.font='bold 14px "Fredoka"';
+  ctx.fillStyle=COL.x;ctx.fillText('x',lx.X,lx.Y); ctx.fillStyle=COL.y;ctx.fillText('y',ly.X,ly.Y);
+  ctx.fillStyle=COL.z;ctx.fillText('z',lz.X,lz.Y);
+  ctx.fillStyle='#6A7184';ctx.font='12px "Be Vietnam Pro"';const o=proj({x:0,y:0,z:0});ctx.fillText('O',o.X-12,o.Y+14);
+  // các điểm cố định
+  cur.pts.forEach(pt=>drawMarker(pt.c,pt.color,pt.name+(pt.hideCoord?'':` (${pt.c.x};${pt.c.y};${pt.c.z})`),false,pt===pickedObj()));
+  // đoạn AB cho nhiệm vụ trung điểm
+  if(cur.A&&cur.B) line(cur.A,cur.B,'#9AA6D8',1.5,[5,5]);
+  // drone (chỉ chế độ move)
+  if(cur.mode==="move") drawMarker(drone,'#FF7A1A',`drone (${drone.x};${drone.y};${drone.z})`,true,false);
+}
+function pickedObj(){ if(cur.mode!=="pick"||!picked) return null; return cur.pts.find(p=>p.name===picked); }
+
+function drawMarker(c,color,label,isDrone,hi){
+  const top=proj(c), foot=proj({x:c.x,y:c.y,z:0});
+  // cột đứng + bóng dưới sàn
+  ctx.strokeStyle=color+'88';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(top.X,top.Y);ctx.lineTo(foot.X,foot.Y);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle=color+'55';ctx.beginPath();ctx.ellipse(foot.X,foot.Y,6,3,0,0,7);ctx.fill();
+  // đầu mốc
+  const r=isDrone?10:8;
+  ctx.fillStyle=color;ctx.strokeStyle='#fff';ctx.lineWidth=2;
+  if(isDrone){ ctx.beginPath();ctx.arc(top.X,top.Y,r,0,7);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(top.X,top.Y,3,0,7);ctx.fill(); }
+  else { ctx.fillRect(top.X-r,top.Y-r,2*r,2*r);ctx.strokeRect(top.X-r,top.Y-r,2*r,2*r); }
+  if(hi){ ctx.strokeStyle='#FF7A1A';ctx.lineWidth=3;ctx.beginPath();ctx.arc(top.X,top.Y,r+6,0,7);ctx.stroke(); }
+  // nhãn
+  ctx.fillStyle='#1C2438';ctx.font='bold 12px "Be Vietnam Pro"';ctx.fillText(label,top.X+r+4,top.Y-r);
+}
+
+// ===== Bảng số liệu =====
+function updateInfo(){
+  const L=cur; let h='';
+  if(L.mode==="move"){
+    $('vx').textContent=drone.x;$('vy').textContent=drone.y;$('vz').textContent=drone.z;
+    h+=`Drone: <span class="mono">(${drone.x}; ${drone.y}; ${drone.z})</span><br>`;
+  }
+  if(lvlIdx===0){ /* đọc tọa độ: không lộ tọa độ kiện */ h+=`Hãy đọc tọa độ kiện hàng bằng cách xoay khung cảnh.`; }
+  if(lvlIdx===1){
+    h+=`P = <span class="mono">(3; 3; 2)</span><br>`;
+    ['Kho A','Kho B','Kho C'].forEach(nm=>{ const k=L.pts.find(p=>p.name===nm);
+      const d=dist(L.P,k.c); h+=`${nm}: PK=√${d.s} ≈ <b>${fmt(d.v)}</b><br>`; });
+  }
+  if(lvlIdx===2){
+    const dA=dist(drone,L.A), dB=dist(drone,L.B);
+    h+=`M = ((1+5)/2; (1+3)/2; (1+5)/2)<br>`;
+    h+=`Tới A: <span class="mono">${fmt(dA.v)}</span> · Tới B: <span class="mono">${fmt(dB.v)}</span>`;
+  }
+  if(lvlIdx===3){
+    const dv=Math.sqrt(L.v.x**2+L.v.y**2+L.v.z**2);
+    h+=`B = A + v = (1+2; 0+3; 2+1)<br>|v| = √(4+9+1) = √14 ≈ <b>${fmt(dv)}</b>`;
+  }
+  $('infoLine').innerHTML=h;
+}
+function render(){ drawScene(); updateInfo(); }
+
+function buildPicks(){
+  const box=$('pickCtrl'); box.innerHTML='';
+  ['Kho A','Kho B','Kho C'].forEach(nm=>{
+    const k=cur.pts.find(p=>p.name===nm), d=dist(cur.P,k.c);
+    const b=document.createElement('button'); b.textContent=nm;
+    b.innerHTML=`<span>${nm}</span><span class="d">≈ ${fmt(d.v)}</span>`;
+    b.onclick=()=>{picked=nm;[...box.children].forEach(c=>c.classList.remove('on'));b.classList.add('on');render();};
+    box.appendChild(b);
+  });
+}
+function setLevel(i){
+  lvlIdx=i; cur=LEVELS[i]; attempts=0; picked=null;
+  drone = cur.drone? {...cur.drone} : {x:0,y:0,z:0};
+  $('lvl').textContent=i+1; $('ctxEmoji').textContent=cur.emoji; $('ctxText').innerHTML=cur.text;
+  $('score').textContent=score;
+  $('tip').innerHTML=cur.tip;
+  $('moveCtrl').style.display = cur.mode==="move"?"block":"none";
+  $('pickCtrl').style.display = cur.mode==="pick"?"flex":"none";
+  $('goBtn').textContent = i===0?"Giao hàng! 🚁" : i===1?"Chọn kho ✅" : i===2?"Đặt trạm! 🛰️" : "Hạ cánh! 🚁";
+  if(cur.mode==="pick") buildPicks();
+  render();
+}
+
+function go(){
+  const L=cur; let ok;
+  if(L.mode==="pick"){ if(!picked){return;} ok = picked===L.answer; }
+  else ok = eq(drone, L.target);
+  if(ok){
+    const s=attempts===0?3:attempts===1?2:1; score+=10*s; $('score').textContent=score;
+    const last=lvlIdx===LEVELS.length-1;
+    let msg=lvlIdx===1?`Kho B gần nhất (≈ ${fmt(dist(L.P,L.pts.find(p=>p.name==='Kho B').c).v)}).`
+           :`Đúng vị trí: (${L.target.x}; ${L.target.y}; ${L.target.z}).`;
+    showToast(true,'★'.repeat(s)+'☆'.repeat(3-s),'Hoàn thành!',msg,
+      last?'Chơi lại từ đầu':'Nhiệm vụ tiếp','next',()=>{ if(last){score=0;setLevel(0);} else setLevel(lvlIdx+1); });
+  } else {
+    attempts++;
+    let msg = L.mode==="pick" ? "Chưa phải kho gần nhất — so lại các khoảng cách rồi xoay để kiểm tra."
+      : "Chưa đúng vị trí. Dùng công thức ở bảng số liệu để tính lại tọa độ cần tới.";
+    showToast(false,'','Chưa đạt',msg,'Thử lại','retry',()=>{});
+  }
+}
+function showToast(ok,star,title,msg,btn,cls,act){
+  const t=$('toast'); t.className='toast show'+(ok?'':' fail');
+  $('tStars').textContent=star; $('tStars').style.display=ok?'block':'none';
+  $('tTitle').textContent=title; $('tMsg').innerHTML=msg;
+  const b=$('tBtn'); b.textContent=btn; b.className=cls; b.onclick=()=>{t.className='toast';act();};
+}
+
+// điều khiển drone
+$('moveCtrl').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  const a=b.dataset.a, d=+b.dataset.d; drone[a]=Math.max(0,Math.min(GRID,drone[a]+d)); render();});
+$('goBtn').addEventListener('click',go);
+$('resetBtn').addEventListener('click',()=>{score=0;$('toast').className='toast';setLevel(0);});
+
+// xoay
+cv.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;cv.setPointerCapture(e.pointerId);});
+cv.addEventListener('pointermove',e=>{ if(!dragging)return;
+  A+=(e.clientX-lastX)*0.01; E+=(e.clientY-lastY)*0.01;
+  E=Math.max(0.12,Math.min(1.45,E)); lastX=e.clientX;lastY=e.clientY; drawScene(); });
+cv.addEventListener('pointerup',()=>dragging=false);
+cv.addEventListener('pointercancel',()=>dragging=false);
+window.addEventListener('resize',render);
+
+setLevel(0);
+</script>
+</body>
+</html>
