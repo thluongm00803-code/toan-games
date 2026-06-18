@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pháo Thủ Parabol — Toán 10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBFAF4; --grid:#DCE6F0; --grid2:#C9D8EC;
+    --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
+    --tangerine:#FF7A1A; --emerald:#1FA36B; --wall:#8A8377;
+    --line:#E4E0D4; --muted:#6A7184;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Be Vietnam Pro",system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 70% -10%, #EAF2FF 0%, transparent 55%),
+      var(--paper);
+    min-height:100vh;
+    padding:18px 14px 40px;
+  }
+  .wrap{max-width:920px;margin:0 auto}
+  header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  h1{
+    font-family:"Fredoka",sans-serif;font-weight:700;
+    font-size:clamp(26px,5vw,40px);margin:0;letter-spacing:-.5px;
+    color:var(--indigo);
+  }
+  h1 .dot{color:var(--tangerine)}
+  .sub{color:var(--muted);font-size:14px;font-weight:500}
+  .mission{
+    background:linear-gradient(180deg,#fff,#FFF7EF);
+    border:1px solid #FCE0C4;border-radius:14px;
+    padding:12px 16px;margin:14px 0;
+    display:flex;align-items:center;gap:12px;
+  }
+  .mission .ctx{font-size:26px;line-height:1}
+  .mission .txt{font-size:15px}
+  .mission .txt b{color:var(--tangerine)}
+  .stage{
+    position:relative;background:#fff;border:1px solid var(--line);
+    border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -18px rgba(42,59,143,.4);
+  }
+  canvas{display:block;width:100%;height:auto;touch-action:none}
+  .hud{
+    position:absolute;top:10px;left:10px;display:flex;gap:8px;
+    font-family:"Fredoka",sans-serif;font-weight:600;font-size:13px;
+  }
+  .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);
+    border-radius:999px;padding:4px 12px;color:var(--indigo)}
+  .chip b{color:var(--tangerine)}
+  .panel{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;
+  }
+  @media(max-width:640px){.panel{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card h3{margin:0 0 12px;font-family:"Fredoka",sans-serif;font-weight:600;
+    font-size:15px;color:var(--indigo);display:flex;align-items:center;gap:7px}
+  .ctrl{margin-bottom:16px}
+  .ctrl label{display:flex;justify-content:space-between;font-size:13px;
+    font-weight:600;margin-bottom:7px;color:var(--ink)}
+  .ctrl label .val{font-family:"Fredoka",sans-serif;color:var(--tangerine)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;
+    border-radius:999px;background:linear-gradient(90deg,var(--indigo-soft),var(--indigo));
+    outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;
+    border-radius:50%;background:#fff;border:4px solid var(--tangerine);cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.2)}
+  input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;
+    background:#fff;border:4px solid var(--tangerine);cursor:pointer}
+  .eq{
+    background:#0F1530;color:#E8ECFF;border-radius:12px;padding:14px 16px;
+    font-family:"Fredoka",sans-serif;
+  }
+  .eq .main{font-size:clamp(18px,4.5vw,24px);font-weight:600;letter-spacing:.3px}
+  .eq .main .a{color:#FFB169}.eq .main .h{color:#86F0C0}.eq .main .k{color:#8FB0FF}
+  .eq .row{display:flex;gap:18px;margin-top:10px;font-size:13px;color:#AAB4E0;flex-wrap:wrap}
+  .eq .row span b{color:#fff;font-weight:600}
+  .actions{display:flex;gap:10px;margin-top:14px}
+  button{font-family:"Fredoka",sans-serif;font-weight:600;font-size:16px;border:none;
+    border-radius:12px;padding:13px 18px;cursor:pointer;flex:1;transition:transform .08s ease,filter .15s}
+  button:active{transform:translateY(2px)}
+  .fire{background:var(--tangerine);color:#fff;box-shadow:0 6px 0 #C95C09}
+  .fire:active{box-shadow:0 2px 0 #C95C09}
+  .fire:disabled{filter:grayscale(.6) opacity(.6);box-shadow:0 6px 0 #C95C09;cursor:default}
+  .reset{background:#EEF0F7;color:var(--indigo);max-width:120px}
+  .toast{
+    position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(15,21,48,.55);backdrop-filter:blur(2px);
+  }
+  .toast.show{display:flex}
+  .toast .box{background:#fff;border-radius:18px;padding:26px 28px;text-align:center;
+    max-width:330px;box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
+  .toast .emo{font-size:48px}
+  .toast h2{font-family:"Fredoka",sans-serif;margin:6px 0 4px;color:var(--emerald);font-size:24px}
+  .toast.fail h2{color:var(--tangerine)}
+  .toast p{margin:0 0 16px;color:var(--muted);font-size:14px}
+  .toast button{flex:none;width:100%}
+  .next{background:var(--emerald);color:#fff;box-shadow:0 6px 0 #15784E}
+  .retry{background:var(--indigo);color:#fff;box-shadow:0 6px 0 #1C2A6B}
+  .tip{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5}
+  .tip b{color:var(--indigo)}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Pháo Thủ Parabol<span class="dot">.</span></h1>
+    <span class="sub">Toán 10 · Hàm số bậc hai &amp; đường bay thực tế</span>
+  </header>
+
+  <div class="mission">
+    <div class="ctx" id="ctxEmoji">🏀</div>
+    <div class="txt" id="ctxText">Chỉnh <b>đỉnh parabol</b> sao cho đường bay đi xuyên qua vòng tròn đích.</div>
+  </div>
+
+  <div class="stage">
+    <div class="hud">
+      <span class="chip">Màn <b id="lvl">1</b>/5</span>
+      <span class="chip">Điểm <b id="score">0</b></span>
+    </div>
+    <canvas id="cv" width="900" height="560"></canvas>
+    <div class="toast" id="toast">
+      <div class="box">
+        <div class="emo" id="tEmo">🎉</div>
+        <h2 id="tTitle">Trúng đích!</h2>
+        <p id="tMsg"></p>
+        <button id="tBtn" class="next">Màn tiếp theo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="card">
+      <h3>🎯 Điều khiển đỉnh parabol</h3>
+      <div class="ctrl">
+        <label>Đỉnh cao bao nhiêu? <span class="val" id="kVal">4.0 m</span></label>
+        <input type="range" id="kRange" min="1" max="8" step="0.1" value="4">
+      </div>
+      <div class="ctrl">
+        <label>Đỉnh ở xa bao nhiêu? <span class="val" id="hVal">4.0 m</span></label>
+        <input type="range" id="hRange" min="1" max="11" step="0.1" value="4">
+      </div>
+      <div class="actions">
+        <button class="fire" id="fireBtn">Ném! 🚀</button>
+        <button class="reset" id="resetBtn">Chơi lại</button>
+      </div>
+      <div class="tip">Bóng xuất phát từ gốc <b>O(0;0)</b>, bay theo parabol có đỉnh <b>I(h;k)</b> và rơi xuống tại <b>x = 2h</b>.</div>
+    </div>
+
+    <div class="card">
+      <h3>📐 Phương trình đường bay</h3>
+      <div class="eq">
+        <div class="main">y = <span class="a" id="eqA">a</span>(x − <span class="h" id="eqH">h</span>)² + <span class="k" id="eqK">k</span></div>
+        <div class="row">
+          <span>Dạng khai triển: <b id="eqExp">y = ax² + bx</b></span>
+        </div>
+        <div class="row">
+          <span>Đỉnh <b id="eqVertex">I(4; 4)</b></span>
+          <span>Trục đối xứng <b id="eqAxis">x = 4</b></span>
+          <span>Hệ số <b id="eqACoef">a = −0.25</b></span>
+        </div>
+      </div>
+      <div class="tip"><b>Để ý:</b> a &lt; 0 nên bề lõm quay xuống. |a| càng lớn, đường bay càng "nhọn"; |a| càng nhỏ, đường bay càng "bè".</div>
+    </div>
+  </div>
+
+  <footer>Một hoạt động dạy học môn Toán · điều khiển trực tiếp đối tượng toán học.</footer>
+</div>
+
+<script>
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+
+// ---- Thế giới toạ độ (mét) ----
+const WORLD = { xMax: 13, yMax: 9 };
+let MARGIN = { l: 48, r: 16, t: 16, b: 40 };
+let scale = 1, plotW = 0, plotH = 0;
+
+function fitCanvas(){
+  const cssW = cv.clientWidth;
+  const cssH = cssW * (560/900);
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = Math.round(cssW*dpr);
+  cv.height = Math.round(cssH*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  plotW = cssW - MARGIN.l - MARGIN.r;
+  plotH = cssH - MARGIN.t - MARGIN.b;
+  scale = Math.min(plotW/WORLD.xMax, plotH/WORLD.yMax);
+}
+function X(x){ return MARGIN.l + x*scale; }
+function Y(y){ return MARGIN.t + plotH - y*scale; }
+
+// ---- Các màn (mô hình thực tế) ----
+const LEVELS = [
+  { emoji:'🏀', text:'Ném bóng vào <b>rổ</b>: cho đường bay xuyên qua vòng tròn đích.', target:{x:8, y:3} },
+  { emoji:'⛲', text:'<b>Vòi phun nước</b> phải rơi đúng vào chậu cây ở xa.', target:{x:10, y:1.5} },
+  { emoji:'🎆', text:'<b>Pháo hoa</b> nổ đúng vị trí trên cao cho đẹp.', target:{x:6, y:6} },
+  { emoji:'🛟', text:'Ném <b>phao cứu sinh</b> qua bức tường tới người gặp nạn.', target:{x:9, y:2.2}, wall:{x:5, h:4} },
+  { emoji:'🏀', text:'Cú <b>ném 3 điểm</b>: vượt qua hậu vệ rồi vào rổ.', target:{x:11, y:3}, wall:{x:6.5, h:3.2} },
+];
+
+let lvlIdx = 0, score = 0, flying = false, hitThisLevel = false;
+let h = 4, k = 4;
+const TOL = 0.55; // bán kính chấp nhận (m)
+
+const $ = id => document.getElementById(id);
+
+function coeffs(){
+  // qua O(0;0), đỉnh I(h;k): a = -k/h^2 ; khai triển y = a x^2 + b x, b = 2k/h
+  const a = -k/(h*h);
+  const b = 2*k/h;
+  return {a,b};
+}
+function curveY(x){ const {a}=coeffs(); return a*(x-h)*(x-h)+k; }
+
+function updateEq(){
+  const {a,b}=coeffs();
+  $('kVal').textContent = k.toFixed(1)+' m';
+  $('hVal').textContent = h.toFixed(1)+' m';
+  $('eqA').textContent = a.toFixed(2);
+  $('eqH').textContent = h.toFixed(1);
+  $('eqK').textContent = k.toFixed(1);
+  $('eqExp').textContent = `y = ${a.toFixed(2)}x² + ${b.toFixed(2)}x`;
+  $('eqVertex').textContent = `I(${h.toFixed(1)}; ${k.toFixed(1)})`;
+  $('eqAxis').textContent = `x = ${h.toFixed(1)}`;
+  $('eqACoef').textContent = `a = ${a.toFixed(2)}`;
+}
+
+function drawGrid(){
+  const cssW = cv.clientWidth, cssH = cssW*(560/900);
+  ctx.clearRect(0,0,cssW,cssH);
+  // ô ly
+  ctx.lineWidth=1;
+  for(let x=0;x<=WORLD.xMax;x++){
+    ctx.strokeStyle = x%2===0 ? '#C9D8EC' : '#E3ECF6';
+    ctx.beginPath(); ctx.moveTo(X(x),Y(0)); ctx.lineTo(X(x),Y(WORLD.yMax)); ctx.stroke();
+  }
+  for(let y=0;y<=WORLD.yMax;y++){
+    ctx.strokeStyle = y%2===0 ? '#C9D8EC' : '#E3ECF6';
+    ctx.beginPath(); ctx.moveTo(X(0),Y(y)); ctx.lineTo(X(WORLD.xMax),Y(y)); ctx.stroke();
+  }
+  // trục
+  ctx.strokeStyle='#1C2438'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(X(0),Y(0)); ctx.lineTo(X(WORLD.xMax),Y(0)); ctx.stroke(); // Ox
+  ctx.beginPath(); ctx.moveTo(X(0),Y(0)); ctx.lineTo(X(0),Y(WORLD.yMax)); ctx.stroke(); // Oy
+  ctx.fillStyle='#6A7184'; ctx.font='12px "Be Vietnam Pro"';
+  ctx.fillText('O', X(0)-14, Y(0)+16);
+  ctx.fillText('x (m)', X(WORLD.xMax)-34, Y(0)+22);
+}
+
+function drawWall(){
+  const w = LEVELS[lvlIdx].wall; if(!w) return;
+  ctx.fillStyle='#8A8377';
+  const wpx = 0.35*scale;
+  ctx.fillRect(X(w.x)-wpx/2, Y(w.h), wpx, w.h*scale);
+  ctx.fillStyle='#6E685D';
+  for(let i=0;i<Math.floor(w.h);i++){
+    ctx.fillRect(X(w.x)-wpx/2, Y(i+1)+2, wpx, 2);
+  }
+}
+
+function drawTarget(){
+  const t = LEVELS[lvlIdx].target;
+  ctx.strokeStyle='#1FA36B'; ctx.lineWidth=4;
+  ctx.beginPath(); ctx.arc(X(t.x), Y(t.y), TOL*scale, 0, Math.PI*2); ctx.stroke();
+  ctx.fillStyle='rgba(31,163,107,.15)';
+  ctx.beginPath(); ctx.arc(X(t.x), Y(t.y), TOL*scale, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle='#1FA36B'; ctx.beginPath();
+  ctx.arc(X(t.x), Y(t.y), 3, 0, Math.PI*2); ctx.fill();
+}
+
+function drawLauncher(){
+  ctx.fillStyle='#2A3B8F';
+  ctx.beginPath();
+  ctx.moveTo(X(0)-2, Y(0));
+  ctx.lineTo(X(0)+18, Y(0));
+  ctx.lineTo(X(0)+2, Y(0)-22);
+  ctx.closePath(); ctx.fill();
+}
+
+function drawCurve(upto=null){
+  ctx.strokeStyle='#2A3B8F'; ctx.lineWidth=3;
+  ctx.setLineDash(upto===null?[8,7]:[]);
+  ctx.beginPath();
+  const end = upto===null ? 2*h : upto;
+  let started=false;
+  for(let x=0;x<=end+0.01;x+=0.05){
+    const y=curveY(x); if(y<-0.2) break;
+    const px=X(x),py=Y(Math.max(y,0));
+    if(!started){ctx.moveTo(px,py);started=true;} else ctx.lineTo(px,py);
+  }
+  ctx.stroke(); ctx.setLineDash([]);
+}
+
+function drawBall(x){
+  const y=Math.max(curveY(x),0);
+  ctx.fillStyle='#FF7A1A';
+  ctx.beginPath(); ctx.arc(X(x),Y(y),9,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#C95C09'; ctx.lineWidth=2; ctx.stroke();
+}
+
+function render(ballX=null){
+  fitCanvas(); drawGrid(); drawWall(); drawTarget(); drawLauncher();
+  if(ballX===null){ drawCurve(); drawBall(0); }
+  else { drawCurve(ballX); drawBall(ballX); }
+}
+
+function setLevel(i){
+  lvlIdx=i; flying=false; hitThisLevel=false;
+  $('lvl').textContent=i+1;
+  $('ctxEmoji').textContent=LEVELS[i].emoji;
+  $('ctxText').innerHTML=LEVELS[i].text;
+  $('fireBtn').disabled=false;
+  render();
+}
+
+function endToast(ok, title, msg, btnLabel, btnClass, action){
+  const t=$('toast');
+  t.className='toast show'+(ok?'':' fail');
+  $('tEmo').textContent=ok?'🎉':'🤏';
+  $('tTitle').textContent=title;
+  $('tMsg').textContent=msg;
+  const b=$('tBtn'); b.textContent=btnLabel; b.className=btnClass;
+  b.onclick=()=>{ t.className='toast'; action(); };
+}
+
+function fire(){
+  if(flying) return;
+  flying=true; $('fireBtn').disabled=true;
+  const t=LEVELS[lvlIdx].target, w=LEVELS[lvlIdx].wall;
+  const land=2*h;
+  let x=0;
+  function step(){
+    x+=Math.max(land,1)/90;
+    // chạm tường?
+    if(w && x>=w.x){
+      const yAtWall=curveY(w.x);
+      if(yAtWall < w.h){
+        render(w.x);
+        flying=false;
+        endToast(false,'Vướng tường!',
+          `Tại x = ${w.x} đường bay chỉ cao ${yAtWall.toFixed(1)} m, thấp hơn tường ${w.h} m. Hãy nâng đỉnh k lên.`,
+          'Thử lại','retry',()=>{$('fireBtn').disabled=false; render();});
+        return;
+      }
+    }
+    if(x>=land){ render(land); checkHit(); flying=false; return; }
+    render(x);
+    requestAnimationFrame(step);
+  }
+  step();
+}
+
+function checkHit(){
+  const t=LEVELS[lvlIdx].target;
+  const land=2*h;
+  if(land < t.x){
+    endToast(false,'Chưa tới đích!',
+      `Bóng rơi tại x = ${land.toFixed(1)} m, chưa tới đích ở x = ${t.x}. Tăng "đỉnh ở xa" (h).`,
+      'Thử lại','retry',()=>{$('fireBtn').disabled=false; render();});
+    return;
+  }
+  const yAt=curveY(t.x);
+  const d=Math.abs(yAt-t.y);
+  if(d<=TOL){
+    if(!hitThisLevel){ score+=100; $('score').textContent=score; hitThisLevel=true; }
+    if(lvlIdx<LEVELS.length-1){
+      endToast(true,'Trúng đích!',`Đường bay đi qua đúng vòng tròn. Đỉnh I(${h.toFixed(1)}; ${k.toFixed(1)}).`,
+        'Màn tiếp theo','next',()=>setLevel(lvlIdx+1));
+    } else {
+      endToast(true,'Hoàn thành!',`Bạn đã chinh phục cả 5 màn với ${score} điểm. Giỏi quá!`,
+        'Chơi lại từ đầu','next',()=>{score=0;$('score').textContent=0;setLevel(0);});
+    }
+  } else {
+    const hint = yAt>t.y ? 'Đường bay cao hơn đích — hạ đỉnh k hoặc dời đỉnh h.'
+                         : 'Đường bay thấp hơn đích — nâng đỉnh k hoặc dời đỉnh h.';
+    endToast(false,'Sát rồi!',`Tại x = ${t.x}, đường bay ở độ cao ${yAt.toFixed(1)} m còn đích ở ${t.y} m. ${hint}`,
+      'Thử lại','retry',()=>{$('fireBtn').disabled=false; render();});
+  }
+}
+
+// ---- Sự kiện ----
+$('hRange').addEventListener('input',e=>{ h=+e.target.value; updateEq(); if(!flying) render(); });
+$('kRange').addEventListener('input',e=>{ k=+e.target.value; updateEq(); if(!flying) render(); });
+$('fireBtn').addEventListener('click',fire);
+$('resetBtn').addEventListener('click',()=>{ score=0; $('score').textContent=0; $('toast').className='toast'; setLevel(0); });
+window.addEventListener('resize',()=>{ if(!flying) render(); });
+
+updateEq();
+setLevel(0);
+</script>
+</body>
+</html>
