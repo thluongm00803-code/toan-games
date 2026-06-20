@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sân Chơi Toán Học — Luyện tập</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#FBFAF4;--ink:#1C2438;--indigo:#2A3B8F;--indigo-soft:#6B7BD6;--tangerine:#FF7A1A;
+    --tang-d:#C95C09;--emerald:#1FA36B;--emerald-d:#15784E;--red:#C0392B;--gold:#E8A317;--line:#E4E0D4;--muted:#6A7184}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}
+  body{font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);
+    background:radial-gradient(120% 80% at 75% -10%,#EAF2FF 0%,transparent 55%),var(--paper);min-height:100vh}
+  .wrap{max-width:860px;margin:0 auto;padding:18px 14px 50px}
+  h1{font-family:"Fredoka",sans-serif;font-weight:700;color:var(--indigo);letter-spacing:-.5px;margin:0}
+  h1 .dot{color:var(--tangerine)}
+  h2{font-family:"Fredoka",sans-serif;color:var(--indigo);font-size:20px;margin:0 0 12px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+  .who{font-size:13px;color:var(--muted);font-weight:600}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px;
+    box-shadow:0 10px 30px -22px rgba(42,59,143,.4)}
+  label{display:block;font-size:13px;font-weight:600;margin:10px 0 5px}
+  input,select,textarea{width:100%;font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--line);
+    border-radius:10px;background:#FCFCFE}
+  textarea{min-height:120px;resize:vertical;font-size:13px}
+  button{font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;border:none;border-radius:11px;
+    padding:11px 16px;cursor:pointer;transition:transform .08s}
+  button:active{transform:translateY(1px)}
+  .pri{background:var(--tangerine);color:#fff;box-shadow:0 4px 0 var(--tang-d)}
+  .pri:active{box-shadow:0 2px 0 var(--tang-d)}
+  .sec{background:#EEF1FB;color:var(--indigo)}
+  .ok{background:var(--emerald);color:#fff;box-shadow:0 4px 0 var(--emerald-d)}
+  .danger{background:#FDECEC;color:var(--red)}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .tabs button{background:#fff;border:1px solid var(--line);color:var(--ink);font-size:13.5px;padding:9px 13px}
+  .tabs button.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left}
+  th{background:#F4F6FB;font-weight:600;color:var(--indigo)}
+  .pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#EEF1FB;color:var(--indigo)}
+  .pill.g{background:#E8F7EE;color:var(--emerald-d)}
+  .muted{color:var(--muted);font-size:13px}
+  .big{font-family:"Fredoka",sans-serif;font-size:30px;color:var(--indigo)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .stat{background:#F4F6FB;border-radius:12px;padding:14px;text-align:center}
+  .stat .n{font-family:"Fredoka",sans-serif;font-size:26px;color:var(--indigo)}
+  .stat .l{font-size:12px;color:var(--muted);font-weight:600}
+  .qbox{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+  .qbox .qt{font-weight:600;margin-bottom:8px}
+  .opt{display:block;padding:8px 10px;border:1px solid var(--line);border-radius:9px;margin-bottom:6px;cursor:pointer;font-size:14px}
+  .opt.sel{border-color:var(--indigo);background:#EEF1FB}
+  .dsrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line)}
+  .dsrow .b{display:flex;gap:6px}
+  .dsrow .b button{padding:6px 12px;font-size:13px;background:#fff;border:1px solid var(--line);color:var(--ink)}
+  .dsrow .b button.t{background:var(--emerald);color:#fff;border-color:var(--emerald)}
+  .dsrow .b button.f{background:var(--red);color:#fff;border-color:var(--red)}
+  .timer{font-family:"Fredoka",sans-serif;font-weight:700;font-size:18px}
+  .timer.warn{color:var(--red)}
+  .banner{background:#FDF6E8;border:1px solid #F3DCA6;color:#8A6212;border-radius:12px;padding:12px 14px;font-size:13px;margin-bottom:14px}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1C2438;color:#fff;
+    padding:12px 18px;border-radius:12px;font-size:14px;z-index:50;opacity:0;transition:.3s;pointer-events:none}
+  .toast.show{opacity:1}
+  .msg{border-left:3px solid var(--indigo);background:#F7F9FF;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:14px}
+  .msg .meta{font-size:11px;color:var(--muted)}
+  .center{text-align:center}
+  /* Giấy chứng nhận */
+  .cert{background:linear-gradient(135deg,#fff,#F3F7FF);border:6px double var(--gold);border-radius:14px;
+    padding:34px 30px;text-align:center;max-width:640px;margin:0 auto}
+  .cert .seal{font-size:46px}
+  .cert h2{font-family:"Fredoka";color:var(--gold);font-size:30px;margin:6px 0}
+  .cert .nm{font-family:"Fredoka";font-size:30px;color:var(--indigo);margin:14px 0}
+  .cert .dsc{font-size:15px;color:var(--ink);line-height:1.7}
+  @media print{ body *{visibility:hidden} #printArea,#printArea *{visibility:visible}
+    #printArea{position:absolute;left:0;top:0;width:100%} .noprint{display:none!important} }
+  .link{color:var(--indigo);font-weight:600;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+/* ============================================================
+   CẤU HÌNH — DÁN firebaseConfig CỦA BẠN VÀO ĐÂY (xem file hướng dẫn)
+   ============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyBrLzdtAUUnS-jpAjqAzWQKe7KA1JIoJog",
+  authDomain: "san-choi-toan.firebaseapp.com",
+  projectId: "san-choi-toan",
+  storageBucket: "san-choi-toan.firebasestorage.app",
+  messagingSenderId: "665539536376",
+  appId: "1:665539536376:web:1bd7f981692527b8f7e20d"
+};
+// URL gốc tới các game (thư mục game nằm cùng repo). Nếu app đặt ở toan-games/luyen-tap/ thì để "../"
+const GAME_BASE = "../";
+const GAMES = [
+  {folder:"xac-suat",  name:"Phòng Lab Xác Suất", lop:10, topic:"Xác suất cổ điển",     ready:true,  auto:true },
+  {folder:"parabol",   name:"Pháo Thủ Parabol",   lop:10, topic:"Hàm số bậc hai",       ready:true,  auto:false},
+  {folder:"nong-trai", name:"Nông Trại Tối Ưu",   lop:10, topic:"Quy hoạch tuyến tính", ready:false, auto:false},
+];
+// auto:true  → game tự gửi kết quả về app khi chơi xong (qua postMessage).
+// Game khác  → học sinh tự nhập % sau khi chơi.
+const DEFAULT_CERT = 80; // % điểm tối thiểu để được cấp giấy chứng nhận
+
+/* ============================================================ */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc,
+  serverTimestamp, deleteDoc, query, orderBy }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+let db=null, fbError=null;
+try { const app=initializeApp(firebaseConfig); db=getFirestore(app); }
+catch(e){ fbError=e.message; }
+const configured = !firebaseConfig.apiKey.startsWith("DÁN");
+
+const app=document.getElementById('app');
+const T=document.getElementById('toast');
+function toast(m){ T.textContent=m; T.classList.add('show'); setTimeout(()=>T.classList.remove('show'),2200); }
+function esc(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function rid(n=6){ const s="ABCDEFGHJKMNPQRSTUVWXYZ23456789"; let r=""; for(let i=0;i<n;i++)r+=s[Math.floor(Math.random()*s.length)]; return r; }
+
+// Firestore helpers
+const cls = id => doc(db,"classes",id);
+const studs = id => collection(db,"classes",id,"students");
+const asgs = id => collection(db,"classes",id,"assignments");
+const subs = id => collection(db,"classes",id,"submissions");
+const msgs = id => collection(db,"classes",id,"messages");
+
+let S={view:"home", classId:null, cls:null, student:null};
+
+/* ===== Tự động nhận kết quả từ game (postMessage) =====
+   Game gửi về: { source:'SCT_GAME', type:'RESULT', game:'<folder>', percent:0..100, stars, starsMax, detail } */
+let pendingGame=null;
+async function recordGameResult(g, d){
+  const percent=Math.max(0,Math.min(100,Math.round(d.percent||0)));
+  await addDoc(subs(S.classId),{studentKey:S.student.key,studentName:S.student.name,aid:g.aid,aTitle:g.title,
+    kind:"game",percent,stars:(d.stars!=null?d.stars:null),starsMax:(d.starsMax!=null?d.starsMax:null),
+    detail:d.detail||'',at:Date.now()});
+  if(S.view==='sdash') viewStudentDash();
+}
+window.addEventListener('message',ev=>{
+  const d=ev.data; if(!d||d.source!=='SCT_GAME'||d.type!=='RESULT'||!S.student||!pendingGame) return;
+  const g={aid:pendingGame.aid,title:pendingGame.title};
+  recordGameResult(g,d).then(()=>toast(`Đã nhận kết quả: ${Math.round(d.percent||0)}% 🎮`));
+});
+
+/* ===================== ĐIỀU HƯỚNG ===================== */
+function render(){
+  if(!configured){ app.innerHTML=`<div class="card"><h1>Sân Chơi Toán Học<span class="dot">.</span></h1>
+    <div class="banner" style="margin-top:14px">⚙️ Web app chưa được cấu hình Firebase. Hãy mở mã nguồn, dán <b>firebaseConfig</b> của bạn vào đầu file (xem file hướng dẫn cài đặt), rồi tải lại trang.</div></div>`; return; }
+  if(fbError){ app.innerHTML=`<div class="card"><h2>Lỗi kết nối</h2><p class="muted">${esc(fbError)}</p></div>`; return; }
+  const v=S.view;
+  if(v==="home") return viewHome();
+  if(v==="tlogin") return viewTeacherLogin();
+  if(v==="tdash") return viewTeacherDash();
+  if(v==="slogin") return viewStudentLogin();
+  if(v==="sdash") return viewStudentDash();
+  if(v==="quiz") return viewQuiz();
+  if(v==="cert") return viewCert();
+}
+function go(v){ S.view=v; render(); }
+
+/* ===================== TRANG CHỦ ===================== */
+function viewHome(){
+  app.innerHTML=`
+    <div class="center" style="padding:30px 0 10px">
+      <h1 style="font-size:38px">Sân Chơi Toán Học<span class="dot">.</span></h1>
+      <p class="muted">Luyện tập phiếu bài tập và trò chơi toán học — Toán 10·11·12</p>
+    </div>
+    <div class="card center">
+      <h2>Bạn là?</h2>
+      <div class="row" style="justify-content:center;margin-top:8px">
+        <button class="pri" id="bS">🎒 Học sinh</button>
+        <button class="sec" id="bT">👩‍🏫 Giáo viên</button>
+      </div>
+    </div>`;
+  app.querySelector('#bS').onclick=()=>go('slogin');
+  app.querySelector('#bT').onclick=()=>go('tlogin');
+}
+
+/* ===================== GIÁO VIÊN: ĐĂNG NHẬP/TẠO LỚP ===================== */
+function viewTeacherLogin(){
+  app.innerHTML=`
+    <div class="topbar"><h1>Giáo viên<span class="dot">.</span></h1><button class="sec" id="back">← Trang chủ</button></div>
+    <div class="card">
+      <h2>Đăng nhập / Tạo lớp</h2>
+      <label>Mã lớp (tự đặt, vd: 12A1-2026)</label><input id="cid" placeholder="Mã lớp">
+      <label>Mã PIN giáo viên</label><input id="pin" type="password" placeholder="PIN bí mật">
+      <div class="row" style="margin-top:14px">
+        <button class="pri" id="enter">Vào lớp</button>
+        <button class="sec" id="create">Tạo lớp mới</button>
+      </div>
+      <p class="muted" style="margin-top:10px">Mã lớp + PIN dùng để quản lý. Học sinh chỉ cần mã lớp và key riêng.</p>
+    </div>`;
+  app.querySelector('#back').onclick=()=>go('home');
+  app.querySelector('#enter').onclick=async()=>{
+    const id=app.querySelector('#cid').value.trim(), pin=app.querySelector('#pin').value.trim();
+    if(!id||!pin) return toast("Nhập mã lớp và PIN");
+    const snap=await getDoc(cls(id));
+    if(!snap.exists()) return toast("Lớp chưa tồn tại — bấm Tạo lớp mới");
+    if(snap.data().teacherPin!==pin) return toast("Sai PIN");
+    S.classId=id; S.cls=snap.data(); go('tdash');
+  };
+  app.querySelector('#create').onclick=async()=>{
+    const id=app.querySelector('#cid').value.trim(), pin=app.querySelector('#pin').value.trim();
+    if(!id||!pin) return toast("Nhập mã lớp và PIN");
+    const snap=await getDoc(cls(id));
+    if(snap.exists()) return toast("Mã lớp đã tồn tại, hãy chọn mã khác");
+    const data={name:id,teacherPin:pin,certThreshold:DEFAULT_CERT,createdAt:Date.now()};
+    await setDoc(cls(id),data); S.classId=id; S.cls=data; toast("Đã tạo lớp"); go('tdash');
+  };
+}
+
+/* ===================== GIÁO VIÊN: BẢNG ĐIỀU KHIỂN ===================== */
+let tTab="students";
+function viewTeacherDash(){
+  app.innerHTML=`
+    <div class="topbar"><div><h1>Lớp ${esc(S.classId)}<span class="dot">.</span></h1><span class="who">Giáo viên</span></div>
+      <button class="sec" id="out">Đăng xuất</button></div>
+    <div class="tabs">
+      <button data-t="students">👥 Học sinh</button>
+      <button data-t="assign">📝 Bài tập & Game</button>
+      <button data-t="results">📊 Kết quả</button>
+      <button data-t="msg">✉️ Tin nhắn</button>
+      <button data-t="settings">⚙️ Lớp</button>
+    </div>
+    <div id="tbody"></div>`;
+  app.querySelector('#out').onclick=()=>{S.classId=null;S.cls=null;go('home');};
+  app.querySelectorAll('.tabs button').forEach(b=>{b.classList.toggle('on',b.dataset.t===tTab);
+    b.onclick=()=>{tTab=b.dataset.t;viewTeacherDash();};});
+  if(tTab==="students") tStudents();
+  if(tTab==="assign") tAssign();
+  if(tTab==="results") tResults();
+  if(tTab==="msg") tMsg();
+  if(tTab==="settings") tSettings();
+}
+
+async function tStudents(){
+  const body=app.querySelector('#tbody');
+  body.innerHTML=`<div class="card"><h2>Nhập danh sách lớp</h2>
+    <label>Dán họ tên học sinh (mỗi em một dòng)</label>
+    <textarea id="names" placeholder="Nguyễn Văn A&#10;Trần Thị B&#10;..."></textarea>
+    <button class="pri" id="imp" style="margin-top:10px">Tạo key cho cả lớp</button>
+    <p class="muted" style="margin-top:8px">Mỗi học sinh sẽ nhận một <b>key</b> để đăng nhập. Có thể nhập thêm nhiều lần.</p>
+    </div>
+    <div class="card"><div class="row" style="justify-content:space-between"><h2>Danh sách (<span id="cnt">…</span>)</h2>
+      <button class="sec" id="exp">⬇ Xuất key (CSV)</button></div>
+      <div id="list"></div></div>`;
+  body.querySelector('#imp').onclick=async()=>{
+    const lines=body.querySelector('#names').value.split('\n').map(s=>s.trim()).filter(Boolean);
+    if(!lines.length) return toast("Chưa có tên");
+    for(const nm of lines){ const key=rid(); await setDoc(doc(studs(S.classId),key),{name:nm,key}); }
+    body.querySelector('#names').value=""; toast("Đã thêm "+lines.length+" học sinh"); loadList();
+  };
+  async function loadList(){
+    const ss=await getDocs(studs(S.classId)); const arr=ss.docs.map(d=>d.data());
+    body.querySelector('#cnt').textContent=arr.length;
+    body.querySelector('#list').innerHTML = arr.length? `<table><tr><th>Họ tên</th><th>Key đăng nhập</th><th></th></tr>`+
+      arr.map(s=>`<tr><td>${esc(s.name)}</td><td><b>${s.key}</b></td>
+        <td><button class="danger" data-k="${s.key}" style="padding:4px 10px;font-size:12px">Xoá</button></td></tr>`).join('')+`</table>`
+      : `<p class="muted">Chưa có học sinh.</p>`;
+    body.querySelectorAll('[data-k]').forEach(b=>b.onclick=async()=>{ await deleteDoc(doc(studs(S.classId),b.dataset.k)); loadList(); });
+    body.querySelector('#exp').onclick=()=>{
+      const csv="Ho ten,Key\n"+arr.map(s=>`"${s.name}",${s.key}`).join('\n');
+      dl(csv,"danh_sach_key_"+S.classId+".csv");
+    };
+  }
+  loadList();
+}
+
+async function tAssign(){
+  const body=app.querySelector('#tbody');
+  body.innerHTML=`
+    <div class="card"><h2>Giao Phiếu bài tập (chấm tự động)</h2>
+      <label>Tiêu đề</label><input id="qtitle" placeholder="Phiếu bài tập Hàm số bậc hai">
+      <label>Thời gian làm bài (phút, 0 = không giới hạn)</label><input id="qdur" type="number" value="0">
+      <label>Hạn nộp (để trống nếu không có)</label><input id="qdl" type="date">
+      <label>Nội dung câu hỏi — theo cú pháp:</label>
+      <div class="banner"><b>[TN]</b> câu trắc nghiệm; các phương án mỗi dòng, đặt <b>*</b> trước đáp án đúng.<br>
+        <b>[DS]</b> câu đúng/sai; mỗi ý một dòng, đặt <b>*</b> trước ý ĐÚNG.<br>
+        <b>[TLN]</b> câu trả lời ngắn; ghi <b>| đáp_án_số</b> ở cuối. Cách nhau bằng dòng trống.</div>
+      <textarea id="qtext" placeholder="[TN] Đỉnh của parabol y=x^2-2x là?
+A. (0;0)
+*B. (1;-1)
+C. (2;0)
+D. (-1;1)
+
+[DS] Cho y=x^2-2x:
+*a) Bề lõm quay lên
+b) Đỉnh có tung độ 1
+*c) Trục đối xứng x=1
+d) Hàm đồng biến trên R
+
+[TLN] Nghiệm dương của x^2-3x+2=0 lớn nhất bằng | 2"></textarea>
+      <button class="pri" id="addq" style="margin-top:10px">Giao phiếu này</button>
+    </div>
+    <div class="card"><h2>Giao Game</h2>
+      <label>Chọn game</label><select id="gsel">${GAMES.map((g,i)=>`<option value="${i}">${g.name} — Lớp ${g.lop} (${g.topic})${g.auto?' · tự động ghi điểm':(g.ready?'':' · sắp ra mắt')}</option>`).join('')}</select>
+      <label>Mục tiêu hoàn thành (%)</label><input id="gtarget" type="number" value="80" min="0" max="100">
+      <button class="pri" id="addg" style="margin-top:10px">Giao game này</button>
+      <p class="muted" style="margin-top:8px">Game “tự động ghi điểm” sẽ gửi kết quả về app khi học sinh chơi xong. Game khác: học sinh tự nhập %.</p>
+    </div>
+    <div class="card"><h2>Đã giao</h2><div id="alist"></div></div>`;
+  body.querySelector('#addq').onclick=async()=>{
+    const title=body.querySelector('#qtitle').value.trim();
+    const qs=parseQuiz(body.querySelector('#qtext').value);
+    if(!title||!qs.length) return toast("Thiếu tiêu đề hoặc câu hỏi");
+    await addDoc(asgs(S.classId),{kind:"quiz",title,questions:qs,
+      duration:+body.querySelector('#qdur').value||0, deadline:body.querySelector('#qdl').value||"", createdAt:Date.now()});
+    toast("Đã giao "+qs.length+" câu"); tAssign();
+  };
+  body.querySelector('#addg').onclick=async()=>{
+    const g=GAMES[+body.querySelector('#gsel').value];
+    await addDoc(asgs(S.classId),{kind:"game",title:g.name,gameFolder:g.folder,
+      targetPercent:+body.querySelector('#gtarget').value||80, auto:!!g.auto, topic:g.topic, createdAt:Date.now()});
+    toast("Đã giao game"); tAssign();
+  };
+  const aa=await getDocs(asgs(S.classId)); const arr=aa.docs.map(d=>({id:d.id,...d.data()}));
+  body.querySelector('#alist').innerHTML = arr.length? arr.sort((a,b)=>b.createdAt-a.createdAt).map(a=>
+    `<div class="dsrow"><span><span class="pill ${a.kind==='game'?'g':''}">${a.kind==='game'?'GAME':'PHIẾU'}</span> ${esc(a.title)}
+      ${a.kind==='quiz'?`· ${a.questions.length} câu`:`· mục tiêu ${a.targetPercent||80}%`}${a.deadline?` · hạn ${a.deadline}`:''}</span>
+      <span class="b"><button class="danger" data-d="${a.id}" style="font-size:12px">Xoá</button></span></div>`).join('')
+    : `<p class="muted">Chưa giao gì.</p>`;
+  body.querySelectorAll('[data-d]').forEach(b=>b.onclick=async()=>{await deleteDoc(doc(asgs(S.classId),b.dataset.d));tAssign();});
+}
+
+async function tResults(){
+  const body=app.querySelector('#tbody');
+  body.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between"><h2>Thống kê</h2>
+    <button class="sec" id="exp">⬇ Xuất kết quả (CSV)</button></div><div id="stats"></div></div>
+    <div class="card"><h2>Bài làm chi tiết</h2><div id="detail"></div></div>`;
+  const [ss,sb,aa]=await Promise.all([getDocs(studs(S.classId)),getDocs(subs(S.classId)),getDocs(asgs(S.classId))]);
+  const students=ss.docs.map(d=>d.data()), submissions=sb.docs.map(d=>d.data());
+  const nQuiz=submissions.filter(x=>x.kind==='quiz').length;
+  const did=new Set(submissions.map(s=>s.studentKey)).size;
+  const avg = nQuiz? (submissions.filter(x=>x.kind==='quiz').reduce((s,x)=>s+x.percent,0)/nQuiz).toFixed(0):0;
+  body.querySelector('#stats').innerHTML=`<div class="grid">
+    <div class="stat"><div class="n">${students.length}</div><div class="l">Học sinh</div></div>
+    <div class="stat"><div class="n">${did}</div><div class="l">Đã làm bài</div></div>
+    <div class="stat"><div class="n">${submissions.length}</div><div class="l">Lượt nộp</div></div>
+    <div class="stat"><div class="n">${avg}%</div><div class="l">Điểm TB phiếu</div></div></div>`;
+  // bảng xếp hạng
+  const best={}; submissions.filter(x=>x.kind==='quiz').forEach(s=>{ if(!best[s.studentKey]||s.percent>best[s.studentKey].percent) best[s.studentKey]=s; });
+  const rank=Object.values(best).sort((a,b)=>b.percent-a.percent);
+  let html=`<table><tr><th>#</th><th>Học sinh</th><th>Bài</th><th>Điểm</th><th>%</th><th>Thời gian</th><th>Cảnh báo</th><th>Khi nào</th></tr>`;
+  submissions.sort((a,b)=>(b.at||0)-(a.at||0)).forEach(s=>{
+    const diem = s.kind==='game' ? (s.stars!=null?(s.stars+(s.starsMax?'/'+s.starsMax:'')+'★'):'🎮') : (s.score+'/'+s.maxScore);
+    html+=`<tr><td>${s.kind==='game'?'🎮':'📝'}</td><td>${esc(s.studentName)}</td><td>${esc(s.aTitle)}</td>
+      <td>${diem}</td><td>${s.percent!=null?s.percent+'%':'-'}</td>
+      <td>${s.timeSpent?Math.round(s.timeSpent/60)+'′':'-'}</td><td>${s.violations?('⚠️'+s.violations):'-'}</td>
+      <td>${s.at?new Date(s.at).toLocaleString('vi-VN'):''}</td></tr>`;
+  });
+  html+=`</table>`;
+  body.querySelector('#detail').innerHTML = submissions.length? html : `<p class="muted">Chưa có bài nộp.</p>`;
+  body.querySelector('#exp').onclick=()=>{
+    const csv="Hoc sinh,Key,Bai,Loai,Diem,PhanTram,Giay,ThoiGian(s),CanhBao,ThoiDiem\n"+
+      submissions.map(s=>`"${s.studentName}",${s.studentKey},"${s.aTitle}",${s.kind},${s.kind==='game'?s.stars:s.score+'/'+s.maxScore},${s.percent||''},${s.percent>=(S.cls.certThreshold||DEFAULT_CERT)?'Co':''},${s.timeSpent||''},${s.violations||0},"${s.at?new Date(s.at).toLocaleString('vi-VN'):''}"`).join('\n');
+    dl(csv,"ket_qua_"+S.classId+".csv");
+  };
+}
+
+async function tMsg(){
+  const body=app.querySelector('#tbody');
+  const ss=await getDocs(studs(S.classId)); const students=ss.docs.map(d=>d.data());
+  body.innerHTML=`<div class="card"><h2>Gửi tin nhắn</h2>
+    <label>Gửi tới</label><select id="to"><option value="all">📢 Cả lớp</option>
+      ${students.map(s=>`<option value="${s.key}">${esc(s.name)} (${s.key})</option>`).join('')}</select>
+    <label>Nội dung (nhắc nhở, động viên…)</label><textarea id="mt" placeholder="Cố lên các em, nhớ làm phiếu trước thứ Sáu nhé!"></textarea>
+    <button class="pri" id="send" style="margin-top:10px">Gửi</button></div>
+    <div class="card"><h2>Đã gửi</h2><div id="mlist"></div></div>`;
+  body.querySelector('#send').onclick=async()=>{
+    const txt=body.querySelector('#mt').value.trim(); if(!txt) return toast("Nhập nội dung");
+    await addDoc(msgs(S.classId),{to:body.querySelector('#to').value,text:txt,at:Date.now()});
+    body.querySelector('#mt').value=""; toast("Đã gửi"); tMsg();
+  };
+  const mm=await getDocs(msgs(S.classId)); const arr=mm.docs.map(d=>d.data()).sort((a,b)=>b.at-a.at);
+  const nameOf=k=>k==='all'?'Cả lớp':(students.find(s=>s.key===k)?.name||k);
+  body.querySelector('#mlist').innerHTML=arr.length? arr.map(m=>`<div class="msg"><div>${esc(m.text)}</div>
+    <div class="meta">→ ${esc(nameOf(m.to))} · ${new Date(m.at).toLocaleString('vi-VN')}</div></div>`).join('')
+    : `<p class="muted">Chưa gửi tin nào.</p>`;
+}
+
+/* ===================== GIÁO VIÊN: CÀI ĐẶT LỚP ===================== */
+async function tSettings(){
+  const body=app.querySelector('#tbody');
+  body.innerHTML=`<div class="card"><h2>Cài đặt lớp</h2>
+    <label>Ngưỡng cấp giấy chứng nhận (%)</label>
+    <input id="th" type="number" min="0" max="100" value="${S.cls.certThreshold||DEFAULT_CERT}">
+    <label>Đổi PIN giáo viên (bỏ trống nếu giữ nguyên)</label>
+    <input id="npin" type="password" placeholder="PIN mới">
+    <button class="pri" id="save" style="margin-top:12px">Lưu cài đặt</button></div>
+    <div class="card"><h2 style="color:var(--red)">Vùng nguy hiểm</h2>
+    <p class="muted">Xoá lớp sẽ xoá toàn bộ học sinh, bài đã giao, kết quả và tin nhắn. Không thể khôi phục.</p>
+    <button class="danger" id="del">Xoá lớp “${esc(S.classId)}”</button></div>`;
+  body.querySelector('#save').onclick=async()=>{
+    const th=+body.querySelector('#th').value||DEFAULT_CERT, np=body.querySelector('#npin').value.trim();
+    const patch={certThreshold:th}; if(np) patch.teacherPin=np;
+    await setDoc(cls(S.classId),{...S.cls,...patch}); S.cls={...S.cls,...patch};
+    body.querySelector('#npin').value=""; toast("Đã lưu cài đặt");
+  };
+  body.querySelector('#del').onclick=async()=>{
+    if(!confirm("Xoá toàn bộ lớp "+S.classId+"? Hành động không thể hoàn tác.")) return;
+    for(const coll of [studs,asgs,subs,msgs]){ const ss=await getDocs(coll(S.classId)); for(const d of ss.docs) await deleteDoc(d.ref); }
+    await deleteDoc(cls(S.classId)); toast("Đã xoá lớp"); S.classId=null;S.cls=null;go('home');
+  };
+}
+
+/* ===================== HỌC SINH ===================== */
+function viewStudentLogin(){
+  app.innerHTML=`<div class="topbar"><h1>Học sinh<span class="dot">.</span></h1><button class="sec" id="back">← Trang chủ</button></div>
+    <div class="card"><h2>Đăng nhập</h2>
+      <label>Mã lớp</label><input id="cid" placeholder="Mã lớp thầy/cô cho">
+      <label>Key của em</label><input id="key" placeholder="VD: K7QM2P">
+      <button class="pri" id="in" style="margin-top:14px">Vào học</button></div>`;
+  app.querySelector('#back').onclick=()=>go('home');
+  app.querySelector('#in').onclick=async()=>{
+    const id=app.querySelector('#cid').value.trim(), key=app.querySelector('#key').value.trim().toUpperCase();
+    if(!id||!key) return toast("Nhập mã lớp và key");
+    const c=await getDoc(cls(id)); if(!c.exists()) return toast("Không tìm thấy lớp");
+    const st=await getDoc(doc(studs(id),key)); if(!st.exists()) return toast("Key không đúng");
+    S.classId=id; S.cls=c.data(); S.student=st.data(); go('sdash');
+  };
+}
+
+async function viewStudentDash(){
+  app.innerHTML=`<div class="topbar"><div><h1>Chào ${esc(S.student.name)}<span class="dot">.</span></h1>
+    <span class="who">Lớp ${esc(S.classId)}</span></div><button class="sec" id="out">Thoát</button></div>
+    <div id="inbox"></div>
+    <div class="card"><h2>📝 Phiếu bài tập</h2><div id="quizzes"></div></div>
+    <div class="card"><h2>🎮 Trò chơi</h2><div id="games"></div></div>
+    <div class="card"><h2>🏅 Giấy chứng nhận</h2><div id="certs"></div></div>
+    <div class="card"><h2>🏆 Bảng xếp hạng lớp</h2><div id="board"></div></div>`;
+  app.querySelector('#out').onclick=()=>{S.student=null;S.classId=null;go('home');};
+  const [aa,sb,mm]=await Promise.all([getDocs(asgs(S.classId)),getDocs(subs(S.classId)),getDocs(msgs(S.classId))]);
+  const asn=aa.docs.map(d=>({id:d.id,...d.data()}));
+  const mine=sb.docs.map(d=>d.data()).filter(s=>s.studentKey===S.student.key);
+  // tin nhắn
+  const inbox=mm.docs.map(d=>d.data()).filter(m=>m.to==='all'||m.to===S.student.key).sort((a,b)=>b.at-a.at);
+  app.querySelector('#inbox').innerHTML = inbox.length? `<div class="card"><h2>✉️ Tin từ thầy/cô</h2>`+
+    inbox.map(m=>`<div class="msg"><div>${esc(m.text)}</div><div class="meta">${new Date(m.at).toLocaleString('vi-VN')}</div></div>`).join('')+`</div>` : '';
+  // quizzes
+  const qz=asn.filter(a=>a.kind==='quiz').sort((a,b)=>b.createdAt-a.createdAt);
+  app.querySelector('#quizzes').innerHTML = qz.length? qz.map(a=>{
+    const done=mine.filter(s=>s.aid===a.id).sort((x,y)=>y.percent-x.percent)[0];
+    const overdue=a.deadline && new Date(a.deadline) < new Date(new Date().toDateString());
+    return `<div class="dsrow"><span>${esc(a.title)} · ${a.questions.length} câu${a.duration?` · ${a.duration}′`:''}${a.deadline?` · hạn ${a.deadline}`:''}
+      ${done?`<span class="pill g">đã làm: ${done.percent}%</span>`:''}${overdue&&!done?`<span class="pill" style="background:#FDECEC;color:#C0392B">quá hạn</span>`:''}</span>
+      <span class="b"><button class="pri" data-q="${a.id}" style="font-size:13px">${done?'Làm lại':'Làm bài'}</button></span></div>`;
+  }).join('') : `<p class="muted">Chưa có phiếu nào.</p>`;
+  app.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{ S.quiz=asn.find(a=>a.id===b.dataset.q); go('quiz'); });
+  // games
+  const gm=asn.filter(a=>a.kind==='game');
+  app.querySelector('#games').innerHTML = gm.length? gm.map(a=>{
+    const tgt=a.targetPercent||80;
+    const done=mine.filter(s=>s.aid===a.id).sort((x,y)=>(y.percent||0)-(x.percent||0))[0];
+    const badge=done?`<span class="pill ${done.percent>=tgt?'g':''}">đạt ${done.percent}%</span>`:'';
+    return `<div class="dsrow"><span>${esc(a.title)} · mục tiêu ${tgt}% ${badge}</span>
+      <span class="b">
+        <button class="pri" data-play="${a.id}" style="font-size:13px">▶ Chơi${a.auto?' &amp; ghi điểm':''}</button>
+        <button class="sec" data-manual="${a.id}" style="font-size:13px">Nhập tay</button></span></div>`;
+  }).join('') : `<p class="muted">Chưa có game nào.</p>`;
+  app.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>{
+    const a=asn.find(x=>x.id===b.dataset.play);
+    pendingGame={aid:a.id,title:a.title,folder:a.gameFolder,target:a.targetPercent||80,auto:a.auto};
+    window.open(`${GAME_BASE}${a.gameFolder}/?lms=1`,'_blank');
+    if(a.auto) toast("Chơi xong, kết quả sẽ tự về đây ✨"); else toast("Chơi xong, bấm “Nhập tay” để ghi %");
+  });
+  app.querySelectorAll('[data-manual]').forEach(b=>b.onclick=async()=>{
+    const a=asn.find(x=>x.id===b.dataset.manual);
+    const v=prompt("Em đạt bao nhiêu % trong game? (0–100)"); const n=parseInt(v);
+    if(!(n>=0&&n<=100)) return;
+    await recordGameResult({aid:a.id,title:a.title},{percent:n,detail:'nhập tay'});
+    toast("Đã ghi nhận "+n+"%");
+  });
+  // certificates (cả phiếu lẫn game đạt ngưỡng)
+  const th=S.cls.certThreshold||DEFAULT_CERT;
+  const passed=asn.map(a=>{const d=mine.filter(s=>s.aid===a.id).sort((x,y)=>(y.percent||0)-(x.percent||0))[0]; return d&&d.percent>=th?{a,d}:null;}).filter(Boolean);
+  app.querySelector('#certs').innerHTML = passed.length? passed.map(p=>
+    `<div class="dsrow"><span>${p.a.kind==='game'?'🎮':'📝'} ${esc(p.a.title)} — ${p.d.percent}% 🎉</span>
+      <span class="b"><button class="ok" data-c="${p.a.id}" data-p="${p.d.percent}" style="font-size:13px">Nhận giấy</button></span></div>`).join('')
+    : `<p class="muted">Đạt ≥ ${th}% một phiếu hoặc game để được cấp giấy chứng nhận.</p>`;
+  app.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{ S.cert={title:asn.find(a=>a.id===b.dataset.c).title,percent:b.dataset.p}; go('cert'); });
+
+  // bảng xếp hạng (theo số bài đạt ngưỡng, rồi điểm trung bình)
+  const allSubs=sb.docs.map(d=>d.data());
+  const byStu={};
+  allSubs.forEach(s=>{ const o=(byStu[s.studentKey]=byStu[s.studentKey]||{name:s.studentName,best:{}});
+    const cur=o.best[s.aid]; if(cur==null||(s.percent||0)>cur) o.best[s.aid]=s.percent||0; });
+  const board=Object.entries(byStu).map(([key,o])=>{ const vals=Object.values(o.best);
+    return {key,name:o.name,passed:vals.filter(p=>p>=th).length,avg:vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0}; })
+    .sort((a,b)=> b.passed-a.passed || b.avg-a.avg).slice(0,5);
+  const medal=['🥇','🥈','🥉','4.','5.'];
+  app.querySelector('#board').innerHTML = board.length? `<table><tr><th></th><th>Học sinh</th><th>Bài đạt</th><th>Điểm TB</th></tr>`+
+    board.map((r,i)=>`<tr${r.key===S.student.key?' style="background:#FFF6EE;font-weight:600"':''}><td>${medal[i]}</td><td>${esc(r.name)}${r.key===S.student.key?' (em)':''}</td><td>${r.passed}</td><td>${r.avg}%</td></tr>`).join('')+`</table>`
+    : `<p class="muted">Chưa có dữ liệu xếp hạng.</p>`;
+}
+
+/* ===================== LÀM BÀI (CHẤM TỰ ĐỘNG + CHỐNG GIAN LẬN) ===================== */
+let quizState=null;
+function viewQuiz(){
+  const a=S.quiz; quizState={answers:a.questions.map(()=>null), violations:0, start:Date.now(), timer:null, left:a.duration*60};
+  app.innerHTML=`<div class="topbar"><h2>${esc(a.title)}</h2>
+    <span class="timer" id="tm">${a.duration?fmtT(quizState.left):'⏱ tự do'}</span></div>
+    <div class="banner noprint">Mẹo: giữ tập trung. Việc chuyển tab/thoát màn sẽ được hệ thống ghi nhận. ⚠️ <span id="vio">0</span> lần.</div>
+    <div id="qs"></div>
+    <button class="ok" id="submit" style="width:100%;margin-top:6px">Nộp bài</button>`;
+  const qc=app.querySelector('#qs');
+  a.questions.forEach((q,i)=>{
+    const d=document.createElement('div'); d.className='qbox';
+    if(q.type==='TN'){
+      d.innerHTML=`<div class="qt">Câu ${i+1}. ${esc(q.q)}</div>`+
+        q.opts.map((o,j)=>`<label class="opt" data-i="${i}" data-j="${j}">${'ABCD'[j]}. ${esc(o.t)}</label>`).join('');
+    } else if(q.type==='DS'){
+      d.innerHTML=`<div class="qt">Câu ${i+1}. ${esc(q.q)}</div>`+
+        q.sts.map((s,j)=>`<div class="dsrow"><span>${'abcd'[j]}) ${esc(s.t)}</span>
+          <span class="b"><button data-i="${i}" data-j="${j}" data-v="1">Đúng</button>
+          <button data-i="${i}" data-j="${j}" data-v="0">Sai</button></span></div>`).join('');
+      quizState.answers[i]=q.sts.map(()=>null);
+    } else {
+      d.innerHTML=`<div class="qt">Câu ${i+1}. ${esc(q.q)}</div><input data-tln="${i}" placeholder="Nhập đáp án (số)">`;
+    }
+    qc.appendChild(d);
+  });
+  // chọn TN
+  qc.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{
+    const i=+o.dataset.i; qc.querySelectorAll(`.opt[data-i="${i}"]`).forEach(x=>x.classList.remove('sel'));
+    o.classList.add('sel'); quizState.answers[i]=+o.dataset.j;
+  });
+  // DS
+  qc.querySelectorAll('.dsrow .b button').forEach(btn=>btn.onclick=()=>{
+    const i=+btn.dataset.i,j=+btn.dataset.j,v=+btn.dataset.v;
+    quizState.answers[i][j]=v; const sib=btn.parentElement.querySelectorAll('button');
+    sib.forEach(x=>x.className=''); btn.className=v?'t':'f';
+  });
+  // TLN
+  qc.querySelectorAll('[data-tln]').forEach(inp=>inp.oninput=()=>{ quizState.answers[+inp.dataset.tln]=inp.value; });
+  app.querySelector('#submit').onclick=submitQuiz;
+  // chống gian lận
+  document.addEventListener('visibilitychange',vioH);
+  window.addEventListener('blur',vioH);
+  if(a.duration){ quizState.timer=setInterval(()=>{ quizState.left--; const tm=app.querySelector('#tm');
+    if(tm){tm.textContent=fmtT(quizState.left); tm.classList.toggle('warn',quizState.left<60);}
+    if(quizState.left<=0) submitQuiz(); },1000); }
+}
+function vioH(){ if(document.hidden||document.visibilityState==='hidden'){ if(quizState){quizState.violations++;
+  const v=app.querySelector('#vio'); if(v)v.textContent=quizState.violations; toast("⚠️ Đã rời khỏi bài làm!");}} }
+function cleanupQuiz(){ document.removeEventListener('visibilitychange',vioH); window.removeEventListener('blur',vioH);
+  if(quizState&&quizState.timer) clearInterval(quizState.timer); }
+
+async function submitQuiz(){
+  const a=S.quiz; let score=0; const detail=[];
+  a.questions.forEach((q,i)=>{
+    let pt=0; const ans=quizState.answers[i];
+    if(q.type==='TN'){ pt = (ans!=null && q.opts[ans] && q.opts[ans].correct)?1:0; }
+    else if(q.type==='DS'){ const arr=ans||[]; let c=0; q.sts.forEach((s,j)=>{ if((arr[j]===1)===s.correct) c++; });
+      if(q.sts.length===4) pt=[0,0.1,0.25,0.5,1][c]; else pt=c/q.sts.length; }
+    else { const u=normNum(ans), k=normNum(q.ans); pt=(u!=null&&k!=null&&Math.abs(u-k)<1e-6)?1:0; }
+    score+=pt; detail.push(pt);
+  });
+  const max=a.questions.length, percent=Math.round(score/max*100), time=Math.round((Date.now()-quizState.start)/1000);
+  cleanupQuiz();
+  const late = !!(a.deadline && Date.now() > new Date(a.deadline+'T23:59:59').getTime());
+  await addDoc(subs(S.classId),{studentKey:S.student.key,studentName:S.student.name,aid:a.id,aTitle:a.title,
+    kind:"quiz",score:Math.round(score*100)/100,maxScore:max,percent,timeSpent:time,violations:quizState.violations,late,at:Date.now()});
+  const th=S.cls.certThreshold||DEFAULT_CERT;
+  app.innerHTML=`<div class="card center"><div class="big">${percent}%</div>
+    <p>Đúng ${Math.round(score*100)/100}/${max} điểm · thời gian ${Math.round(time/60)}′${quizState.violations?` · ⚠️ ${quizState.violations} lần rời màn`:''}</p>
+    ${percent>=th?`<p style="color:var(--emerald-d);font-weight:600">🎉 Xuất sắc! Em đủ điều kiện nhận giấy chứng nhận.</p>`:`<p class="muted">Cố thêm để đạt ≥ ${th}% nhận giấy chứng nhận nhé!</p>`}
+    <div class="row" style="justify-content:center;margin-top:10px">
+      ${percent>=th?`<button class="ok" id="cert">🏅 Nhận giấy chứng nhận</button>`:''}
+      <button class="sec" id="bk">Về trang học</button></div></div>`;
+  if(percent>=th) app.querySelector('#cert').onclick=()=>{ S.cert={title:a.title,percent}; go('cert'); };
+  app.querySelector('#bk').onclick=()=>go('sdash');
+}
+
+/* ===================== GIẤY CHỨNG NHẬN ===================== */
+function viewCert(){
+  const c=S.cert;
+  app.innerHTML=`<div class="topbar noprint"><h2>Giấy chứng nhận</h2>
+    <div class="row"><button class="pri" id="print">🖨 In / Lưu PDF</button><button class="sec" id="bk">← Quay lại</button></div></div>
+    <div id="printArea"><div class="cert">
+      <div class="seal">🏅</div><h2>GIẤY CHỨNG NHẬN</h2>
+      <div class="dsc">Chứng nhận học sinh</div>
+      <div class="nm">${esc(S.student.name)}</div>
+      <div class="dsc">đã hoàn thành xuất sắc bài luyện tập<br><b>“${esc(c.title)}”</b><br>
+        với kết quả <b>${c.percent}%</b> · Lớp ${esc(S.classId)}</div>
+      <div class="dsc" style="margin-top:18px">Ngày ${new Date().toLocaleDateString('vi-VN')}</div>
+      <div class="dsc" style="margin-top:24px;display:flex;justify-content:space-around">
+        <span>Sân Chơi Toán Học</span><span>Giáo viên: ………………</span></div>
+    </div></div>`;
+  app.querySelector('#print').onclick=()=>window.print();
+  app.querySelector('#bk').onclick=()=>go('sdash');
+}
+
+/* ===================== TIỆN ÍCH ===================== */
+function parseQuiz(text){
+  const blocks=text.split(/\n\s*\n/).map(b=>b.trim()).filter(Boolean); const qs=[];
+  for(const b of blocks){
+    const lines=b.split('\n').map(l=>l.trim()).filter(Boolean);
+    const m=lines[0].match(/^\[(TN|DS|TLN)\]\s*(.*)$/i); if(!m) continue;
+    const type=m[1].toUpperCase();
+    if(type==='TLN'){ const full=lines.join(' ').replace(/^\[TLN\]\s*/i,'').split('|');
+      qs.push({type,q:full[0].trim(),ans:(full[1]||'').trim()}); }
+    else if(type==='TN'){ qs.push({type,q:m[2],opts:lines.slice(1).map(l=>({
+      correct:l.startsWith('*'), t:l.replace(/^\*/,'').replace(/^[A-Da-d][\.\)]\s*/,'').trim()}))}); }
+    else { qs.push({type,q:m[2],sts:lines.slice(1).map(l=>({
+      correct:l.startsWith('*'), t:l.replace(/^\*/,'').replace(/^[a-d][\.\)]\s*/,'').trim()}))}); }
+  }
+  return qs;
+}
+function normNum(s){ if(s==null) return null; const v=parseFloat(String(s).replace(',','.').replace(/[^\d.\-]/g,'')); return isNaN(v)?null:v; }
+function fmtT(s){ s=Math.max(0,s); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+function dl(content,name){ const b=new Blob(["\uFEFF"+content],{type:'text/csv;charset=utf-8'});
+  const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download=name; a.click(); URL.revokeObjectURL(u); }
+
+render();
+</script>
+</body>
+</html>
