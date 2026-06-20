@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phòng Lab Xác Suất · Sân Chơi Toán Học</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBFAF4; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
+    --tangerine:#FF7A1A; --emerald:#1FA36B; --line:#E4E0D4; --muted:#6A7184;
+    --rose:#E54B4B; --sky:#2E8BC0; --gold:#E6A817;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);
+    min-height:100vh;
+    background:
+      linear-gradient(#E3ECF6 1px,transparent 1px) 0 0/100% 34px,
+      linear-gradient(90deg,#E3ECF6 1px,transparent 1px) 0 0/34px 100%,
+      radial-gradient(130% 90% at 82% -8%, #EAF2FF 0%, transparent 55%),
+      var(--paper);
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:22px 16px 60px}
+
+  /* header */
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .back{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:var(--indigo);
+    font-weight:600;font-size:14px;background:#fff;border:1px solid var(--line);
+    border-radius:999px;padding:7px 14px;transition:.15s}
+  .back:hover{border-color:var(--indigo-soft)}
+  .stars{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);
+    border-radius:999px;padding:7px 16px;font-weight:700;font-family:"Fredoka",sans-serif;color:var(--gold)}
+  .stars b{color:var(--ink)}
+
+  h1{font-family:"Fredoka",sans-serif;font-weight:700;letter-spacing:-.5px;
+    font-size:clamp(28px,5.4vw,44px);line-height:1.05;margin:18px 0 4px;color:var(--indigo)}
+  h1 em{font-style:normal;color:var(--tangerine)}
+  .lead{font-size:15px;color:var(--muted);max-width:620px;font-weight:500;margin:0 0 8px}
+  .formula{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);
+    border-radius:10px;padding:6px 12px;font-weight:600;color:var(--indigo);font-size:14px}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;line-height:1.05;vertical-align:middle}
+  .frac span:first-child{border-bottom:1.6px solid currentColor;padding:0 4px}
+
+  /* tabs */
+  .tabs{display:flex;gap:6px;margin:18px 0;background:#EEF0F7;padding:5px;border-radius:14px;width:max-content}
+  .tabs button{font-family:"Fredoka",sans-serif;font-weight:600;font-size:14.5px;border:none;
+    background:transparent;color:var(--muted);border-radius:10px;padding:9px 18px;cursor:pointer;transition:.15s}
+  .tabs button.on{background:#fff;color:var(--indigo);box-shadow:0 4px 12px -8px rgba(42,59,143,.6)}
+
+  .panel{display:none}
+  .panel.show{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  /* experiment pills */
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .pills button{font-weight:600;font-size:13.5px;border:1px solid var(--line);background:#fff;color:var(--ink);
+    border-radius:999px;padding:9px 15px;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:7px}
+  .pills button:hover{border-color:var(--indigo-soft)}
+  .pills button.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+
+  /* layout */
+  .lab{display:grid;grid-template-columns:1.15fr .95fr;gap:16px;align-items:start}
+  @media(max-width:780px){.lab{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;
+    box-shadow:0 14px 34px -26px rgba(42,59,143,.5)}
+  .card h3{font-family:"Fredoka",sans-serif;font-weight:600;font-size:16px;margin:0 0 4px;color:var(--ink);
+    display:flex;align-items:center;gap:8px}
+  .card .sub{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+  .nbox{font-family:"Fredoka",sans-serif;font-weight:700;color:var(--indigo)}
+
+  /* config steppers (marbles) */
+  .config{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .step{display:flex;align-items:center;gap:8px;background:#F7F8FC;border:1px solid var(--line);
+    border-radius:12px;padding:6px 10px}
+  .step .dot{width:16px;height:16px;border-radius:50%}
+  .step .lbl{font-size:13px;font-weight:600}
+  .step .n{font-family:"Fredoka",sans-serif;font-weight:700;min-width:18px;text-align:center}
+  .step button{width:24px;height:24px;border-radius:7px;border:1px solid var(--line);background:#fff;
+    cursor:pointer;font-weight:700;color:var(--indigo);line-height:1}
+  .step button:hover{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+  .coinrow{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:13.5px;font-weight:600}
+
+  /* sample space */
+  .omega{display:flex;flex-wrap:wrap;gap:7px}
+  .out{min-width:38px;height:38px;padding:0 8px;border-radius:9px;border:1.5px solid var(--line);
+    background:#FAFBFE;display:inline-flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:600;cursor:pointer;transition:.12s;user-select:none;gap:4px}
+  .out:hover{border-color:var(--indigo-soft)}
+  .out.fav{background:#FFF1E5;border-color:var(--tangerine);color:#C9650E}
+  .out.flash{animation:pop .4s ease}
+  @keyframes pop{0%{transform:scale(.82);background:var(--tangerine);color:#fff}100%{transform:none}}
+  .pip{font-size:15px}
+  .mball{width:24px;height:24px;border-radius:50%;border:2px solid rgba(0,0,0,.12)}
+  .seqbadge{font-weight:700;letter-spacing:.5px}
+
+  .hint{font-size:12px;color:var(--muted);margin-top:12px}
+
+  /* event presets */
+  .presets{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+  .presets button{font-size:12.5px;font-weight:600;border:1px solid var(--line);background:#fff;
+    color:var(--ink);border-radius:8px;padding:7px 11px;cursor:pointer;transition:.12s}
+  .presets button:hover{border-color:var(--tangerine);color:#C9650E}
+  .presets button.on{background:var(--tangerine);color:#fff;border-color:var(--tangerine)}
+  .clearbtn{margin-left:auto;color:var(--muted)!important;border-style:dashed!important}
+
+  /* probability readout */
+  .pread{background:#F7F8FC;border:1px solid var(--line);border-radius:13px;padding:14px;margin-bottom:14px}
+  .pread .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .pread .big{font-family:"Fredoka",sans-serif;font-weight:700;font-size:26px;color:var(--indigo)}
+  .pread .calc{font-size:13px;color:var(--muted);margin-top:6px}
+  .pread .calc b{color:var(--ink)}
+
+  /* simulation */
+  .simbtns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .simbtns button{font-family:"Fredoka",sans-serif;font-weight:600;font-size:13.5px;border:none;
+    border-radius:10px;padding:10px 14px;cursor:pointer;color:#fff;transition:filter .12s}
+  .simbtns button:active{transform:translateY(1px)}
+  .b-go{background:var(--emerald);box-shadow:0 4px 0 #16805280}
+  .b-go2{background:var(--indigo);box-shadow:0 4px 0 #1d2a6680}
+  .b-reset{background:#fff;color:var(--muted)!important;border:1px solid var(--line)!important;box-shadow:none}
+  .b-reset:hover{border-color:var(--rose)!important;color:var(--rose)!important}
+  .meter{margin-bottom:8px}
+  .meter .ml{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-bottom:4px}
+  .track{height:14px;border-radius:8px;background:#EEF0F7;overflow:hidden}
+  .fill{height:100%;border-radius:8px;transition:width .25s ease}
+  .fill.theory{background:var(--indigo)}
+  .fill.exp{background:var(--tangerine)}
+  .simstat{font-size:13px;color:var(--muted);margin-top:10px}
+  .simstat b{color:var(--ink);font-family:"Fredoka",sans-serif}
+  .converge{font-size:12px;color:var(--emerald);font-weight:600;margin-top:6px;min-height:16px}
+
+  /* challenge */
+  .qcard{max-width:620px;margin:0 auto}
+  .qmeta{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);
+    font-weight:600;margin-bottom:10px}
+  .dots{display:flex;gap:5px}
+  .dots .d{width:9px;height:9px;border-radius:50%;background:#E4E0D4}
+  .dots .d.done{background:var(--emerald)}
+  .dots .d.cur{background:var(--tangerine)}
+  .qtext{font-size:17px;font-weight:600;line-height:1.5;margin-bottom:6px}
+  .qctx{font-size:13px;color:var(--muted);margin-bottom:16px}
+  .ansrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .ansrow .lab{font-weight:600;font-size:14px}
+  .fracin{display:inline-flex;flex-direction:column;gap:4px}
+  .fracin input{width:74px;text-align:center;font-family:"Fredoka",sans-serif;font-weight:700;font-size:18px;
+    border:1.5px solid var(--line);border-radius:9px;padding:7px;color:var(--indigo)}
+  .fracin input:focus{outline:none;border-color:var(--indigo)}
+  .fracin .bar{height:2px;background:var(--ink);border-radius:2px}
+  .qbtn{font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;border:none;border-radius:11px;
+    padding:11px 22px;cursor:pointer;color:#fff;background:var(--tangerine);box-shadow:0 4px 0 #C95C09}
+  .qbtn:active{transform:translateY(2px);box-shadow:0 2px 0 #C95C09}
+  .qbtn.next{background:var(--indigo);box-shadow:0 4px 0 #1d2a66}
+  .feedback{border-radius:12px;padding:13px 15px;font-size:14px;font-weight:500;margin-bottom:14px;display:none}
+  .feedback.show{display:block;animation:fade .2s}
+  .feedback.ok{background:#E9F7F0;color:#11724E;border:1px solid #BCE5D2}
+  .feedback.no{background:#FDECEC;color:#A52A2A;border:1px solid #F3C9C9}
+  .feedback .sol{font-weight:400;margin-top:6px;color:inherit;opacity:.92}
+  .finale{text-align:center;padding:14px}
+  .finale .score{font-family:"Fredoka",sans-serif;font-size:46px;font-weight:700;color:var(--gold)}
+  .report{margin-top:10px;font-size:13px;color:var(--muted)}
+  .report code{background:#F1F2F7;padding:2px 8px;border-radius:6px;color:var(--indigo);font-weight:700}
+
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:middle}
+
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <a class="back" href="../">← Sân Chơi Toán Học</a>
+    <span class="stars">⭐ Sao: <b id="starCount">0</b></span>
+  </div>
+
+  <h1>Phòng Lab <em>Xác Suất</em></h1>
+  <p class="lead">Tự dựng <b>không gian mẫu</b>, tự chọn <b>biến cố</b>, rồi <b>gieo thật nhiều lần</b> để thấy tần suất tiến dần về xác suất. Toán 10 · Bài 26 &amp; 27 · Xác suất cổ điển.</p>
+  <span class="formula">P(E)&nbsp;=&nbsp;<span class="frac"><span>n(E)</span><span>n(Ω)</span></span></span>
+
+  <div class="tabs" role="tablist">
+    <button id="tabExplore" class="on" onclick="switchTab('explore')">🔬 Khám phá</button>
+    <button id="tabChallenge" onclick="switchTab('challenge')">🎯 Thử thách</button>
+  </div>
+
+  <!-- ============ EXPLORE ============ -->
+  <section id="explore" class="panel show">
+    <div class="pills" id="pills"></div>
+
+    <div class="lab">
+      <!-- sample space -->
+      <div class="card">
+        <h3>① Không gian mẫu&nbsp; <span class="nbox">n(Ω) = <span id="nOmega">0</span></span></h3>
+        <p class="sub" id="omegaSub">Mỗi ô là một kết quả đồng khả năng. Bấm vào ô để đưa vào biến cố.</p>
+        <div id="configArea"></div>
+        <div class="omega" id="omega"></div>
+        <div class="legend">
+          <span><i style="background:#FAFBFE;border:1.5px solid var(--line)"></i>Kết quả</span>
+          <span><i style="background:#FFF1E5;border:1.5px solid var(--tangerine)"></i>Thuận lợi cho biến cố E</span>
+        </div>
+      </div>
+
+      <!-- event + prob + sim -->
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <h3>② Biến cố E&nbsp; <span class="nbox">n(E) = <span id="nE">0</span></span></h3>
+          <p class="sub">Chọn nhanh một biến cố mẫu, hoặc tự bấm các ô bên trái.</p>
+          <div class="presets" id="presets"></div>
+          <div class="pread">
+            <div class="row">
+              <span style="font-weight:600;font-size:14px">Xác suất P(E)</span>
+              <span class="big" id="pBig">—</span>
+            </div>
+            <div class="calc" id="pCalc">Chưa chọn kết quả nào cho biến cố E.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>③ Mô phỏng — gieo nhiều lần</h3>
+          <p class="sub">Tần suất thực nghiệm sẽ tiến dần về xác suất lý thuyết.</p>
+          <div class="simbtns">
+            <button class="b-go" onclick="run(1)">Gieo 1 lần</button>
+            <button class="b-go2" onclick="run(100)">Gieo 100</button>
+            <button class="b-go2" onclick="run(1000)">Gieo 1000</button>
+            <button class="b-reset" onclick="resetSim()">Đặt lại</button>
+          </div>
+          <div class="meter">
+            <div class="ml"><span>Lý thuyết P(E)</span><span id="pPct">0%</span></div>
+            <div class="track"><div class="fill theory" id="barTheory" style="width:0%"></div></div>
+          </div>
+          <div class="meter">
+            <div class="ml"><span>Thực nghiệm f</span><span id="fPct">0%</span></div>
+            <div class="track"><div class="fill exp" id="barExp" style="width:0%"></div></div>
+          </div>
+          <div class="simstat">Đã gieo <b id="trials">0</b> lần · E xảy ra <b id="hits">0</b> lần · tần suất f = <b id="freq">0</b></div>
+          <div class="converge" id="converge"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CHALLENGE ============ -->
+  <section id="challenge" class="panel">
+    <div class="card qcard">
+      <div class="qmeta">
+        <span>Câu <b id="qNum">1</b>/<span id="qTotal">0</span></span>
+        <div class="dots" id="dots"></div>
+      </div>
+      <div id="qBody">
+        <p class="qtext" id="qText"></p>
+        <p class="qctx" id="qCtx"></p>
+        <div class="ansrow">
+          <span class="lab">P(E) =</span>
+          <div class="fracin">
+            <input id="numIn" inputmode="numeric" aria-label="Tử số" placeholder="?">
+            <div class="bar"></div>
+            <input id="denIn" inputmode="numeric" aria-label="Mẫu số" placeholder="?">
+          </div>
+          <span class="lab" style="color:var(--muted);font-weight:500">(rút gọn được thì càng tốt — chấp nhận phân số bằng nhau)</span>
+        </div>
+        <div class="feedback" id="fb"></div>
+        <button class="qbtn" id="checkBtn" onclick="checkAnswer()">Kiểm tra</button>
+        <button class="qbtn next" id="nextBtn" style="display:none" onclick="nextQ()">Câu tiếp →</button>
+      </div>
+      <div id="qFinale" style="display:none"></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a||1}
+function fracStr(n,d){if(n===0)return"0";const g=gcd(n,d);return (n/g)+"/"+(d/g)}
+function isPrime(x){if(x<2)return false;for(let i=2;i*i<=x;i++)if(x%i===0)return false;return true}
+const COLORS={do:'#E54B4B',xanh:'#2E8BC0',vang:'#E6A817',luc:'#1FA36B'};
+const COLORNAME={do:'đỏ',xanh:'xanh',vang:'vàng',luc:'lục'};
+
+/* ---------- experiments ---------- */
+let marbleCfg={do:3,xanh:2,vang:1};
+let coinN=3;
+
+function buildExperiments(){
+  return {
+    dice1:{
+      name:'1 xúc xắc', emoji:'🎲',
+      sub:'Gieo một con xúc xắc cân đối, xem số chấm.',
+      config:null,
+      outcomes:(()=> {let a=[];for(let i=1;i<=6;i++)a.push({id:'d'+i,val:i,html:pips(i)});return a})(),
+      presets:[
+        {label:'Số chẵn', test:o=>o.val%2===0},
+        {label:'Số nguyên tố', test:o=>isPrime(o.val)},
+        {label:'Số ≥ 5', test:o=>o.val>=5},
+      ]
+    },
+    dice2:{
+      name:'2 xúc xắc', emoji:'🎲🎲',
+      sub:'Gieo đồng thời hai con xúc xắc — mỗi ô là một cặp (a, b).',
+      config:null,
+      outcomes:(()=>{let a=[];for(let i=1;i<=6;i++)for(let j=1;j<=6;j++)a.push({id:'p'+i+j,i,j,html:`(${i}, ${j})`});return a})(),
+      presets:[
+        {label:'Tổng = 7', test:o=>o.i+o.j===7},
+        {label:'Tổng là số nguyên tố', test:o=>isPrime(o.i+o.j)},
+        {label:'Tích < 6', test:o=>o.i*o.j<6},
+        {label:'Ít nhất một mặt 6', test:o=>o.i===6||o.j===6},
+        {label:'Hai mặt giống nhau', test:o=>o.i===o.j},
+      ]
+    },
+    coin:{
+      name:'Tung đồng xu', emoji:'🪙',
+      sub:'S = sấp, N = ngửa. Mỗi dãy là một kết quả của '+coinN+' lần tung.',
+      config:'coin',
+      outcomes:coinOutcomes(),
+      presets:coinPresets()
+    },
+    marble:{
+      name:'Hộp bi', emoji:'🔴',
+      sub:'Lấy ngẫu nhiên 1 viên bi. Mỗi viên đồng khả năng.',
+      config:'marble',
+      outcomes:marbleOutcomes(),
+      presets:[
+        {label:'Bi đỏ', test:o=>o.color==='do'},
+        {label:'Không phải bi đỏ (biến cố đối)', test:o=>o.color!=='do'},
+        {label:'Bi xanh hoặc vàng', test:o=>o.color==='xanh'||o.color==='vang'},
+      ]
+    }
+  };
+}
+function pips(n){return `<span class="pip">${'●'.repeat(n)}</span>`}
+function coinOutcomes(){
+  let a=[];const total=1<<coinN;
+  for(let m=0;m<total;m++){
+    let s='';for(let b=coinN-1;b>=0;b--)s+=((m>>b)&1)?'N':'S';
+    a.push({id:'c'+s,seq:s,heads:(s.match(/S/g)||[]).length,html:`<span class="seqbadge">${s}</span>`});
+  }
+  return a;
+}
+function coinPresets(){
+  return [
+    {label:'Đúng 2 lần sấp', test:o=>o.heads===2},
+    {label:'Cả '+coinN+' lần đều sấp', test:o=>o.heads===coinN},
+    {label:'Có ít nhất 1 lần sấp', test:o=>o.heads>=1},
+    {label:'Số lần sấp là số chẵn', test:o=>o.heads%2===0},
+  ];
+}
+function marbleOutcomes(){
+  let a=[],k=0;
+  for(const c of ['do','xanh','vang','luc']){
+    for(let i=0;i<(marbleCfg[c]||0);i++){a.push({id:'m'+(k++),color:c,html:`<span class="mball" style="background:${COLORS[c]}"></span>`})}
+  }
+  return a;
+}
+
+/* ---------- state ---------- */
+let EXP=buildExperiments();
+let cur='dice2';
+let fav=new Set();
+let trials=0, hits=0;
+let stars=0;
+
+/* ---------- render ---------- */
+function renderPills(){
+  const el=document.getElementById('pills');
+  el.innerHTML='';
+  for(const key in EXP){
+    const e=EXP[key];
+    const b=document.createElement('button');
+    b.className=(key===cur?'on':'');
+    b.innerHTML=`<span>${e.emoji}</span> ${e.name}`;
+    b.onclick=()=>{cur=key;fav.clear();resetSim();renderAll()};
+    el.appendChild(b);
+  }
+}
+function renderConfig(){
+  const area=document.getElementById('configArea');
+  const e=EXP[cur];
+  area.innerHTML='';
+  if(e.config==='marble'){
+    const wrap=document.createElement('div');wrap.className='config';
+    for(const c of ['do','xanh','vang','luc']){
+      const s=document.createElement('div');s.className='step';
+      s.innerHTML=`<span class="dot" style="background:${COLORS[c]}"></span>
+        <span class="lbl">${COLORNAME[c]}</span>
+        <button aria-label="bớt ${COLORNAME[c]}">−</button><span class="n">${marbleCfg[c]||0}</span><button aria-label="thêm ${COLORNAME[c]}">+</button>`;
+      const [minus,,plus]=s.querySelectorAll('button,.n');
+      const btns=s.querySelectorAll('button');
+      btns[0].onclick=()=>{marbleCfg[c]=Math.max(0,(marbleCfg[c]||0)-1);refreshExp()};
+      btns[1].onclick=()=>{marbleCfg[c]=Math.min(9,(marbleCfg[c]||0)+1);refreshExp()};
+      wrap.appendChild(s);
+    }
+    area.appendChild(wrap);
+  } else if(e.config==='coin'){
+    const row=document.createElement('div');row.className='coinrow';
+    row.innerHTML=`Số lần tung: `;
+    const s=document.createElement('div');s.className='step';
+    s.innerHTML=`<button aria-label="bớt">−</button><span class="n">${coinN}</span><button aria-label="thêm">+</button>`;
+    const b=s.querySelectorAll('button');
+    b[0].onclick=()=>{coinN=Math.max(1,coinN-1);refreshExp()};
+    b[1].onclick=()=>{coinN=Math.min(4,coinN+1);refreshExp()};
+    row.appendChild(s);
+    area.appendChild(row);
+  }
+}
+function refreshExp(){EXP=buildExperiments();fav.clear();resetSim();renderAll()}
+
+function renderOmega(){
+  const e=EXP[cur];
+  document.getElementById('omegaSub').textContent=e.sub;
+  document.getElementById('nOmega').textContent=e.outcomes.length;
+  const el=document.getElementById('omega');
+  el.innerHTML='';
+  e.outcomes.forEach(o=>{
+    const d=document.createElement('div');
+    d.className='out'+(fav.has(o.id)?' fav':'');
+    d.innerHTML=o.html;
+    d.dataset.id=o.id;
+    d.onclick=()=>{ if(fav.has(o.id))fav.delete(o.id); else fav.add(o.id); clearPresetHighlight(); renderEvent(); };
+    el.appendChild(d);
+  });
+}
+function renderPresets(){
+  const e=EXP[cur];
+  const el=document.getElementById('presets');
+  el.innerHTML='';
+  e.presets.forEach((p,idx)=>{
+    const b=document.createElement('button');
+    b.textContent=p.label;b.dataset.idx=idx;
+    b.onclick=()=>{
+      fav.clear();
+      e.outcomes.forEach(o=>{if(p.test(o))fav.add(o.id)});
+      [...el.children].forEach(c=>c.classList.remove('on'));
+      b.classList.add('on');
+      renderEvent(true);
+    };
+    el.appendChild(b);
+  });
+  const clr=document.createElement('button');
+  clr.className='clearbtn';clr.textContent='Xoá chọn';
+  clr.onclick=()=>{fav.clear();clearPresetHighlight();renderEvent()};
+  el.appendChild(clr);
+}
+function clearPresetHighlight(){[...document.getElementById('presets').children].forEach(c=>c.classList.remove('on'))}
+
+function renderEvent(flash){
+  const e=EXP[cur], nO=e.outcomes.length, nE=fav.size;
+  document.getElementById('nE').textContent=nE;
+  // repaint omega cells
+  document.querySelectorAll('#omega .out').forEach(d=>{
+    const on=fav.has(d.dataset.id);
+    d.classList.toggle('fav',on);
+    if(flash&&on){d.classList.add('flash');setTimeout(()=>d.classList.remove('flash'),400)}
+  });
+  const pBig=document.getElementById('pBig'), pCalc=document.getElementById('pCalc');
+  if(nE===0){
+    pBig.textContent='—';
+    pCalc.textContent='Chưa chọn kết quả nào cho biến cố E.';
+  }else{
+    const f=fracStr(nE,nO), dec=(nE/nO);
+    pBig.innerHTML=f.includes('/')?frac(f):f;
+    pCalc.innerHTML=`= <b>${nE}/${nO}</b> ≈ <b>${dec.toFixed(4)}</b> = <b>${(dec*100).toFixed(2)}%</b>`;
+  }
+  // sync theoretical bar
+  const dec=nO?nE/nO:0;
+  document.getElementById('barTheory').style.width=(dec*100)+'%';
+  document.getElementById('pPct').textContent=(dec*100).toFixed(1)+'%';
+  updateConverge();
+}
+function frac(s){const[a,b]=s.split('/');return `<span class="frac" style="font-size:20px"><span>${a}</span><span>${b}</span></span>`}
+
+/* ---------- simulation ---------- */
+function run(times){
+  const e=EXP[cur];
+  if(fav.size===0){pulse(document.getElementById('presets'));return}
+  for(let t=0;t<times;t++){
+    const o=e.outcomes[Math.floor(Math.random()*e.outcomes.length)];
+    trials++; if(fav.has(o.id))hits++;
+  }
+  const f=hits/trials;
+  document.getElementById('trials').textContent=trials.toLocaleString('vi');
+  document.getElementById('hits').textContent=hits.toLocaleString('vi');
+  document.getElementById('freq').textContent=f.toFixed(4);
+  document.getElementById('barExp').style.width=(f*100)+'%';
+  document.getElementById('fPct').textContent=(f*100).toFixed(1)+'%';
+  updateConverge();
+}
+function updateConverge(){
+  const e=EXP[cur], nO=e.outcomes.length, p=nO?fav.size/nO:0;
+  const c=document.getElementById('converge');
+  if(trials===0||fav.size===0){c.textContent='';return}
+  const f=hits/trials, diff=Math.abs(f-p);
+  if(trials>=300 && diff<0.02) c.textContent='✓ Tần suất đã rất gần xác suất lý thuyết — đúng như định nghĩa cổ điển!';
+  else if(p>0 && p<=0.01 && hits===0 && trials>=500) c.textContent='Xác suất quá bé nên gần như không xảy ra (nguyên lí xác suất bé).';
+  else c.textContent='Gieo thêm nữa để thấy f tiến gần P(E) hơn…';
+}
+function resetSim(){
+  trials=0;hits=0;
+  ['trials','hits'].forEach(id=>document.getElementById(id).textContent='0');
+  document.getElementById('freq').textContent='0';
+  document.getElementById('barExp').style.width='0%';
+  document.getElementById('fPct').textContent='0%';
+  document.getElementById('converge').textContent='';
+}
+function pulse(el){el.animate([{transform:'translateX(-3px)'},{transform:'translateX(3px)'},{transform:'none'}],{duration:200})}
+
+function renderAll(){renderPills();renderConfig();renderOmega();renderPresets();renderEvent()}
+
+/* ---------- tabs ---------- */
+function switchTab(t){
+  document.getElementById('explore').classList.toggle('show',t==='explore');
+  document.getElementById('challenge').classList.toggle('show',t==='challenge');
+  document.getElementById('tabExplore').classList.toggle('on',t==='explore');
+  document.getElementById('tabChallenge').classList.toggle('on',t==='challenge');
+  if(t==='challenge'&&!challengeStarted)startChallenge();
+}
+
+/* ---------- challenge ---------- */
+const QUESTIONS=[
+  {text:'Gieo một con xúc xắc cân đối. Tính xác suất xuất hiện số nguyên tố.',
+   ctx:'Số nguyên tố trong {1,…,6} là 2, 3, 5.', n:3, d:6},
+  {text:'Gieo đồng thời hai con xúc xắc. Tính xác suất tổng số chấm bằng 7.',
+   ctx:'n(Ω) = 36. Các cặp có tổng 7: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1).', n:6, d:36},
+  {text:'Gieo hai con xúc xắc. Tính xác suất hai mặt giống nhau.',
+   ctx:'Các kết quả: (1,1),(2,2),…,(6,6).', n:6, d:36},
+  {text:'Tung một đồng xu cân đối 3 lần. Tính xác suất có đúng 2 lần xuất hiện mặt sấp.',
+   ctx:'n(Ω) = 8. Các dãy: SSN, SNS, NSS.', n:3, d:8},
+  {text:'Tung đồng xu 3 lần. Tính xác suất có ít nhất một lần mặt sấp.',
+   ctx:'Dùng biến cố đối: chỉ có 1 dãy không có sấp là NNN.', n:7, d:8},
+  {text:'Hộp có 3 bi đỏ, 2 bi xanh, 1 bi vàng. Lấy ngẫu nhiên 1 viên. Tính xác suất lấy được bi đỏ.',
+   ctx:'Tổng 6 viên đồng khả năng.', n:3, d:6},
+  {text:'Gieo hai con xúc xắc. Tính xác suất tích hai số chấm bé hơn 6.',
+   ctx:'Các cặp: (1,1),(1,2),(1,3),(1,4),(1,5),(2,1),(2,2),(3,1),(4,1),(5,1).', n:10, d:36},
+];
+let qOrder=[], qIdx=0, qScore=0, challengeStarted=false, answered=false;
+
+function startChallenge(){
+  challengeStarted=true;
+  qOrder=[...QUESTIONS.keys()].sort(()=>Math.random()-0.5);
+  qIdx=0;qScore=0;
+  document.getElementById('qTotal').textContent=qOrder.length;
+  document.getElementById('qBody').style.display='';
+  document.getElementById('qFinale').style.display='none';
+  buildDots();showQ();
+}
+function buildDots(){
+  const el=document.getElementById('dots');el.innerHTML='';
+  qOrder.forEach((_,i)=>{const d=document.createElement('span');d.className='d';d.id='dot'+i;el.appendChild(d)})
+}
+function showQ(){
+  answered=false;
+  const q=QUESTIONS[qOrder[qIdx]];
+  document.getElementById('qNum').textContent=qIdx+1;
+  document.getElementById('qText').textContent=q.text;
+  document.getElementById('qCtx').textContent=q.ctx;
+  document.getElementById('numIn').value='';
+  document.getElementById('denIn').value='';
+  document.getElementById('fb').className='feedback';
+  document.getElementById('checkBtn').style.display='';
+  document.getElementById('nextBtn').style.display='none';
+  qOrder.forEach((_,i)=>{const d=document.getElementById('dot'+i);d.className='d'+(i<qIdx?' done':i===qIdx?' cur':'')});
+  document.getElementById('numIn').focus();
+}
+function checkAnswer(){
+  if(answered)return;
+  const q=QUESTIONS[qOrder[qIdx]];
+  const num=parseInt(document.getElementById('numIn').value,10);
+  const den=parseInt(document.getElementById('denIn').value,10);
+  const fb=document.getElementById('fb');
+  if(isNaN(num)||isNaN(den)||den===0){
+    fb.className='feedback no show';
+    fb.innerHTML='Hãy nhập cả tử số và mẫu số (mẫu khác 0).';
+    return;
+  }
+  answered=true;
+  const correct = num*q.d === q.n*den; // equivalent fractions
+  if(correct){
+    qScore++;stars++;updateStars();
+    document.getElementById('dot'+qIdx).className='d done';
+    fb.className='feedback ok show';
+    fb.innerHTML=`Chính xác! ⭐ +1 sao<div class="sol">Đáp án: P(E) = ${fracStr(q.n,q.d)} (= ${q.n}/${q.d}).</div>`;
+  }else{
+    document.getElementById('dot'+qIdx).className='d';
+    fb.className='feedback no show';
+    fb.innerHTML=`Chưa đúng.<div class="sol">Đáp án đúng: P(E) = <b>${fracStr(q.n,q.d)}</b> = ${q.n}/${q.d}. ${q.ctx}</div>`;
+  }
+  document.getElementById('checkBtn').style.display='none';
+  document.getElementById('nextBtn').style.display='';
+  document.getElementById('nextBtn').textContent = (qIdx===qOrder.length-1)?'Xem kết quả →':'Câu tiếp →';
+  document.getElementById('nextBtn').focus();
+}
+function nextQ(){
+  if(qIdx<qOrder.length-1){qIdx++;showQ()}
+  else finishChallenge();
+}
+function reportToLMS(percent, stars, starsMax){
+  var payload={source:'SCT_GAME',type:'RESULT',game:'xac-suat',percent:percent,stars:stars,starsMax:starsMax,detail:stars+'/'+starsMax+' câu đúng'};
+  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,'*'); }catch(e){}
+  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
+}
+var FROM_LMS = new URLSearchParams(location.search).has('lms');
+function finishChallenge(){
+  document.getElementById('qBody').style.display='none';
+  const f=document.getElementById('qFinale');f.style.display='';
+  const total=qOrder.length, pct=Math.round(qScore/total*100);
+  let msg = pct>=80?'Xuất sắc! Đủ điều kiện nhận giấy chứng nhận.':pct>=50?'Khá tốt — luyện thêm để đạt mốc 80%.':'Cần ôn lại định nghĩa cổ điển của xác suất.';
+  reportToLMS(pct, qScore, total);
+  const reportLine = FROM_LMS
+    ? `<p class="report">✅ Đã gửi kết quả <code>${pct}%</code> về app Luyện tập.</p>`
+    : `<p class="report">Báo kết quả cho thầy/cô trong app Luyện tập: <code>${pct}%</code> (${qScore}/${total} câu).</p>`;
+  f.innerHTML=`<div class="finale">
+    <div class="score">⭐ ${qScore}/${total}</div>
+    <p style="font-weight:600;font-size:16px;margin:6px 0">${pct}% chính xác</p>
+    <p style="color:var(--muted);font-size:14px">${msg}</p>
+    ${reportLine}
+    <button class="qbtn" style="margin-top:14px" onclick="startChallenge()">Làm lại 🔄</button>
+  </div>`;
+}
+function updateStars(){document.getElementById('starCount').textContent=stars}
+
+/* enter key */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('challenge').classList.contains('show')){
+    if(!answered)checkAnswer();else nextQ();
+  }
+});
+
+/* init */
+renderAll();
+</script>
+</body>
+</html>
