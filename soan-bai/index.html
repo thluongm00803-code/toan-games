@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xưởng Soạn Bài · Sân Chơi Toán Học</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@4.0.1/dist/pptxgen.bundle.js"></script>
+<style>
+  :root{
+    --paper:#FBFAF4; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
+    --tangerine:#FF7A1A; --tangerine-dk:#C95C09; --emerald:#1FA36B; --line:#E4E0D4; --muted:#6A7184;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);min-height:100vh;
+    background:
+      linear-gradient(#E3ECF6 1px,transparent 1px) 0 0/100% 34px,
+      linear-gradient(90deg,#E3ECF6 1px,transparent 1px) 0 0/34px 100%,
+      radial-gradient(130% 90% at 82% -8%, #EAF2FF 0%, transparent 55%),
+      var(--paper);}
+  .wrap{max-width:980px;margin:0 auto;padding:22px 16px 70px}
+  .top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .back{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:var(--indigo);
+    font-weight:600;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+  .back:hover{border-color:var(--indigo-soft)}
+  h1{font-family:"Fredoka",sans-serif;font-weight:700;letter-spacing:-.5px;font-size:clamp(28px,5.4vw,42px);
+    line-height:1.05;margin:16px 0 6px;color:var(--indigo)}
+  h1 em{font-style:normal;color:var(--tangerine)}
+  .lead{font-size:15px;color:var(--muted);max-width:640px;font-weight:500;margin:0 0 6px}
+
+  .step{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 20px 22px;margin-top:18px;
+    box-shadow:0 14px 34px -26px rgba(42,59,143,.5)}
+  .step h2{font-family:"Fredoka",sans-serif;font-weight:600;font-size:18px;margin:0 0 3px;color:var(--ink);
+    display:flex;align-items:center;gap:10px}
+  .step .num{width:26px;height:26px;border-radius:8px;background:var(--indigo);color:#fff;font-size:14px;
+    display:inline-flex;align-items:center;justify-content:center;font-family:"Fredoka",sans-serif}
+  .step .desc{font-size:13px;color:var(--muted);margin:2px 0 16px 36px}
+
+  .lessons{display:flex;gap:10px;flex-wrap:wrap}
+  .lesson{flex:1;min-width:240px;text-align:left;background:#FAFBFE;border:1.5px solid var(--line);border-radius:14px;
+    padding:15px 16px;cursor:pointer;transition:.15s}
+  .lesson:hover{border-color:var(--indigo-soft)}
+  .lesson.on{border-color:var(--indigo);background:#EEF1FB;box-shadow:0 0 0 3px #2A3B8F18}
+  .lesson .tag{font-size:11px;font-weight:700;color:var(--tangerine-dk);letter-spacing:.5px}
+  .lesson .nm{font-family:"Fredoka",sans-serif;font-weight:600;font-size:16px;margin:3px 0 4px;color:var(--ink)}
+  .lesson .mt{font-size:12px;color:var(--muted)}
+  .addnote{margin-top:12px;font-size:12.5px;color:var(--muted);background:#F7F8FC;border:1px dashed var(--line);
+    border-radius:10px;padding:10px 12px}
+  .addnote b{color:var(--indigo)}
+
+  details.pdf{margin-top:12px}
+  details.pdf summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--indigo);list-style:none}
+  details.pdf summary::-webkit-details-marker{display:none}
+  details.pdf summary::before{content:"▸ ";color:var(--tangerine)}
+  details.pdf[open] summary::before{content:"▾ "}
+  .pdfbox{margin-top:10px}
+  .pdfbox input[type=file]{font-size:13px}
+  .pdfbox textarea{width:100%;height:120px;margin-top:8px;border:1px solid var(--line);border-radius:10px;
+    padding:10px;font-family:ui-monospace,monospace;font-size:12px;color:var(--ink);resize:vertical}
+
+  .actlist{display:flex;flex-direction:column;gap:9px}
+  .act{display:flex;align-items:center;gap:12px;background:#FAFBFE;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .act .ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .act .body{flex:1;min-width:0}
+  .act .ph{font-size:10.5px;font-weight:700;color:var(--tangerine-dk);letter-spacing:.4px}
+  .act .nm{font-weight:600;font-size:14.5px}
+  .act .gm{font-size:12px;color:var(--muted);margin-top:1px}
+  .switch{position:relative;width:46px;height:26px;flex-shrink:0}
+  .switch input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:#D7DAE6;border-radius:999px;cursor:pointer;transition:.18s}
+  .slider::before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.18s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .switch input:checked + .slider{background:var(--emerald)}
+  .switch input:checked + .slider::before{transform:translateX(20px)}
+  .switch.dis .slider{background:#EDEFF4;cursor:not-allowed}
+  .nogame{font-size:12px;color:#A9AEC0;font-weight:600;flex-shrink:0;width:46px;text-align:center}
+
+  .outgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.outgrid{grid-template-columns:1fr}}
+  .out{border:1px solid var(--line);border-radius:14px;padding:16px}
+  .out h3{font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;margin:0 0 3px;display:flex;align-items:center;gap:8px}
+  .out .sub{font-size:12px;color:var(--muted);margin:0 0 13px}
+  .btn{font-family:"Fredoka",sans-serif;font-weight:600;font-size:14.5px;border:none;border-radius:11px;
+    padding:11px 16px;cursor:pointer;color:#fff;width:100%;transition:filter .12s}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--tangerine);box-shadow:0 4px 0 var(--tangerine-dk)}
+  .btn.primary:active{box-shadow:0 2px 0 var(--tangerine-dk)}
+  .btn.indigo{background:var(--indigo);box-shadow:0 4px 0 #1d2a66}
+  .btn.ghost{background:#fff;color:var(--indigo);border:1px solid var(--line);box-shadow:none}
+  .btn.ghost:hover{border-color:var(--indigo-soft)}
+  .btnrow{display:flex;flex-direction:column;gap:8px}
+  .types{display:flex;gap:14px;margin-bottom:12px;font-size:13px}
+  .types label{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:600}
+  textarea.code{width:100%;height:150px;border:1px solid var(--line);border-radius:10px;padding:10px;
+    font-family:ui-monospace,monospace;font-size:11.5px;color:var(--ink);resize:vertical;background:#FBFBFD;margin-bottom:9px}
+  .gamehint{margin-top:13px;background:#FFF6EE;border:1px solid #FFD9B8;border-radius:11px;padding:11px 13px;font-size:12.5px;color:#8a4a10}
+  .gamehint b{color:var(--tangerine-dk)}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
+    padding:11px 20px;border-radius:999px;font-size:13.5px;font-weight:600;opacity:0;transition:.25s;pointer-events:none;z-index:99}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  footer{margin-top:30px;text-align:center;color:var(--muted);font-size:12px;line-height:1.7}
+  footer b{color:var(--indigo)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="../">← Sân Chơi Toán Học</a>
+    <span style="font-size:12.5px;color:var(--muted)">Web app soạn bài · chạy hoàn toàn trên trình duyệt</span>
+  </div>
+
+  <h1>Xưởng <em>Soạn Bài</em></h1>
+  <p class="lead">Chọn bài → gắn game vào hoạt động → xuất <b>bài giảng PPTX</b> và <b>phiếu bài tập về nhà</b>. Phiếu sinh ra đúng cú pháp để dán thẳng vào app Luyện tập.</p>
+
+  <!-- STEP 1 -->
+  <section class="step">
+    <h2><span class="num">1</span> Chọn kế hoạch bài dạy</h2>
+    <p class="desc">Demo có sẵn 2 bài Chương IX. Các bài khác sẽ thêm sau khi bạn gửi KHBD.</p>
+    <div class="lessons" id="lessons"></div>
+    <div class="addnote">Thêm bài mới: gửi mình file PDF KHBD Toán 10, mình sẽ tạo một <b>khối dữ liệu bài học</b> để bổ sung vào app này (mục tiêu, các hoạt động, ngân hàng câu hỏi).</div>
+    <details class="pdf">
+      <summary>Thử nạp nội dung từ PDF KHBD (beta)</summary>
+      <div class="pdfbox">
+        <input type="file" id="pdfFile" accept="application/pdf">
+        <textarea id="pdfText" placeholder="Nội dung trích xuất từ PDF sẽ hiện ở đây để tham khảo/biên tập. (Bản demo chưa tự dựng slide từ PDF — dùng để hỗ trợ soạn dữ liệu bài mới.)" readonly></textarea>
+      </div>
+    </details>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step">
+    <h2><span class="num">2</span> Gắn game vào hoạt động</h2>
+    <p class="desc">Bật công tắc để chèn ô “Trò chơi” vào slide của hoạt động tương ứng.</p>
+    <div class="actlist" id="actlist"></div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step">
+    <h2><span class="num">3</span> Xuất file</h2>
+    <p class="desc">Bài giảng để đi dạy + phiếu bài tập cho học sinh luyện tập.</p>
+    <div class="outgrid">
+      <div class="out">
+        <h3>🖥️ Bài giảng PPTX</h3>
+        <p class="sub" id="pptxSub">Slide tiêu đề, mục tiêu, từng hoạt động và hướng dẫn về nhà.</p>
+        <button class="btn primary" id="btnPptx">Tải bài giảng .pptx</button>
+      </div>
+      <div class="out">
+        <h3>📝 Phiếu bài tập về nhà</h3>
+        <p class="sub">Trắc nghiệm (TN), Đúng/Sai (DS), Trả lời ngắn (TLN).</p>
+        <div class="types" id="types">
+          <label><input type="checkbox" data-t="tn" checked> TN</label>
+          <label><input type="checkbox" data-t="ds" checked> ĐS</label>
+          <label><input type="checkbox" data-t="tln" checked> TLN</label>
+        </div>
+        <textarea class="code" id="wsCode" readonly></textarea>
+        <div class="btnrow">
+          <button class="btn indigo" id="btnCopy">Sao chép cú pháp cho app Luyện tập</button>
+          <button class="btn ghost" id="btnTxt">Tải .txt</button>
+          <button class="btn ghost" id="btnPrint">In phiếu cho học sinh (ẩn đáp án)</button>
+        </div>
+      </div>
+    </div>
+    <div class="gamehint" id="gameHint"></div>
+  </section>
+
+  <footer><b>Sân Chơi Toán Học</b> — Xưởng Soạn Bài · không gửi dữ liệu đi đâu, mọi thứ chạy ngay trên máy bạn.</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ GAME REGISTRY ============ */
+const GAME_XS = {
+  name:'Phòng Lab Xác Suất', folder:'xac-suat', stars:5,
+  how:[
+    'Tab Khám phá: dựng không gian mẫu Ω, chọn biến cố, xem P(E) cập nhật ngay.',
+    'Gieo 100/1000 lần — tần suất tiến dần về xác suất lý thuyết.',
+    'Tab Thử thách: 7 câu tính P(E), chấm tự động, lấy sao.'
+  ]
+};
+
+/* ============ LESSON DATA ============ */
+const LESSONS = {
+  bai26:{
+    id:'bai26', tag:'CHƯƠNG IX · BÀI 26', meta:'Toán 10 · Kết nối tri thức · 2 tiết',
+    title:'Bài 26: Biến cố và định nghĩa cổ điển của xác suất',
+    subtitle:'Toán 10 · Kết nối tri thức (Tập 2) · 2 tiết',
+    obj:{
+      kienthuc:['Nhận biết phép thử ngẫu nhiên, không gian mẫu, biến cố, biến cố đối.',
+        'Mô tả chính xác không gian mẫu và biến cố trong phép thử đơn giản.',
+        'Nắm định nghĩa cổ điển của xác suất và nguyên lí xác suất bé.'],
+      nangluc:['Mô hình hoá: chuyển tình huống thực tế thành phép thử – biến cố.',
+        'Tư duy & lập luận: xác định Ω, biến cố, tính xác suất.',
+        'Năng lực số: mô phỏng xúc xắc ảo, dùng bảng tính liệt kê – đếm.'],
+      phamchat:['Chăm chỉ: tích cực tham gia hoạt động học tập.',
+        'Trách nhiệm: bảo đảm tính chính xác của kết quả nhóm.',
+        'Trung thực: trung thực khi làm bài và báo cáo.']
+    },
+    activities:[
+      {key:'hd1',name:'Khởi động',phase:'HOẠT ĐỘNG 1',emoji:'🎯',fill:'FFF1E5',
+        muctieu:'Tạo hứng thú, dẫn vào khái niệm xác suất qua trò chơi bốc thăm trúng thưởng.',
+        steps:['Xem video hiện tượng ngẫu nhiên; đọc tình huống mở đầu (bốc thăm 6/45).',
+          'Bạn An chọn bộ {5;13;20;31;32;35} — trúng độc đắc/giải nhất có dễ không?',
+          'HS nhận định: rất khó vì số khả năng quá lớn.'],
+        note:'Dẫn dắt: muốn trả lời chính xác cần các khái niệm biến cố và định nghĩa cổ điển của xác suất.',
+        game:GAME_XS},
+      {key:'hd2a',name:'Hình thành kiến thức — Biến cố',phase:'HOẠT ĐỘNG 2.1',emoji:'🧩',fill:'EAF1FB',
+        muctieu:'Nhận biết, mô tả phép thử ngẫu nhiên, không gian mẫu, biến cố và biến cố đối.',
+        steps:['Phép thử ngẫu nhiên: không đoán trước được kết quả.',
+          'Không gian mẫu Ω: tập tất cả kết quả có thể (hữu hạn).',
+          'Biến cố E là một tập con của Ω; biến cố đối Ē là phần bù của E.',
+          'Ví dụ 1–3, Luyện tập 1–2 (SGK tr.78–79).'],
+        note:'Công cụ số: nhóm gieo xúc xắc ảo để mô tả Ω; lưu sản phẩm lên Google Drive.',
+        game:GAME_XS},
+      {key:'hd2b',name:'Định nghĩa cổ điển của xác suất',phase:'HOẠT ĐỘNG 2.2',emoji:'🎲',fill:'EAF6EE',
+        muctieu:'Nêu định nghĩa cổ điển, tính xác suất bài toán đơn giản và hiểu nguyên lí xác suất bé.',
+        steps:['Kết quả đồng khả năng. Định nghĩa: P(E) = n(E) / n(Ω).',
+          'Tính chất: 0 ≤ P(E) ≤ 1; P(Ω) = 1; P(∅) = 0.',
+          'Ví dụ 4–5 (gieo đồng xu, hai túi thẻ) + lập bảng Ω bằng Google Sheets.',
+          'Nguyên lí xác suất bé: biến cố xác suất rất nhỏ thì coi như không xảy ra.'],
+        note:'P(E) = n(E)/n(Ω). Xác suất trúng độc đắc 6/45 ≈ 0,000000123 — minh hoạ nguyên lí xác suất bé.',
+        game:GAME_XS},
+      {key:'hd3',name:'Luyện tập',phase:'HOẠT ĐỘNG 3',emoji:'✏️',fill:'F3EEFB',
+        muctieu:'Củng cố biến cố, không gian mẫu, biến cố đối và định nghĩa cổ điển qua bài tập.',
+        steps:['Trắc nghiệm nhanh trên Wayground (có bảng xếp hạng).',
+          'Bài 9.1–9.4 (SGK tr.82) theo nhóm, nộp ảnh lên Padlet, nhận xét chéo.',
+          'GV chữa các câu sai nhiều dựa trên thống kê.'],
+        note:null, game:GAME_XS},
+      {key:'hd4',name:'Vận dụng',phase:'HOẠT ĐỘNG 4',emoji:'🌍',fill:'FFF1E5',
+        muctieu:'Vận dụng xác suất cổ điển vào bài toán thực tiễn; dùng công cụ số thu thập, phân tích dữ liệu.',
+        steps:['Bài 9.5 (hai bạn gieo xúc xắc) + bài tập tổ hợp mở rộng.',
+          'Lập bảng kết quả bằng Google Sheets để liệt kê – đếm.',
+          'Khảo sát sở thích thể thao bằng Google Forms, trực quan hoá bằng biểu đồ.'],
+        note:null, game:null},
+    ],
+    homework:['Ghi nhớ định nghĩa cổ điển của xác suất và các khái niệm liên quan.',
+      'Hoàn thành các bài tập còn lại trong SGK và SBT.',
+      'Chuẩn bị Bài 27: Thực hành tính xác suất theo định nghĩa cổ điển.'],
+    worksheet:{
+      tn:[
+        {q:'Gieo một con xúc xắc cân đối một lần. Xác suất xuất hiện mặt có số chấm chẵn là:',opts:['1/3','1/2','2/3','1/6'],correct:1},
+        {q:'Gieo đồng thời hai con xúc xắc cân đối. Xác suất để tổng số chấm bằng 7 là:',opts:['1/9','1/12','1/6','5/36'],correct:2},
+        {q:'Một chương trình khuyến mãi có 6 phần thưởng: ti vi, bàn ghế, tủ lạnh, máy tính, bếp từ, bộ bát đĩa. Chọn ngẫu nhiên 1 phần thưởng. Xác suất chọn được một món đồ điện (ti vi, tủ lạnh, máy tính, bếp từ) là:',opts:['1/3','2/3','1/2','1/6'],correct:1}
+      ],
+      ds:[
+        {stem:'Gieo một con xúc xắc cân đối. Xét biến cố A: “Số chấm xuất hiện là số nguyên tố”.',
+         items:[['Không gian mẫu Ω = {1; 2; 3; 4; 5; 6}',true],['A = {2; 3; 5}',true],['n(A) = 2',false],['P(A) = 1/2',true]]},
+        {stem:'Gieo một đồng xu cân đối ba lần.',
+         items:[['Không gian mẫu có 8 phần tử',true],['Biến cố “ba lần đều sấp” có 3 kết quả thuận lợi',false],['Biến cố “có đúng hai lần sấp” có 3 kết quả thuận lợi',true],['Xác suất có đúng hai lần sấp là 3/8',true]]}
+      ],
+      tln:[
+        {q:'Gieo đồng thời hai con xúc xắc cân đối. Số phần tử của không gian mẫu là',a:'36'},
+        {q:'Tung một đồng xu cân đối 4 lần. Số phần tử của không gian mẫu là',a:'16'},
+        {q:'Một hộp chứa 12 tấm thẻ đánh số từ 1 đến 12, rút ngẫu nhiên 1 thẻ. Có bao nhiêu kết quả thuận lợi cho biến cố “rút được thẻ ghi số nguyên tố”?',a:'5'}
+      ]
+    }
+  },
+
+  bai27:{
+    id:'bai27', tag:'CHƯƠNG IX · BÀI 27', meta:'Toán 10 · Kết nối tri thức · 3 tiết',
+    title:'Bài 27: Thực hành tính xác suất theo định nghĩa cổ điển',
+    subtitle:'Toán 10 · Kết nối tri thức (Tập 2) · 3 tiết',
+    obj:{
+      kienthuc:['Tính xác suất bằng phương pháp tổ hợp và sơ đồ hình cây.',
+        'Vận dụng quy tắc xác suất của biến cố đối: P(E) = 1 − P(Ē).',
+        'Liên hệ các quy tắc đếm (hoán vị, chỉnh hợp, tổ hợp) với không gian mẫu.'],
+      nangluc:['Mô hình hoá: dựng sơ đồ hình cây, công thức tổ hợp cho bài toán xác suất.',
+        'Giải quyết vấn đề: dùng biến cố đối khi tính trực tiếp khó.',
+        'Năng lực số: máy tính tổ hợp trực tuyến, Canva/Sheets dựng cây, bảng Punnett.'],
+      phamchat:['Chăm chỉ và trách nhiệm trong hoạt động nhóm.',
+        'Trung thực trong kiểm tra, đánh giá.',
+        'Sáng tạo: đề xuất nhiều cách giải khác nhau.']
+    },
+    activities:[
+      {key:'hd1',name:'Khởi động',phase:'HOẠT ĐỘNG 1',emoji:'🎯',fill:'FFF1E5',
+        muctieu:'Ôn khái niệm xác suất, nhắc lại bài toán 6/45 và đặt vấn đề cho bài thực hành.',
+        steps:['Trắc nghiệm khởi động nhanh trên Wayground (biến cố, Ω, công thức P).',
+          'Nhắc tình huống 6/45: tính P(độc đắc), P(giải nhất) của bạn An.',
+          'HS nhận ra liệt kê trực tiếp là bất khả thi → cần công cụ đếm.'],
+        note:'Đặt vấn đề: cần phương pháp tổ hợp và sơ đồ hình cây để đếm n(Ω), n(E).',
+        game:GAME_XS},
+      {key:'hd2a',name:'Phương pháp tổ hợp',phase:'HOẠT ĐỘNG 2.1',emoji:'🧮',fill:'EAF1FB',
+        muctieu:'Dùng quy tắc đếm và công thức tổ hợp để tính n(Ω) và n(E).',
+        steps:['“Đại số tổ hợp là sự kiểm đếm không cần liệt kê.”',
+          'Ví dụ 1: chọn 6 trong 10 HS — P(6 nam), P(4 nam 2 nữ).',
+          'Luyện tập 1: chọn 6 trong 12 HS sao cho số nữ bằng số nam.',
+          'Kiểm chứng C(12,6)=924 bằng máy tính tổ hợp trực tuyến.'],
+        note:'Quy tắc nhân: ghép các công đoạn lựa chọn để đếm số phần tử biến cố.',
+        game:null},
+      {key:'hd2b',name:'Sơ đồ hình cây',phase:'HOẠT ĐỘNG 2.2',emoji:'🌳',fill:'EAF6EE',
+        muctieu:'Mô tả không gian mẫu và biến cố của phép thử nhiều công đoạn bằng sơ đồ hình cây.',
+        steps:['HĐ2: “Vòng quay may mắn” hai bánh xe → n(Ω) = 2 × 4 = 8.',
+          'Ví dụ 2: lấy bi từ ba hộp; Luyện tập 2–3 (vòng quay, gia đình 3 con).',
+          'Dựng sơ đồ hình cây số hoá bằng Canva/MindMeister, gắn nhãn màu.'],
+        note:'Mỗi nhánh từ gốc tới lá là một kết quả; đếm số lá để có n(Ω).',
+        game:GAME_XS},
+      {key:'hd2c',name:'Xác suất của biến cố đối',phase:'HOẠT ĐỘNG 2.3',emoji:'🔄',fill:'F3EEFB',
+        muctieu:'Nắm và vận dụng công thức P(E) = 1 − P(Ē) để tính gián tiếp.',
+        steps:['HĐ3: n(Ē) = n(Ω) − n(E) ⇒ P(E) = 1 − P(Ē).',
+          'Liên hệ thực tế: dự báo “mưa 70%” ⇒ “không mưa 30%”.',
+          'Ví dụ 3, Luyện tập 4 và Vận dụng (giải bài toán 6/45).'],
+        note:'Khi tính trực tiếp khó (“ít nhất một…”), hãy tính qua biến cố đối.',
+        game:GAME_XS},
+      {key:'hd3',name:'Luyện tập',phase:'HOẠT ĐỘNG 3',emoji:'✏️',fill:'FFF1E5',
+        muctieu:'Củng cố tổ hợp, sơ đồ hình cây và biến cố đối qua bài tập.',
+        steps:['Trắc nghiệm trên Wayground (có thống kê câu sai).',
+          'Bài 9.6–9.9 (SGK tr.86–87) theo nhóm.',
+          'Nộp ảnh bài giải lên Padlet, nhận xét chéo.'],
+        note:null, game:GAME_XS},
+      {key:'hd4',name:'Vận dụng',phase:'HOẠT ĐỘNG 4',emoji:'🧬',fill:'EAF1FB',
+        muctieu:'Vận dụng xác suất vào di truyền; dùng bảng tính và AI khám phá liên môn.',
+        steps:['Bài 9.11 (biến cố đối), 9.12 (lai 2 cặp tính trạng).',
+          'Dựng bảng Punnett 4×4 bằng Excel/Google Sheets (n(Ω)=16).',
+          'Dùng Chatbot AI tìm hiểu ứng dụng xác suất trong y học.'],
+        note:null, game:null},
+    ],
+    homework:['Ghi nhớ phương pháp tổ hợp, sơ đồ hình cây và quy tắc biến cố đối.',
+      'Hoàn thành các bài tập trong SBT.',
+      'Chuẩn bị Bài tập cuối chương IX; nhóm làm infographic tổng kết bằng Canva.'],
+    worksheet:{
+      tn:[
+        {q:'Một tổ có 6 nam và 4 nữ. Chọn ngẫu nhiên 6 học sinh. Xác suất để cả 6 em được chọn đều là nam là:',opts:['1/210','1/120','1/45','3/7'],correct:0},
+        {q:'Một gia đình có ba người con. Giả thiết khả năng sinh con trai và con gái như nhau. Xác suất để gia đình đó có một con trai và hai con gái là:',opts:['1/8','3/8','1/2','1/4'],correct:1},
+        {q:'Gieo đồng thời hai con xúc xắc cân đối. Xác suất để có ít nhất một con xúc xắc xuất hiện mặt 6 chấm là:',opts:['1/6','11/36','25/36','1/3'],correct:1}
+      ],
+      ds:[
+        {stem:'Chọn ngẫu nhiên hai số từ tập {1; 2; …; 9}. Xét biến cố H: “Trong hai số được chọn có ít nhất một số chẵn”.',
+         items:[['Không gian mẫu có C(9,2) = 36 phần tử',true],['Biến cố đối H̄ là: “Cả hai số được chọn đều là số lẻ”',true],['n(H̄) = 6',false],['P(H) = 13/18',true]]},
+        {stem:'Một tổ có 7 nam và 5 nữ. Chọn ngẫu nhiên 6 học sinh.',
+         items:[['Không gian mẫu có C(12,6) = 924 phần tử',true],['“Số nữ bằng số nam” nghĩa là chọn 2 nam và 4 nữ',false],['Số cách chọn 3 nam và 3 nữ là 35 × 10 = 350',true],['Xác suất để số nữ bằng số nam là 25/66',true]]}
+      ],
+      tln:[
+        {q:'Trong xổ số 6/45, số phần tử của không gian mẫu (số tập con 6 phần tử của {1; …; 45}) là',a:'8145060'},
+        {q:'Có ba hộp A, B, C lần lượt có 3, 2, 2 tấm thẻ. Từ mỗi hộp rút ngẫu nhiên 1 thẻ. Số phần tử của không gian mẫu là',a:'12'},
+        {q:'Gieo hai con xúc xắc cân đối. Có bao nhiêu kết quả thuận lợi cho biến cố “hai mặt giống nhau”?',a:'6'}
+      ]
+    }
+  }
+};
+
+/* ============ STATE ============ */
+let curId='bai26';
+const attached={}; // {lessonId: {actKey:bool}}
+for(const id in LESSONS){attached[id]={};LESSONS[id].activities.forEach(a=>attached[id][a.key]=!!a.game)}
+const wsTypes={tn:true,ds:true,tln:true};
+
+/* ============ DECK BUILDER (giống bản đã kiểm thử bằng Node) ============ */
+const C={indigo:'2A3B8F',indigoSoft:'6B7BD6',tangerine:'FF7A1A',tangerineDk:'C95C09',emerald:'1FA36B',
+  ink:'1C2438',white:'FFFFFF',muted:'6A7184',line:'E4E0D4',tintBlue:'EAF1FB',tintGreen:'EAF6EE',
+  tintOrange:'FFF1E5',tintPurple:'F3EEFB',paperDark:'212B52'};
+const FONT='Calibri';
+function shadow(){return{type:'outer',color:'000000',blur:7,offset:3,angle:90,opacity:0.12}}
+function header(s,p,emoji,fill,title,eyebrow){
+  s.addShape(p.shapes.ROUNDED_RECTANGLE,{x:0.7,y:0.5,w:0.7,h:0.7,fill:{color:fill},rectRadius:0.12,line:{type:'none'}});
+  s.addText(emoji,{x:0.7,y:0.5,w:0.7,h:0.7,align:'center',valign:'middle',fontSize:26,fontFace:FONT,margin:0});
+  if(eyebrow)s.addText(eyebrow,{x:1.55,y:0.5,w:11,h:0.3,fontFace:FONT,fontSize:12,bold:true,color:C.tangerine,charSpacing:1,margin:0});
+  s.addText(title,{x:1.55,y:eyebrow?0.78:0.5,w:11,h:0.7,valign:eyebrow?'top':'middle',fontFace:FONT,fontSize:28,bold:true,color:C.indigo,margin:0});
+}
+function titleSlide(p,L,games){
+  const s=p.addSlide();s.background={color:C.indigo};
+  s.addText('CHƯƠNG IX · THỐNG KÊ & XÁC SUẤT',{x:0.7,y:0.95,w:12,h:0.4,fontFace:FONT,fontSize:14,bold:true,color:C.indigoSoft,charSpacing:2,margin:0});
+  s.addText(L.title,{x:0.7,y:1.5,w:11.9,h:2.4,fontFace:FONT,fontSize:42,bold:true,color:C.white,margin:0,lineSpacingMultiple:1.02});
+  s.addText(L.subtitle,{x:0.7,y:4.05,w:11.9,h:0.5,fontFace:FONT,fontSize:18,color:'C9D2F0',margin:0});
+  if(games.length){
+    s.addText('Trò chơi tích hợp:',{x:0.7,y:4.85,w:1.8,h:0.45,fontFace:FONT,fontSize:13,bold:true,color:C.indigoSoft,margin:0,valign:'middle'});
+    let gx=2.6;
+    games.forEach(g=>{const w=Math.min(4.2,0.9+g.length*0.115);
+      s.addShape(p.shapes.ROUNDED_RECTANGLE,{x:gx,y:4.82,w,h:0.5,fill:{color:C.tangerine},rectRadius:0.25,line:{type:'none'}});
+      s.addText('🎮 '+g,{x:gx,y:4.82,w,h:0.5,align:'center',valign:'middle',fontFace:FONT,fontSize:13,bold:true,color:C.white,margin:0});
+      gx+=w+0.25;});
+  }
+  s.addText('Sân Chơi Toán Học',{x:0.7,y:6.7,w:6,h:0.4,fontFace:FONT,fontSize:13,bold:true,color:C.tangerine,margin:0});
+  s.addText('Kế hoạch bài dạy tích hợp năng lực số · GDPT 2018',{x:6.6,y:6.7,w:6,h:0.4,align:'right',fontFace:FONT,fontSize:12,color:'8A93C0',margin:0});
+}
+function objectivesSlide(p,L){
+  const s=p.addSlide();s.background={color:C.white};
+  header(s,p,'🎯',C.tintOrange,'Mục tiêu bài học');
+  const cols=[{t:'Kiến thức',emoji:'📘',fill:C.tintBlue,items:L.obj.kienthuc},
+    {t:'Năng lực',emoji:'⚙️',fill:C.tintGreen,items:L.obj.nangluc},
+    {t:'Phẩm chất',emoji:'🌱',fill:C.tintOrange,items:L.obj.phamchat}];
+  const cw=3.83,gap=0.31,x0=0.7,y0=1.75,ch=4.95;
+  cols.forEach((c,i)=>{const x=x0+i*(cw+gap);
+    s.addShape(p.shapes.ROUNDED_RECTANGLE,{x,y:y0,w:cw,h:ch,fill:{color:'FBFBFD'},line:{color:C.line,width:1},rectRadius:0.1,shadow:shadow()});
+    s.addShape(p.shapes.ROUNDED_RECTANGLE,{x:x+0.3,y:y0+0.32,w:0.6,h:0.6,fill:{color:c.fill},rectRadius:0.1,line:{type:'none'}});
+    s.addText(c.emoji,{x:x+0.3,y:y0+0.32,w:0.6,h:0.6,align:'center',valign:'middle',fontSize:22,margin:0});
+    s.addText(c.t,{x:x+1.0,y:y0+0.32,w:cw-1.2,h:0.6,valign:'middle',fontFace:FONT,fontSize:18,bold:true,color:C.indigo,margin:0});
+    s.addText(c.items.map(t=>({text:t,options:{bullet:{indent:14},breakLine:true,paraSpaceAfter:7}})),
+      {x:x+0.32,y:y0+1.15,w:cw-0.62,h:ch-1.35,fontFace:FONT,fontSize:13.5,color:C.ink,valign:'top',margin:0});
+  });
+}
+function activitySlide(p,act,game){
+  const s=p.addSlide();s.background={color:C.white};
+  header(s,p,act.emoji,act.fill,act.name,act.phase);
+  const leftW=game?7.0:11.9,x0=0.7,y0=1.75;
+  s.addText('Mục tiêu',{x:x0,y:y0,w:leftW,h:0.35,fontFace:FONT,fontSize:14,bold:true,color:C.tangerineDk,margin:0});
+  s.addText(act.muctieu,{x:x0,y:y0+0.38,w:leftW,h:0.9,fontFace:FONT,fontSize:14,color:C.ink,margin:0,valign:'top',lineSpacingMultiple:1.05});
+  s.addText('Nội dung & tiến trình',{x:x0,y:y0+1.45,w:leftW,h:0.35,fontFace:FONT,fontSize:14,bold:true,color:C.tangerineDk,margin:0});
+  s.addText(act.steps.map(t=>({text:t,options:{bullet:{indent:14},breakLine:true,paraSpaceAfter:8}})),
+    {x:x0,y:y0+1.85,w:leftW,h:3.4,fontFace:FONT,fontSize:13.5,color:C.ink,valign:'top',margin:0});
+  if(act.note){
+    s.addShape(p.shapes.ROUNDED_RECTANGLE,{x:x0,y:y0+3.55,w:leftW,h:0.95,fill:{color:C.tintBlue},rectRadius:0.1,line:{type:'none'}});
+    s.addText(act.note,{x:x0+0.25,y:y0+3.55,w:leftW-0.5,h:0.95,valign:'middle',fontFace:FONT,fontSize:13,italic:true,color:C.indigo,margin:0,lineSpacingMultiple:1.03});
+  }
+  if(game){
+    const gx=8.0,gw=4.6;
+    s.addShape(p.shapes.ROUNDED_RECTANGLE,{x:gx,y:y0,w:gw,h:4.5,fill:{color:'FFF6EE'},line:{color:C.tangerine,width:1.25},rectRadius:0.12,shadow:shadow()});
+    s.addShape(p.shapes.ROUNDED_RECTANGLE,{x:gx+0.3,y:y0+0.32,w:0.62,h:0.62,fill:{color:C.tangerine},rectRadius:0.12,line:{type:'none'}});
+    s.addText('🎮',{x:gx+0.3,y:y0+0.32,w:0.62,h:0.62,align:'center',valign:'middle',fontSize:22,margin:0});
+    s.addText('TRÒ CHƠI',{x:gx+1.05,y:y0+0.34,w:gw-1.3,h:0.28,fontFace:FONT,fontSize:11,bold:true,color:C.tangerineDk,charSpacing:1,margin:0});
+    s.addText(game.name,{x:gx+1.05,y:y0+0.6,w:gw-1.3,h:0.4,fontFace:FONT,fontSize:16,bold:true,color:C.ink,margin:0});
+    s.addText(game.how.map(t=>({text:t,options:{bullet:{indent:13},breakLine:true,paraSpaceAfter:7}})),
+      {x:gx+0.3,y:y0+1.25,w:gw-0.6,h:2.5,fontFace:FONT,fontSize:13,color:C.ink,valign:'top',margin:0});
+    s.addShape(p.shapes.ROUNDED_RECTANGLE,{x:gx+0.3,y:y0+3.85,w:gw-0.6,h:0.5,fill:{color:C.white},line:{color:C.line,width:1},rectRadius:0.08});
+    s.addText([{text:'Mở: ',options:{bold:true,color:C.muted}},{text:'toan-games/'+game.folder,options:{color:C.indigo,bold:true}}],
+      {x:gx+0.45,y:y0+3.85,w:gw-0.9,h:0.5,valign:'middle',fontFace:FONT,fontSize:12.5,margin:0});
+  }
+}
+function closingSlide(p,L,games){
+  const s=p.addSlide();s.background={color:C.indigo};
+  s.addShape(p.shapes.ROUNDED_RECTANGLE,{x:0.7,y:0.55,w:0.7,h:0.7,fill:{color:C.tangerine},rectRadius:0.12,line:{type:'none'}});
+  s.addText('🏠',{x:0.7,y:0.55,w:0.7,h:0.7,align:'center',valign:'middle',fontSize:26,margin:0});
+  s.addText('Hướng dẫn về nhà',{x:1.55,y:0.55,w:11,h:0.7,valign:'middle',fontFace:FONT,fontSize:28,bold:true,color:C.white,margin:0});
+  s.addText(L.homework.map(t=>({text:t,options:{bullet:{indent:14},breakLine:true,paraSpaceAfter:10,color:'E6EAF8'}})),
+    {x:0.95,y:1.85,w:11.4,h:3.0,fontFace:FONT,fontSize:16,valign:'top',margin:0});
+  if(games.length){
+    s.addShape(p.shapes.ROUNDED_RECTANGLE,{x:0.7,y:5.2,w:11.93,h:1.4,fill:{color:C.paperDark},rectRadius:0.12,line:{type:'none'}});
+    s.addText('🎮 Luyện tập thêm trên app',{x:1.0,y:5.4,w:11,h:0.4,fontFace:FONT,fontSize:15,bold:true,color:C.tangerine,margin:0});
+    s.addText('Vào Sân Chơi Toán Học, chơi '+games.join(', ')+' và làm phiếu bài tập được giao để lấy sao và giấy chứng nhận.',
+      {x:1.0,y:5.8,w:11.3,h:0.7,fontFace:FONT,fontSize:13.5,color:'C9D2F0',margin:0,valign:'top',lineSpacingMultiple:1.05});
+  }
+  s.addText('Sân Chơi Toán Học',{x:0.7,y:6.95,w:6,h:0.35,fontFace:FONT,fontSize:12,bold:true,color:'8A93C0',margin:0});
+}
+function buildDeck(p,L,att){
+  p.layout='LAYOUT_WIDE';p.author='Sân Chơi Toán Học';p.title=L.title;
+  const names=[];L.activities.forEach(a=>{if(att[a.key]&&a.game)names.push(a.game.name)});
+  const uniq=[...new Set(names)];
+  titleSlide(p,L,uniq);objectivesSlide(p,L);
+  L.activities.forEach(a=>activitySlide(p,a,att[a.key]?a.game:null));
+  closingSlide(p,L,uniq);
+}
+
+/* ============ WORKSHEET ============ */
+function worksheetText(L){
+  const b=[],LET=['A','B','C','D','E'],let2=['a','b','c','d','e'];
+  if(wsTypes.tn)L.worksheet.tn.forEach(it=>{
+    const lines=['[TN] '+it.q];it.opts.forEach((o,i)=>lines.push((i===it.correct?'*':'')+LET[i]+'. '+o));b.push(lines.join('\n'));});
+  if(wsTypes.ds)L.worksheet.ds.forEach(it=>{
+    const lines=['[DS] '+it.stem];it.items.forEach((x,i)=>lines.push((x[1]?'*':'')+let2[i]+') '+x[0]));b.push(lines.join('\n'));});
+  if(wsTypes.tln)L.worksheet.tln.forEach(it=>b.push('[TLN] '+it.q+' | '+it.a));
+  return b.join('\n\n');
+}
+function printable(L){
+  const LET=['A','B','C','D','E'],let2=['a','b','c','d','e'];
+  let n=0,html='';
+  if(wsTypes.tn&&L.worksheet.tn.length){html+='<h2>Phần I — Trắc nghiệm</h2>';
+    L.worksheet.tn.forEach(it=>{n++;html+=`<p class="q"><b>Câu ${n}.</b> ${esc(it.q)}</p><div class="opts">`+
+      it.opts.map((o,i)=>`<span>${LET[i]}. ${esc(o)}</span>`).join('')+`</div>`;});}
+  if(wsTypes.ds&&L.worksheet.ds.length){html+='<h2>Phần II — Đúng/Sai</h2>';
+    L.worksheet.ds.forEach(it=>{n++;html+=`<p class="q"><b>Câu ${n}.</b> ${esc(it.stem)}</p><div class="ds">`+
+      it.items.map((x,i)=>`<p>${let2[i]}) ${esc(x[0])} &nbsp;&nbsp; <span class="box">Đúng ☐</span> <span class="box">Sai ☐</span></p>`).join('')+`</div>`;});}
+  if(wsTypes.tln&&L.worksheet.tln.length){html+='<h2>Phần III — Trả lời ngắn</h2>';
+    L.worksheet.tln.forEach(it=>{n++;html+=`<p class="q"><b>Câu ${n}.</b> ${esc(it.q)} &nbsp; Đáp án: ………………</p>`;});}
+  const games=[...new Set(L.activities.filter(a=>attached[curId][a.key]&&a.game).map(a=>a.game))];
+  let gh='';games.forEach(g=>{gh+=`<p>🎮 Chơi <b>${esc(g.name)}</b> (mở <i>toan-games/${g.folder}</i>) và đạt tối thiểu <b>${g.stars} sao</b> ở tab Thử thách.</p>`;});
+  return `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>Phiếu bài tập — ${esc(L.title)}</title>
+  <style>
+    body{font-family:'Times New Roman',serif;color:#111;max-width:780px;margin:24px auto;padding:0 20px;line-height:1.5}
+    h1{font-size:18px;text-align:center;margin:0 0 2px}
+    .meta{text-align:center;font-size:13px;color:#444;margin-bottom:14px}
+    .info{display:flex;gap:24px;font-size:14px;margin:10px 0 4px}
+    .info span{flex:1;border-bottom:1px dotted #999;padding-bottom:2px}
+    h2{font-size:15px;margin:18px 0 8px;color:#1a2a6b;border-bottom:1px solid #ccc;padding-bottom:3px}
+    .q{margin:10px 0 4px;font-size:14px}
+    .opts{display:grid;grid-template-columns:1fr 1fr;gap:2px 18px;font-size:14px;margin:2px 0 4px 18px}
+    .ds{margin-left:18px;font-size:14px}.ds p{margin:4px 0}
+    .box{font-size:13px;color:#333}
+    .games{margin-top:18px;border:1px solid #d8a; background:#fff7ef;border-radius:8px;padding:10px 14px;font-size:13.5px}
+    .games h3{margin:0 0 6px;font-size:14px;color:#b85f10}
+    @media print{.noprint{display:none}}
+    .noprint{text-align:center;margin:18px 0}
+    .noprint button{font-size:14px;padding:8px 18px;border:none;background:#2A3B8F;color:#fff;border-radius:8px;cursor:pointer}
+  </style></head><body>
+  <div class="noprint"><button onclick="window.print()">🖨️ In / Lưu PDF</button></div>
+  <h1>PHIẾU BÀI TẬP VỀ NHÀ</h1>
+  <div class="meta">${esc(L.title)} · ${esc(L.meta)}</div>
+  <div class="info"><span>Họ và tên: </span><span>Lớp: </span></div>
+  ${html}
+  <div class="games"><h3>🎮 Nhiệm vụ trò chơi</h3>${gh||'<p>(Không có game gắn kèm.)</p>'}</div>
+  </body></html>`;
+}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+
+/* ============ UI ============ */
+const $=s=>document.querySelector(s);
+function renderLessons(){
+  const el=$('#lessons');el.innerHTML='';
+  for(const id in LESSONS){const L=LESSONS[id];
+    const d=document.createElement('div');d.className='lesson'+(id===curId?' on':'');
+    d.innerHTML=`<div class="tag">${L.tag}</div><div class="nm">${L.title.replace(/^Bài \d+: /,'')}</div><div class="mt">${L.meta} · ${L.activities.length} hoạt động</div>`;
+    d.onclick=()=>{curId=id;renderAll()};el.appendChild(d);}
+}
+function renderActs(){
+  const L=LESSONS[curId],el=$('#actlist');el.innerHTML='';
+  L.activities.forEach(a=>{
+    const row=document.createElement('div');row.className='act';
+    const hasGame=!!a.game;
+    row.innerHTML=`<div class="ico" style="background:#${a.fill}">${a.emoji}</div>
+      <div class="body"><div class="ph">${a.phase}</div><div class="nm">${a.name}</div>
+      <div class="gm">${hasGame?'Game phù hợp: '+a.game.name:'Không có game phù hợp'}</div></div>`;
+    if(hasGame){
+      const sw=document.createElement('label');sw.className='switch';
+      sw.innerHTML=`<input type="checkbox" ${attached[curId][a.key]?'checked':''}><span class="slider"></span>`;
+      sw.querySelector('input').onchange=e=>{attached[curId][a.key]=e.target.checked;refreshOutputs()};
+      row.appendChild(sw);
+    }else{const n=document.createElement('span');n.className='nogame';n.textContent='—';row.appendChild(n);}
+    el.appendChild(row);
+  });
+}
+function refreshOutputs(){
+  const L=LESSONS[curId];
+  $('#wsCode').value=worksheetText(L);
+  const games=[...new Set(L.activities.filter(a=>attached[curId][a.key]&&a.game).map(a=>a.game))];
+  const nSlides=2+L.activities.length+1;
+  $('#pptxSub').textContent=`${nSlides} slide · ${games.length?games.length+' game được gắn':'chưa gắn game'}.`;
+  if(games.length){
+    $('#gameHint').style.display='block';
+    $('#gameHint').innerHTML='<b>Gợi ý giao game trong app Luyện tập:</b> '+
+      games.map(g=>`${g.name} — mục tiêu ${g.stars} sao`).join(' · ')+
+      '. Đặt vào thẻ “Bài tập & Game”, kèm hạn nộp.';
+  }else $('#gameHint').style.display='none';
+}
+function renderAll(){renderLessons();renderActs();refreshOutputs()}
+
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1900)}
+
+$('#btnPptx').onclick=async()=>{
+  if(typeof PptxGenJS==='undefined'){toast('Chưa tải được thư viện PPTX — kiểm tra mạng');return}
+  const L=LESSONS[curId];
+  try{const p=new PptxGenJS();buildDeck(p,L,attached[curId]);
+    await p.writeFile({fileName:L.id+'_bai_giang.pptx'});toast('Đã tạo file PPTX ✓');
+  }catch(e){console.error(e);toast('Lỗi tạo PPTX: '+e.message)}
+};
+$('#btnCopy').onclick=async()=>{
+  const txt=$('#wsCode').value;
+  try{await navigator.clipboard.writeText(txt);toast('Đã sao chép cú pháp ✓')}
+  catch{ $('#wsCode').select();document.execCommand('copy');toast('Đã sao chép ✓')}
+};
+$('#btnTxt').onclick=()=>{
+  const L=LESSONS[curId];const blob=new Blob([$('#wsCode').value],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=L.id+'_phieu_app.txt';a.click();
+  URL.revokeObjectURL(a.href);toast('Đã tải .txt ✓');
+};
+$('#btnPrint').onclick=()=>{
+  const w=window.open('','_blank');if(!w){toast('Trình duyệt chặn cửa sổ in');return}
+  w.document.write(printable(LESSONS[curId]));w.document.close();
+};
+document.querySelectorAll('#types input').forEach(c=>c.onchange=e=>{wsTypes[e.target.dataset.t]=e.target.checked;refreshOutputs()});
+
+/* ===== PDF import (beta) ===== */
+$('#pdfFile').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f)return;
+  const ta=$('#pdfText');ta.value='Đang đọc PDF…';
+  try{
+    if(!window.pdfjsLib){
+      await new Promise((res,rej)=>{const s=document.createElement('script');
+        s.src='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    }
+    const buf=await f.arrayBuffer();const pdf=await window.pdfjsLib.getDocument({data:buf}).promise;
+    let out='';for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i);
+      const tc=await pg.getTextContent();out+='\n--- Trang '+i+' ---\n'+tc.items.map(t=>t.str).join(' ');}
+    ta.value=out.trim()||'(Không trích xuất được văn bản — có thể PDF là ảnh scan.)';
+    toast('Đã trích xuất nội dung PDF');
+  }catch(err){console.error(err);ta.value='Lỗi đọc PDF: '+err.message}
+});
+
+renderAll();
+</script>
+</body>
+</html>
