@@ -6,6 +6,9 @@
 <title>Sân Chơi Toán Học — Luyện tập</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
   :root{--paper:#FBFAF4;--ink:#1C2438;--indigo:#2A3B8F;--indigo-soft:#6B7BD6;--tangerine:#FF7A1A;
     --tang-d:#C95C09;--emerald:#1FA36B;--emerald-d:#15784E;--red:#C0392B;--gold:#E8A317;--line:#E4E0D4;--muted:#6A7184}
@@ -96,9 +99,13 @@ const firebaseConfig = {
 // URL gốc tới các game (thư mục game nằm cùng repo). Nếu app đặt ở toan-games/luyen-tap/ thì để "../"
 const GAME_BASE = "../";
 const GAMES = [
-  {folder:"xac-suat",  name:"Phòng Lab Xác Suất", lop:10, topic:"Xác suất cổ điển",     ready:true,  auto:true },
-  {folder:"parabol",   name:"Pháo Thủ Parabol",   lop:10, topic:"Hàm số bậc hai",       ready:true,  auto:false},
-  {folder:"nong-trai", name:"Nông Trại Tối Ưu",   lop:10, topic:"Quy hoạch tuyến tính", ready:false, auto:false},
+  {folder:"xac-suat",  name:"Phòng Lab Xác Suất", lop:10, topic:"Xác suất cổ điển",      ready:true, auto:true},
+  {folder:"parabol",   name:"Pháo Thủ Parabol",   lop:10, topic:"Hàm số bậc hai",        ready:true, auto:true},
+  {folder:"nong-trai", name:"Nông Trại Tối Ưu",   lop:10, topic:"Bất PT bậc nhất hai ẩn", ready:true, auto:true},
+  {folder:"dau-tu",    name:"Đầu Tư Thông Minh",  lop:11, topic:"Cấp số nhân · lãi kép",  ready:true, auto:true},
+  {folder:"pha-ket",   name:"Phá Két Mật Mã",     lop:10, topic:"Tổ hợp · hoán vị",       ready:true, auto:true},
+  {folder:"kho-van",   name:"Kho Vận 3D",         lop:12, topic:"Hình không gian · Oxyz", ready:true, auto:true},
+  {folder:"thiet-ke",  name:"Nhà Thiết Kế",       lop:12, topic:"Đạo hàm · bài toán tối ưu", ready:true, auto:true},
 ];
 // auto:true  → game tự gửi kết quả về app khi chơi xong (qua postMessage).
 // Game khác  → học sinh tự nhập % sau khi chơi.
@@ -117,6 +124,9 @@ const configured = !firebaseConfig.apiKey.startsWith("DÁN");
 
 const app=document.getElementById('app');
 const T=document.getElementById('toast');
+function renderKatex(el){ if(!el||!window.renderMathInElement) return;
+  try{ renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false}); }catch(e){}
+}
 function toast(m){ T.textContent=m; T.classList.add('show'); setTimeout(()=>T.classList.remove('show'),2200); }
 function esc(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function rid(n=6){ const s="ABCDEFGHJKMNPQRSTUVWXYZ23456789"; let r=""; for(let i=0;i<n;i++)r+=s[Math.floor(Math.random()*s.length)]; return r; }
@@ -523,6 +533,7 @@ function viewQuiz(){
     }
     qc.appendChild(d);
   });
+  renderKatex(qc);
   // chọn TN
   qc.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{
     const i=+o.dataset.i; qc.querySelectorAll(`.opt[data-i="${i}"]`).forEach(x=>x.classList.remove('sel'));
