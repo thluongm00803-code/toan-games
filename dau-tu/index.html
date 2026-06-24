@@ -6,7 +6,7 @@
 <title>Đầu Tư Thông Minh — Toán 11</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --paper:#FBFAF4; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
@@ -20,7 +20,7 @@
     min-height:100vh;padding:18px 14px 40px}
   .wrap{max-width:960px;margin:0 auto}
   header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
-  h1{font-family:"Fredoka",sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);
+  h1{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);
     margin:0;letter-spacing:-.5px;color:var(--indigo)}
   h1 .dot{color:var(--gold)}
   .sub{color:var(--muted);font-size:14px;font-weight:500}
@@ -32,21 +32,21 @@
     overflow:hidden;box-shadow:0 10px 30px -18px rgba(42,59,143,.4)}
   canvas{display:block;width:100%;height:auto}
   .hud{position:absolute;top:10px;left:10px;display:flex;gap:8px;
-    font-family:"Fredoka",sans-serif;font-weight:600;font-size:13px}
+    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px}
   .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;
     padding:4px 12px;color:var(--indigo)}.chip b{color:var(--gold-d)}
   .panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
   @media(max-width:640px){.panel{grid-template-columns:1fr}}
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
-  .card h3{margin:0 0 12px;font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;
+  .card h3{margin:0 0 12px;font-family:"Baloo 2",sans-serif;font-weight:600;font-size:15px;
     color:var(--indigo);display:flex;align-items:center;gap:7px}
   .readout{display:flex;gap:10px;margin-bottom:12px}
   .ro{flex:1;background:#F4F6FB;border-radius:10px;padding:10px 12px;text-align:center}
   .ro .lab{font-size:11.5px;color:var(--muted);font-weight:600}
-  .ro .num{font-family:"Fredoka",sans-serif;font-size:19px;color:var(--ink)}
+  .ro .num{font-family:"Baloo 2",sans-serif;font-size:19px;color:var(--ink)}
   .ctrl{margin-bottom:14px}
   .ctrl label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:7px}
-  .ctrl label .val{font-family:"Fredoka",sans-serif;color:var(--gold-d)}
+  .ctrl label .val{font-family:"Baloo 2",sans-serif;color:var(--gold-d)}
   input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:999px;
     background:linear-gradient(90deg,var(--gold),var(--gold-d));outline:none}
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;
@@ -54,20 +54,20 @@
   input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:4px solid var(--gold);cursor:pointer}
   .toggle{display:none;gap:8px;margin-bottom:14px}
   .toggle.show{display:flex}
-  .toggle button{flex:1;font-family:"Fredoka",sans-serif;font-weight:600;font-size:14px;
+  .toggle button{flex:1;font-family:"Baloo 2",sans-serif;font-weight:600;font-size:14px;
     border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:10px;cursor:pointer}
   .toggle button.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
   .status{font-size:13px;font-weight:600;padding:9px 12px;border-radius:10px;margin-bottom:12px}
   .status.ok{background:#E8F7EE;color:var(--emerald-d)}
   .status.bad{background:#FDF0E8;color:var(--gold-d)}
   .actions{display:flex;gap:8px}
-  button.act{font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;border:none;
+  button.act{font-family:"Baloo 2",sans-serif;font-weight:600;font-size:15px;border:none;
     border-radius:12px;padding:12px 14px;cursor:pointer;transition:transform .08s}
   button.act:active{transform:translateY(2px)}
   .confirm{flex:1;background:var(--gold);color:#fff;box-shadow:0 5px 0 var(--gold-d)}
   .confirm:active{box-shadow:0 3px 0 var(--gold-d)}
   .reset{background:#EEF0F7;color:var(--indigo)}
-  .sys{background:#0F1530;color:#E8ECFF;border-radius:12px;padding:14px 16px;font-family:"Fredoka",sans-serif}
+  .sys{background:#0F1530;color:#E8ECFF;border-radius:12px;padding:14px 16px;font-family:"Baloo 2",sans-serif}
   .sys .formula{font-size:clamp(17px,4vw,21px);font-weight:600;letter-spacing:.3px}
   .sys .formula .v{color:#FFD27A}
   .sys .seq{font-size:13px;color:#AAB4E0;margin-top:10px;line-height:1.7}
@@ -81,17 +81,41 @@
   .toast .box{background:#fff;border-radius:18px;padding:24px 26px;text-align:center;max-width:350px;
     box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
   .toast .stars{font-size:30px;letter-spacing:4px}
-  .toast h2{font-family:"Fredoka",sans-serif;margin:8px 0 4px;font-size:23px;color:var(--gold-d)}
+  .toast h2{font-family:"Baloo 2",sans-serif;margin:8px 0 4px;font-size:23px;color:var(--gold-d)}
   .toast.fail h2{color:var(--tangerine)}
   .toast p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.55}
   .toast button{width:100%}
   .next{background:var(--emerald);color:#fff;box-shadow:0 5px 0 var(--emerald-d)}
   .retry{background:var(--indigo);color:#fff;box-shadow:0 5px 0 #1C2A6B}
   footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+
+/* ==== Cải tiến: dải nhận diện cấp lớp + đồng hồ ==== */
+:root{--indigo:#0E6F5C;--indigo-soft:#3FA98E;--tangerine:#E0871C;--emerald:#0E6F5C;--gradec:#0E6F5C;--grade2:#E0871C}
+.sct-ribbon{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:0 0 16px;flex-wrap:wrap}
+.sct-ribbon::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;
+  background:linear-gradient(90deg,var(--gradec),var(--grade2));z-index:5}
+.sct-back{font:600 13px/1 "Baloo 2",system-ui,sans-serif;color:var(--gradec);
+  text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:999px;
+  padding:9px 15px;transition:.15s;white-space:nowrap}
+.sct-back:hover{border-color:var(--gradec);transform:translateX(-2px)}
+.sct-tag{font:700 12px/1 "Baloo 2",system-ui,sans-serif;letter-spacing:.6px;color:#fff;
+  background:var(--gradec);border-radius:999px;padding:8px 15px;white-space:nowrap}
+.sct-timer{font:600 13px/1 "Baloo 2",system-ui,sans-serif !important;
+  background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:999px;
+  padding:5px 13px;color:var(--gradec);display:inline-flex;align-items:center;gap:5px}
+.sct-timer b{color:var(--grade2);font-weight:700}
+
+.wrap{position:relative}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="sct-ribbon">
+    <a class="sct-back" href="../">← Về Sân Chơi Toán Học</a>
+    <span class="sct-tag">LỚP 11 · HƯỚNG MỞ RỘNG</span>
+  </div>
+
   <header>
     <h1>Đầu Tư Thông Minh<span class="dot">.</span></h1>
     <span class="sub">Toán 11 · Cấp số nhân &amp; lãi kép · giáo dục tài chính</span>
@@ -186,6 +210,15 @@ const LEVELS=[
 ];
 
 let lvlIdx=0, score=0, n=0, sel="kep", cur=null;
+/* ===== Báo kết quả về app Luyện tập (postMessage) ===== */
+const SCT_done=new Set();
+function SCTreport(){
+  var total=LEVELS.length, cleared=SCT_done.size;
+  var percent=Math.round(cleared/total*100);
+  var payload={source:'SCT_GAME',type:'RESULT',game:'dau-tu',percent:percent,stars:cleared,starsMax:total,detail:cleared+'/'+total+' màn hoàn thành'};
+  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,'*'); }catch(e){}
+  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
+}
 
 // giá trị theo loại
 function value(L,k,kind){
@@ -258,7 +291,7 @@ function draw(){
   }
   // nhãn giá trị cột cuối
   const vNow=primary(L,n);
-  ctx.fillStyle='#1C2438'; ctx.font='bold 13px "Fredoka"';
+  ctx.fillStyle='#1C2438'; ctx.font='bold 13px "Baloo 2"';
   if(n>0){ const tx=Math.min(X(n), M.l+plotW-44); ctx.fillText(fmt(vNow), tx-14, Y(vNow)-8); }
 }
 
@@ -319,7 +352,7 @@ function confirmPlan(){
     ()=>{ if(last){score=0;setLevel(0);} else setLevel(lvlIdx+1); });
 }
 function showToast(ok,star,title,msg,btn,cls,act){
-  const t=$('toast'); t.className='toast show'+(ok?'':' fail');
+  const t=$('toast'); if(ok){SCT_done.add(lvlIdx);SCTreport();} t.className='toast show'+(ok?'':' fail');
   $('tStars').textContent=star; $('tStars').style.display=ok?'block':'none';
   $('tTitle').textContent=title; $('tMsg').innerHTML=msg;
   const b=$('tBtn'); b.textContent=btn; b.className=cls;
