@@ -6,7 +6,7 @@
 <title>Phá Két Mật Mã — Toán 10</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --paper:#FBFAF4; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
@@ -20,7 +20,7 @@
     min-height:100vh;padding:18px 14px 40px}
   .wrap{max-width:960px;margin:0 auto}
   header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
-  h1{font-family:"Fredoka",sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);
+  h1{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);
     margin:0;letter-spacing:-.5px;color:var(--steel)}
   h1 .dot{color:var(--gold)}
   .sub{color:var(--muted);font-size:14px;font-weight:500}
@@ -33,7 +33,7 @@
     border:1px solid #2C3554;border-radius:16px;overflow:hidden;padding:22px 18px 24px;
     box-shadow:0 14px 34px -22px rgba(23,29,51,.9)}
   .hud{position:absolute;top:12px;left:12px;display:flex;gap:8px;
-    font-family:"Fredoka",sans-serif;font-weight:600;font-size:13px}
+    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px}
   .chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:999px;
     padding:4px 12px;color:#CBD3F0}.chip b{color:var(--gold)}
   .vault{text-align:center;margin-top:14px}
@@ -46,7 +46,7 @@
   .slot .cap{font-size:9px;color:#8FA0C8;margin-top:2px}
   .times{color:#6B7BD6;font-weight:700;align-self:center;font-family:"JetBrains Mono",monospace}
   .combnote{color:#8FA0C8;font-size:13px;text-align:center;margin-top:2px}
-  .countbox{margin-top:14px;text-align:center;font-family:"Fredoka",sans-serif}
+  .countbox{margin-top:14px;text-align:center;font-family:"Baloo 2",sans-serif}
   .countbox .typ{font-size:13px;color:#86F0C0;font-weight:600;letter-spacing:.3px}
   .countbox .expr{font-family:"JetBrains Mono",monospace;color:#E8ECFF;font-size:clamp(16px,4.2vw,22px);margin-top:4px}
   .countbox .expr .res{color:var(--gold)}
@@ -57,23 +57,23 @@
   .panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
   @media(max-width:640px){.panel{grid-template-columns:1fr}}
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
-  .card h3{margin:0 0 12px;font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;
+  .card h3{margin:0 0 12px;font-family:"Baloo 2",sans-serif;font-weight:600;font-size:15px;
     color:var(--steel);display:flex;align-items:center;gap:7px}
   .facts{display:flex;gap:10px;margin-bottom:14px}
   .fact{flex:1;background:#F4F6FB;border-radius:10px;padding:9px 11px;text-align:center}
   .fact .lab{font-size:11px;color:var(--muted);font-weight:600}
-  .fact .num{font-family:"Fredoka",sans-serif;font-size:18px;color:var(--ink)}
+  .fact .num{font-family:"Baloo 2",sans-serif;font-size:18px;color:var(--ink)}
   .fact .sm{font-size:10.5px;color:var(--muted);font-weight:500}
   .qrow{margin-bottom:13px}
   .qrow .q{font-size:13px;font-weight:600;margin-bottom:8px}
   .seg{display:flex;gap:8px}
-  .seg button{flex:1;font-family:"Fredoka",sans-serif;font-weight:600;font-size:14px;
+  .seg button{flex:1;font-family:"Baloo 2",sans-serif;font-weight:600;font-size:14px;
     border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:11px;cursor:pointer;transition:.12s}
   .seg button.on{background:var(--steel);color:#fff;border-color:var(--steel)}
   .seg button:disabled{opacity:.4;cursor:not-allowed}
   .hintline{font-size:12px;color:var(--muted);min-height:16px;margin:2px 0 12px}
   .actions{display:flex;gap:8px}
-  button.act{font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;border:none;
+  button.act{font-family:"Baloo 2",sans-serif;font-weight:600;font-size:15px;border:none;
     border-radius:12px;padding:12px 14px;cursor:pointer;transition:transform .08s}
   button.act:active{transform:translateY(2px)}
   .crack{flex:1;background:var(--gold);color:#fff;box-shadow:0 5px 0 var(--gold-d)}
@@ -92,17 +92,41 @@
   .toast .box{background:#fff;border-radius:18px;padding:24px 26px;text-align:center;max-width:350px;
     box-shadow:0 20px 50px -20px rgba(0,0,0,.6)}
   .toast .stars{font-size:30px;letter-spacing:4px}
-  .toast h2{font-family:"Fredoka",sans-serif;margin:8px 0 4px;font-size:23px;color:var(--emerald-d)}
+  .toast h2{font-family:"Baloo 2",sans-serif;margin:8px 0 4px;font-size:23px;color:var(--emerald-d)}
   .toast.fail h2{color:var(--tangerine)}
   .toast p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.55}
   .toast button{width:100%}
   .next{background:var(--emerald);color:#fff;box-shadow:0 5px 0 var(--emerald-d)}
   .retry{background:var(--indigo);color:#fff;box-shadow:0 5px 0 #1C2A6B}
   footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+
+/* ==== Cải tiến: dải nhận diện cấp lớp + đồng hồ ==== */
+:root{--gradec:#2A3B8F;--grade2:#FF7A1A}
+.sct-ribbon{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:0 0 16px;flex-wrap:wrap}
+.sct-ribbon::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;
+  background:linear-gradient(90deg,var(--gradec),var(--grade2));z-index:5}
+.sct-back{font:600 13px/1 "Baloo 2",system-ui,sans-serif;color:var(--gradec);
+  text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:999px;
+  padding:9px 15px;transition:.15s;white-space:nowrap}
+.sct-back:hover{border-color:var(--gradec);transform:translateX(-2px)}
+.sct-tag{font:700 12px/1 "Baloo 2",system-ui,sans-serif;letter-spacing:.6px;color:#fff;
+  background:var(--gradec);border-radius:999px;padding:8px 15px;white-space:nowrap}
+.sct-timer{font:600 13px/1 "Baloo 2",system-ui,sans-serif !important;
+  background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:999px;
+  padding:5px 13px;color:var(--gradec);display:inline-flex;align-items:center;gap:5px}
+.sct-timer b{color:var(--grade2);font-weight:700}
+
+.wrap{position:relative}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="sct-ribbon">
+    <a class="sct-back" href="../">← Về Sân Chơi Toán Học</a>
+    <span class="sct-tag">LỚP 10 · TRỌNG TÂM ĐỀ TÀI</span>
+  </div>
+
   <header>
     <h1>Phá Két Mật Mã<span class="dot">.</span></h1>
     <span class="sub">Toán 10 · Quy tắc nhân · Hoán vị · Chỉnh hợp · Tổ hợp</span>
@@ -210,6 +234,15 @@ const LEVELS=[
 ];
 
 let lvlIdx=0, score=0, order=1, rep=1, attempts=0, cur=null;
+/* ===== Báo kết quả về app Luyện tập (postMessage) ===== */
+const SCT_done=new Set();
+function SCTreport(){
+  var total=LEVELS.length, cleared=SCT_done.size;
+  var percent=Math.round(cleared/total*100);
+  var payload={source:'SCT_GAME',type:'RESULT',game:'pha-ket',percent:percent,stars:cleared,starsMax:total,detail:cleared+'/'+total+' màn hoàn thành'};
+  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,'*'); }catch(e){}
+  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
+}
 
 function compute(n,k,ord,rp){
   // trả về {type, expr, value}
@@ -291,7 +324,7 @@ function crack(){
   }
 }
 function showToast(ok,star,title,msg,btn,cls,act){
-  const t=$('toast'); t.className='toast show'+(ok?'':' fail');
+  const t=$('toast'); if(ok){SCT_done.add(lvlIdx);SCTreport();} t.className='toast show'+(ok?'':' fail');
   $('tStars').textContent=star; $('tStars').style.display=ok?'block':'none';
   $('tTitle').textContent=title; $('tMsg').innerHTML=msg;
   const b=$('tBtn'); b.textContent=btn; b.className=cls; b.onclick=()=>{ t.className='toast'; act(); };
@@ -303,6 +336,30 @@ $('crackBtn').addEventListener('click',crack);
 $('resetBtn').addEventListener('click',()=>{score=0;$('toast').className='toast';setLevel(0);});
 
 setLevel(0);
+</script>
+
+<script>
+/* ==== Cải tiến lớp 10: đồng hồ đo thời gian chơi ==== */
+(function(){
+  var sec=0, started=false, running=false;
+  function fmt(s){var m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0');}
+  var chip=document.createElement('span');
+  chip.className='sct-timer';
+  chip.innerHTML='\u23F1 <b id="sctClock">0:00</b>';
+  function mount(){
+    var host=document.querySelector('.hud')||document.querySelector('.top');
+    if(host){ host.appendChild(chip); }
+    else{ chip.style.position='fixed'; chip.style.top='12px'; chip.style.right='12px';
+          chip.style.zIndex='99'; document.body.appendChild(chip); }
+  }
+  function tick(){ if(running){ sec++; var c=document.getElementById('sctClock'); if(c) c.textContent=fmt(sec); } }
+  function start(){ if(started) return; started=true; running=true; setInterval(tick,1000); }
+  document.addEventListener('visibilitychange',function(){ running = started && !document.hidden; });
+  ['pointerdown','keydown','input','change'].forEach(function(ev){ document.addEventListener(ev,start); });
+  window.SCT_elapsed=function(){ return sec; };
+  if(document.readyState!=='loading') mount();
+  else document.addEventListener('DOMContentLoaded',mount);
+})();
 </script>
 </body>
 </html>
