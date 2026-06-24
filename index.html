@@ -3,14 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sân Chơi Toán Học · Game dạy học Toán 10–11–12</title>
+<title>Sân Chơi Toán Học · Game dạy học Toán THPT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#FBFAF4; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
-    --tangerine:#FF7A1A; --emerald:#1FA36B; --line:#E4E0D4; --muted:#6A7184;
+    --paper:#FBFAF4; --ink:#1C2438; --line:#E4E0D4; --muted:#6A7184;
+    /* Lớp 10 — trọng tâm */
+    --c10:#2A3B8F; --c10soft:#6B7BD6; --c10a:#FF7A1A;
+    /* Lớp 11 — hướng mở rộng (xanh ngọc) */
+    --c11:#0E6F5C; --c11soft:#3FA98E; --c11a:#E0871C;
+    /* Lớp 12 — hướng mở rộng (tím) */
+    --c12:#5B3FBF; --c12soft:#9385E6; --c12a:#D6479A;
+    --emerald:#1FA36B;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
@@ -23,57 +29,90 @@
       radial-gradient(130% 90% at 78% -8%, #EAF2FF 0%, transparent 55%),
       var(--paper);
   }
-  .wrap{max-width:1040px;margin:0 auto;padding:30px 16px 56px}
+  .wrap{max-width:1060px;margin:0 auto;padding:30px 16px 56px}
 
   /* ---- Hero ---- */
-  .hero{padding:28px 0 18px}
+  .hero{padding:24px 0 6px}
   .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;
     border:1px solid var(--line);border-radius:999px;padding:6px 14px;
-    font-size:13px;font-weight:600;color:var(--indigo);box-shadow:0 6px 18px -12px rgba(42,59,143,.5)}
-  .eyebrow .pin{width:8px;height:8px;border-radius:50%;background:var(--tangerine)}
-  h1{font-family:"Fredoka",sans-serif;font-weight:700;letter-spacing:-1px;
-    font-size:clamp(34px,7vw,60px);line-height:1.02;margin:16px 0 10px;color:var(--indigo)}
-  h1 em{font-style:normal;color:var(--tangerine);position:relative}
+    font-size:13px;font-weight:600;color:var(--c10);box-shadow:0 6px 18px -12px rgba(42,59,143,.5)}
+  .eyebrow .pin{width:8px;height:8px;border-radius:50%;background:var(--c10a)}
+  h1{font-family:"Baloo 2",sans-serif;font-weight:800;letter-spacing:-.5px;
+    font-size:clamp(34px,7vw,58px);line-height:1.04;margin:16px 0 10px;color:var(--c10)}
+  h1 em{font-style:normal;color:var(--c10a);position:relative}
   h1 em::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:10px;
     background:#FFD9B8;border-radius:6px;z-index:-1}
-  .lead{font-size:clamp(15px,2.4vw,18px);color:var(--muted);max-width:560px;font-weight:500}
+  .lead{font-size:clamp(15px,2.4vw,18px);color:var(--muted);max-width:600px;font-weight:500}
   .lead b{color:var(--ink)}
 
-  /* ---- Filter ---- */
-  .filter{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 18px}
-  .filter button{font-family:"Fredoka",sans-serif;font-weight:600;font-size:14px;
-    border:1px solid var(--line);background:#fff;color:var(--ink);
-    border-radius:999px;padding:9px 16px;cursor:pointer;transition:.15s}
-  .filter button:hover{border-color:var(--indigo-soft)}
-  .filter button.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+  /* ---- Teacher tools ---- */
+  .teach{margin:26px 0 6px}
+  .teach-tag{display:inline-block;font-family:"Baloo 2",sans-serif;font-weight:700;font-size:12px;
+    color:var(--emerald);background:#EAF6EE;border-radius:999px;padding:5px 12px;margin-bottom:10px}
+  .teach-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:14px}
+  .teach-card{display:flex;gap:13px;align-items:center;text-decoration:none;color:var(--ink);
+    background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;
+    box-shadow:0 10px 26px -20px rgba(42,59,143,.5);transition:transform .12s,box-shadow .12s}
+  .teach-card:hover{transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(42,59,143,.55)}
+  .teach-card .te{font-size:30px;flex:none}
+  .teach-card b{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:16px;color:var(--emerald)}
+  .teach-card .sub{font-size:13px;line-height:1.45;color:var(--muted)}
 
-  /* ---- Grid ---- */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+  /* ---- Section heading ---- */
+  .sec{margin:40px 0 4px}
+  .sec .kick{display:inline-flex;align-items:center;gap:8px;font-family:"Baloo 2",sans-serif;
+    font-weight:700;font-size:13px;letter-spacing:.4px;border-radius:999px;padding:6px 14px}
+  .sec.core .kick{color:#fff;background:var(--c10)}
+  .sec.ext .kick{color:var(--c12);background:#F0ECFB;border:1px solid #E0D7F7}
+  .sec h2{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:clamp(22px,4vw,30px);
+    margin:12px 0 4px;color:var(--ink)}
+  .sec p.note{font-size:14.5px;color:var(--muted);max-width:680px;margin:0;line-height:1.55}
+  .sec p.note b{color:var(--ink)}
+
+  /* ---- Grid + cards ---- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-top:18px}
   .card{position:relative;background:#fff;border:1px solid var(--line);border-radius:18px;
-    padding:20px;display:flex;flex-direction:column;gap:12px;
+    padding:20px 20px 20px;display:flex;flex-direction:column;gap:11px;overflow:hidden;
     box-shadow:0 14px 34px -24px rgba(42,59,143,.5);transition:transform .12s,box-shadow .12s}
-  .card.live:hover{transform:translateY(-4px);box-shadow:0 22px 40px -22px rgba(42,59,143,.55)}
-  .card.soon{opacity:.72}
-  .badge{position:absolute;top:14px;right:14px;font-family:"Fredoka",sans-serif;font-weight:600;
-    font-size:11px;padding:4px 10px;border-radius:999px;letter-spacing:.3px}
-  .badge.new{background:var(--tangerine);color:#fff}
-  .badge.wip{background:#EEF0F7;color:var(--muted)}
-  .tile{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;
-    justify-content:center;font-size:30px}
-  .card h2{font-family:"Fredoka",sans-serif;font-weight:600;font-size:20px;margin:0;color:var(--ink)}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px}
+  .card:hover{transform:translateY(-4px);box-shadow:0 22px 40px -22px rgba(42,59,143,.55)}
+  .card.g10::before{background:linear-gradient(var(--c10),var(--c10a))}
+  .card.g11::before{background:linear-gradient(var(--c11),var(--c11a))}
+  .card.g12::before{background:linear-gradient(var(--c12),var(--c12a))}
+
+  .ord{position:absolute;top:16px;right:18px;font-family:"Baloo 2",sans-serif;font-weight:800;
+    font-size:30px;color:#EEF0F7;line-height:1}
+  .tile{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;
+    justify-content:center;font-size:29px}
+  .card.g10 .tile{background:#FFF1E5}
+  .card.g11 .tile{background:#E6F4F0}
+  .card.g12 .tile{background:#F0ECFB}
+  .gradetag{display:inline-flex;align-items:center;gap:6px;font-family:"Baloo 2",sans-serif;
+    font-weight:700;font-size:11.5px;letter-spacing:.3px;border-radius:999px;padding:4px 11px;width:fit-content}
+  .card.g10 .gradetag{color:#fff;background:var(--c10)}
+  .card.g11 .gradetag{color:#fff;background:var(--c11)}
+  .card.g12 .gradetag{color:#fff;background:var(--c12)}
+  .card h3{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:20px;margin:0;color:var(--ink)}
   .chips{display:flex;gap:6px;flex-wrap:wrap}
-  .chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:8px;background:#F3F5FB;color:var(--indigo)}
-  .chip.real{background:#FFF3E8;color:#C9650E}
+  .chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:8px;background:#F3F5FB;color:var(--ink)}
+  .chip.real{background:#FFF6EE;color:#C9650E}
+  .card.g11 .chip.real{background:#EAF6F1;color:var(--c11)}
+  .card.g12 .chip.real{background:#F3EEFC;color:var(--c12)}
   .desc{font-size:13.5px;color:var(--muted);line-height:1.5;flex:1}
   .desc b{color:var(--ink)}
-  .play{margin-top:4px;font-family:"Fredoka",sans-serif;font-weight:600;font-size:15px;
-    text-align:center;text-decoration:none;border-radius:12px;padding:12px;display:block;transition:filter .15s}
-  .play.go{background:var(--tangerine);color:#fff;box-shadow:0 5px 0 #C95C09}
-  .play.go:active{transform:translateY(2px);box-shadow:0 3px 0 #C95C09}
-  .play.lock{background:#F0F1F6;color:var(--muted);cursor:default;pointer-events:none}
+  .feat{display:flex;gap:6px;flex-wrap:wrap;font-size:11.5px;color:var(--muted)}
+  .feat span{background:#F6F7FB;border:1px solid var(--line);border-radius:7px;padding:3px 8px;font-weight:600}
+  .play{margin-top:4px;font-family:"Baloo 2",sans-serif;font-weight:700;font-size:15px;
+    text-align:center;text-decoration:none;border-radius:12px;padding:12px;display:block;color:#fff}
+  .card.g10 .play{background:var(--c10a);box-shadow:0 5px 0 #C95C09}
+  .card.g10 .play:active{transform:translateY(2px);box-shadow:0 3px 0 #C95C09}
+  .card.g11 .play{background:var(--c11);box-shadow:0 5px 0 #0A4E40}
+  .card.g11 .play:active{transform:translateY(2px);box-shadow:0 3px 0 #0A4E40}
+  .card.g12 .play{background:var(--c12);box-shadow:0 5px 0 #402C8C}
+  .card.g12 .play:active{transform:translateY(2px);box-shadow:0 3px 0 #402C8C}
 
-  footer{margin-top:40px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7}
-  footer b{color:var(--indigo)}
+  footer{margin-top:46px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7}
+  footer b{color:var(--c10)}
 </style>
 </head>
 <body>
@@ -85,97 +124,112 @@
     <p class="lead">Bộ trò chơi để học sinh <b>điều khiển trực tiếp đối tượng toán</b> — kéo đỉnh, chỉnh ràng buộc, mô phỏng — rồi thấy ngay kết quả. Toán gắn với mô hình thật ngoài đời sống.</p>
   </section>
 
-  <div class="filter" id="filter">
-    <button data-g="all" class="on">Tất cả</button>
-    <button data-g="10">Lớp 10</button>
-    <button data-g="11">Lớp 11</button>
-    <button data-g="12">Lớp 12</button>
-  </div>
+  <section class="teach">
+    <span class="teach-tag">🍎 Dành cho giáo viên</span>
+    <div class="teach-row">
+      <a class="teach-card" href="soan-bai/">
+        <span class="te">📝</span>
+        <span><b>Xưởng Soạn Bài</b><br><span class="sub">Soạn giáo án, gắn game vào hoạt động, xuất bài giảng PPTX &amp; phiếu bài tập.</span></span>
+      </a>
+      <a class="teach-card" href="luyen-tap/">
+        <span class="te">📊</span>
+        <span><b>App Luyện Tập</b><br><span class="sub">Tạo lớp, giao phiếu &amp; game tự chấm điểm, theo dõi kết quả học sinh.</span></span>
+      </a>
+    </div>
+  </section>
 
-  <div class="grid" id="grid"></div>
+  <!-- ============ LÕI: 6 GAME LỚP 10 ============ -->
+  <section class="sec core">
+    <span class="kick">⭐ Trọng tâm đề tài</span>
+    <h2>Sáu trò chơi Toán 10</h2>
+    <p class="note">Sáu game được thiết kế sâu cho chương trình lớp 10, mỗi game gắn một mạch kiến thức và một mô hình thực tế. Tất cả đều có <b>đồng hồ đo thời gian chơi</b>, báo kết quả về App Luyện Tập và giao diện thống nhất theo màu <b>indigo–cam</b>.</p>
+  </section>
+  <div class="grid" id="gridCore"></div>
+
+  <!-- ============ HƯỚNG MỞ RỘNG: LỚP 11–12 ============ -->
+  <section class="sec ext">
+    <span class="kick">🧭 Hướng mở rộng của đề tài</span>
+    <h2>Mở rộng lên lớp 11 &amp; 12</h2>
+    <p class="note">Ba game phát triển ý tưởng lên các lớp trên — <b>cấp số nhân &amp; lãi kép</b> (lớp 11), <b>tối ưu bằng đạo hàm</b> và <b>hình học Oxyz</b> (lớp 12). Đây là <b>định hướng mở rộng</b> của đề tài, dùng hệ màu riêng (xanh ngọc cho lớp 11, tím cho lớp 12) để phân biệt với phần lõi lớp 10.</p>
+  </section>
+  <div class="grid" id="gridExt"></div>
 
   <footer>
     <b>Sân Chơi Toán Học</b> — mỗi trò chơi mở trong một thư mục riêng.<br>
-    Cập nhật bằng cách tải thêm game vào kho rồi đổi trạng thái trong danh sách.
+    Phần lõi gồm 6 game lớp 10; phần mở rộng gồm 1 game lớp 11 và 2 game lớp 12.
   </footer>
 </div>
 
 <script>
-// Mỗi game = một thư mục con cùng cấp với trang này.
-// status: 'live' (đã có, bấm chơi được) | 'soon' (đang phát triển).
-const GAMES = [
-  { name:"Phòng Lab Xác Suất", emoji:"🎲", tint:"#EAF1FB",
-    grades:[10], topic:"Xác suất cổ điển", real:"Xúc xắc · đồng xu · hộp bi",
-    desc:"Dựng <b>không gian mẫu</b>, chọn biến cố và xem P(E) đổi ngay. Gieo nhiều lần để thấy tần suất hội tụ về xác suất.",
-    folder:"xac-suat", status:"live" },
+// Phần lõi — 6 game lớp 10, theo đúng thứ tự đề tài.
+const CORE = [
+  { ord:1, name:"Pháo Thủ Parabol", emoji:"🏀", grade:10,
+    topic:"Hàm số bậc hai", real:"Đường bay · ném bóng", folder:"parabol",
+    feat:["⏱ Hẹn giờ","🎯 5 màn"],
+    desc:"Chỉnh <b>đỉnh I(h; k)</b> của parabol để đường bay xuyên qua đích. Phương trình cập nhật sống theo từng thao tác." },
 
-  { name:"Pháo Thủ Parabol", emoji:"🏀", tint:"#FFF1E5",
-    grades:[10], topic:"Hàm số bậc hai", real:"Đường bay · ném bóng",
-    desc:"Chỉnh <b>đỉnh I(h; k)</b> của parabol để đường bay xuyên qua đích. Phương trình cập nhật sống theo từng thao tác.",
-    folder:"parabol", status:"live" },
+  { ord:2, name:"Nông Trại Tối Ưu", emoji:"🌾", grade:10,
+    topic:"Bất PT bậc nhất hai ẩn", real:"Ruộng lúa · ao cá ĐBSCL", folder:"nong-trai",
+    feat:["⏱ Hẹn giờ","🌱 3 vụ"],
+    desc:"Chia <b>đất, vốn, công</b> để lãi cao nhất. Kéo các ràng buộc, thấy vùng nghiệm và đỉnh tối ưu hiện ra." },
 
-  { name:"Nông Trại Tối Ưu", emoji:"🌾", tint:"#EAF6EE",
-    grades:[10], topic:"Bất PT bậc nhất hai ẩn", real:"Ruộng lúa · ao cá ĐBSCL",
-    desc:"Chia <b>đất, vốn, công</b> để lãi cao nhất. Kéo các ràng buộc, thấy vùng nghiệm và đỉnh tối ưu hiện ra.",
-    folder:"nong-trai", status:"live" },
+  { ord:3, name:"Phi Thuyền Vectơ", emoji:"🚀", grade:10,
+    topic:"Vectơ · tích vô hướng", real:"Lực đẩy · phi thuyền", folder:"vecto",
+    feat:["⏱ Hẹn giờ","🚀 5 màn"],
+    desc:"Kéo <b>đầu mũi tên</b> để ghép tổng – hiệu vectơ và chỉnh <b>tích vô hướng</b>; toạ độ và kết quả đổi tức thì." },
 
-  { name:"Đầu Tư Thông Minh", emoji:"💰", tint:"#EAF1FB",
-    grades:[11], topic:"Cấp số nhân · lãi kép", real:"Lãi suất ngân hàng",
-    desc:"Mô phỏng <b>lãi kép</b> theo thời gian: gửi tiết kiệm hay vay nợ, thấy sức mạnh của hàm số mũ.",
-    folder:"dau-tu", status:"live" },
+  { ord:4, name:"Trạm Vệ Tinh", emoji:"📡", grade:10,
+    topic:"Đường tròn · elip", real:"Phủ sóng · quỹ đạo vệ tinh", folder:"duong-tron",
+    feat:["⏱ Hẹn giờ","📡 5 màn"],
+    desc:"Kéo <b>tâm, bán kính</b> hoặc <b>bán trục</b> để đường tròn/elip đi qua đúng các điểm — phương trình hiện ngay." },
 
-  { name:"Phá Két Mật Mã", emoji:"🔐", tint:"#F3EEFB",
-    grades:[10,11], topic:"Tổ hợp · hoán vị", real:"Mật khẩu · biển số xe",
-    desc:"Đếm số <b>khả năng</b> để mở két và bẻ khoá. Hiểu vì sao mật khẩu dài thì khó đoán.",
-    folder:"pha-ket", status:"live" },
+  { ord:5, name:"Phá Két Mật Mã", emoji:"🔐", grade:10,
+    topic:"Quy tắc đếm · tổ hợp", real:"Mật khẩu · biển số xe", folder:"pha-ket",
+    feat:["⏱ Hẹn giờ","🔐 5 két"],
+    desc:"Đếm số <b>khả năng</b> để mở két và bẻ khoá. Hiểu vì sao mật khẩu dài thì khó đoán." },
 
-  { name:"Kho Vận 3D", emoji:"📦", tint:"#EAF6F4",
-    grades:[11,12], topic:"Hình không gian · Oxyz", real:"Giao hàng · kiến trúc",
-    desc:"Đặt vật trong <b>không gian xoay được</b>, tính khoảng cách và dựng khối — nhìn hình không gian rõ như thật.",
-    folder:"kho-van", status:"live" },
-
-  { name:"Nhà Thiết Kế", emoji:"📐", tint:"#FFF1E5",
-    grades:[12], topic:"Đạo hàm · bài toán tối ưu", real:"Bao bì · rào ruộng",
-    desc:"Ít vật liệu nhất cho hộp có <b>thể tích cho trước</b>. Thử và đo, để đạo hàm chỉ ra điểm tối ưu.",
-    folder:"thiet-ke", status:"live" },
+  { ord:6, name:"Phòng Lab Xác Suất", emoji:"🎲", grade:10,
+    topic:"Xác suất cổ điển", real:"Xúc xắc · đồng xu · hộp bi", folder:"xac-suat",
+    feat:["⏱ Hẹn giờ","🔬 Khám phá + 🎯 Thử thách"],
+    desc:"Dựng <b>không gian mẫu</b>, chọn biến cố và xem P(E) đổi ngay. Gieo nhiều lần để thấy tần suất hội tụ về xác suất." },
 ];
 
-const grid = document.getElementById('grid');
+// Hướng mở rộng — lớp 11 & 12.
+const EXT = [
+  { name:"Đầu Tư Thông Minh", emoji:"💰", grade:11,
+    topic:"Cấp số nhân · lãi kép", real:"Lãi suất ngân hàng", folder:"dau-tu",
+    feat:["💹 Giáo dục tài chính"],
+    desc:"Mô phỏng <b>lãi kép</b> theo thời gian: gửi tiết kiệm hay vay nợ, thấy sức mạnh của hàm số mũ." },
 
-function gradeLabel(gs){ return gs.map(g=>"Lớp "+g).join(" · "); }
+  { name:"Nhà Thiết Kế", emoji:"📐", grade:12,
+    topic:"Đạo hàm · bài toán tối ưu", real:"Bao bì · rào ruộng", folder:"thiet-ke",
+    feat:["📦 Tối ưu vật liệu"],
+    desc:"Ít vật liệu nhất cho hộp có <b>thể tích cho trước</b>. Thử và đo, để đạo hàm chỉ ra điểm tối ưu." },
 
-function render(filter){
-  grid.innerHTML = "";
-  GAMES.filter(g => filter==="all" || g.grades.includes(+filter)).forEach(g=>{
-    const live = g.status==="live";
-    const card = document.createElement('div');
-    card.className = "card "+(live?"live":"soon");
-    card.innerHTML = `
-      <span class="badge ${live?'new':'wip'}">${live?'CHƠI ĐƯỢC':'SẮP RA MẮT'}</span>
-      <div class="tile" style="background:${g.tint}">${g.emoji}</div>
-      <h2>${g.name}</h2>
-      <div class="chips">
-        <span class="chip">${gradeLabel(g.grades)}</span>
-        <span class="chip">${g.topic}</span>
-        <span class="chip real">${g.real}</span>
-      </div>
-      <p class="desc">${g.desc}</p>
-      ${ live
-        ? `<a class="play go" href="${g.folder}/">Chơi ngay 🚀</a>`
-        : `<span class="play lock">Đang phát triển</span>` }
-    `;
-    grid.appendChild(card);
-  });
+  { name:"Kho Vận 3D", emoji:"📦", grade:12,
+    topic:"Hình không gian · Oxyz", real:"Giao hàng · kiến trúc", folder:"kho-van",
+    feat:["🧊 Không gian xoay"],
+    desc:"Đặt vật trong <b>không gian xoay được</b>, tính khoảng cách và dựng khối — nhìn hình không gian rõ như thật." },
+];
+
+function cardHTML(g, withOrd){
+  return `<div class="card g${g.grade}">
+    ${withOrd ? `<span class="ord">${g.ord}</span>` : ``}
+    <div class="tile">${g.emoji}</div>
+    <span class="gradetag">Lớp ${g.grade}</span>
+    <h3>${g.name}</h3>
+    <div class="chips">
+      <span class="chip">${g.topic}</span>
+      <span class="chip real">${g.real}</span>
+    </div>
+    <p class="desc">${g.desc}</p>
+    <div class="feat">${g.feat.map(f=>`<span>${f}</span>`).join("")}</div>
+    <a class="play" href="${g.folder}/">Chơi ngay 🚀</a>
+  </div>`;
 }
 
-document.getElementById('filter').addEventListener('click', e=>{
-  const b = e.target.closest('button'); if(!b) return;
-  [...document.querySelectorAll('#filter button')].forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');
-  render(b.dataset.g);
-});
-
-render("all");
+document.getElementById('gridCore').innerHTML = CORE.map(g=>cardHTML(g,true)).join("");
+document.getElementById('gridExt').innerHTML  = EXT.map(g=>cardHTML(g,false)).join("");
 </script>
 </body>
 </html>
