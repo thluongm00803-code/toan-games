@@ -6,7 +6,7 @@
 <title>Pháo Thủ Parabol — Toán 10</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --paper:#FBFAF4; --grid:#DCE6F0; --grid2:#C9D8EC;
@@ -28,7 +28,7 @@
   .wrap{max-width:920px;margin:0 auto}
   header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
   h1{
-    font-family:"Fredoka",sans-serif;font-weight:700;
+    font-family:"Baloo 2",sans-serif;font-weight:700;
     font-size:clamp(26px,5vw,40px);margin:0;letter-spacing:-.5px;
     color:var(--indigo);
   }
@@ -50,7 +50,7 @@
   canvas{display:block;width:100%;height:auto;touch-action:none}
   .hud{
     position:absolute;top:10px;left:10px;display:flex;gap:8px;
-    font-family:"Fredoka",sans-serif;font-weight:600;font-size:13px;
+    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px;
   }
   .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);
     border-radius:999px;padding:4px 12px;color:var(--indigo)}
@@ -60,12 +60,12 @@
   }
   @media(max-width:640px){.panel{grid-template-columns:1fr}}
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
-  .card h3{margin:0 0 12px;font-family:"Fredoka",sans-serif;font-weight:600;
+  .card h3{margin:0 0 12px;font-family:"Baloo 2",sans-serif;font-weight:600;
     font-size:15px;color:var(--indigo);display:flex;align-items:center;gap:7px}
   .ctrl{margin-bottom:16px}
   .ctrl label{display:flex;justify-content:space-between;font-size:13px;
     font-weight:600;margin-bottom:7px;color:var(--ink)}
-  .ctrl label .val{font-family:"Fredoka",sans-serif;color:var(--tangerine)}
+  .ctrl label .val{font-family:"Baloo 2",sans-serif;color:var(--tangerine)}
   input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;
     border-radius:999px;background:linear-gradient(90deg,var(--indigo-soft),var(--indigo));
     outline:none}
@@ -76,14 +76,14 @@
     background:#fff;border:4px solid var(--tangerine);cursor:pointer}
   .eq{
     background:#0F1530;color:#E8ECFF;border-radius:12px;padding:14px 16px;
-    font-family:"Fredoka",sans-serif;
+    font-family:"Baloo 2",sans-serif;
   }
   .eq .main{font-size:clamp(18px,4.5vw,24px);font-weight:600;letter-spacing:.3px}
   .eq .main .a{color:#FFB169}.eq .main .h{color:#86F0C0}.eq .main .k{color:#8FB0FF}
   .eq .row{display:flex;gap:18px;margin-top:10px;font-size:13px;color:#AAB4E0;flex-wrap:wrap}
   .eq .row span b{color:#fff;font-weight:600}
   .actions{display:flex;gap:10px;margin-top:14px}
-  button{font-family:"Fredoka",sans-serif;font-weight:600;font-size:16px;border:none;
+  button{font-family:"Baloo 2",sans-serif;font-weight:600;font-size:16px;border:none;
     border-radius:12px;padding:13px 18px;cursor:pointer;flex:1;transition:transform .08s ease,filter .15s}
   button:active{transform:translateY(2px)}
   .fire{background:var(--tangerine);color:#fff;box-shadow:0 6px 0 #C95C09}
@@ -98,7 +98,7 @@
   .toast .box{background:#fff;border-radius:18px;padding:26px 28px;text-align:center;
     max-width:330px;box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
   .toast .emo{font-size:48px}
-  .toast h2{font-family:"Fredoka",sans-serif;margin:6px 0 4px;color:var(--emerald);font-size:24px}
+  .toast h2{font-family:"Baloo 2",sans-serif;margin:6px 0 4px;color:var(--emerald);font-size:24px}
   .toast.fail h2{color:var(--tangerine)}
   .toast p{margin:0 0 16px;color:var(--muted);font-size:14px}
   .toast button{flex:none;width:100%}
@@ -107,10 +107,34 @@
   .tip{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5}
   .tip b{color:var(--indigo)}
   footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+
+/* ==== Cải tiến: dải nhận diện cấp lớp + đồng hồ ==== */
+:root{--gradec:#2A3B8F;--grade2:#FF7A1A}
+.sct-ribbon{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:0 0 16px;flex-wrap:wrap}
+.sct-ribbon::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;
+  background:linear-gradient(90deg,var(--gradec),var(--grade2));z-index:5}
+.sct-back{font:600 13px/1 "Baloo 2",system-ui,sans-serif;color:var(--gradec);
+  text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:999px;
+  padding:9px 15px;transition:.15s;white-space:nowrap}
+.sct-back:hover{border-color:var(--gradec);transform:translateX(-2px)}
+.sct-tag{font:700 12px/1 "Baloo 2",system-ui,sans-serif;letter-spacing:.6px;color:#fff;
+  background:var(--gradec);border-radius:999px;padding:8px 15px;white-space:nowrap}
+.sct-timer{font:600 13px/1 "Baloo 2",system-ui,sans-serif !important;
+  background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:999px;
+  padding:5px 13px;color:var(--gradec);display:inline-flex;align-items:center;gap:5px}
+.sct-timer b{color:var(--grade2);font-weight:700}
+
+.wrap{position:relative}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="sct-ribbon">
+    <a class="sct-back" href="../">← Về Sân Chơi Toán Học</a>
+    <span class="sct-tag">LỚP 10 · TRỌNG TÂM ĐỀ TÀI</span>
+  </div>
+
   <header>
     <h1>Pháo Thủ Parabol<span class="dot">.</span></h1>
     <span class="sub">Toán 10 · Hàm số bậc hai &amp; đường bay thực tế</span>
@@ -208,6 +232,15 @@ const LEVELS = [
 ];
 
 let lvlIdx = 0, score = 0, flying = false, hitThisLevel = false;
+/* ===== Báo kết quả về app Luyện tập (postMessage) ===== */
+const SCT_done=new Set();
+function SCTreport(){
+  var total=LEVELS.length, cleared=SCT_done.size;
+  var percent=Math.round(cleared/total*100);
+  var payload={source:'SCT_GAME',type:'RESULT',game:'parabol',percent:percent,stars:cleared,starsMax:total,detail:cleared+'/'+total+' màn hoàn thành'};
+  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,'*'); }catch(e){}
+  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
+}
 let h = 4, k = 4;
 const TOL = 0.55; // bán kính chấp nhận (m)
 
@@ -372,6 +405,7 @@ function checkHit(){
   const d=Math.abs(yAt-t.y);
   if(d<=TOL){
     if(!hitThisLevel){ score+=100; $('score').textContent=score; hitThisLevel=true; }
+    SCT_done.add(lvlIdx); SCTreport();
     if(lvlIdx<LEVELS.length-1){
       endToast(true,'Trúng đích!',`Đường bay đi qua đúng vòng tròn. Đỉnh I(${h.toFixed(1)}; ${k.toFixed(1)}).`,
         'Màn tiếp theo','next',()=>setLevel(lvlIdx+1));
@@ -396,6 +430,30 @@ window.addEventListener('resize',()=>{ if(!flying) render(); });
 
 updateEq();
 setLevel(0);
+</script>
+
+<script>
+/* ==== Cải tiến lớp 10: đồng hồ đo thời gian chơi ==== */
+(function(){
+  var sec=0, started=false, running=false;
+  function fmt(s){var m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0');}
+  var chip=document.createElement('span');
+  chip.className='sct-timer';
+  chip.innerHTML='\u23F1 <b id="sctClock">0:00</b>';
+  function mount(){
+    var host=document.querySelector('.hud')||document.querySelector('.top');
+    if(host){ host.appendChild(chip); }
+    else{ chip.style.position='fixed'; chip.style.top='12px'; chip.style.right='12px';
+          chip.style.zIndex='99'; document.body.appendChild(chip); }
+  }
+  function tick(){ if(running){ sec++; var c=document.getElementById('sctClock'); if(c) c.textContent=fmt(sec); } }
+  function start(){ if(started) return; started=true; running=true; setInterval(tick,1000); }
+  document.addEventListener('visibilitychange',function(){ running = started && !document.hidden; });
+  ['pointerdown','keydown','input','change'].forEach(function(ev){ document.addEventListener(ev,start); });
+  window.SCT_elapsed=function(){ return sec; };
+  if(document.readyState!=='loading') mount();
+  else document.addEventListener('DOMContentLoaded',mount);
+})();
 </script>
 </body>
 </html>
