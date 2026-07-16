@@ -52,7 +52,8 @@
   .stat .l{font-size:12px;color:var(--muted);font-weight:600}
   .qbox{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
   .qbox .qt{font-weight:600;margin-bottom:8px}
-  .opt{display:block;padding:8px 10px;border:1px solid var(--line);border-radius:9px;margin-bottom:6px;cursor:pointer;font-size:14px}
+  /* .opt: chỉ nhãn A/B/C/D in đậm (bọc <b>), nội dung phương án để thường (font-weight:400) */
+  .opt{display:block;padding:8px 10px;border:1px solid var(--line);border-radius:9px;margin-bottom:6px;cursor:pointer;font-size:14px;font-weight:400}
   .opt.sel{border-color:var(--indigo);background:#EEF1FB}
   .dsrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line)}
   .dsrow .b{display:flex;gap:6px}
@@ -523,7 +524,7 @@ function viewQuiz(){
     const d=document.createElement('div'); d.className='qbox';
     if(q.type==='TN'){
       d.innerHTML=`<div class="qt">Câu ${i+1}. ${esc(q.q)}</div>`+
-        q.opts.map((o,j)=>`<label class="opt" data-i="${i}" data-j="${j}">${'ABCD'[j]}. ${esc(o.t)}</label>`).join('');
+        q.opts.map((o,j)=>`<label class="opt" data-i="${i}" data-j="${j}"><b>${'ABCD'[j]}.</b> ${esc(o.t)}</label>`).join('');
     } else if(q.type==='DS'){
       d.innerHTML=`<div class="qt">Câu ${i+1}. ${esc(q.q)}</div>`+
         q.sts.map((s,j)=>`<div class="dsrow"><span>${'abcd'[j]}) ${esc(s.t)}</span>
