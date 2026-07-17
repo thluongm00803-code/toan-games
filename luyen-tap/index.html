@@ -11,21 +11,26 @@
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
   :root{--paper:#FBFAF4;--ink:#1C2438;--indigo:#2A3B8F;--indigo-soft:#6B7BD6;--tangerine:#FF7A1A;
-    --tang-d:#C95C09;--emerald:#1FA36B;--emerald-d:#15784E;--red:#C0392B;--gold:#E8A317;--line:#E4E0D4;--muted:#6A7184}
+    --tang-d:#C95C09;--emerald:#1FA36B;--emerald-d:#15784E;--red:#C0392B;--gold:#E8A317;--line:#E4E0D4;--muted:#6A7184;
+    --teal:#0E6F5C;--violet:#5B3FBF}
   *{box-sizing:border-box}html,body{margin:0;padding:0}
   body{font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);
     background:radial-gradient(120% 80% at 75% -10%,#EAF2FF 0%,transparent 55%),var(--paper);min-height:100vh}
-  .wrap{max-width:860px;margin:0 auto;padding:18px 14px 50px}
+  .wrap{max-width:900px;margin:0 auto;padding:18px 14px 50px;position:relative}
+  .wrap::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;border-radius:3px;
+    background:linear-gradient(90deg,var(--indigo),var(--tangerine))}
   h1{font-family:"Baloo 2",sans-serif;font-weight:700;color:var(--indigo);letter-spacing:-.5px;margin:0}
   h1 .dot{color:var(--tangerine)}
   h2{font-family:"Baloo 2",sans-serif;color:var(--indigo);font-size:20px;margin:0 0 12px}
-  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+  h2 small{font-size:12px;color:var(--muted);font-weight:500;font-family:"Be Vietnam Pro"}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin:10px 0 14px;flex-wrap:wrap;gap:8px}
   .who{font-size:13px;color:var(--muted);font-weight:600}
   .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px;
     box-shadow:0 10px 30px -22px rgba(42,59,143,.4)}
   label{display:block;font-size:13px;font-weight:600;margin:10px 0 5px}
   input,select,textarea{width:100%;font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--line);
     border-radius:10px;background:#FCFCFE}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--indigo-soft)}
   textarea{min-height:120px;resize:vertical;font-size:13px}
   button{font-family:"Baloo 2",sans-serif;font-weight:600;font-size:15px;border:none;border-radius:11px;
     padding:11px 16px;cursor:pointer;transition:transform .08s}
@@ -35,6 +40,7 @@
   .sec{background:#EEF1FB;color:var(--indigo)}
   .ok{background:var(--emerald);color:#fff;box-shadow:0 4px 0 var(--emerald-d)}
   .danger{background:#FDECEC;color:var(--red)}
+  .ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
   .row{display:flex;gap:8px;flex-wrap:wrap}
   .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
   .tabs button{background:#fff;border:1px solid var(--line);color:var(--ink);font-size:13.5px;padding:9px 13px}
@@ -42,21 +48,40 @@
   table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
   th,td{border:1px solid var(--line);padding:7px 9px;text-align:left}
   th{background:#F4F6FB;font-weight:600;color:var(--indigo)}
+  tr:hover td{background:#FAFBFF}
   .pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#EEF1FB;color:var(--indigo)}
   .pill.g{background:#E8F7EE;color:var(--emerald-d)}
+  .pill.r{background:#FDECEC;color:var(--red)}
+  .pill.y{background:#FDF6E8;color:#8A6212}
   .muted{color:var(--muted);font-size:13px}
   .big{font-family:"Baloo 2",sans-serif;font-size:30px;color:var(--indigo)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-  .stat{background:#F4F6FB;border-radius:12px;padding:14px;text-align:center}
-  .stat .n{font-family:"Baloo 2",sans-serif;font-size:26px;color:var(--indigo)}
-  .stat .l{font-size:12px;color:var(--muted);font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .stat{border-radius:12px;padding:14px;text-align:center;background:#F4F6FB}
+  .stat .n{font-family:"Baloo 2",sans-serif;font-size:25px;color:var(--indigo)}
+  .stat .l{font-size:11.5px;color:var(--muted);font-weight:600}
+  .stat.c1{background:#EEF1FB}.stat.c1 .n{color:var(--indigo)}
+  .stat.c2{background:#FFF1E5}.stat.c2 .n{color:var(--tang-d)}
+  .stat.c3{background:#E8F7EE}.stat.c3 .n{color:var(--emerald-d)}
+  .stat.c4{background:#FDF6E8}.stat.c4 .n{color:var(--gold)}
+  /* Biểu đồ cột ngang thuần CSS */
+  .hbar{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:12.5px}
+  .hbar .lab{width:92px;font-weight:600;color:var(--muted);text-align:right;flex:none}
+  .hbar .track{flex:1;height:18px;background:#EEF0F7;border-radius:9px;overflow:hidden}
+  .hbar .fill{height:100%;border-radius:9px;background:var(--indigo);transition:width .4s;
+    display:flex;align-items:center;justify-content:flex-end;color:#fff;font-size:10.5px;font-weight:700;padding-right:6px}
+  .hbar .fill.o{background:var(--tangerine)} .hbar .fill.e{background:var(--emerald)}
+  .hbar .fill.r{background:var(--red)} .hbar .fill.y{background:var(--gold)}
+  /* thanh tiến độ nhỏ trong hàng game */
+  .mini{position:relative;height:8px;border-radius:5px;background:#EEF0F7;overflow:hidden;margin-top:5px}
+  .mini .f{position:absolute;left:0;top:0;bottom:0;background:var(--emerald);border-radius:5px}
+  .mini .f.low{background:var(--tangerine)}
+  .mini .t{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--indigo)}
   .qbox{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
   .qbox .qt{font-weight:600;margin-bottom:8px}
-  /* .opt: chỉ nhãn A/B/C/D in đậm (bọc <b>), nội dung phương án để thường (font-weight:400) */
   .opt{display:block;padding:8px 10px;border:1px solid var(--line);border-radius:9px;margin-bottom:6px;cursor:pointer;font-size:14px;font-weight:400}
   .opt.sel{border-color:var(--indigo);background:#EEF1FB}
-  .dsrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line)}
-  .dsrow .b{display:flex;gap:6px}
+  .dsrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line)}
+  .dsrow .b{display:flex;gap:6px;flex:none}
   .dsrow .b button{padding:6px 12px;font-size:13px;background:#fff;border:1px solid var(--line);color:var(--ink)}
   .dsrow .b button.t{background:var(--emerald);color:#fff;border-color:var(--emerald)}
   .dsrow .b button.f{background:var(--red);color:#fff;border-color:var(--red)}
@@ -69,6 +94,23 @@
   .msg{border-left:3px solid var(--indigo);background:#F7F9FF;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:14px}
   .msg .meta{font-size:11px;color:var(--muted)}
   .center{text-align:center}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .chips .pill{font-size:12px;padding:4px 10px}
+  .stars-gold{color:var(--gold);font-weight:700}
+  /* Trang chủ */
+  .hero{text-align:center;padding:34px 0 18px}
+  .hero h1{font-size:clamp(32px,6vw,46px)}
+  .hero p{color:var(--muted);font-weight:500;margin:8px 0 0}
+  .rolegrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:620px;margin:18px auto 0}
+  @media(max-width:560px){.rolegrid{grid-template-columns:1fr}}
+  .role{background:#fff;border:1.5px solid var(--line);border-radius:18px;padding:26px 18px;text-align:center;
+    cursor:pointer;transition:.15s;box-shadow:0 10px 30px -24px rgba(42,59,143,.5)}
+  .role:hover{transform:translateY(-3px);border-color:var(--indigo-soft)}
+  .role .ico{font-size:44px}
+  .role .nm{font-family:"Baloo 2";font-weight:700;font-size:19px;color:var(--indigo);margin:8px 0 4px}
+  .role .ds{font-size:12.5px;color:var(--muted)}
+  .lvbadges{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+  .lvbadges span{font-size:11.5px;font-weight:700;color:#fff;border-radius:999px;padding:5px 13px}
   /* Giấy chứng nhận */
   .cert{background:linear-gradient(135deg,#fff,#F3F7FF);border:6px double var(--gold);border-radius:14px;
     padding:34px 30px;text-align:center;max-width:640px;margin:0 auto}
@@ -87,7 +129,7 @@
 
 <script type="module">
 /* ============================================================
-   CẤU HÌNH — DÁN firebaseConfig CỦA BẠN VÀO ĐÂY (xem file hướng dẫn)
+   CẤU HÌNH — DÁN firebaseConfig CỦA BẠN VÀO ĐÂY
    ============================================================ */
 const firebaseConfig = {
   apiKey: "AIzaSyBrLzdtAUUnS-jpAjqAzWQKe7KA1JIoJog",
@@ -105,23 +147,20 @@ const GAMES = [
   {folder:"nong-trai", name:"Nông Trại Tối Ưu",   lop:10, topic:"Bất PT bậc nhất hai ẩn", ready:true, auto:true},
   {folder:"vecto",     name:"Phi Thuyền Vectơ",  lop:10, topic:"Vectơ · tích vô hướng", ready:true, auto:true},
   {folder:"duong-tron",name:"Trạm Vệ Tinh",      lop:10, topic:"Đường tròn · elip",      ready:true, auto:true},
-  {folder:"dau-tu",    name:"Đầu Tư Thông Minh",  lop:11, topic:"Cấp số nhân · lãi kép",  ready:true, auto:true},
   {folder:"pha-ket",   name:"Phá Két Mật Mã",     lop:10, topic:"Tổ hợp · hoán vị",       ready:true, auto:true},
-  {folder:"kho-van",   name:"Kho Vận 3D",         lop:12, topic:"Hình không gian · Oxyz", ready:true, auto:true},
+  {folder:"dau-tu",    name:"Đầu Tư Thông Minh",  lop:11, topic:"Cấp số nhân · lãi kép",  ready:true, auto:true},
   {folder:"thiet-ke",  name:"Nhà Thiết Kế",       lop:12, topic:"Đạo hàm · bài toán tối ưu", ready:true, auto:true},
+  {folder:"kho-van",   name:"Kho Vận 3D",         lop:12, topic:"Hình không gian · Oxyz", ready:true, auto:true},
 ];
-// auto:true  → game tự gửi kết quả về app khi chơi xong (qua postMessage).
-// Game khác  → học sinh tự nhập % sau khi chơi.
 const DEFAULT_CERT = 80; // % điểm tối thiểu để được cấp giấy chứng nhận
 
 /* ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc,
-  serverTimestamp, deleteDoc, query, orderBy }
-  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let db=null, fbError=null;
-try { const app=initializeApp(firebaseConfig); db=getFirestore(app); }
+try { const fbApp=initializeApp(firebaseConfig); db=getFirestore(fbApp); }
 catch(e){ fbError=e.message; }
 const configured = !firebaseConfig.apiKey.startsWith("DÁN");
 
@@ -131,8 +170,9 @@ function renderKatex(el){ if(!el||!window.renderMathInElement) return;
   try{ renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false}); }catch(e){}
 }
 function toast(m){ T.textContent=m; T.classList.add('show'); setTimeout(()=>T.classList.remove('show'),2200); }
-function esc(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function esc(s){ return (s||'').toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function rid(n=6){ const s="ABCDEFGHJKMNPQRSTUVWXYZ23456789"; let r=""; for(let i=0;i<n;i++)r+=s[Math.floor(Math.random()*s.length)]; return r; }
+const fmtMin=sec=>sec==null?'-':(sec<60? sec+'″' : Math.round(sec/60)+'′');
 
 // Firestore helpers
 const cls = id => doc(db,"classes",id);
@@ -143,26 +183,37 @@ const msgs = id => collection(db,"classes",id,"messages");
 
 let S={view:"home", classId:null, cls:null, student:null};
 
-/* ===== Tự động nhận kết quả từ game (postMessage) =====
-   Game gửi về: { source:'SCT_GAME', type:'RESULT', game:'<folder>', percent:0..100, stars, starsMax, detail } */
-let pendingGame=null;
+/* ===== Nhận kết quả từ game (postMessage) — ĐỊNH DẠNG PAYLOAD MỚI =====
+   Game gửi: { source:'SCT_GAME', type:'RESULT', game:'<folder>',
+               percent, stars, starsMax, timeSec, quizCorrect, quizAsked, detail }
+   Bảo mật: chỉ nhận từ CÙNG ORIGIN (game và app cùng tên miền);
+   khi chạy file:// (dạy ngoại tuyến) origin là 'null' nên bỏ qua kiểm tra. */
+let pendingGame=null, lastResultAt=0;
 async function recordGameResult(g, d){
   const percent=Math.max(0,Math.min(100,Math.round(d.percent||0)));
   await addDoc(subs(S.classId),{studentKey:S.student.key,studentName:S.student.name,aid:g.aid,aTitle:g.title,
-    kind:"game",percent,stars:(d.stars!=null?d.stars:null),starsMax:(d.starsMax!=null?d.starsMax:null),
-    detail:d.detail||'',at:Date.now()});
+    kind:"game",percent,
+    stars:(d.stars!=null?d.stars:null), starsMax:(d.starsMax!=null?d.starsMax:null),
+    timeSec:(d.timeSec!=null?Math.round(d.timeSec):null),
+    quizCorrect:(d.quizCorrect!=null?d.quizCorrect:null), quizAsked:(d.quizAsked!=null?d.quizAsked:null),
+    detail:d.detail||'', at:Date.now()});
   if(S.view==='sdash') viewStudentDash();
 }
 window.addEventListener('message',ev=>{
-  const d=ev.data; if(!d||d.source!=='SCT_GAME'||d.type!=='RESULT'||!S.student||!pendingGame) return;
+  const d=ev.data;
+  if(!d||d.source!=='SCT_GAME'||d.type!=='RESULT'||!S.student||!pendingGame) return;
+  if(location.protocol.startsWith('http') && ev.origin!==location.origin) return;      // chặn origin lạ
+  if(d.game && pendingGame.folder && d.game!==pendingGame.folder) return;               // đúng game đang giao
+  if(Date.now()-lastResultAt<1500) return;                                              // chặn gửi dồn dập
+  lastResultAt=Date.now();
   const g={aid:pendingGame.aid,title:pendingGame.title};
-  recordGameResult(g,d).then(()=>toast(`Đã nhận kết quả: ${Math.round(d.percent||0)}% 🎮`));
+  recordGameResult(g,d).then(()=>toast(`Đã nhận: ${Math.round(d.percent||0)}%${d.stars!=null?` · ⭐${d.stars}/${d.starsMax}`:''} 🎮`));
 });
 
 /* ===================== ĐIỀU HƯỚNG ===================== */
 function render(){
   if(!configured){ app.innerHTML=`<div class="card"><h1>Sân Chơi Toán Học<span class="dot">.</span></h1>
-    <div class="banner" style="margin-top:14px">⚙️ Web app chưa được cấu hình Firebase. Hãy mở mã nguồn, dán <b>firebaseConfig</b> của bạn vào đầu file (xem file hướng dẫn cài đặt), rồi tải lại trang.</div></div>`; return; }
+    <div class="banner" style="margin-top:14px">⚙️ Web app chưa được cấu hình Firebase. Hãy mở mã nguồn, dán <b>firebaseConfig</b> của bạn vào đầu file, rồi tải lại trang.</div></div>`; return; }
   if(fbError){ app.innerHTML=`<div class="card"><h2>Lỗi kết nối</h2><p class="muted">${esc(fbError)}</p></div>`; return; }
   const v=S.view;
   if(v==="home") return viewHome();
@@ -178,16 +229,20 @@ function go(v){ S.view=v; render(); }
 /* ===================== TRANG CHỦ ===================== */
 function viewHome(){
   app.innerHTML=`
-    <div class="center" style="padding:30px 0 10px">
-      <h1 style="font-size:38px">Sân Chơi Toán Học<span class="dot">.</span></h1>
-      <p class="muted">Luyện tập phiếu bài tập và trò chơi toán học — Toán 10·11·12</p>
-    </div>
-    <div class="card center">
-      <h2>Bạn là?</h2>
-      <div class="row" style="justify-content:center;margin-top:8px">
-        <button class="pri" id="bS">🎒 Học sinh</button>
-        <button class="sec" id="bT">👩‍🏫 Giáo viên</button>
+    <div class="hero">
+      <h1>Sân Chơi Toán Học<span class="dot">.</span></h1>
+      <p>Hệ sinh thái luyện tập: ${GAMES.length} trò chơi tương tác · phiếu bài tập tự chấm · thống kê cho thầy cô</p>
+      <div class="lvbadges">
+        <span style="background:var(--indigo)">LỚP 10 · ${GAMES.filter(g=>g.lop===10).length} game trọng tâm</span>
+        <span style="background:var(--teal)">LỚP 11 · mở rộng</span>
+        <span style="background:var(--violet)">LỚP 12 · mở rộng</span>
       </div>
+    </div>
+    <div class="rolegrid">
+      <div class="role" id="bS"><div class="ico">🎒</div><div class="nm">Học sinh</div>
+        <div class="ds">Vào bằng mã lớp + key riêng.<br>Chơi game, làm phiếu, nhận giấy chứng nhận.</div></div>
+      <div class="role" id="bT"><div class="ico">👩‍🏫</div><div class="nm">Giáo viên</div>
+        <div class="ds">Tạo lớp, giao bài, theo dõi tiến độ.<br>Thống kê phổ điểm, câu hỏi khó, xuất CSV.</div></div>
     </div>`;
   app.querySelector('#bS').onclick=()=>go('slogin');
   app.querySelector('#bT').onclick=()=>go('tlogin');
@@ -195,11 +250,12 @@ function viewHome(){
 
 /* ===================== GIÁO VIÊN: ĐĂNG NHẬP/TẠO LỚP ===================== */
 function viewTeacherLogin(){
+  const saved=JSON.parse(localStorage.getItem('sct_tclass')||'null');
   app.innerHTML=`
     <div class="topbar"><h1>Giáo viên<span class="dot">.</span></h1><button class="sec" id="back">← Trang chủ</button></div>
     <div class="card">
       <h2>Đăng nhập / Tạo lớp</h2>
-      <label>Mã lớp (tự đặt, vd: 12A1-2026)</label><input id="cid" placeholder="Mã lớp">
+      <label>Mã lớp (tự đặt, vd: 12A1-2026)</label><input id="cid" placeholder="Mã lớp" value="${esc(saved||'')}">
       <label>Mã PIN giáo viên</label><input id="pin" type="password" placeholder="PIN bí mật">
       <div class="row" style="margin-top:14px">
         <button class="pri" id="enter">Vào lớp</button>
@@ -214,6 +270,7 @@ function viewTeacherLogin(){
     const snap=await getDoc(cls(id));
     if(!snap.exists()) return toast("Lớp chưa tồn tại — bấm Tạo lớp mới");
     if(snap.data().teacherPin!==pin) return toast("Sai PIN");
+    localStorage.setItem('sct_tclass',JSON.stringify(id));
     S.classId=id; S.cls=snap.data(); go('tdash');
   };
   app.querySelector('#create').onclick=async()=>{
@@ -222,7 +279,8 @@ function viewTeacherLogin(){
     const snap=await getDoc(cls(id));
     if(snap.exists()) return toast("Mã lớp đã tồn tại, hãy chọn mã khác");
     const data={name:id,teacherPin:pin,certThreshold:DEFAULT_CERT,createdAt:Date.now()};
-    await setDoc(cls(id),data); S.classId=id; S.cls=data; toast("Đã tạo lớp"); go('tdash');
+    await setDoc(cls(id),data); localStorage.setItem('sct_tclass',JSON.stringify(id));
+    S.classId=id; S.cls=data; toast("Đã tạo lớp"); go('tdash');
   };
 }
 
@@ -235,7 +293,7 @@ function viewTeacherDash(){
     <div class="tabs">
       <button data-t="students">👥 Học sinh</button>
       <button data-t="assign">📝 Bài tập & Game</button>
-      <button data-t="results">📊 Kết quả</button>
+      <button data-t="results">📊 Kết quả & Báo cáo</button>
       <button data-t="msg">✉️ Tin nhắn</button>
       <button data-t="settings">⚙️ Lớp</button>
     </div>
@@ -259,7 +317,7 @@ async function tStudents(){
     <p class="muted" style="margin-top:8px">Mỗi học sinh sẽ nhận một <b>key</b> để đăng nhập. Có thể nhập thêm nhiều lần.</p>
     </div>
     <div class="card"><div class="row" style="justify-content:space-between"><h2>Danh sách (<span id="cnt">…</span>)</h2>
-      <button class="sec" id="exp">⬇ Xuất key (CSV)</button></div>
+      <span class="row"><button class="sec" id="prn">🖨 In phiếu key</button><button class="sec" id="exp">⬇ CSV</button></span></div>
       <div id="list"></div></div>`;
   body.querySelector('#imp').onclick=async()=>{
     const lines=body.querySelector('#names').value.split('\n').map(s=>s.trim()).filter(Boolean);
@@ -268,16 +326,29 @@ async function tStudents(){
     body.querySelector('#names').value=""; toast("Đã thêm "+lines.length+" học sinh"); loadList();
   };
   async function loadList(){
-    const ss=await getDocs(studs(S.classId)); const arr=ss.docs.map(d=>d.data());
+    const [ss,sb]=await Promise.all([getDocs(studs(S.classId)),getDocs(subs(S.classId))]);
+    const arr=ss.docs.map(d=>d.data()).sort((a,b)=>a.name.localeCompare(b.name,'vi'));
+    const subsArr=sb.docs.map(d=>d.data());
+    const doneCount=k=>new Set(subsArr.filter(s=>s.studentKey===k).map(s=>s.aid)).size;
     body.querySelector('#cnt').textContent=arr.length;
-    body.querySelector('#list').innerHTML = arr.length? `<table><tr><th>Họ tên</th><th>Key đăng nhập</th><th></th></tr>`+
-      arr.map(s=>`<tr><td>${esc(s.name)}</td><td><b>${s.key}</b></td>
+    body.querySelector('#list').innerHTML = arr.length? `<table><tr><th>Họ tên</th><th>Key</th><th>Đã làm (bài)</th><th></th></tr>`+
+      arr.map(s=>`<tr><td>${esc(s.name)}</td><td><b>${s.key}</b></td><td>${doneCount(s.key)}</td>
         <td><button class="danger" data-k="${s.key}" style="padding:4px 10px;font-size:12px">Xoá</button></td></tr>`).join('')+`</table>`
       : `<p class="muted">Chưa có học sinh.</p>`;
     body.querySelectorAll('[data-k]').forEach(b=>b.onclick=async()=>{ await deleteDoc(doc(studs(S.classId),b.dataset.k)); loadList(); });
     body.querySelector('#exp').onclick=()=>{
       const csv="Ho ten,Key\n"+arr.map(s=>`"${s.name}",${s.key}`).join('\n');
       dl(csv,"danh_sach_key_"+S.classId+".csv");
+    };
+    body.querySelector('#prn').onclick=()=>{ // phiếu key cắt phát cho từng em
+      const w=window.open('','_blank');
+      w.document.write(`<html><head><title>Phiếu key ${esc(S.classId)}</title><style>
+        body{font-family:sans-serif} .k{display:inline-block;border:1px dashed #888;border-radius:8px;
+        padding:10px 14px;margin:6px;width:240px}.k b{font-size:18px}</style></head><body>
+        <h3>Lớp ${esc(S.classId)} — phiếu đăng nhập Sân Chơi Toán Học</h3>`+
+        arr.map(s=>`<div class="k">${esc(s.name)}<br>Mã lớp: <b>${esc(S.classId)}</b> · Key: <b>${s.key}</b></div>`).join('')+
+        `<script>print()<\/script></body></html>`);
+      w.document.close();
     };
   }
   loadList();
@@ -286,7 +357,7 @@ async function tStudents(){
 async function tAssign(){
   const body=app.querySelector('#tbody');
   body.innerHTML=`
-    <div class="card"><h2>Giao Phiếu bài tập (chấm tự động)</h2>
+    <div class="card"><h2>Giao Phiếu bài tập <small>(chấm tự động · công thức gõ dạng $…$)</small></h2>
       <label>Tiêu đề</label><input id="qtitle" placeholder="Phiếu bài tập Hàm số bậc hai">
       <label>Thời gian làm bài (phút, 0 = không giới hạn)</label><input id="qdur" type="number" value="0">
       <label>Hạn nộp (để trống nếu không có)</label><input id="qdl" type="date">
@@ -294,28 +365,37 @@ async function tAssign(){
       <div class="banner"><b>[TN]</b> câu trắc nghiệm; các phương án mỗi dòng, đặt <b>*</b> trước đáp án đúng.<br>
         <b>[DS]</b> câu đúng/sai; mỗi ý một dòng, đặt <b>*</b> trước ý ĐÚNG.<br>
         <b>[TLN]</b> câu trả lời ngắn; ghi <b>| đáp_án_số</b> ở cuối. Cách nhau bằng dòng trống.</div>
-      <textarea id="qtext" placeholder="[TN] Đỉnh của parabol y=x^2-2x là?
+      <textarea id="qtext" placeholder="[TN] Đỉnh của parabol $y=x^2-2x$ là?
 A. (0;0)
 *B. (1;-1)
 C. (2;0)
-D. (-1;1)
-
-[DS] Cho y=x^2-2x:
-*a) Bề lõm quay lên
-b) Đỉnh có tung độ 1
-*c) Trục đối xứng x=1
-d) Hàm đồng biến trên R
-
-[TLN] Nghiệm dương của x^2-3x+2=0 lớn nhất bằng | 2"></textarea>
-      <button class="pri" id="addq" style="margin-top:10px">Giao phiếu này</button>
+D. (-1;1)"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="sec" id="prev">👁 Xem trước</button>
+        <button class="pri" id="addq">Giao phiếu này</button>
+      </div>
+      <div id="pvbox"></div>
     </div>
     <div class="card"><h2>Giao Game</h2>
-      <label>Chọn game</label><select id="gsel">${GAMES.map((g,i)=>`<option value="${i}">${g.name} — Lớp ${g.lop} (${g.topic})${g.auto?' · tự động ghi điểm':(g.ready?'':' · sắp ra mắt')}</option>`).join('')}</select>
+      <label>Chọn game</label><select id="gsel">${GAMES.map((g,i)=>`<option value="${i}">${g.name} — Lớp ${g.lop} (${g.topic})${g.auto?' · tự động ghi điểm':''}</option>`).join('')}</select>
       <label>Mục tiêu hoàn thành (%)</label><input id="gtarget" type="number" value="80" min="0" max="100">
       <button class="pri" id="addg" style="margin-top:10px">Giao game này</button>
-      <p class="muted" style="margin-top:8px">Game “tự động ghi điểm” sẽ gửi kết quả về app khi học sinh chơi xong. Game khác: học sinh tự nhập %.</p>
+      <p class="muted" style="margin-top:8px">Game tự gửi về app: % hoàn thành, ⭐ sao, thời gian chơi và kết quả câu hỏi củng cố.</p>
     </div>
     <div class="card"><h2>Đã giao</h2><div id="alist"></div></div>`;
+  body.querySelector('#prev').onclick=()=>{
+    const qs=parseQuiz(body.querySelector('#qtext').value);
+    const tn=qs.filter(q=>q.type==='TN').length, ds=qs.filter(q=>q.type==='DS').length, tl=qs.filter(q=>q.type==='TLN').length;
+    const pv=body.querySelector('#pvbox');
+    pv.innerHTML = qs.length
+      ? `<div class="banner" style="margin-top:10px">Nhận diện <b>${qs.length}</b> câu: ${tn} TN · ${ds} Đúng/Sai · ${tl} trả lời ngắn.</div>`
+        + qs.map((q,i)=>`<div class="qbox"><div class="qt">Câu ${i+1} <span class="pill">${q.type}</span> ${esc(q.q)}</div>${
+          q.type==='TN'? q.opts.map((o,j)=>`<div style="font-size:13px">${o.correct?'✅':'▫️'} ${'ABCD'[j]}. ${esc(o.t)}</div>`).join('')
+          : q.type==='DS'? q.sts.map((s,j)=>`<div style="font-size:13px">${s.correct?'✅ đúng':'❌ sai'} — ${'abcd'[j]}) ${esc(s.t)}</div>`).join('')
+          : `<div style="font-size:13px">Đáp án: <b>${esc(q.ans)}</b></div>`}</div>`).join('')
+      : `<p class="muted" style="margin-top:8px">Chưa nhận diện được câu nào — kiểm tra cú pháp.</p>`;
+    renderKatex(pv);
+  };
   body.querySelector('#addq').onclick=async()=>{
     const title=body.querySelector('#qtitle').value.trim();
     const qs=parseQuiz(body.querySelector('#qtext').value);
@@ -330,46 +410,150 @@ d) Hàm đồng biến trên R
       targetPercent:+body.querySelector('#gtarget').value||80, auto:!!g.auto, topic:g.topic, createdAt:Date.now()});
     toast("Đã giao game"); tAssign();
   };
-  const aa=await getDocs(asgs(S.classId)); const arr=aa.docs.map(d=>({id:d.id,...d.data()}));
+  const [aa,sb]=await Promise.all([getDocs(asgs(S.classId)),getDocs(subs(S.classId))]);
+  const arr=aa.docs.map(d=>({id:d.id,...d.data()})), subsArr=sb.docs.map(d=>d.data());
+  const nSub=aid=>subsArr.filter(s=>s.aid===aid).length;
   body.querySelector('#alist').innerHTML = arr.length? arr.sort((a,b)=>b.createdAt-a.createdAt).map(a=>
     `<div class="dsrow"><span><span class="pill ${a.kind==='game'?'g':''}">${a.kind==='game'?'GAME':'PHIẾU'}</span> ${esc(a.title)}
-      ${a.kind==='quiz'?`· ${a.questions.length} câu`:`· mục tiêu ${a.targetPercent||80}%`}${a.deadline?` · hạn ${a.deadline}`:''}</span>
-      <span class="b"><button class="danger" data-d="${a.id}" style="font-size:12px">Xoá</button></span></div>`).join('')
+      ${a.kind==='quiz'?`· ${a.questions.length} câu`:`· mục tiêu ${a.targetPercent||80}%`}${a.deadline?` · hạn ${a.deadline}`:''}
+      · ${nSub(a.id)} lượt nộp ${a.closed?'<span class="pill r">đã khoá</span>':''}</span>
+      <span class="b">
+        <button class="ghost" data-l="${a.id}" style="font-size:12px">${a.closed?'Mở lại':'Khoá'}</button>
+        <button class="danger" data-d="${a.id}" style="font-size:12px">Xoá</button></span></div>`).join('')
     : `<p class="muted">Chưa giao gì.</p>`;
   body.querySelectorAll('[data-d]').forEach(b=>b.onclick=async()=>{await deleteDoc(doc(asgs(S.classId),b.dataset.d));tAssign();});
+  body.querySelectorAll('[data-l]').forEach(b=>b.onclick=async()=>{
+    const a=arr.find(x=>x.id===b.dataset.l);
+    await setDoc(doc(asgs(S.classId),a.id),{...a,closed:!a.closed}); tAssign();
+  });
 }
 
+/* ========== GIÁO VIÊN: KẾT QUẢ & BÁO CÁO (nâng cấp toàn diện) ========== */
+let rFilter="all";
 async function tResults(){
   const body=app.querySelector('#tbody');
-  body.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between"><h2>Thống kê</h2>
-    <button class="sec" id="exp">⬇ Xuất kết quả (CSV)</button></div><div id="stats"></div></div>
-    <div class="card"><h2>Bài làm chi tiết</h2><div id="detail"></div></div>`;
   const [ss,sb,aa]=await Promise.all([getDocs(studs(S.classId)),getDocs(subs(S.classId)),getDocs(asgs(S.classId))]);
-  const students=ss.docs.map(d=>d.data()), submissions=sb.docs.map(d=>d.data());
-  const nQuiz=submissions.filter(x=>x.kind==='quiz').length;
-  const did=new Set(submissions.map(s=>s.studentKey)).size;
-  const avg = nQuiz? (submissions.filter(x=>x.kind==='quiz').reduce((s,x)=>s+x.percent,0)/nQuiz).toFixed(0):0;
+  const students=ss.docs.map(d=>d.data());
+  const allSubs=sb.docs.map(d=>d.data());
+  const asn=aa.docs.map(d=>({id:d.id,...d.data()}));
+  const th=S.cls.certThreshold||DEFAULT_CERT;
+
+  body.innerHTML=`
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h2>Tổng quan lớp</h2>
+        <select id="fA" style="width:auto;max-width:280px">${
+          ['<option value="all">— Tất cả bài đã giao —</option>',
+           ...asn.map(a=>`<option value="${a.id}" ${rFilter===a.id?'selected':''}>${a.kind==='game'?'🎮':'📝'} ${esc(a.title)}</option>`)].join('')}</select>
+      </div>
+      <div id="stats"></div>
+      <div id="histo" style="margin-top:14px"></div>
+    </div>
+    <div class="card" id="byAsgCard"><h2>Theo từng bài <small>ai đã làm — ai chưa</small></h2><div id="byAsg"></div></div>
+    <div class="card" id="hardCard" style="display:none"><h2>Phân tích câu hỏi <small>câu nào lớp sai nhiều?</small></h2><div id="hardQ"></div></div>
+    <div class="card"><h2>Học sinh cần hỗ trợ <small>chưa làm bài hoặc điểm trung bình &lt; 50%</small></h2><div id="needHelp"></div></div>
+    <div class="card"><div class="row" style="justify-content:space-between"><h2>Bài làm chi tiết</h2>
+      <button class="sec" id="exp">⬇ Xuất CSV</button></div><div id="detail"></div></div>`;
+
+  body.querySelector('#fA').onchange=e=>{rFilter=e.target.value;tResults();};
+
+  const filtered = rFilter==='all' ? allSubs : allSubs.filter(s=>s.aid===rFilter);
+
+  // ---- Thẻ tổng quan ----
+  const quizSubs=filtered.filter(x=>x.kind==='quiz'), gameSubs=filtered.filter(x=>x.kind==='game');
+  const did=new Set(filtered.map(s=>s.studentKey)).size;
+  const avgQ=quizSubs.length?Math.round(quizSubs.reduce((s,x)=>s+(x.percent||0),0)/quizSubs.length):null;
+  const avgG=gameSubs.length?Math.round(gameSubs.reduce((s,x)=>s+(x.percent||0),0)/gameSubs.length):null;
+  const totalStars=gameSubs.reduce((s,x)=>s+(x.stars||0),0);
   body.querySelector('#stats').innerHTML=`<div class="grid">
-    <div class="stat"><div class="n">${students.length}</div><div class="l">Học sinh</div></div>
-    <div class="stat"><div class="n">${did}</div><div class="l">Đã làm bài</div></div>
-    <div class="stat"><div class="n">${submissions.length}</div><div class="l">Lượt nộp</div></div>
-    <div class="stat"><div class="n">${avg}%</div><div class="l">Điểm TB phiếu</div></div></div>`;
-  // bảng xếp hạng
-  const best={}; submissions.filter(x=>x.kind==='quiz').forEach(s=>{ if(!best[s.studentKey]||s.percent>best[s.studentKey].percent) best[s.studentKey]=s; });
-  const rank=Object.values(best).sort((a,b)=>b.percent-a.percent);
-  let html=`<table><tr><th>#</th><th>Học sinh</th><th>Bài</th><th>Điểm</th><th>%</th><th>Thời gian</th><th>Cảnh báo</th><th>Khi nào</th></tr>`;
-  submissions.sort((a,b)=>(b.at||0)-(a.at||0)).forEach(s=>{
-    const diem = s.kind==='game' ? (s.stars!=null?(s.stars+(s.starsMax?'/'+s.starsMax:'')+'★'):'🎮') : (s.score+'/'+s.maxScore);
+    <div class="stat c1"><div class="n">${students.length}</div><div class="l">Học sinh</div></div>
+    <div class="stat c3"><div class="n">${did}</div><div class="l">Đã tham gia</div></div>
+    <div class="stat c1"><div class="n">${filtered.length}</div><div class="l">Lượt nộp</div></div>
+    <div class="stat c2"><div class="n">${avgQ!=null?avgQ+'%':'—'}</div><div class="l">TB phiếu</div></div>
+    <div class="stat c2"><div class="n">${avgG!=null?avgG+'%':'—'}</div><div class="l">TB game</div></div>
+    <div class="stat c4"><div class="n">${totalStars}⭐</div><div class="l">Tổng sao game</div></div></div>`;
+
+  // ---- Phổ điểm (kết quả TỐT NHẤT của mỗi HS cho mỗi bài) ----
+  const bestMap={};   // `${key}|${aid}` -> best percent
+  filtered.forEach(s=>{ const k=s.studentKey+'|'+s.aid;
+    if(bestMap[k]==null||(s.percent||0)>bestMap[k]) bestMap[k]=s.percent||0; });
+  const bests=Object.values(bestMap);
+  if(bests.length){
+    const buckets=[['0–49%',0,49,'r'],['50–64%',50,64,'o'],['65–79%',65,79,'y'],['80–100%',80,100,'e']];
+    const mx=Math.max(...buckets.map(b=>bests.filter(p=>p>=b[1]&&p<=b[2]).length),1);
+    body.querySelector('#histo').innerHTML=`<b style="font-size:13px">Phổ điểm (kết quả tốt nhất của mỗi em · ${bests.length} lượt tính):</b>`+
+      buckets.map(b=>{ const n=bests.filter(p=>p>=b[1]&&p<=b[2]).length;
+        return `<div class="hbar"><span class="lab">${b[0]}</span><span class="track">
+          <span class="fill ${b[3]}" style="width:${Math.round(n/mx*100)}%">${n||''}</span></span></div>`; }).join('');
+  } else body.querySelector('#histo').innerHTML=`<p class="muted">Chưa có dữ liệu.</p>`;
+
+  // ---- Theo từng bài: đã làm / chưa làm / TB / đạt mục tiêu ----
+  const listAsn = rFilter==='all'? asn : asn.filter(a=>a.id===rFilter);
+  body.querySelector('#byAsg').innerHTML = listAsn.length? `<table>
+    <tr><th>Bài</th><th>Đã làm</th><th>TB tốt nhất</th><th>Đạt ${'≥'}${th}%</th><th>Chưa làm</th></tr>`+
+    listAsn.sort((a,b)=>b.createdAt-a.createdAt).map(a=>{
+      const doneKeys=[...new Set(allSubs.filter(s=>s.aid===a.id).map(s=>s.studentKey))];
+      const bestOf=k=>Math.max(...allSubs.filter(s=>s.aid===a.id&&s.studentKey===k).map(s=>s.percent||0));
+      const bestsA=doneKeys.map(bestOf);
+      const avg=bestsA.length?Math.round(bestsA.reduce((x,y)=>x+y,0)/bestsA.length):null;
+      const pass=bestsA.filter(p=>p>=th).length;
+      const notDone=students.filter(st=>!doneKeys.includes(st.key)).map(st=>st.name);
+      return `<tr><td>${a.kind==='game'?'🎮':'📝'} ${esc(a.title)}</td>
+        <td>${doneKeys.length}/${students.length}</td><td>${avg!=null?avg+'%':'—'}</td><td>${pass}</td>
+        <td style="font-size:12px;color:${notDone.length?'var(--red)':'var(--emerald-d)'}">${
+          notDone.length? esc(notDone.slice(0,4).join(', '))+(notDone.length>4?` +${notDone.length-4} em`:'') : '✓ đủ cả lớp'}</td></tr>`;
+    }).join('')+`</table>` : `<p class="muted">Chưa giao bài nào.</p>`;
+
+  // ---- Phân tích câu hỏi khó (khi lọc đúng 1 phiếu) ----
+  const selA=asn.find(a=>a.id===rFilter);
+  if(selA&&selA.kind==='quiz'){
+    const withD=allSubs.filter(s=>s.aid===selA.id&&Array.isArray(s.qDetail));
+    body.querySelector('#hardCard').style.display='';
+    if(withD.length){
+      const n=selA.questions.length;
+      const rates=Array.from({length:n},(_,i)=>{
+        const pts=withD.map(s=>s.qDetail[i]||0);
+        return Math.round(pts.reduce((a,b)=>a+b,0)/pts.length*100);
+      });
+      body.querySelector('#hardQ').innerHTML=
+        `<p class="muted">Tỉ lệ đạt điểm từng câu (trên ${withD.length} bài nộp) — cột càng ngắn càng cần chữa kỹ:</p>`+
+        rates.map((r,i)=>`<div class="hbar"><span class="lab">Câu ${i+1} (${selA.questions[i].type})</span>
+          <span class="track"><span class="fill ${r>=80?'e':r>=50?'y':'r'}" style="width:${Math.max(r,6)}%">${r}%</span></span></div>`).join('');
+    } else body.querySelector('#hardQ').innerHTML=`<p class="muted">Chưa có bài nộp có dữ liệu từng câu (bài nộp từ phiên bản cũ không có).</p>`;
+  }
+
+  // ---- Học sinh cần hỗ trợ ----
+  const perStu={};
+  allSubs.forEach(s=>{ const o=(perStu[s.studentKey]=perStu[s.studentKey]||{best:{}});
+    if(o.best[s.aid]==null||(s.percent||0)>o.best[s.aid]) o.best[s.aid]=s.percent||0; });
+  const help=[];
+  students.forEach(st=>{
+    const o=perStu[st.key];
+    if(!o){ help.push({name:st.name,why:'chưa làm bài nào'}); return; }
+    const vals=Object.values(o.best); const avg=Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+    if(avg<50) help.push({name:st.name,why:'TB '+avg+'%'});
+  });
+  body.querySelector('#needHelp').innerHTML = help.length
+    ? `<div class="chips">${help.map(h=>`<span class="pill r">${esc(h.name)} · ${h.why}</span>`).join('')}</div>`
+    : `<p class="muted" style="color:var(--emerald-d)">✓ Cả lớp đều đã tham gia và đạt TB ≥ 50%.</p>`;
+
+  // ---- Bảng chi tiết ----
+  let html=`<table><tr><th></th><th>Học sinh</th><th>Bài</th><th>Điểm</th><th>%</th><th>⭐</th><th>Củng cố</th><th>Thời gian</th><th>Cảnh báo</th><th>Khi nào</th></tr>`;
+  filtered.sort((a,b)=>(b.at||0)-(a.at||0)).forEach(s=>{
+    const diem = s.kind==='game' ? '🎮' : (s.score+'/'+s.maxScore);
+    const sao = s.stars!=null ? `<span class="stars-gold">${s.stars}${s.starsMax?'/'+s.starsMax:''}</span>` : '-';
+    const cc = s.quizAsked!=null&&s.quizAsked>0 ? `${s.quizCorrect||0}/${s.quizAsked}` : '-';
+    const tsec = s.kind==='game' ? s.timeSec : s.timeSpent;
     html+=`<tr><td>${s.kind==='game'?'🎮':'📝'}</td><td>${esc(s.studentName)}</td><td>${esc(s.aTitle)}</td>
-      <td>${diem}</td><td>${s.percent!=null?s.percent+'%':'-'}</td>
-      <td>${s.timeSpent?Math.round(s.timeSpent/60)+'′':'-'}</td><td>${s.violations?('⚠️'+s.violations):'-'}</td>
-      <td>${s.at?new Date(s.at).toLocaleString('vi-VN'):''}</td></tr>`;
+      <td>${diem}</td><td>${s.percent!=null?s.percent+'%':'-'}</td><td>${sao}</td><td>${cc}</td>
+      <td>${fmtMin(tsec)}</td><td>${s.violations?('⚠️'+s.violations):'-'}</td>
+      <td style="font-size:11.5px">${s.at?new Date(s.at).toLocaleString('vi-VN'):''}</td></tr>`;
   });
   html+=`</table>`;
-  body.querySelector('#detail').innerHTML = submissions.length? html : `<p class="muted">Chưa có bài nộp.</p>`;
+  body.querySelector('#detail').innerHTML = filtered.length? html : `<p class="muted">Chưa có bài nộp.</p>`;
   body.querySelector('#exp').onclick=()=>{
-    const csv="Hoc sinh,Key,Bai,Loai,Diem,PhanTram,Giay,ThoiGian(s),CanhBao,ThoiDiem\n"+
-      submissions.map(s=>`"${s.studentName}",${s.studentKey},"${s.aTitle}",${s.kind},${s.kind==='game'?s.stars:s.score+'/'+s.maxScore},${s.percent||''},${s.percent>=(S.cls.certThreshold||DEFAULT_CERT)?'Co':''},${s.timeSpent||''},${s.violations||0},"${s.at?new Date(s.at).toLocaleString('vi-VN'):''}"`).join('\n');
+    const csv="Hoc sinh,Key,Bai,Loai,Diem,PhanTram,Sao,SaoMax,CungCoDung,CungCoTong,ThoiGian(s),CanhBao,DatNguong,ThoiDiem\n"+
+      filtered.map(s=>`"${s.studentName}",${s.studentKey},"${s.aTitle}",${s.kind},${s.kind==='game'?'':(s.score+'/'+s.maxScore)},${s.percent??''},${s.stars??''},${s.starsMax??''},${s.quizCorrect??''},${s.quizAsked??''},${(s.kind==='game'?s.timeSec:s.timeSpent)??''},${s.violations||0},${(s.percent||0)>=th?'Co':''},"${s.at?new Date(s.at).toLocaleString('vi-VN'):''}"`).join('\n');
     dl(csv,"ket_qua_"+S.classId+".csv");
   };
 }
@@ -388,14 +572,15 @@ async function tMsg(){
     await addDoc(msgs(S.classId),{to:body.querySelector('#to').value,text:txt,at:Date.now()});
     body.querySelector('#mt').value=""; toast("Đã gửi"); tMsg();
   };
-  const mm=await getDocs(msgs(S.classId)); const arr=mm.docs.map(d=>d.data()).sort((a,b)=>b.at-a.at);
+  const mm=await getDocs(msgs(S.classId)); const arr=mm.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.at-a.at);
   const nameOf=k=>k==='all'?'Cả lớp':(students.find(s=>s.key===k)?.name||k);
   body.querySelector('#mlist').innerHTML=arr.length? arr.map(m=>`<div class="msg"><div>${esc(m.text)}</div>
-    <div class="meta">→ ${esc(nameOf(m.to))} · ${new Date(m.at).toLocaleString('vi-VN')}</div></div>`).join('')
+    <div class="meta">→ ${esc(nameOf(m.to))} · ${new Date(m.at).toLocaleString('vi-VN')}
+    <button class="danger" data-dm="${m.id}" style="padding:2px 8px;font-size:11px;margin-left:8px">xoá</button></div></div>`).join('')
     : `<p class="muted">Chưa gửi tin nào.</p>`;
+  body.querySelectorAll('[data-dm]').forEach(b=>b.onclick=async()=>{await deleteDoc(doc(msgs(S.classId),b.dataset.dm));tMsg();});
 }
 
-/* ===================== GIÁO VIÊN: CÀI ĐẶT LỚP ===================== */
 async function tSettings(){
   const body=app.querySelector('#tbody');
   body.innerHTML=`<div class="card"><h2>Cài đặt lớp</h2>
@@ -422,10 +607,11 @@ async function tSettings(){
 
 /* ===================== HỌC SINH ===================== */
 function viewStudentLogin(){
+  const saved=JSON.parse(localStorage.getItem('sct_slogin')||'null');
   app.innerHTML=`<div class="topbar"><h1>Học sinh<span class="dot">.</span></h1><button class="sec" id="back">← Trang chủ</button></div>
     <div class="card"><h2>Đăng nhập</h2>
-      <label>Mã lớp</label><input id="cid" placeholder="Mã lớp thầy/cô cho">
-      <label>Key của em</label><input id="key" placeholder="VD: K7QM2P">
+      <label>Mã lớp</label><input id="cid" placeholder="Mã lớp thầy/cô cho" value="${esc(saved?.cid||'')}">
+      <label>Key của em</label><input id="key" placeholder="VD: K7QM2P" value="${esc(saved?.key||'')}">
       <button class="pri" id="in" style="margin-top:14px">Vào học</button></div>`;
   app.querySelector('#back').onclick=()=>go('home');
   app.querySelector('#in').onclick=async()=>{
@@ -433,6 +619,7 @@ function viewStudentLogin(){
     if(!id||!key) return toast("Nhập mã lớp và key");
     const c=await getDoc(cls(id)); if(!c.exists()) return toast("Không tìm thấy lớp");
     const st=await getDoc(doc(studs(id),key)); if(!st.exists()) return toast("Key không đúng");
+    localStorage.setItem('sct_slogin',JSON.stringify({cid:id,key}));
     S.classId=id; S.cls=c.data(); S.student=st.data(); go('sdash');
   };
 }
@@ -440,39 +627,67 @@ function viewStudentLogin(){
 async function viewStudentDash(){
   app.innerHTML=`<div class="topbar"><div><h1>Chào ${esc(S.student.name)}<span class="dot">.</span></h1>
     <span class="who">Lớp ${esc(S.classId)}</span></div><button class="sec" id="out">Thoát</button></div>
+    <div class="card"><h2>📈 Tiến độ của em</h2><div id="mystats"></div></div>
     <div id="inbox"></div>
     <div class="card"><h2>📝 Phiếu bài tập</h2><div id="quizzes"></div></div>
     <div class="card"><h2>🎮 Trò chơi</h2><div id="games"></div></div>
+    <div class="card"><h2>🕘 Hoạt động gần đây</h2><div id="recent"></div></div>
     <div class="card"><h2>🏅 Giấy chứng nhận</h2><div id="certs"></div></div>
     <div class="card"><h2>🏆 Bảng xếp hạng lớp</h2><div id="board"></div></div>`;
   app.querySelector('#out').onclick=()=>{S.student=null;S.classId=null;go('home');};
   const [aa,sb,mm]=await Promise.all([getDocs(asgs(S.classId)),getDocs(subs(S.classId)),getDocs(msgs(S.classId))]);
   const asn=aa.docs.map(d=>({id:d.id,...d.data()}));
-  const mine=sb.docs.map(d=>d.data()).filter(s=>s.studentKey===S.student.key);
-  // tin nhắn
+  const allSubs=sb.docs.map(d=>d.data());
+  const mine=allSubs.filter(s=>s.studentKey===S.student.key);
+  const th=S.cls.certThreshold||DEFAULT_CERT;
+  const bestFor=aid=>mine.filter(s=>s.aid===aid).sort((x,y)=>(y.percent||0)-(x.percent||0))[0];
+
+  // ---- Thẻ tiến độ cá nhân ----
+  const doneIds=new Set(mine.map(s=>s.aid));
+  const myBests=asn.map(a=>bestFor(a.id)).filter(Boolean);
+  const myAvg=myBests.length?Math.round(myBests.reduce((s,x)=>s+(x.percent||0),0)/myBests.length):null;
+  const myStars=asn.reduce((sum,a)=>{ const b=mine.filter(s=>s.aid===a.id&&s.stars!=null).sort((x,y)=>y.stars-x.stars)[0];
+    return sum+(b?b.stars:0); },0);
+  const nCert=myBests.filter(b=>(b.percent||0)>=th).length;
+  app.querySelector('#mystats').innerHTML=`<div class="grid">
+    <div class="stat c1"><div class="n">${doneIds.size}/${asn.length}</div><div class="l">Bài đã làm</div></div>
+    <div class="stat c2"><div class="n">${myAvg!=null?myAvg+'%':'—'}</div><div class="l">Điểm TB (tốt nhất)</div></div>
+    <div class="stat c4"><div class="n">${myStars}⭐</div><div class="l">Sao game</div></div>
+    <div class="stat c3"><div class="n">${nCert}</div><div class="l">Giấy chứng nhận</div></div></div>`;
+
+  // ---- Tin nhắn ----
   const inbox=mm.docs.map(d=>d.data()).filter(m=>m.to==='all'||m.to===S.student.key).sort((a,b)=>b.at-a.at);
   app.querySelector('#inbox').innerHTML = inbox.length? `<div class="card"><h2>✉️ Tin từ thầy/cô</h2>`+
-    inbox.map(m=>`<div class="msg"><div>${esc(m.text)}</div><div class="meta">${new Date(m.at).toLocaleString('vi-VN')}</div></div>`).join('')+`</div>` : '';
-  // quizzes
+    inbox.slice(0,5).map(m=>`<div class="msg"><div>${esc(m.text)}</div><div class="meta">${new Date(m.at).toLocaleString('vi-VN')}</div></div>`).join('')+`</div>` : '';
+
+  // ---- Phiếu ----
   const qz=asn.filter(a=>a.kind==='quiz').sort((a,b)=>b.createdAt-a.createdAt);
   app.querySelector('#quizzes').innerHTML = qz.length? qz.map(a=>{
-    const done=mine.filter(s=>s.aid===a.id).sort((x,y)=>y.percent-x.percent)[0];
+    const done=bestFor(a.id);
     const overdue=a.deadline && new Date(a.deadline) < new Date(new Date().toDateString());
+    const locked=a.closed;
     return `<div class="dsrow"><span>${esc(a.title)} · ${a.questions.length} câu${a.duration?` · ${a.duration}′`:''}${a.deadline?` · hạn ${a.deadline}`:''}
-      ${done?`<span class="pill g">đã làm: ${done.percent}%</span>`:''}${overdue&&!done?`<span class="pill" style="background:#FDECEC;color:#C0392B">quá hạn</span>`:''}</span>
-      <span class="b"><button class="pri" data-q="${a.id}" style="font-size:13px">${done?'Làm lại':'Làm bài'}</button></span></div>`;
+      ${done?`<span class="pill g">tốt nhất: ${done.percent}%</span>`:''}${overdue&&!done?`<span class="pill r">quá hạn</span>`:''}${locked?`<span class="pill r">đã khoá</span>`:''}</span>
+      <span class="b">${locked?'':`<button class="pri" data-q="${a.id}" style="font-size:13px">${done?'Làm lại':'Làm bài'}</button>`}</span></div>`;
   }).join('') : `<p class="muted">Chưa có phiếu nào.</p>`;
   app.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{ S.quiz=asn.find(a=>a.id===b.dataset.q); go('quiz'); });
-  // games
+
+  // ---- Game (thanh tiến độ tới mục tiêu + sao + thời gian) ----
   const gm=asn.filter(a=>a.kind==='game');
   app.querySelector('#games').innerHTML = gm.length? gm.map(a=>{
-    const tgt=a.targetPercent||80;
-    const done=mine.filter(s=>s.aid===a.id).sort((x,y)=>(y.percent||0)-(x.percent||0))[0];
-    const badge=done?`<span class="pill ${done.percent>=tgt?'g':''}">đạt ${done.percent}%</span>`:'';
-    return `<div class="dsrow"><span>${esc(a.title)} · mục tiêu ${tgt}% ${badge}</span>
-      <span class="b">
-        <button class="pri" data-play="${a.id}" style="font-size:13px">▶ Chơi${a.auto?' &amp; ghi điểm':''}</button>
-        <button class="sec" data-manual="${a.id}" style="font-size:13px">Nhập tay</button></span></div>`;
+    const tgt=a.targetPercent||80, done=bestFor(a.id), locked=a.closed;
+    const best=done?done.percent||0:0;
+    const sao=done&&done.stars!=null?` · <span class="stars-gold">⭐${done.stars}/${done.starsMax||''}</span>`:'';
+    const tm=done&&done.timeSec!=null?` · ⏱${fmtMin(done.timeSec)}`:'';
+    return `<div style="padding:9px 0;border-bottom:1px dashed var(--line)">
+      <div class="dsrow" style="border:none;padding:0">
+        <span>${esc(a.title)} ${done?`<span class="pill ${best>=tgt?'g':''}">tốt nhất ${best}%</span>`:''}${sao}${tm}${locked?` <span class="pill r">đã khoá</span>`:''}</span>
+        <span class="b">${locked?'':`
+          <button class="pri" data-play="${a.id}" style="font-size:13px">▶ Chơi</button>
+          <button class="ghost" data-manual="${a.id}" style="font-size:13px">Nhập tay</button>`}</span></div>
+      <div class="mini"><span class="f ${best<tgt?'low':''}" style="width:${Math.min(best,100)}%"></span>
+        <span class="t" style="left:${tgt}%"></span></div>
+      <div class="muted" style="font-size:11px;margin-top:2px">mục tiêu ${tgt}% (vạch xanh đậm)</div></div>`;
   }).join('') : `<p class="muted">Chưa có game nào.</p>`;
   app.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>{
     const a=asn.find(x=>x.id===b.dataset.play);
@@ -487,26 +702,40 @@ async function viewStudentDash(){
     await recordGameResult({aid:a.id,title:a.title},{percent:n,detail:'nhập tay'});
     toast("Đã ghi nhận "+n+"%");
   });
-  // certificates (cả phiếu lẫn game đạt ngưỡng)
-  const th=S.cls.certThreshold||DEFAULT_CERT;
-  const passed=asn.map(a=>{const d=mine.filter(s=>s.aid===a.id).sort((x,y)=>(y.percent||0)-(x.percent||0))[0]; return d&&d.percent>=th?{a,d}:null;}).filter(Boolean);
+
+  // ---- Hoạt động gần đây ----
+  const recent=mine.sort((a,b)=>(b.at||0)-(a.at||0)).slice(0,5);
+  app.querySelector('#recent').innerHTML = recent.length? recent.map(s=>
+    `<div class="dsrow"><span>${s.kind==='game'?'🎮':'📝'} ${esc(s.aTitle)} — <b>${s.percent}%</b>${
+      s.stars!=null?` · <span class="stars-gold">⭐${s.stars}/${s.starsMax||''}</span>`:''}${
+      s.quizAsked?` · củng cố ${s.quizCorrect||0}/${s.quizAsked}`:''}${
+      s.detail?` · <span class="muted">${esc(s.detail)}</span>`:''}</span>
+      <span class="muted" style="font-size:11px;flex:none">${new Date(s.at).toLocaleString('vi-VN')}</span></div>`).join('')
+    : `<p class="muted">Chưa có hoạt động nào — chọn một game hoặc phiếu để bắt đầu!</p>`;
+
+  // ---- Giấy chứng nhận ----
+  const passed=asn.map(a=>{const d=bestFor(a.id); return d&&(d.percent||0)>=th?{a,d}:null;}).filter(Boolean);
   app.querySelector('#certs').innerHTML = passed.length? passed.map(p=>
     `<div class="dsrow"><span>${p.a.kind==='game'?'🎮':'📝'} ${esc(p.a.title)} — ${p.d.percent}% 🎉</span>
       <span class="b"><button class="ok" data-c="${p.a.id}" data-p="${p.d.percent}" style="font-size:13px">Nhận giấy</button></span></div>`).join('')
     : `<p class="muted">Đạt ≥ ${th}% một phiếu hoặc game để được cấp giấy chứng nhận.</p>`;
   app.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{ S.cert={title:asn.find(a=>a.id===b.dataset.c).title,percent:b.dataset.p}; go('cert'); });
 
-  // bảng xếp hạng (theo số bài đạt ngưỡng, rồi điểm trung bình)
-  const allSubs=sb.docs.map(d=>d.data());
+  // ---- Xếp hạng: top 5 + vị trí của mình ----
   const byStu={};
   allSubs.forEach(s=>{ const o=(byStu[s.studentKey]=byStu[s.studentKey]||{name:s.studentName,best:{}});
     const cur=o.best[s.aid]; if(cur==null||(s.percent||0)>cur) o.best[s.aid]=s.percent||0; });
   const board=Object.entries(byStu).map(([key,o])=>{ const vals=Object.values(o.best);
     return {key,name:o.name,passed:vals.filter(p=>p>=th).length,avg:vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0}; })
-    .sort((a,b)=> b.passed-a.passed || b.avg-a.avg).slice(0,5);
-  const medal=['🥇','🥈','🥉','4.','5.'];
+    .sort((a,b)=> b.passed-a.passed || b.avg-a.avg);
+  const myIdx=board.findIndex(r=>r.key===S.student.key);
+  const medal=i=>['🥇','🥈','🥉'][i]||`${i+1}.`;
+  const rows=board.slice(0,5);
+  if(myIdx>=5) rows.push(board[myIdx]);
   app.querySelector('#board').innerHTML = board.length? `<table><tr><th></th><th>Học sinh</th><th>Bài đạt</th><th>Điểm TB</th></tr>`+
-    board.map((r,i)=>`<tr${r.key===S.student.key?' style="background:#FFF6EE;font-weight:600"':''}><td>${medal[i]}</td><td>${esc(r.name)}${r.key===S.student.key?' (em)':''}</td><td>${r.passed}</td><td>${r.avg}%</td></tr>`).join('')+`</table>`
+    rows.map(r=>{ const i=board.indexOf(r);
+      return `<tr${r.key===S.student.key?' style="background:#FFF6EE;font-weight:600"':''}>
+        <td>${medal(i)}</td><td>${esc(r.name)}${r.key===S.student.key?' (em)':''}</td><td>${r.passed}</td><td>${r.avg}%</td></tr>`; }).join('')+`</table>`
     : `<p class="muted">Chưa có dữ liệu xếp hạng.</p>`;
 }
 
@@ -537,21 +766,17 @@ function viewQuiz(){
     qc.appendChild(d);
   });
   renderKatex(qc);
-  // chọn TN
   qc.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{
     const i=+o.dataset.i; qc.querySelectorAll(`.opt[data-i="${i}"]`).forEach(x=>x.classList.remove('sel'));
     o.classList.add('sel'); quizState.answers[i]=+o.dataset.j;
   });
-  // DS
   qc.querySelectorAll('.dsrow .b button').forEach(btn=>btn.onclick=()=>{
     const i=+btn.dataset.i,j=+btn.dataset.j,v=+btn.dataset.v;
     quizState.answers[i][j]=v; const sib=btn.parentElement.querySelectorAll('button');
     sib.forEach(x=>x.className=''); btn.className=v?'t':'f';
   });
-  // TLN
   qc.querySelectorAll('[data-tln]').forEach(inp=>inp.oninput=()=>{ quizState.answers[+inp.dataset.tln]=inp.value; });
   app.querySelector('#submit').onclick=submitQuiz;
-  // chống gian lận
   document.addEventListener('visibilitychange',vioH);
   window.addEventListener('blur',vioH);
   if(a.duration){ quizState.timer=setInterval(()=>{ quizState.left--; const tm=app.querySelector('#tm');
@@ -564,24 +789,28 @@ function cleanupQuiz(){ document.removeEventListener('visibilitychange',vioH); w
   if(quizState&&quizState.timer) clearInterval(quizState.timer); }
 
 async function submitQuiz(){
-  const a=S.quiz; let score=0; const detail=[];
+  const a=S.quiz; let score=0; const qDetail=[];
   a.questions.forEach((q,i)=>{
     let pt=0; const ans=quizState.answers[i];
     if(q.type==='TN'){ pt = (ans!=null && q.opts[ans] && q.opts[ans].correct)?1:0; }
     else if(q.type==='DS'){ const arr=ans||[]; let c=0; q.sts.forEach((s,j)=>{ if((arr[j]===1)===s.correct) c++; });
       if(q.sts.length===4) pt=[0,0.1,0.25,0.5,1][c]; else pt=c/q.sts.length; }
     else { const u=normNum(ans), k=normNum(q.ans); pt=(u!=null&&k!=null&&Math.abs(u-k)<1e-6)?1:0; }
-    score+=pt; detail.push(pt);
+    score+=pt; qDetail.push(Math.round(pt*100)/100);
   });
   const max=a.questions.length, percent=Math.round(score/max*100), time=Math.round((Date.now()-quizState.start)/1000);
   cleanupQuiz();
   const late = !!(a.deadline && Date.now() > new Date(a.deadline+'T23:59:59').getTime());
   await addDoc(subs(S.classId),{studentKey:S.student.key,studentName:S.student.name,aid:a.id,aTitle:a.title,
-    kind:"quiz",score:Math.round(score*100)/100,maxScore:max,percent,timeSpent:time,violations:quizState.violations,late,at:Date.now()});
+    kind:"quiz",score:Math.round(score*100)/100,maxScore:max,percent,timeSpent:time,
+    violations:quizState.violations,late,qDetail,at:Date.now()});
   const th=S.cls.certThreshold||DEFAULT_CERT;
+  // xem lại từng câu (chỉ báo đúng/sai — không lộ đáp án để có thể làm lại)
+  const review=qDetail.map((p,i)=>`<span class="pill ${p>=1?'g':p>0?'y':'r'}">C${i+1}: ${p>=1?'✓':p>0?'nửa':'✗'}</span>`).join(' ');
   app.innerHTML=`<div class="card center"><div class="big">${percent}%</div>
     <p>Đúng ${Math.round(score*100)/100}/${max} điểm · thời gian ${Math.round(time/60)}′${quizState.violations?` · ⚠️ ${quizState.violations} lần rời màn`:''}</p>
-    ${percent>=th?`<p style="color:var(--emerald-d);font-weight:600">🎉 Xuất sắc! Em đủ điều kiện nhận giấy chứng nhận.</p>`:`<p class="muted">Cố thêm để đạt ≥ ${th}% nhận giấy chứng nhận nhé!</p>`}
+    <div class="chips" style="justify-content:center">${review}</div>
+    ${percent>=th?`<p style="color:var(--emerald-d);font-weight:600;margin-top:10px">🎉 Xuất sắc! Em đủ điều kiện nhận giấy chứng nhận.</p>`:`<p class="muted" style="margin-top:10px">Cố thêm để đạt ≥ ${th}% nhận giấy chứng nhận nhé!</p>`}
     <div class="row" style="justify-content:center;margin-top:10px">
       ${percent>=th?`<button class="ok" id="cert">🏅 Nhận giấy chứng nhận</button>`:''}
       <button class="sec" id="bk">Về trang học</button></div></div>`;
