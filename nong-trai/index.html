@@ -31,15 +31,18 @@
   .mission .ctx{font-size:26px;line-height:1}
   .mission .txt{font-size:15px}
   .mission .txt b{color:var(--emerald-d)}
+  .mission .txt .expert{color:#C9650E;font-weight:600}
   .stage{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;
     overflow:hidden;box-shadow:0 10px 30px -18px rgba(31,163,107,.45)}
   canvas{display:block;width:100%;height:auto;touch-action:none;cursor:grab}
   canvas:active{cursor:grabbing}
-  .hud{position:absolute;top:10px;left:10px;display:flex;gap:8px;
-    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px}
+  .hud{position:absolute;top:10px;left:10px;display:flex;gap:8px;flex-wrap:wrap;
+    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px;z-index:10}
   .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;
     padding:4px 12px;color:var(--emerald-d)}
   .chip b{color:var(--tangerine)}
+  button.chip{cursor:pointer;flex:none;font-size:13px;box-shadow:none;
+    font-family:"Baloo 2",sans-serif;font-weight:600}
   .panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
   @media(max-width:640px){.panel{grid-template-columns:1fr}}
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
@@ -77,19 +80,39 @@
   .tip{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5}
   .tip b{color:var(--emerald-d)}
   .toast{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
-    background:rgba(15,21,48,.55);backdrop-filter:blur(2px)}
+    background:rgba(15,21,48,.55);backdrop-filter:blur(2px);z-index:20}
   .toast.show{display:flex}
-  .toast .box{background:#fff;border-radius:18px;padding:24px 26px;text-align:center;max-width:340px;
-    box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
+  .toast .box{background:#fff;border-radius:18px;padding:24px 26px;text-align:center;max-width:360px;
+    width:calc(100% - 40px);box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
   .toast .stars{font-size:30px;letter-spacing:4px}
   .toast h2{font-family:"Baloo 2",sans-serif;margin:8px 0 4px;color:var(--emerald-d);font-size:23px}
   .toast.fail h2{color:var(--tangerine)}
   .toast p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.5}
   .toast button{width:100%}
+  .toast .btn2{margin-top:8px}
   .next{background:var(--emerald);color:#fff;box-shadow:0 5px 0 var(--emerald-d)}
   .retry{background:var(--indigo);color:#fff;box-shadow:0 5px 0 #1C2A6B}
   footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
   footer a{color:var(--emerald-d)}
+
+  /* ==== Câu hỏi củng cố ==== */
+  .qopts{display:grid;grid-template-columns:1fr;gap:8px;margin:14px 0 6px}
+  .qopt{background:#EEF0F7;color:var(--ink);font-size:14px;padding:11px 10px;
+    border-radius:10px;box-shadow:none;text-align:left}
+  .qopt.correct{background:var(--emerald);color:#fff}
+  .qopt.wrong{background:#E85D5D;color:#fff}
+  .qopt:disabled{cursor:default;opacity:.92}
+  .qexp{font-size:13px;color:var(--indigo);background:#F1F4FF;border-radius:10px;
+    padding:10px 12px;margin:10px 0 14px;text-align:left;line-height:1.5}
+
+  /* ==== Pháo giấy ==== */
+  .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:15}
+  .confetti i{position:absolute;top:-16px;width:8px;height:13px;border-radius:2px;
+    opacity:.95;animation:cfall linear forwards}
+  @keyframes cfall{
+    0%{transform:translateY(0) rotate(0deg)}
+    100%{transform:translateY(680px) rotate(660deg);opacity:.7}
+  }
 
 /* ==== Cải tiến: dải nhận diện cấp lớp + đồng hồ ==== */
 :root{--gradec:#2A3B8F;--grade2:#FF7A1A}
@@ -130,38 +153,42 @@
 
   <div class="stage">
     <div class="hud">
-      <span class="chip">Vụ <b id="lvl">1</b>/3</span>
-      <span class="chip">Tổng lãi <b id="score">0</b></span>
+      <span class="chip">Vụ <b id="lvl">1</b>/<span id="lvlMax">4</span></span>
+      <span class="chip">Điểm <b id="score">0</b></span>
+      <span class="chip">⭐ <b id="stars">0</b>/<span id="starsMax">12</span></span>
+      <button class="chip" id="sndBtn" title="Bật/tắt âm thanh">🔊</button>
     </div>
-    <canvas id="cv" width="900" height="600"></canvas>
+    <canvas id="cv" width="900" height="600" role="img" aria-label="Đồng ruộng: miền nghiệm của hệ bất phương trình"></canvas>
     <div class="toast" id="toast">
       <div class="box">
         <div class="stars" id="tStars"></div>
         <h2 id="tTitle"></h2>
         <p id="tMsg"></p>
         <button id="tBtn" class="next"></button>
+        <button id="tBtn2" class="reset btn2" style="display:none"></button>
       </div>
     </div>
+    <div class="toast" id="quiz"><div class="box" id="quizBox"></div></div>
   </div>
 
   <div class="panel">
     <div class="card">
       <h3>🚜 Kế hoạch canh tác</h3>
       <div class="readout">
-        <div class="ro"><div class="lab" id="lab1">Lúa</div><div class="num"><span id="xVal">0</span> <small>ha</small></div></div>
-        <div class="ro"><div class="lab" id="lab2">Cá</div><div class="num"><span id="yVal">0</span> <small>ha</small></div></div>
+        <div class="ro"><div class="lab" id="lab1">Lúa</div><div class="num"><span id="xVal">0</span> <small id="u1">ha</small></div></div>
+        <div class="ro"><div class="lab" id="lab2">Cá</div><div class="num"><span id="yVal">0</span> <small id="u2">ha</small></div></div>
       </div>
       <div class="profit">
-        <span class="lab">Lợi nhuận F</span>
-        <span class="val"><span id="fVal">0</span> <small>triệu</small></span>
+        <span class="lab" id="fLab">Lợi nhuận F</span>
+        <span class="val"><span id="fVal">0</span> <small id="fUnit">triệu</small></span>
       </div>
       <div class="status ok" id="status">Hợp lệ — kéo điểm trên đồng để tìm lãi cao nhất.</div>
       <div class="actions">
         <button class="harvest" id="harvestBtn">Thu hoạch! 🌾</button>
-        <button class="ghint" id="hintBtn">Gợi ý đỉnh 💡</button>
+        <button class="ghint" id="hintBtn">Gợi ý 💡 (tối đa ★★)</button>
         <button class="reset" id="resetBtn">Chơi lại</button>
       </div>
-      <div class="tip"><b>Kéo</b> điểm vàng trên đồng (hoặc bấm vào vị trí muốn chọn). Điểm phải nằm trong <b>vùng xanh</b> — vùng thỏa mọi nguồn lực.</div>
+      <div class="tip"><b>Kéo</b> điểm vàng trên đồng (hoặc dùng phím mũi tên). Điểm phải nằm trong <b>miền nghiệm</b> — vùng thỏa mọi nguồn lực.</div>
     </div>
 
     <div class="card">
@@ -171,7 +198,7 @@
         <div class="ineq" id="ineqList"></div>
         <div class="obj" id="objLine"></div>
       </div>
-      <div class="tip"><b>Mẹo toán học:</b> lợi nhuận lớn nhất luôn đạt tại một <b>đỉnh</b> của vùng xanh. Bật "Gợi ý đỉnh" để xem và thử từng đỉnh.</div>
+      <div class="tip"><b>Mẹo toán học:</b> giá trị lớn nhất/nhỏ nhất của F luôn đạt tại một <b>đỉnh</b> của miền nghiệm. Cách làm chuẩn: tìm các đỉnh, tính F tại từng đỉnh rồi so sánh.</div>
     </div>
   </div>
 
@@ -181,69 +208,155 @@
 <script>
 const cv=document.getElementById('cv'), ctx=cv.getContext('2d'), $=id=>document.getElementById(id);
 
-// ===== Dữ liệu các vụ (mô hình thực tế ĐBSCL) =====
-// Ràng buộc dạng a*x + b*y <= c. Biến x,y >= 0 mặc định.
+/* ===================================================================
+   CẤU HÌNH BÁO ĐIỂM VỀ APP LUYỆN TẬP
+   Khi triển khai, đặt origin thật của App Luyện Tập, ví dụ:
+   const SCT_APP_ORIGIN = 'https://sanchoitoanhoc.web.app';
+   Mặc định dùng origin của chính trang; mở bằng file:// (dạy ngoại
+   tuyến) origin không hợp lệ nên tự hạ về '*'.
+=================================================================== */
+const SCT_APP_ORIGIN = window.SCT_APP_ORIGIN || window.location.origin;
+const SCT_TARGET = /^https?:/i.test(SCT_APP_ORIGIN) ? SCT_APP_ORIGIN : '*';
+
+/* ===== Dữ liệu các vụ (mô hình thực tế ĐBSCL) =====
+   Ràng buộc: a*x + b*y (op) c, op = '<=' | '>='. Mặc định x,y >= 0.
+   min:true  → bài toán TỐI THIỂU chi phí (chiều ngược của tối ưu).
+   hideRegion:true → chế độ chuyên gia: không tô sẵn miền nghiệm.   */
 const LEVELS=[
- { emoji:"🌾", crop1:"Lúa", crop2:"Cá",
+ { emoji:"🌾", crop1:"Lúa", crop2:"Cá", unit:"ha", fUnit:"triệu",
    text:"Bác Tư có ruộng ở <b>Đồng Tháp</b>. Trồng <b>lúa</b> (x ha) hay nuôi <b>cá</b> (y ha) sao cho lãi cao nhất?",
-   cons:[ {a:1,b:1,c:8,tag:"đất (ha)"}, {a:2,b:3,c:18,tag:"vốn (triệu)"} ],
+   cons:[ {a:1,b:1,c:8,op:'<=',tag:"đất (ha)"}, {a:2,b:3,c:18,op:'<=',tag:"vốn (triệu)"} ],
    obj:{a:4,b:5}, world:{x:10,y:9} },
 
- { emoji:"🦐", crop1:"Tôm", crop2:"Cá tra",
+ { emoji:"🦐", crop1:"Tôm", crop2:"Cá tra", unit:"ha", fUnit:"triệu",
    text:"Trại thủy sản nuôi <b>tôm</b> (x ha) và <b>cá tra</b> (y ha). Phân bổ ao thế nào để lãi nhất?",
-   cons:[ {a:5,b:3,c:35,tag:"vốn (chục triệu)"}, {a:1,b:4,c:24,tag:"công chăm (ngày)"} ],
+   cons:[ {a:5,b:3,c:35,op:'<=',tag:"vốn (chục triệu)"}, {a:1,b:4,c:24,op:'<=',tag:"công chăm (ngày)"} ],
    obj:{a:2,b:3}, world:{x:8,y:8} },
 
- { emoji:"🥭", crop1:"Xoài", crop2:"Sen",
+ { emoji:"🥭", crop1:"Xoài", crop2:"Sen", unit:"ha", fUnit:"triệu",
    text:"Trang trại tổng hợp trồng <b>xoài</b> (x ha) và <b>sen</b> (y ha) với ba nguồn lực giới hạn.",
-   cons:[ {a:1,b:2,c:10,tag:"vốn (chục triệu)"}, {a:3,b:1,c:15,tag:"công (ngày)"}, {a:1,b:1,c:6,tag:"đất (ha)"} ],
-   obj:{a:3,b:4}, world:{x:7,y:7} },
+   cons:[ {a:1,b:2,c:10,op:'<=',tag:"vốn (chục triệu)"}, {a:3,b:1,c:15,op:'<=',tag:"công (ngày)"}, {a:1,b:1,c:6,op:'<=',tag:"đất (ha)"} ],
+   obj:{a:3,b:4}, world:{x:7,y:7}, hideRegion:true },
+
+ { emoji:"🐔", crop1:"Thức ăn A", crop2:"Thức ăn B", unit:"tạ", fUnit:"triệu", min:true,
+   text:"Trại gà cần mua <b>thức ăn A</b> (x tạ) và <b>thức ăn B</b> (y tạ) đủ dinh dưỡng tối thiểu với <b>chi phí thấp nhất</b>.",
+   cons:[ {a:2,b:1,c:8,op:'>=',tag:"đạm (kg)"}, {a:1,b:1,c:6,op:'>=',tag:"tinh bột (kg)"} ],
+   obj:{a:3,b:2}, world:{x:9,y:9}, hideRegion:true, start:{x:5,y:4} },
 ];
 
-let lvlIdx=0, score=0, P={x:0,y:0}, showHints=false, dragging=false;
-/* ===== Báo kết quả về app Luyện tập (postMessage) ===== */
+let lvlIdx=0, score=0, P={x:0,y:0}, showHints=false, hintUsed=false, dragging=false;
+let levelStars={}, starsTotal=0;
+let quizCorrect=0, quizAsked=0;
+const clearedOnce=new Set(), quizDone=new Set();
+
+/* ===== Báo kết quả về App Luyện Tập (postMessage, origin giới hạn) ===== */
 const SCT_done=new Set();
 function SCTreport(){
   var total=LEVELS.length, cleared=SCT_done.size;
   var percent=Math.round(cleared/total*100);
-  var payload={source:'SCT_GAME',type:'RESULT',game:'nong-trai',percent:percent,stars:cleared,starsMax:total,detail:cleared+'/'+total+' màn hoàn thành'};
-  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,'*'); }catch(e){}
-  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
+  var payload={source:'SCT_GAME',type:'RESULT',game:'nong-trai',
+    percent:percent, stars:starsTotal, starsMax:total*3,
+    timeSec:(window.SCT_elapsed?window.SCT_elapsed():0),
+    quizCorrect:quizCorrect, quizAsked:quizAsked,
+    detail:cleared+'/'+total+' vụ · '+starsTotal+'/'+(total*3)+' sao · củng cố đúng '+quizCorrect+'/'+quizAsked};
+  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,SCT_TARGET); }catch(e){}
+  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,SCT_TARGET); }catch(e){}
 }
-let cur=null; // {cons, world, vertices, optPt, optF}
+
+let cur=null; // {cons, obj, world, verts (đa giác vẽ), hintVerts (đỉnh thật), optPt, optF}
 const EPS=1e-6;
 
-// ===== Hình học =====
-function allLines(L){ return [...L.cons, {a:1,b:0,c:0}, {a:0,b:1,c:0}]; } // + trục x=0,y=0 (a*x+b*y=c dạng =)
+/* ===== Âm thanh (Web Audio) ===== */
+const SFX=(function(){
+  let ac=null, muted=false;
+  function ctxA(){
+    if(muted) return null;
+    if(!ac){ try{ ac=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+    if(ac.state==='suspended') ac.resume();
+    return ac;
+  }
+  function tone(f,d,type,t0,vol){
+    const a=ctxA(); if(!a) return;
+    const o=a.createOscillator(),g=a.createGain();
+    o.type=type||'sine'; o.frequency.value=f;
+    g.gain.setValueAtTime(vol||.16,a.currentTime+t0);
+    g.gain.exponentialRampToValueAtTime(.001,a.currentTime+t0+d);
+    o.connect(g); g.connect(a.destination);
+    o.start(a.currentTime+t0); o.stop(a.currentTime+t0+d+.05);
+  }
+  return {
+    win(){ [523,659,784,1047].forEach((f,i)=>tone(f,.2,'sine',i*.095,.18)); },
+    fail(){ tone(185,.22,'sawtooth',0,.1); tone(140,.3,'sawtooth',.09,.1); },
+    ding(){ tone(880,.15,'sine',0,.16); tone(1175,.2,'sine',.08,.14); },
+    buzz(){ tone(160,.25,'square',0,.08); },
+    toggle(){ muted=!muted; return muted; }
+  };
+})();
+$('sndBtn').addEventListener('click',()=>{ $('sndBtn').textContent = SFX.toggle() ? '🔇' : '🔊'; });
+
+/* ===== Pháo giấy ===== */
+function confetti(){
+  const box=document.createElement('div'); box.className='confetti';
+  const colors=['#FF7A1A','#2A3B8F','#1FA36B','#FFC94D','#6B7BD6','#E85D5D'];
+  for(let i=0;i<38;i++){
+    const p=document.createElement('i');
+    p.style.left=(Math.random()*100)+'%';
+    p.style.background=colors[i%colors.length];
+    p.style.animationDuration=(1+Math.random()*0.9)+'s';
+    p.style.animationDelay=(Math.random()*0.35)+'s';
+    box.appendChild(p);
+  }
+  document.querySelector('.stage').appendChild(box);
+  setTimeout(()=>box.remove(),2400);
+}
+
+/* ===== Hình học ===== */
 function intersect(L1,L2){
   const d=L1.a*L2.b-L2.a*L1.b; if(Math.abs(d)<EPS) return null;
   return { x:(L1.c*L2.b-L2.c*L1.b)/d, y:(L1.a*L2.c-L2.a*L1.c)/d };
 }
-function feasible(p,L){
-  if(p.x<-EPS||p.y<-EPS) return null;
-  for(const c of L.cons){ if(c.a*p.x+c.b*p.y > c.c+1e-4) return c; }
-  return false; // false = hợp lệ
+function satisfies(p,c){
+  const v=c.a*p.x+c.b*p.y;
+  return c.op==='>=' ? v>=c.c-1e-4 : v<=c.c+1e-4;
+}
+function feasible(p,L){ // trả về false nếu hợp lệ, hoặc ràng buộc bị vi phạm
+  if(p.x<-EPS||p.y<-EPS) return {op:'>=',tag:'điều kiện x ≥ 0, y ≥ 0'};
+  for(const c of L.cons){ if(!satisfies(p,c)) return c; }
+  return false;
 }
 function computeVertices(L){
-  const lines=allLines(L), pts=[];
-  for(let i=0;i<lines.length;i++) for(let j=i+1;j<lines.length;j++){
-    const p=intersect(lines[i],lines[j]); if(!p) continue;
-    if(p.x<-EPS||p.y<-EPS) continue;
-    let ok=true;
-    for(const c of L.cons){ if(c.a*p.x+c.b*p.y>c.c+1e-4){ok=false;break;} }
-    if(ok) pts.push(p);
+  const base=L.cons.map(c=>({a:c.a,b:c.b,c:c.c,box:false}));
+  base.push({a:1,b:0,c:0,box:false},{a:0,b:1,c:0,box:false});
+  // miền có ràng buộc ≥ có thể không bị chặn → thêm mép khung để vẽ
+  if(L.cons.some(c=>c.op==='>=')){
+    base.push({a:1,b:0,c:L.world.x,box:true},{a:0,b:1,c:L.world.y,box:true});
   }
-  // khử trùng
+  const pts=[];
+  for(let i=0;i<base.length;i++) for(let j=i+1;j<base.length;j++){
+    const p=intersect(base[i],base[j]); if(!p) continue;
+    if(p.x<-EPS||p.y<-EPS||p.x>L.world.x+EPS||p.y>L.world.y+EPS) continue;
+    if(!L.cons.every(c=>satisfies(p,c))) continue;
+    pts.push({x:p.x,y:p.y,box:base[i].box||base[j].box});
+  }
   const uniq=[];
-  for(const p of pts){ if(!uniq.some(q=>Math.abs(q.x-p.x)<1e-3&&Math.abs(q.y-p.y)<1e-3)) uniq.push(p); }
-  // sắp theo góc quanh trọng tâm
+  for(const p of pts){
+    const q=uniq.find(q=>Math.abs(q.x-p.x)<1e-3&&Math.abs(q.y-p.y)<1e-3);
+    if(q){ q.box=q.box&&p.box; } else uniq.push(p);
+  }
+  if(!uniq.length) return {verts:[],hintVerts:[]};
   const cx=uniq.reduce((s,p)=>s+p.x,0)/uniq.length, cy=uniq.reduce((s,p)=>s+p.y,0)/uniq.length;
   uniq.sort((a,b)=>Math.atan2(a.y-cy,a.x-cx)-Math.atan2(b.y-cy,b.x-cx));
-  return uniq;
+  return {verts:uniq, hintVerts:uniq.filter(p=>!p.box)};
 }
 const Fval=(p,L)=>L.obj.a*p.x+L.obj.b*p.y;
+const fmtN=v=>{ v=Math.round(v*10)/10; return v%1===0 ? v.toFixed(0) : v.toFixed(1); };
+function fmtTerms(a,b){
+  const t=[]; if(a) t.push((a===1?'':a)+'x'); if(b) t.push((b===1?'':b)+'y');
+  return t.join(' + ');
+}
+const ineqStr=c=>`${fmtTerms(c.a,c.b)} ${c.op==='>='?'≥':'≤'} ${c.c}`;
 
-// ===== Toạ độ màn hình =====
+/* ===== Toạ độ màn hình ===== */
 let M={l:46,r:18,t:18,b:40}, sx=1, sy=1, plotW=0, plotH=0;
 function fit(){
   const cssW=cv.clientWidth, cssH=cssW*(600/900), dpr=window.devicePixelRatio||1;
@@ -254,7 +367,7 @@ function fit(){
 const X=x=>M.l+x*sx, Y=y=>M.t+plotH-y*sy;
 const invX=px=>(px-M.l)/sx, invY=py=>(M.t+plotH-py)/sy;
 
-// ===== Vẽ =====
+/* ===== Vẽ ===== */
 function drawGrid(){
   const cssW=cv.clientWidth, cssH=cssW*(600/900);
   ctx.clearRect(0,0,cssW,cssH);
@@ -265,18 +378,19 @@ function drawGrid(){
     ctx.beginPath();ctx.moveTo(X(0),Y(y));ctx.lineTo(X(cur.world.x),Y(y));ctx.stroke();}
 }
 function drawRegion(){
-  if(cur.vertices.length<3) return;
+  const lv=LEVELS[lvlIdx];
+  if(lv.hideRegion && !showHints) return;   // chế độ chuyên gia: tự suy luận miền nghiệm
+  if(cur.verts.length<3) return;
   ctx.beginPath();
-  cur.vertices.forEach((p,i)=>{ const px=X(p.x),py=Y(p.y); i?ctx.lineTo(px,py):ctx.moveTo(px,py); });
+  cur.verts.forEach((p,i)=>{ const px=X(p.x),py=Y(p.y); i?ctx.lineTo(px,py):ctx.moveTo(px,py); });
   ctx.closePath();
   ctx.fillStyle='rgba(31,163,107,.16)'; ctx.fill();
-  ctx.strokeStyle='var(--emerald)'; ctx.strokeStyle='#1FA36B'; ctx.lineWidth=2; ctx.stroke();
+  ctx.strokeStyle='#1FA36B'; ctx.lineWidth=2; ctx.stroke();
 }
 function drawConstraintLines(){
   ctx.save(); ctx.beginPath(); ctx.rect(X(0),Y(cur.world.y),plotW,plotH); ctx.clip();
   ctx.lineWidth=1.5; ctx.setLineDash([6,5]); ctx.strokeStyle='#9AA6D8';
   for(const c of cur.cons){
-    // điểm trên đường a x + b y = c, vẽ qua khung
     let p1,p2;
     if(Math.abs(c.b)>EPS){ p1={x:0,y:c.c/c.b}; p2={x:cur.world.x,y:(c.c-c.a*cur.world.x)/c.b}; }
     else { p1={x:c.c/c.a,y:0}; p2={x:c.c/c.a,y:cur.world.y}; }
@@ -293,10 +407,14 @@ function drawAxes(){
   ctx.fillText('x · '+LEVELS[lvlIdx].crop1,X(cur.world.x)-72,Y(0)+24);
   ctx.save();ctx.translate(X(0)-30,Y(cur.world.y)+40);ctx.rotate(-Math.PI/2);
   ctx.fillText('y · '+LEVELS[lvlIdx].crop2,0,0);ctx.restore();
+  // số trên trục — đọc được toạ độ, phục vụ tính toán
+  ctx.font='10.5px "Be Vietnam Pro"'; ctx.fillStyle='#8A93A8';
+  for(let x=1;x<=cur.world.x;x++) ctx.fillText(x, X(x)-3, Y(0)+14);
+  for(let y=1;y<=cur.world.y;y++) ctx.fillText(y, X(0)-16, Y(y)+4);
 }
 function drawObjLine(){
-  // đường mức F = F(P) và mũi tên hướng tăng lợi nhuận
   const a=cur.obj.a, b=cur.obj.b, F=Fval(P,cur);
+  const dir=LEVELS[lvlIdx].min ? -1 : 1;        // min → mũi tên chỉ chiều GIẢM chi phí
   ctx.save(); ctx.beginPath(); ctx.rect(X(0),Y(cur.world.y),plotW,plotH); ctx.clip();
   ctx.strokeStyle='rgba(255,122,26,.85)'; ctx.lineWidth=2; ctx.setLineDash([2,4]);
   let p1,p2;
@@ -304,8 +422,7 @@ function drawObjLine(){
   else { p1={x:F/a,y:-1}; p2={x:F/a,y:cur.world.y+1}; }
   ctx.beginPath();ctx.moveTo(X(p1.x),Y(p1.y));ctx.lineTo(X(p2.x),Y(p2.y));ctx.stroke();
   ctx.setLineDash([]);
-  // mũi tên gradient
-  const n=Math.hypot(a,b), ux=a/n, uy=b/n, len=0.9;
+  const n=Math.hypot(a,b), ux=dir*a/n, uy=dir*b/n, len=0.9;
   const tipX=P.x+ux*len, tipY=P.y+uy*len;
   ctx.strokeStyle='#FF7A1A'; ctx.lineWidth=2.5;
   ctx.beginPath();ctx.moveTo(X(P.x),Y(P.y));ctx.lineTo(X(tipX),Y(tipY));ctx.stroke();
@@ -315,17 +432,18 @@ function drawObjLine(){
   ctx.lineTo(X(tipX)-8*Math.cos(ang-.5),Y(tipY)+8*Math.sin(ang-.5));
   ctx.lineTo(X(tipX)-8*Math.cos(ang+.5),Y(tipY)+8*Math.sin(ang+.5));
   ctx.closePath();ctx.fill();
+  ctx.font='600 11px "Be Vietnam Pro"';
+  ctx.fillText(LEVELS[lvlIdx].min?'chi phí giảm':'lãi tăng', X(tipX)+6, Y(tipY)-4);
   ctx.restore();
 }
 function drawVertices(){
+  // Gợi ý: chỉ hiện VỊ TRÍ các đỉnh — việc tính F tại từng đỉnh là của học sinh
   if(!showHints) return;
-  cur.vertices.forEach(p=>{
-    const isOpt=Math.abs(p.x-cur.optPt.x)<1e-3&&Math.abs(p.y-cur.optPt.y)<1e-3;
-    ctx.fillStyle=isOpt?'#FF7A1A':'#2A3B8F';
-    ctx.beginPath();ctx.arc(X(p.x),Y(p.y),isOpt?7:5,0,7);ctx.fill();
+  cur.hintVerts.forEach(p=>{
+    ctx.fillStyle='#2A3B8F';
+    ctx.beginPath();ctx.arc(X(p.x),Y(p.y),5.5,0,7);ctx.fill();
     ctx.fillStyle='#1C2438'; ctx.font='bold 11px "Be Vietnam Pro"';
-    const f=Fval(p,cur);
-    ctx.fillText(f.toFixed(0), X(p.x)+9, Y(p.y)-7);
+    ctx.fillText(`(${fmtN(p.x)}; ${fmtN(p.y)})`, X(p.x)+9, Y(p.y)-7);
   });
 }
 function drawPoint(){
@@ -334,83 +452,214 @@ function drawPoint(){
   ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(X(P.x),Y(P.y),3,0,7);ctx.fill();
 }
 function render(){
-  fit(); drawGrid(); drawRegion(); drawConstraintLines(); drawAxes();
+  drawGrid(); drawRegion(); drawConstraintLines(); drawAxes();
   drawObjLine(); drawVertices(); drawPoint();
   updatePanel();
 }
 
-// ===== Bảng thông tin =====
+/* ===== Bảng thông tin ===== */
 function updatePanel(){
+  const lv=LEVELS[lvlIdx];
   $('xVal').textContent=P.x.toFixed(1);
   $('yVal').textContent=P.y.toFixed(1);
   $('fVal').textContent=Fval(P,cur).toFixed(1);
   const v=feasible(P,cur), st=$('status');
-  if(v===false){ st.className='status ok'; st.textContent='✓ Hợp lệ — đang trong vùng nguồn lực cho phép.'; }
-  else { st.className='status bad'; st.textContent='✗ Vượt quá '+v.tag+' — hãy kéo điểm vào vùng xanh.'; }
+  if(v===false){
+    st.className='status ok';
+    st.textContent= lv.min ? '✓ Hợp lệ — đủ dinh dưỡng, hãy hạ chi phí thấp nhất.' :
+                             '✓ Hợp lệ — đang trong vùng nguồn lực cho phép.';
+  } else {
+    st.className='status bad';
+    st.textContent = v.op==='>=' ? '✗ Chưa đạt mức tối thiểu '+v.tag+' — tăng x hoặc y.'
+                                 : '✗ Vượt quá '+v.tag+' — hãy đưa điểm về miền nghiệm.';
+  }
 }
 function buildSystem(){
   const L=LEVELS[lvlIdx];
   $('lab1').textContent=L.crop1; $('lab2').textContent=L.crop2;
-  $('legend').innerHTML=`<b>x</b> = ha ${L.crop1} &nbsp;·&nbsp; <b>y</b> = ha ${L.crop2}`;
-  const fmt=(a,b)=>{
-    const t=[]; if(a) t.push((a===1?'':a)+'x'); if(b) t.push((b===1?'':b)+'y');
-    return t.join(' + ');
-  };
+  $('u1').textContent=L.unit; $('u2').textContent=L.unit;
+  $('fLab').textContent=L.min?'Chi phí F':'Lợi nhuận F';
+  $('fUnit').textContent=L.fUnit;
+  $('legend').innerHTML=`<b>x</b> = ${L.unit} ${L.crop1} &nbsp;·&nbsp; <b>y</b> = ${L.unit} ${L.crop2}`;
   $('ineqList').innerHTML =
-    L.cons.map(c=>`${fmt(c.a,c.b)} ≤ ${c.c} <span class="tag">${c.tag}</span>`).join('<br>')
+    L.cons.map(c=>`${ineqStr(c)} <span class="tag">${c.tag}</span>`).join('<br>')
     + `<br>x ≥ 0,&nbsp; y ≥ 0`;
-  $('objLine').innerHTML=`F = ${fmt(L.obj.a,L.obj.b)} <b>→ tối đa</b>`;
+  $('objLine').innerHTML=`F = ${fmtTerms(L.obj.a,L.obj.b)} <b>→ ${L.min?'tối thiểu':'tối đa'}</b>`;
+  $('harvestBtn').textContent = L.min ? 'Chốt đơn hàng! 🐔' : 'Thu hoạch! 🌾';
 }
 
-// ===== Vào / qua vụ =====
+/* ===== Vào / qua vụ ===== */
 function setLevel(i){
   lvlIdx=i;
   const L=LEVELS[i];
-  cur={cons:L.cons,obj:L.obj,world:L.world,vertices:computeVertices(L)};
-  let best={f:-Infinity,p:null};
-  cur.vertices.forEach(p=>{const f=Fval(p,cur); if(f>best.f) best={f,p};});
+  const cv2=computeVertices(L);
+  cur={cons:L.cons,obj:L.obj,world:L.world,verts:cv2.verts,hintVerts:cv2.hintVerts};
+  let best={f:L.min?Infinity:-Infinity,p:null};
+  cur.hintVerts.forEach(p=>{
+    const f=Fval(p,cur);
+    if(L.min ? f<best.f : f>best.f) best={f,p};
+  });
   cur.optPt=best.p; cur.optF=best.f;
-  P={x:0,y:0}; showHints=false; $('hintBtn').classList.remove('on');
-  $('lvl').textContent=i+1; $('ctxEmoji').textContent=L.emoji; $('ctxText').innerHTML=L.text;
-  buildSystem(); render();
+  P = L.start ? {...L.start} : {x:0,y:0};
+  showHints=false; hintUsed=false; $('hintBtn').classList.remove('on');
+  $('lvl').textContent=i+1; $('ctxEmoji').textContent=L.emoji;
+  const note =
+    L.min ? ' <span class="expert">· Chiều ngược: tìm GIÁ TRỊ NHỎ NHẤT — miền nghiệm cũng phải tự suy luận!</span>' :
+    L.hideRegion ? ' <span class="expert">· Chế độ chuyên gia: miền nghiệm không tô sẵn — tự xác định từ hệ bất phương trình!</span>' : '';
+  $('ctxText').innerHTML=L.text+note;
+  buildSystem(); fit(); render();
 }
 
 function stars(ratio){ return ratio>=0.999?3 : ratio>=0.92?2 : ratio>=0.75?1 : 0; }
 
-function harvest(){
-  const v=feasible(P,cur);
-  if(v!==false){
-    showToast(false,'','Vượt nguồn lực!',
-      `Kế hoạch này vượt quá ${v.tag}. Hãy đưa điểm trở lại vùng xanh rồi thu hoạch.`,
-      'Thử lại','retry',()=>{});
-    return;
+/* ===== Câu hỏi củng cố ===== */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function makeQuiz(){
+  const L=LEVELS[lvlIdx], o=cur.obj;
+  const vs=cur.hintVerts;
+  const pool=[];
+  // 1) Tính F tại một đỉnh không tối ưu
+  const v0=vs.find(p=>Math.abs(p.x-cur.optPt.x)>1e-3||Math.abs(p.y-cur.optPt.y)>1e-3)||vs[0];
+  const f0=Fval(v0,cur);
+  pool.push(()=>({q:`Tại đỉnh (${fmtN(v0.x)}; ${fmtN(v0.y)}), giá trị F = ${fmtTerms(o.a,o.b)} bằng bao nhiêu?`,
+    correct:fmtN(f0),
+    opts:[fmtN(f0), fmtN(f0+o.a), fmtN(Math.max(0,f0-o.b)), fmtN(v0.x+v0.y)],
+    exp:`F = ${o.a}·${fmtN(v0.x)} + ${o.b}·${fmtN(v0.y)} = ${fmtN(f0)}.`}));
+  // 2) Chọn đỉnh tối ưu trong các đỉnh
+  if(vs.length>=3){
+    const cands=[cur.optPt, ...vs.filter(p=>p!==cur.optPt)].slice(0,4);
+    pool.push(()=>({q: L.min?'Trong các đỉnh của miền nghiệm, đỉnh nào cho F nhỏ nhất?'
+                         :'Trong các đỉnh của miền nghiệm, đỉnh nào cho F lớn nhất?',
+      correct:`(${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)})`,
+      opts:cands.map(p=>`(${fmtN(p.x)}; ${fmtN(p.y)})`),
+      exp:'So sánh: '+cands.map(p=>`F(${fmtN(p.x)};${fmtN(p.y)}) = ${fmtN(Fval(p,cur))}`).join(' ; ')+'.'}));
   }
-  const f=Fval(P,cur), ratio=f/cur.optF, s=stars(ratio);
-  if(s===0){
-    showToast(false,'','Lãi còn thấp!',
-      `Bạn đạt ${f.toFixed(0)} triệu, mới ${(ratio*100).toFixed(0)}% mức tối đa. Thử kéo điểm tới một đỉnh của vùng xanh.`,
-      'Thử lại','retry',()=>{});
-    return;
+  // 3) Khái niệm nền tảng
+  pool.push(()=>({q:`Trên miền nghiệm đa giác, giá trị ${L.min?'nhỏ':'lớn'} nhất của F = ${fmtTerms(o.a,o.b)} đạt được ở đâu?`,
+    correct:'Tại một đỉnh của miền nghiệm',
+    opts:['Tại một đỉnh của miền nghiệm','Tại trọng tâm của miền nghiệm','Tại một điểm bất kỳ bên trong miền','Luôn tại gốc toạ độ O'],
+    exp:'Định lí: F = ax + by đạt GTLN và GTNN trên miền đa giác lồi tại các đỉnh của miền. Vì vậy chỉ cần tính F tại từng đỉnh rồi so sánh.'}));
+  // 4) Kiểm tra một điểm có thuộc miền nghiệm không
+  const Mq = L.min ? {x:Math.max(0,cur.optPt.x-1.5),y:Math.max(0,cur.optPt.y-1.5)}
+                   : {x:cur.optPt.x+1.5,y:cur.optPt.y+1.5};
+  const viol=cur.cons.filter(c=>!satisfies(Mq,c));
+  if(viol.length){
+    const sat=cur.cons.filter(c=>satisfies(Mq,c));
+    pool.push(()=>({q:`Điểm M(${fmtN(Mq.x)}; ${fmtN(Mq.y)}) có thuộc miền nghiệm của hệ không?`,
+      correct:`Không — M vi phạm ${ineqStr(viol[0])}`,
+      opts:[`Không — M vi phạm ${ineqStr(viol[0])}`,
+            'Có — M thoả mọi bất phương trình',
+            sat.length?`Không — M vi phạm ${ineqStr(sat[0])}`:'Không — M vi phạm x ≥ 0',
+            'Có — vì M nằm gần đỉnh tối ưu'],
+      exp:`Thay M vào: ${viol[0].a}·${fmtN(Mq.x)} + ${viol[0].b}·${fmtN(Mq.y)} = ${fmtN(viol[0].a*Mq.x+viol[0].b*Mq.y)} ${viol[0].op==='>='?'< '+viol[0].c+' (chưa đạt mức tối thiểu)':'> '+viol[0].c+' (vượt giới hạn)'} → M không thuộc miền nghiệm.`}));
   }
-  score+=Math.round(f); $('score').textContent=score;
-  const optTxt=`Tối đa là <b>${cur.optF.toFixed(0)} triệu</b> tại đỉnh (${cur.optPt.x.toFixed(0)}; ${cur.optPt.y.toFixed(0)}).`;
-  const last=lvlIdx===LEVELS.length-1;
-  showToast(true,'★'.repeat(s)+'☆'.repeat(3-s),
-    s===3?'Tối ưu hoàn hảo!':'Thu hoạch tốt!',
-    `Bạn đạt ${f.toFixed(0)} triệu. ${s<3?optTxt:'Đúng đỉnh cho lãi cao nhất.'}`,
-    last?'Chơi lại từ đầu':'Vụ tiếp theo', 'next',
-    ()=>{ if(last){score=0;$('score').textContent=0;setLevel(0);} else setLevel(lvlIdx+1); });
+  const t=pool[Math.floor(Math.random()*pool.length)]();
+  t.opts=shuffle([...new Set(t.opts)]);
+  return t;
+}
+function showQuiz(onDone,nextLabel){
+  const qz=makeQuiz(); quizAsked++;
+  const q=$('quiz'), box=$('quizBox');
+  box.innerHTML=`<div style="font-size:42px">✏️</div>
+    <h2 style="color:var(--indigo)">Câu hỏi củng cố</h2>
+    <p style="margin-bottom:0">${qz.q}</p>
+    <div class="qopts"></div>
+    <div class="qexp" style="display:none"></div>
+    <button class="next" style="display:none">${nextLabel}</button>`;
+  const wrap=box.querySelector('.qopts');
+  const expEl=box.querySelector('.qexp');
+  const nextBtn=box.querySelector('button.next');
+  qz.opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='qopt'; b.textContent=o;
+    b.onclick=()=>{
+      wrap.querySelectorAll('button').forEach(x=>{
+        x.disabled=true;
+        if(x.textContent===qz.correct) x.classList.add('correct');
+      });
+      const ok=(o===qz.correct);
+      if(!ok){ b.classList.add('wrong'); SFX.buzz(); }
+      else{ quizCorrect++; score+=50; $('score').textContent=score; SFX.ding(); }
+      expEl.style.display='block';
+      expEl.innerHTML=(ok?'✅ Chính xác! +50 điểm. ':'❌ Chưa đúng. ')+qz.exp;
+      nextBtn.style.display='block';
+      SCTreport();
+    };
+    wrap.appendChild(b);
+  });
+  nextBtn.onclick=()=>{ q.className='toast'; onDone(); };
+  q.className='toast show';
 }
 
-function showToast(ok,starStr,title,msg,btn,cls,act){
-  const t=$('toast'); if(ok){SCT_done.add(lvlIdx);SCTreport();} t.className='toast show'+(ok?'':' fail');
-  $('tStars').textContent=starStr; $('tStars').style.display=ok?'block':'none';
+const fmtT=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+function finalToast(){
+  const time=window.SCT_elapsed?fmtT(window.SCT_elapsed()):'—';
+  showToast(true,'🏆','Hoàn thành cả '+LEVELS.length+' vụ!',
+    `${score} điểm · ${starsTotal}/${LEVELS.length*3} ⭐ · củng cố đúng ${quizCorrect}/${quizAsked} · thời gian ${time}. Một nhà nông tối ưu thực thụ!`,
+    'Chơi lại từ đầu','next',
+    ()=>{ score=0; $('score').textContent=0; setLevel(0); });
+}
+
+function harvest(){
+  const L=LEVELS[lvlIdx];
+  const v=feasible(P,cur);
+  if(v!==false){
+    SFX.fail();
+    showToast(false,'', L.min?'Chưa đủ dinh dưỡng!':'Vượt nguồn lực!',
+      (v.op==='>=' ? `Kế hoạch chưa đạt mức tối thiểu ${v.tag}. ` : `Kế hoạch vượt quá ${v.tag}. `)+
+      'Đưa điểm về miền nghiệm rồi thử lại.',
+      'Thử lại','retry',()=>{});
+    return;
+  }
+  const f=Fval(P,cur);
+  const ratio = L.min ? cur.optF/f : f/cur.optF;
+  let s=stars(ratio);
+  if(s===0){
+    SFX.fail();
+    showToast(false,'', L.min?'Chi phí còn cao!':'Lãi còn thấp!',
+      L.min ? `Chi phí ${f.toFixed(0)} ${L.fUnit}, còn cách mức thấp nhất khá xa. Thử di chuyển tới một đỉnh của miền nghiệm.`
+            : `Bạn đạt ${f.toFixed(0)} ${L.fUnit}, mới ${(ratio*100).toFixed(0)}% mức tối đa. Thử kéo điểm tới một đỉnh của miền nghiệm.`,
+      'Thử lại','retry',()=>{});
+    return;
+  }
+  if(hintUsed) s=Math.min(s,2);   // dùng gợi ý → tối đa 2 sao
+  if(!clearedOnce.has(lvlIdx)){ score+=100; $('score').textContent=score; clearedOnce.add(lvlIdx); }
+  levelStars[lvlIdx]=Math.max(s,levelStars[lvlIdx]||0);
+  starsTotal=Object.values(levelStars).reduce((a,b)=>a+b,0);
+  $('stars').textContent=starsTotal;
+  SCT_done.add(lvlIdx); SCTreport();
+  SFX.win(); confetti();
+
+  const last=lvlIdx===LEVELS.length-1;
+  const goNext=()=>{ last ? finalToast() : setLevel(lvlIdx+1); };
+  const mainLabel = quizDone.has(lvlIdx) ? (last?'Xem tổng kết 🏆':'Vụ tiếp theo') : 'Câu hỏi củng cố ✏️';
+  const mainAction = quizDone.has(lvlIdx) ? goNext
+    : ()=>{ quizDone.add(lvlIdx); showQuiz(goNext, last?'Xem tổng kết 🏆':'Vụ tiếp theo'); };
+  const optTxt = s<3
+    ? (L.min?`Mức thấp nhất là ${cur.optF.toFixed(0)} ${L.fUnit} — thử lại để đạt ★★★.`
+            :`Vẫn còn cách mức tối đa — thử lại để đạt ★★★.`)
+    : (L.min?'Đúng phương án chi phí thấp nhất!':'Đúng đỉnh cho lãi cao nhất!');
+  showToast(true,'★'.repeat(s)+'☆'.repeat(3-s),
+    s===3?'Tối ưu hoàn hảo!':(L.min?'Đơn hàng ổn!':'Thu hoạch tốt!'),
+    `${L.min?'Chi phí':'Bạn đạt'} ${f.toFixed(0)} ${L.fUnit}${hintUsed?' (có dùng gợi ý)':''}. ${optTxt}`,
+    mainLabel,'next',mainAction,
+    s<3 ? {label:'Làm lại vụ này (săn ★★★)', action:()=>setLevel(lvlIdx)} : null);
+}
+
+function showToast(ok,starStr,title,msg,btn,cls,act,second){
+  const t=$('toast');
+  t.className='toast show'+(ok?'':' fail');
+  $('tStars').textContent=starStr; $('tStars').style.display=ok&&starStr?'block':'none';
   $('tTitle').textContent=title; $('tMsg').innerHTML=msg;
   const b=$('tBtn'); b.textContent=btn; b.className=cls;
   b.onclick=()=>{ t.className='toast'; act(); render(); };
+  const b2=$('tBtn2');
+  if(second){ b2.style.display='block'; b2.textContent=second.label;
+    b2.onclick=()=>{ t.className='toast'; second.action(); render(); }; }
+  else b2.style.display='none';
 }
 
-// ===== Tương tác kéo điểm =====
+/* ===== Tương tác kéo điểm ===== */
 function setFromEvent(e){
   const r=cv.getBoundingClientRect();
   const cxp=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
@@ -418,9 +667,8 @@ function setFromEvent(e){
   let x=invX(cxp), y=invY(cyp);
   x=Math.max(0,Math.min(cur.world.x,Math.round(x*2)/2));
   y=Math.max(0,Math.min(cur.world.y,Math.round(y*2)/2));
-  // nếu bật gợi ý: hút về đỉnh gần nếu rất sát
   if(showHints){
-    for(const vtx of cur.vertices){
+    for(const vtx of cur.hintVerts){
       if(Math.hypot(vtx.x-x,vtx.y-y)<0.6){ x=vtx.x; y=vtx.y; break; }
     }
   }
@@ -431,11 +679,32 @@ cv.addEventListener('pointermove',e=>{if(dragging)setFromEvent(e);});
 cv.addEventListener('pointerup',()=>dragging=false);
 cv.addEventListener('pointercancel',()=>dragging=false);
 
-$('harvestBtn').addEventListener('click',harvest);
-$('hintBtn').addEventListener('click',e=>{showHints=!showHints;e.target.classList.toggle('on',showHints);render();});
-$('resetBtn').addEventListener('click',()=>{score=0;$('score').textContent=0;$('toast').className='toast';setLevel(0);});
-window.addEventListener('resize',()=>render());
+// điều khiển bằng bàn phím (mũi tên) — hỗ trợ tiếp cận
+window.addEventListener('keydown',e=>{
+  if($('toast').classList.contains('show')||$('quiz').classList.contains('show')) return;
+  const step=0.5; let moved=true;
+  if(e.key==='ArrowLeft') P.x=Math.max(0,P.x-step);
+  else if(e.key==='ArrowRight') P.x=Math.min(cur.world.x,P.x+step);
+  else if(e.key==='ArrowDown') P.y=Math.max(0,P.y-step);
+  else if(e.key==='ArrowUp') P.y=Math.min(cur.world.y,P.y+step);
+  else if(e.key==='Enter'){ harvest(); moved=false; }
+  else moved=false;
+  if(moved){ e.preventDefault(); render(); }
+});
 
+$('harvestBtn').addEventListener('click',harvest);
+$('hintBtn').addEventListener('click',e=>{
+  showHints=!showHints;
+  if(showHints) hintUsed=true;     // đã nhìn gợi ý thì vụ này tối đa ★★
+  e.target.classList.toggle('on',showHints);
+  render();
+});
+$('resetBtn').addEventListener('click',()=>{score=0;$('score').textContent=0;
+  $('toast').className='toast';$('quiz').className='toast';setLevel(0);});
+window.addEventListener('resize',()=>{fit();render();});
+
+$('lvlMax').textContent=LEVELS.length;
+$('starsMax').textContent=LEVELS.length*3;
 setLevel(0);
 </script>
 
@@ -446,7 +715,7 @@ setLevel(0);
   function fmt(s){var m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0');}
   var chip=document.createElement('span');
   chip.className='sct-timer';
-  chip.innerHTML='\u23F1 <b id="sctClock">0:00</b>';
+  chip.innerHTML='⏱ <b id="sctClock">0:00</b>';
   function mount(){
     var host=document.querySelector('.hud')||document.querySelector('.top');
     if(host){ host.appendChild(chip); }
