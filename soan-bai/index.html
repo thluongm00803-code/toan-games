@@ -9,57 +9,84 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 <style>
+  /* ==== HỆ MÀU & NỀN — thiết kế lại hiện đại, gọn gàng ==== */
   :root{
-    --paper:#FBFAF4; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
-    --tangerine:#FF7A1A; --tangerine-dk:#C95C09; --emerald:#1FA36B; --line:#E4E0D4; --muted:#6A7184;
+    --paper:#F6F8FC; --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
+    --tangerine:#FF7A1A; --tangerine-dk:#C95C09; --emerald:#1FA36B; --violet:#7A4FD0;
+    --line:#E3E7F2; --muted:#6A7184; --card:#FFFFFF;
+    --r-lg:20px; --r-md:14px; --r-sm:10px;
+    --shadow:0 18px 40px -28px rgba(42,59,143,.35);
   }
   *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
   html,body{margin:0;padding:0}
   body{font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);min-height:100vh;
     background:
-      linear-gradient(#E3ECF6 1px,transparent 1px) 0 0/100% 34px,
-      linear-gradient(90deg,#E3ECF6 1px,transparent 1px) 0 0/34px 100%,
-      radial-gradient(130% 90% at 82% -8%, #EAF2FF 0%, transparent 55%),
+      radial-gradient(60% 40% at 8% 0%, #FFEFE0 0%, transparent 60%),
+      radial-gradient(70% 50% at 95% 5%, #E4EBFF 0%, transparent 55%),
       var(--paper);}
-  .wrap{max-width:980px;margin:0 auto;padding:22px 16px 70px}
+  .wrap{max-width:1020px;margin:0 auto;padding:14px 16px 70px}
+
+  /* ==== Thanh điều hướng dính ==== */
+  .nav{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;
+    background:rgba(255,255,255,.86);backdrop-filter:blur(10px);
+    border:1px solid var(--line);border-radius:999px;padding:8px 10px;margin-bottom:18px;
+    box-shadow:0 8px 24px -18px rgba(42,59,143,.35)}
+  .nav .brand{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:16px;color:var(--indigo);
+    display:flex;align-items:center;gap:7px;padding:0 6px;white-space:nowrap}
+  .nav .brand em{font-style:normal;color:var(--tangerine)}
+  .nav .links{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+  .nav .links a{font-size:12.5px;font-weight:600;color:var(--muted);text-decoration:none;
+    padding:7px 12px;border-radius:999px;transition:.15s}
+  .nav .links a:hover{background:#EEF1FB;color:var(--indigo)}
+  .back{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--indigo);
+    font-weight:600;font-size:13px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 13px;transition:.15s}
+  .back:hover{border-color:var(--indigo-soft);transform:translateX(-2px)}
+
+  /* ==== Hero ==== */
   .top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-  .back{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:var(--indigo);
-    font-weight:600;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px}
-  .back:hover{border-color:var(--indigo-soft)}
-  h1{font-family:"Baloo 2",sans-serif;font-weight:700;letter-spacing:-.5px;font-size:clamp(28px,5.4vw,42px);
-    line-height:1.05;margin:16px 0 6px;color:var(--indigo)}
-  h1 em{font-style:normal;color:var(--tangerine)}
-  .lead{font-size:15px;color:var(--muted);max-width:640px;font-weight:500;margin:0 0 6px}
+  h1{font-family:"Baloo 2",sans-serif;font-weight:700;letter-spacing:-.5px;font-size:clamp(30px,5.4vw,44px);
+    line-height:1.05;margin:10px 0 8px;color:var(--indigo)}
+  h1 em{font-style:normal;background:linear-gradient(90deg,var(--tangerine),#FFB169);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .lead{font-size:15px;color:var(--muted);max-width:660px;font-weight:500;margin:0 0 10px}
+  .herochips{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 6px}
+  .herochips span{font-size:12px;font-weight:700;border-radius:999px;padding:6px 13px;
+    background:#fff;border:1px solid var(--line);color:var(--indigo)}
+  .herochips span b{color:var(--tangerine)}
 
-  .step{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 20px 22px;margin-top:18px;
-    box-shadow:0 14px 34px -26px rgba(42,59,143,.5)}
-  .step h2{font-family:"Baloo 2",sans-serif;font-weight:600;font-size:18px;margin:0 0 3px;color:var(--ink);
-    display:flex;align-items:center;gap:10px}
-  .step .num{width:26px;height:26px;border-radius:8px;background:var(--indigo);color:#fff;font-size:14px;
-    display:inline-flex;align-items:center;justify-content:center;font-family:"Baloo 2",sans-serif}
-  .step .desc{font-size:13px;color:var(--muted);margin:2px 0 16px 36px}
+  /* ==== Thẻ bước ==== */
+  .step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:22px 22px 24px;margin-top:20px;box-shadow:var(--shadow);overflow:hidden}
+  .step::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;
+    background:linear-gradient(180deg,var(--indigo),var(--indigo-soft))}
+  .step h2{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:19px;margin:0 0 3px;color:var(--ink);
+    display:flex;align-items:center;gap:11px}
+  .step .num{width:30px;height:30px;border-radius:10px;color:#fff;font-size:15px;flex:none;
+    display:inline-flex;align-items:center;justify-content:center;font-family:"Baloo 2",sans-serif;
+    background:linear-gradient(135deg,var(--indigo),var(--indigo-soft));box-shadow:0 4px 10px -4px rgba(42,59,143,.6)}
+  .step .desc{font-size:13px;color:var(--muted);margin:3px 0 16px 41px}
 
+  /* legacy giữ tương thích */
   .lessons{display:flex;gap:10px;flex-wrap:wrap}
-  .lesson{flex:1;min-width:240px;text-align:left;background:#FAFBFE;border:1.5px solid var(--line);border-radius:14px;
-    padding:15px 16px;cursor:pointer;transition:.15s}
+  .lesson{flex:1;min-width:240px;text-align:left;background:#FAFBFE;border:1.5px solid var(--line);border-radius:var(--r-md);padding:15px 16px;cursor:pointer;transition:.15s}
   .lesson:hover{border-color:var(--indigo-soft)}
   .lesson.on{border-color:var(--indigo);background:#EEF1FB;box-shadow:0 0 0 3px #2A3B8F18}
   .lesson .tag{font-size:11px;font-weight:700;color:var(--tangerine-dk);letter-spacing:.5px}
   .lesson .nm{font-family:"Baloo 2",sans-serif;font-weight:600;font-size:16px;margin:3px 0 4px;color:var(--ink)}
   .lesson .mt{font-size:12px;color:var(--muted)}
-  .addnote{margin-top:12px;font-size:12.5px;color:var(--muted);background:#F7F8FC;border:1px dashed var(--line);
-    border-radius:10px;padding:10px 12px}
+  .addnote{margin-top:12px;font-size:12.5px;color:var(--muted);background:#F7F8FC;border:1px dashed var(--line);border-radius:var(--r-sm);padding:10px 12px}
   .addnote b{color:var(--indigo)}
 
-  details.pdf{margin-top:12px}
+  details.pdf{margin-top:14px;background:#F8FAFF;border:1px dashed #C9D2E8;border-radius:var(--r-md);padding:11px 14px}
   details.pdf summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--indigo);list-style:none}
   details.pdf summary::-webkit-details-marker{display:none}
   details.pdf summary::before{content:"▸ ";color:var(--tangerine)}
   details.pdf[open] summary::before{content:"▾ "}
   .pdfbox{margin-top:10px}
   .pdfbox input[type=file]{font-size:13px}
-  .pdfbox textarea{width:100%;height:120px;margin-top:8px;border:1px solid var(--line);border-radius:10px;
-    padding:10px;font-family:ui-monospace,monospace;font-size:12px;color:var(--ink);resize:vertical}
+  .pdfbox textarea{width:100%;height:120px;margin-top:8px;border:1px solid var(--line);border-radius:var(--r-sm);
+    padding:10px;font-family:ui-monospace,monospace;font-size:12px;color:var(--ink);resize:vertical;background:#fff}
 
   .actlist{display:flex;flex-direction:column;gap:9px}
   .act{display:flex;align-items:center;gap:12px;background:#FAFBFE;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
@@ -68,28 +95,33 @@
   .act .ph{font-size:10.5px;font-weight:700;color:var(--tangerine-dk);letter-spacing:.4px}
   .act .nm{font-weight:600;font-size:14.5px}
   .act .gm{font-size:12px;color:var(--muted);margin-top:1px}
-  .switch{position:relative;width:46px;height:26px;flex-shrink:0}
+
+  /* công tắc gắn game */
+  .switch{position:relative;width:50px;height:28px;flex-shrink:0}
   .switch input{opacity:0;width:0;height:0}
   .slider{position:absolute;inset:0;background:#D7DAE6;border-radius:999px;cursor:pointer;transition:.18s}
-  .slider::before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.18s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .slider::before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.18s;box-shadow:0 1px 4px rgba(0,0,0,.25)}
   .switch input:checked + .slider{background:var(--emerald)}
-  .switch input:checked + .slider::before{transform:translateX(20px)}
+  .switch input:checked + .slider::before{transform:translateX(22px)}
   .switch.dis .slider{background:#EDEFF4;cursor:not-allowed}
   .nogame{font-size:12px;color:#A9AEC0;font-weight:600;flex-shrink:0;width:46px;text-align:center}
 
-  .outgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  /* ==== Bốn thẻ xuất file ==== */
+  .outgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:680px){.outgrid{grid-template-columns:1fr}}
-  .out{position:relative;border:1px solid var(--line);border-radius:16px;padding:20px 18px 16px;background:#fff;box-shadow:0 3px 14px rgba(28,36,56,.06);overflow:hidden;transition:transform .15s,box-shadow .15s}
-  .out:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(28,36,56,.10)}
-  .out::before{content:"";position:absolute;top:0;left:0;right:0;height:5px}
-  .out h3{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:16px;margin:2px 0 4px;display:flex;align-items:center;gap:8px}
+  .out{position:relative;border:1px solid var(--line);border-radius:var(--r-lg);padding:20px 18px 16px;background:#fff;
+    box-shadow:0 4px 16px rgba(28,36,56,.05);overflow:hidden;transition:transform .15s,box-shadow .15s}
+  .out:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(28,36,56,.12)}
+  .out::before{content:"";position:absolute;top:0;left:0;right:0;height:6px}
+  .out h3{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:16.5px;margin:4px 0 4px;display:flex;align-items:center;gap:8px}
   .out .sub{font-size:12px;color:var(--muted);margin:0 0 13px}
-  .out.c-pptx{background:linear-gradient(180deg,#EDF1FC,#fff 58%)}  .out.c-pptx::before{background:linear-gradient(90deg,#2A3B8F,#6B7BD6)}  .out.c-pptx h3{color:#26337D}
-  .out.c-khbd{background:linear-gradient(180deg,#E8F6EF,#fff 58%)}  .out.c-khbd::before{background:linear-gradient(90deg,#1FA36B,#62C79C)}  .out.c-khbd h3{color:#14784E}
-  .out.c-phieu{background:linear-gradient(180deg,#FFF2E6,#fff 58%)} .out.c-phieu::before{background:linear-gradient(90deg,#FF7A1A,#FFB174)} .out.c-phieu h3{color:#C25708}
-  .out.c-kt{background:linear-gradient(180deg,#F2ECFB,#fff 58%)}    .out.c-kt::before{background:linear-gradient(90deg,#7A4FD0,#AC8BE8)}    .out.c-kt h3{color:#5A33AE}
-  .btn{font-family:"Baloo 2",sans-serif;font-weight:600;font-size:14.5px;border:none;border-radius:11px;
-    padding:11px 16px;cursor:pointer;color:#fff;width:100%;transition:filter .12s}
+  .out.c-pptx{background:linear-gradient(180deg,#EDF1FC,#fff 52%)}  .out.c-pptx::before{background:linear-gradient(90deg,#2A3B8F,#6B7BD6)}  .out.c-pptx h3{color:#26337D}
+  .out.c-khbd{background:linear-gradient(180deg,#E8F6EF,#fff 52%)}  .out.c-khbd::before{background:linear-gradient(90deg,#1FA36B,#62C79C)}  .out.c-khbd h3{color:#14784E}
+  .out.c-phieu{background:linear-gradient(180deg,#FFF2E6,#fff 52%)} .out.c-phieu::before{background:linear-gradient(90deg,#FF7A1A,#FFB174)} .out.c-phieu h3{color:#C25708}
+  .out.c-kt{background:linear-gradient(180deg,#F2ECFB,#fff 52%)}    .out.c-kt::before{background:linear-gradient(90deg,#7A4FD0,#AC8BE8)}    .out.c-kt h3{color:#5A33AE}
+
+  .btn{font-family:"Baloo 2",sans-serif;font-weight:600;font-size:14.5px;border:none;border-radius:12px;
+    padding:12px 16px;cursor:pointer;color:#fff;width:100%;transition:filter .12s,transform .08s}
   .btn:active{transform:translateY(1px)}
   .btn.primary{background:var(--tangerine);box-shadow:0 4px 0 var(--tangerine-dk)}
   .btn.primary:active{box-shadow:0 2px 0 var(--tangerine-dk)}
@@ -100,7 +132,7 @@
   .btn.b-khbd{background:#1FA36B;box-shadow:0 4px 0 #15784E}   .btn.b-khbd:active{box-shadow:0 2px 0 #15784E}
   .btn.b-phieu{background:#FF7A1A;box-shadow:0 4px 0 #C95C09}  .btn.b-phieu:active{box-shadow:0 2px 0 #C95C09}
   .btn.b-kt{background:#7A4FD0;box-shadow:0 4px 0 #5A33AE}     .btn.b-kt:active{box-shadow:0 2px 0 #5A33AE}
-  .btn.b-pptx:hover,.btn.b-khbd:hover,.btn.b-phieu:hover,.btn.b-kt:hover{filter:brightness(1.06)}
+  .btn.b-pptx:hover,.btn.b-khbd:hover,.btn.b-phieu:hover,.btn.b-kt:hover{filter:brightness(1.07)}
   .btnrow.row2{flex-direction:row}
   .btnrow.row2 .btn{flex:1}
   .btn.b-khbd-soft{background:#DCF1E7;color:#15784E;box-shadow:none}
@@ -111,57 +143,81 @@
   .btn.fv1{background:#CCB7EE;color:#48278C;box-shadow:none}
   .btn.fv2{background:#E0D2F4;color:#48278C;box-shadow:none}
   .btn.fv3{background:#F1E9FB;color:#48278C;box-shadow:none}
+  .btn.fv4{background:#fff;color:#5A33AE;border:1.5px dashed #AC8BE8;box-shadow:none}
+  .btn.fv4:hover{border-style:solid}
   .btn.fo1:hover,.btn.fo2:hover,.btn.fo3:hover,.btn.fv1:hover,.btn.fv2:hover,.btn.fv3:hover{filter:brightness(.97)}
   .btnrow{display:flex;flex-direction:column;gap:8px}
   .types{display:flex;gap:14px;margin-bottom:12px;font-size:13px}
   .types label{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:600}
-  textarea.code{width:100%;height:150px;border:1px solid var(--line);border-radius:10px;padding:10px;
+  .types input{accent-color:var(--indigo)}
+  textarea.code{width:100%;height:150px;border:1px solid var(--line);border-radius:var(--r-sm);padding:10px;
     font-family:ui-monospace,monospace;font-size:11.5px;color:var(--ink);resize:vertical;background:#FBFBFD;margin-bottom:9px}
-  .gamehint{margin-top:13px;background:#FFF6EE;border:1px solid #FFD9B8;border-radius:11px;padding:11px 13px;font-size:12.5px;color:#8a4a10}
+  .gamehint{margin-top:14px;background:linear-gradient(90deg,#FFF6EE,#FFFDFB);border:1px solid #FFD9B8;
+    border-radius:var(--r-md);padding:12px 15px;font-size:12.5px;color:#8a4a10}
   .gamehint b{color:var(--tangerine-dk)}
-  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
-    padding:11px 20px;border-radius:999px;font-size:13.5px;font-weight:600;opacity:0;transition:.25s;pointer-events:none;z-index:99}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-size:13.5px;font-weight:600;
+    opacity:0;transition:.25s;pointer-events:none;z-index:99;box-shadow:0 12px 30px -10px rgba(0,0,0,.5)}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-  footer{margin-top:30px;text-align:center;color:var(--muted);font-size:12px;line-height:1.7}
+  footer{margin-top:34px;text-align:center;color:var(--muted);font-size:12px;line-height:1.7}
   footer b{color:var(--indigo)}
   .setsel{display:flex;gap:7px;flex-wrap:wrap;margin:2px 0 12px}
-  .setsel button{font-family:inherit;font-weight:600;font-size:12.5px;border:1px solid #E4E0D4;background:#fff;
-    color:#2A3B8F;border-radius:999px;padding:7px 13px;cursor:pointer;transition:.12s}
-  .setsel button:hover:not(:disabled){border-color:#2A3B8F}
-  .setsel button.on{background:#2A3B8F;color:#fff;border-color:#2A3B8F}
+  .setsel button{font-family:inherit;font-weight:600;font-size:12.5px;border:1px solid var(--line);background:#fff;
+    color:var(--indigo);border-radius:999px;padding:7px 14px;cursor:pointer;transition:.12s}
+  .setsel button:hover:not(:disabled){border-color:var(--indigo);transform:translateY(-1px)}
+  .setsel button.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
   .setsel button.test{color:#1FA36B}
   .setsel button.test.on{background:#1FA36B;color:#fff;border-color:#1FA36B}
-  .setsel button:disabled{opacity:.4;cursor:not-allowed}
+  .setsel button:disabled{opacity:.35;cursor:not-allowed}
   .gvform{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 14px;margin:12px 0 8px}
   .gvform label{display:flex;flex-direction:column;font-size:12px;font-weight:600;color:#5A6173;gap:4px}
   .gvform label.wide{grid-column:1/-1}
-  .gvform input{font:inherit;font-weight:500;font-size:13.5px;color:#1C2438;border:1px solid #E4E0D4;border-radius:9px;padding:8px 11px;background:#fff}
-  .gvform input:focus{outline:none;border-color:#2A3B8F}
-  .lessonSel{width:100%;font:inherit;font-size:15px;font-weight:600;color:#1C2438;border:1px solid #C9D2E8;border-radius:10px;padding:11px 12px;background:#fff;cursor:pointer}
-  .lessonSel:focus{outline:none;border-color:#2A3B8F}
+  .gvform input{font:inherit;font-weight:500;font-size:13.5px;color:var(--ink);border:1px solid var(--line);
+    border-radius:9px;padding:9px 12px;background:#fff;transition:.12s}
+  .gvform input:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px #2A3B8F14}
+  .lessonSel{width:100%;font:inherit;font-size:15px;font-weight:600;color:var(--ink);border:1.5px solid #C9D2E8;
+    border-radius:12px;padding:12px 13px;background:#fff;cursor:pointer;transition:.12s}
+  .lessonSel:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px #2A3B8F14}
   .lessonSel{appearance:none;-webkit-appearance:none;-moz-appearance:none;background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><rect x='2' y='2' width='28' height='28' rx='9' fill='%23FF7A1A'/><path d='M10 13l6 6 6-6' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 9px center;background-size:30px;padding-right:50px}
   .lessonSel:hover{border-color:#FF7A1A}
   .muted2{color:#8A90A2;font-size:13px}
   .actgame{margin-top:10px}
-  .actgame-card{display:flex;align-items:center;gap:12px;background:#FAFBFE;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-  .actgame-card.on{background:#FFF4EA;border-color:var(--tangerine)}
-  @media(max-width:640px){.gvform{grid-template-columns:1fr 1fr}}
+  .actgame-card{display:flex;align-items:center;gap:12px;background:#FAFBFE;border:1px solid var(--line);border-radius:var(--r-md);padding:13px 15px;transition:.15s}
+  .actgame-card.on{background:linear-gradient(90deg,#FFF4EA,#FFFDFB);border-color:var(--tangerine);box-shadow:0 6px 18px -12px rgba(255,122,26,.5)}
+  .stephead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .bankchip{font-size:11.5px;font-weight:700;color:var(--emerald);background:#E8F7EE;border-radius:999px;padding:5px 12px}
+  .quickbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+  .quickbar .btn{width:auto;padding:10px 16px;font-size:13.5px}
+  @media(max-width:640px){.gvform{grid-template-columns:1fr 1fr}.nav .links{display:none}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="top">
-    <a class="back" href="../">← Sân Chơi Toán Học</a>
-    <span style="font-size:12.5px;color:var(--muted)">Web app soạn bài · chạy hoàn toàn trên trình duyệt</span>
-  </div>
+  <nav class="nav">
+    <a class="back" href="../">←</a>
+    <span class="brand">🛠️ Xưởng <em>Soạn Bài</em></span>
+    <div class="links">
+      <a href="#step1">1 · Chọn bài</a>
+      <a href="#step2">2 · Gắn game</a>
+      <a href="#step3">3 · Xuất file</a>
+    </div>
+  </nav>
 
   <h1>Xưởng <em>Soạn Bài</em></h1>
-  <p class="lead">Chọn bài → gắn game vào hoạt động → xuất <b>bài giảng PPTX</b> và <b>phiếu bài tập về nhà</b>. Phiếu sinh ra đúng cú pháp để dán thẳng vào app Luyện tập.</p>
+  <p class="lead">Chọn bài → gắn game vào hoạt động → xuất <b>bài giảng PPTX</b>, <b>KHBD</b>, <b>phiếu bài tập</b> và <b>đề kiểm tra</b>. Phiếu sinh ra đúng cú pháp để dán thẳng vào App Luyện Tập.</p>
+  <div class="herochips">
+    <span>📚 Kho <b id="bankChip">…</b> bài học</span>
+    <span>🎮 Gắn game vào từng hoạt động</span>
+    <span>📤 <b>4</b> định dạng xuất · chạy 100% trên máy bạn</span>
+  </div>
 
   <!-- STEP 1 -->
-  <section class="step">
-    <h2><span class="num">1</span> Chọn kế hoạch bài dạy</h2>
-    <p class="desc">Chọn bài học từ danh sách thả xuống (sẽ đủ 27 bài khi nạp xong kho).</p>
+  <section class="step" id="step1">
+    <div class="stephead">
+      <h2><span class="num">1</span> Chọn kế hoạch bài dạy</h2>
+      <span class="bankchip" id="bankChip2">…</span>
+    </div>
+    <p class="desc">Chọn bài học từ danh sách. Thông tin giáo viên được <b>tự lưu trên máy</b> — lần sau mở lại không phải gõ.</p>
     <select id="lessonSel" class="lessonSel"></select>
     <div class="gvform">
       <label>Trường<input id="gvTruong" placeholder="THPT …"></label>
@@ -181,17 +237,20 @@
   </section>
 
   <!-- STEP 2 -->
-  <section class="step">
+  <section class="step" id="step2">
     <h2><span class="num">2</span> Tích hợp game vào hoạt động</h2>
-    <p class="desc">Chọn hoạt động cần tích hợp trò chơi, rồi bật công tắc để chèn slide “Trò chơi” vào đúng hoạt động đó.</p>
+    <p class="desc">Chọn hoạt động cần tích hợp trò chơi, rồi bật công tắc để chèn slide “Trò chơi” vào đúng hoạt động đó. Lựa chọn được <b>tự lưu theo từng bài</b>.</p>
     <select id="actSel" class="lessonSel"></select>
     <div class="actgame" id="actGame"></div>
   </section>
 
   <!-- STEP 3 -->
-  <section class="step">
+  <section class="step" id="step3">
     <h2><span class="num">3</span> Xuất file</h2>
     <p class="desc">Bài giảng để đi dạy + phiếu bài tập cho học sinh luyện tập.</p>
+    <div class="quickbar">
+      <button class="btn indigo" id="btnQuick">⚡ Xuất nhanh cả bộ (PPTX + KHBD.docx + phiếu.txt)</button>
+    </div>
     <div class="outgrid">
       <div class="out c-pptx">
         <h3>🖥️ Bài giảng PPTX</h3>
@@ -238,6 +297,7 @@
           <button class="btn fv1" id="btnKtTxt">Tải .txt</button>
           <button class="btn fv2" id="btnKtPrint">In đề (cho học sinh)</button>
           <button class="btn fv3" id="btnKtKey">In đề có đáp án (GV)</button>
+          <button class="btn fv4" id="btnKtMatrix">📐 In ma trận đề (4 mức độ nhận thức)</button>
         </div>
       </div>
     </div>
@@ -1137,6 +1197,66 @@ $('#btnKtPrint').onclick=()=>{const ws=activeTest();if(!ws){toast('Chưa có đ�
 $('#btnKtKey').onclick=()=>{const ws=activeTest();if(!ws){toast('Chưa có đề');return}openHTML(printable(LESSONS[curId],ws,curTest,true,ktTypes));};
 
 renderAll();
+
+/* ============ NÂNG CẤP v2: nhớ trạng thái · ma trận đề · xuất nhanh ============ */
+
+/* 1) Đếm tiến độ kho bài (x/27) hiện trên hero + bước 1 */
+(function(){
+  const n=Object.keys(LESSONS).length;
+  const c1=document.getElementById('bankChip'), c2=document.getElementById('bankChip2');
+  if(c1) c1.textContent=n+'/27';
+  if(c2) c2.textContent='✓ '+n+'/27 bài sẵn sàng';
+})();
+
+/* 2) Tự lưu & khôi phục: thông tin GV, bài đang chọn, trạng thái gắn game */
+(function(){
+  const KEY='sct_xuong_v2';
+  try{
+    const saved=JSON.parse(localStorage.getItem(KEY)||'null');
+    if(saved){
+      if(saved.GV) Object.assign(GV,saved.GV);
+      const map={gvTruong:'truong',gvName:'name',gvLop:'lop',gvTiet:'tiet',gvNgay:'ngay',gvTb:'thietbi'};
+      for(const id in map){const el=document.getElementById(id); if(el&&GV[map[id]]) el.value=GV[map[id]];}
+      if(saved.curId && LESSONS[saved.curId]) curId=saved.curId;
+      if(saved.attached){
+        for(const lid in saved.attached){ if(!attached[lid]) continue;
+          for(const k in saved.attached[lid]){ if(k in attached[lid]) attached[lid][k]=!!saved.attached[lid][k]; } }
+      }
+      renderAll();
+    }
+  }catch(e){}
+  let last='';
+  setInterval(()=>{
+    try{
+      const snap=JSON.stringify({GV,curId,attached});
+      if(snap!==last){ last=snap; localStorage.setItem(KEY,snap); }
+    }catch(e){}
+  },1500);
+})();
+
+/* 3) Nút MA TRẬN ĐỀ — hàm testMatrixHTML có sẵn trong kho nhưng bản cũ chưa có nút gọi */
+(function(){
+  const b=document.getElementById('btnKtMatrix'); if(!b) return;
+  b.onclick=()=>{
+    const L=LESSONS[curId];
+    if(!(L.tests&&L.tests.length)){toast('Bài này chưa có đề kiểm tra');return;}
+    const key=(L.tests.includes(curTest)?curTest:L.tests[0]);
+    if(!(L.testTagsMap&&L.testTagsMap[key])&&!L.testTags){toast('Đề này chưa gắn nhãn mức độ nhận thức');return;}
+    openHTML(testMatrixHTML(L,key));
+  };
+})();
+
+/* 4) Xuất nhanh cả bộ: PPTX + KHBD.docx + phiếu .txt trong một cú bấm */
+(function(){
+  const b=document.getElementById('btnQuick'); if(!b) return;
+  b.onclick=async()=>{
+    toast('Đang xuất cả bộ… (3 tệp sẽ lần lượt tải về)');
+    document.getElementById('btnPptx').click();
+    setTimeout(()=>document.getElementById('btnPlanDoc').click(),900);
+    setTimeout(()=>{ if(activeWS()) document.getElementById('btnTxt').click(); },1800);
+  };
+})();
+
 </script>
 </body>
 </html>
