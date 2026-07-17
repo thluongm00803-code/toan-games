@@ -43,18 +43,22 @@
   .mission .ctx{font-size:26px;line-height:1}
   .mission .txt{font-size:15px}
   .mission .txt b{color:var(--tangerine)}
+  .mission .txt .expert{color:#C95C09;font-weight:600}
   .stage{
     position:relative;background:#fff;border:1px solid var(--line);
     border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -18px rgba(42,59,143,.4);
   }
-  canvas{display:block;width:100%;height:auto;touch-action:none}
+  canvas{display:block;width:100%;height:auto;touch-action:none;cursor:grab}
+  canvas:active{cursor:grabbing}
   .hud{
-    position:absolute;top:10px;left:10px;display:flex;gap:8px;
-    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px;
+    position:absolute;top:10px;left:10px;display:flex;gap:8px;flex-wrap:wrap;
+    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px;z-index:10;
   }
   .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);
     border-radius:999px;padding:4px 12px;color:var(--indigo)}
   .chip b{color:var(--tangerine)}
+  button.chip{cursor:pointer;flex:none;font-size:13px;box-shadow:none;
+    font-family:"Baloo 2",sans-serif;font-weight:600}
   .panel{
     display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;
   }
@@ -62,51 +66,63 @@
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
   .card h3{margin:0 0 12px;font-family:"Baloo 2",sans-serif;font-weight:600;
     font-size:15px;color:var(--indigo);display:flex;align-items:center;gap:7px}
-  .ctrl{margin-bottom:16px}
-  .ctrl label{display:flex;justify-content:space-between;font-size:13px;
-    font-weight:600;margin-bottom:7px;color:var(--ink)}
-  .ctrl label .val{font-family:"Baloo 2",sans-serif;color:var(--tangerine)}
-  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;
-    border-radius:999px;background:linear-gradient(90deg,var(--indigo-soft),var(--indigo));
-    outline:none}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;
-    border-radius:50%;background:#fff;border:4px solid var(--tangerine);cursor:pointer;
-    box-shadow:0 2px 6px rgba(0,0,0,.2)}
-  input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;
-    background:#fff;border:4px solid var(--tangerine);cursor:pointer}
   .eq{
     background:#0F1530;color:#E8ECFF;border-radius:12px;padding:14px 16px;
     font-family:"Baloo 2",sans-serif;
   }
-  .eq .main{font-size:clamp(18px,4.5vw,24px);font-weight:600;letter-spacing:.3px}
-  .eq .main .a{color:#FFB169}.eq .main .h{color:#86F0C0}.eq .main .k{color:#8FB0FF}
-  .eq .row{display:flex;gap:18px;margin-top:10px;font-size:13px;color:#AAB4E0;flex-wrap:wrap}
-  .eq .row span b{color:#fff;font-weight:600}
+  .eq .main{font-size:19px;font-weight:600;letter-spacing:.3px}
   .actions{display:flex;gap:10px;margin-top:14px}
   button{font-family:"Baloo 2",sans-serif;font-weight:600;font-size:16px;border:none;
     border-radius:12px;padding:13px 18px;cursor:pointer;flex:1;transition:transform .08s ease,filter .15s}
   button:active{transform:translateY(2px)}
   .fire{background:var(--tangerine);color:#fff;box-shadow:0 6px 0 #C95C09}
   .fire:active{box-shadow:0 2px 0 #C95C09}
-  .fire:disabled{filter:grayscale(.6) opacity(.6);box-shadow:0 6px 0 #C95C09;cursor:default}
   .reset{background:#EEF0F7;color:var(--indigo);max-width:120px}
   .toast{
     position:absolute;inset:0;display:none;align-items:center;justify-content:center;
-    background:rgba(15,21,48,.55);backdrop-filter:blur(2px);
+    background:rgba(15,21,48,.55);backdrop-filter:blur(2px);z-index:20;
   }
   .toast.show{display:flex}
   .toast .box{background:#fff;border-radius:18px;padding:26px 28px;text-align:center;
-    max-width:330px;box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
+    max-width:360px;width:calc(100% - 40px);box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
   .toast .emo{font-size:48px}
   .toast h2{font-family:"Baloo 2",sans-serif;margin:6px 0 4px;color:var(--emerald);font-size:24px}
   .toast.fail h2{color:var(--tangerine)}
-  .toast p{margin:0 0 16px;color:var(--muted);font-size:14px}
+  .toast p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.55}
   .toast button{flex:none;width:100%}
   .next{background:var(--emerald);color:#fff;box-shadow:0 6px 0 #15784E}
   .retry{background:var(--indigo);color:#fff;box-shadow:0 6px 0 #1C2A6B}
   .tip{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5}
   .tip b{color:var(--indigo)}
   footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+
+  .readout{display:flex;flex-direction:column;gap:7px}
+  .readout .ln{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+  .readout .ln .k{color:#AAB4E0}.readout .ln .v{color:#fff;font-weight:600}
+  .badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
+  .ok{background:#1FA36B;color:#fff}.no{background:#FF7A1A;color:#fff}
+  .hid{background:#4A5578;color:#DDE3FF}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+  /* ==== Câu hỏi củng cố ==== */
+  .qopts{display:grid;grid-template-columns:1fr;gap:8px;margin:14px 0 6px}
+  .qopt{background:#EEF0F7;color:var(--ink);font-size:14px;padding:11px 10px;
+    border-radius:10px;box-shadow:none;text-align:left}
+  .qopt.correct{background:var(--emerald);color:#fff}
+  .qopt.wrong{background:#E85D5D;color:#fff}
+  .qopt:disabled{cursor:default;opacity:.92}
+  .qexp{font-size:13px;color:var(--indigo);background:#F1F4FF;border-radius:10px;
+    padding:10px 12px;margin:10px 0 14px;text-align:left;line-height:1.5}
+
+  /* ==== Pháo giấy ==== */
+  .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:15}
+  .confetti i{position:absolute;top:-16px;width:8px;height:13px;border-radius:2px;
+    opacity:.95;animation:cfall linear forwards}
+  @keyframes cfall{
+    0%{transform:translateY(0) rotate(0deg)}
+    100%{transform:translateY(640px) rotate(660deg);opacity:.7}
+  }
 
 /* ==== Cải tiến: dải nhận diện cấp lớp + đồng hồ ==== */
 :root{--gradec:#2A3B8F;--grade2:#FF7A1A}
@@ -127,15 +143,6 @@
 
 .wrap{position:relative}
 </style>
-<style>
-  .readout{display:flex;flex-direction:column;gap:7px}
-  .readout .ln{display:flex;justify-content:space-between;gap:12px;font-size:14px}
-  .readout .ln .k{color:#AAB4E0}.readout .ln .v{color:#fff;font-weight:600}
-  .badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
-  .ok{background:#1FA36B;color:#fff}.no{background:#FF7A1A;color:#fff}
-  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
-  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-</style>
 </head>
 <body>
 <div class="wrap">
@@ -154,10 +161,13 @@
   </div>
   <div class="stage">
     <div class="hud">
-      <span class="chip">Màn <b id="lvl">1</b>/5</span>
-      <span class="chip">Đã qua <b id="score">0</b></span>
+      <span class="chip">Màn <b id="lvl">1</b>/<span id="lvlMax">5</span></span>
+      <span class="chip">Điểm <b id="score">0</b></span>
+      <span class="chip">⭐ <b id="stars">0</b>/<span id="starsMax">15</span></span>
+      <span class="chip">Lượt KT <b id="shots">0</b></span>
+      <button class="chip" id="sndBtn" title="Bật/tắt âm thanh">🔊</button>
     </div>
-    <canvas id="cv" width="900" height="560"></canvas>
+    <canvas id="cv" width="900" height="560" role="img" aria-label="Mặt phẳng toạ độ với đường tròn hoặc elip kéo được"></canvas>
     <div class="toast" id="toast">
       <div class="box">
         <div class="emo" id="tEmo">🎉</div>
@@ -166,6 +176,7 @@
         <button id="tBtn" class="next">Màn tiếp theo</button>
       </div>
     </div>
+    <div class="toast" id="quiz"><div class="box" id="quizBox"></div></div>
   </div>
   <div class="panel">
     <div class="card">
@@ -180,74 +191,163 @@
     <div class="card">
       <h3>📐 Phương trình</h3>
       <div class="eq">
-        <div class="main" id="eqMain" style="font-size:19px">—</div>
+        <div class="main" id="eqMain">—</div>
         <div class="readout" id="eqRows" style="margin-top:10px"></div>
       </div>
+      <div class="tip" id="modeTip"></div>
     </div>
   </div>
 
-<script>
+  <footer>Một hoạt động dạy học môn Toán · điều khiển trực tiếp đối tượng toán học.</footer>
+</div>
 
-/* ===== Báo kết quả về app Luyện tập (postMessage) ===== */
-const SCT_done=new Set();
-function SCTreport(){
-  var total=LEVELS.length, cleared=SCT_done.size;
-  var percent=Math.round(cleared/total*100);
-  var payload={source:'SCT_GAME',type:'RESULT',game:'duong-tron',percent:percent,stars:cleared,starsMax:total,detail:cleared+'/'+total+' màn hoàn thành'};
-  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,'*'); }catch(e){}
-  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
-}
+<script>
+/* ===================================================================
+   CẤU HÌNH BÁO ĐIỂM VỀ APP LUYỆN TẬP
+   Khi triển khai, đặt origin thật của App Luyện Tập, ví dụ:
+   const SCT_APP_ORIGIN = 'https://sanchoitoanhoc.web.app';
+   Mặc định dùng origin của trang; mở bằng file:// tự hạ về '*'.
+=================================================================== */
+const SCT_APP_ORIGIN = window.SCT_APP_ORIGIN || window.location.origin;
+const SCT_TARGET = /^https?:/i.test(SCT_APP_ORIGIN) ? SCT_APP_ORIGIN : '*';
+
 const W=900,H=560,U=40,cx=W/2,cy=H/2;
 const cv=document.getElementById('cv'),g=cv.getContext('2d');
+const $=id=>document.getElementById(id);
 const X=v=>cx+v*U, Y=v=>cy-v*U;
 function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
 const r2=n=>Math.round(n*2)/2;
+const fmtN=v=>{ v=Math.round(v*100)/100; return Number.isInteger(v)?''+v:''+v; };
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const fmtT=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
 
+/* ===== Âm thanh (Web Audio) ===== */
+const SFX=(function(){
+  let ac=null, muted=false;
+  function ctxA(){
+    if(muted) return null;
+    if(!ac){ try{ ac=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+    if(ac.state==='suspended') ac.resume();
+    return ac;
+  }
+  function tone(f,d,type,t0,vol){
+    const a=ctxA(); if(!a) return;
+    const o=a.createOscillator(),gn=a.createGain();
+    o.type=type||'sine'; o.frequency.value=f;
+    gn.gain.setValueAtTime(vol||.16,a.currentTime+t0);
+    gn.gain.exponentialRampToValueAtTime(.001,a.currentTime+t0+d);
+    o.connect(gn); gn.connect(a.destination);
+    o.start(a.currentTime+t0); o.stop(a.currentTime+t0+d+.05);
+  }
+  return {
+    win(){ [523,659,784,1047].forEach((f,i)=>tone(f,.2,'sine',i*.095,.18)); },
+    fail(){ tone(185,.22,'sawtooth',0,.1); tone(140,.3,'sawtooth',.09,.1); },
+    ding(){ tone(880,.15,'sine',0,.16); tone(1175,.2,'sine',.08,.14); },
+    buzz(){ tone(160,.25,'square',0,.08); },
+    toggle(){ muted=!muted; return muted; }
+  };
+})();
+$('sndBtn').addEventListener('click',()=>{ $('sndBtn').textContent = SFX.toggle() ? '🔇' : '🔊'; });
+
+/* ===== Pháo giấy ===== */
+function confetti(){
+  const box=document.createElement('div'); box.className='confetti';
+  const colors=['#FF7A1A','#2A3B8F','#1FA36B','#FFC94D','#6B7BD6','#E85D5D'];
+  for(let i=0;i<38;i++){
+    const p=document.createElement('i');
+    p.style.left=(Math.random()*100)+'%';
+    p.style.background=colors[i%colors.length];
+    p.style.animationDuration=(1+Math.random()*0.9)+'s';
+    p.style.animationDelay=(Math.random()*0.35)+'s';
+    box.appendChild(p);
+  }
+  document.querySelector('.stage').appendChild(box);
+  setTimeout(()=>box.remove(),2300);
+}
+
+/* ===== Các màn =====
+   live:true  → phương trình & kiểm tra điểm hiện tức thì (làm quen)
+   live:false → kết quả ẩn, phải TÍNH rồi bấm Kiểm tra (chuyên gia)  */
 const LEVELS=[
- {mode:'circle',emoji:'📡',sub:'Đường tròn tâm cố định đi qua một điểm',
+ {mode:'circle',emoji:'📡',live:true,
   text:'Trạm phát sóng đặt tại I. Kéo <b>bán kính</b> để vùng phủ sóng (đường tròn) đi qua đúng nhà A.',
   fixI:true,I:{x:0,y:0},R:2,P:[{x:3,y:4,n:'A'}],edit:['R']},
- {mode:'circle',emoji:'🏠',sub:'Đường tròn đi qua hai điểm',
+ {mode:'circle',emoji:'🏠',live:true,
   text:'Kéo <b>tâm I</b> và <b>bán kính</b> để đường tròn đi qua cả hai nhà A và B.',
   fixI:false,I:{x:0,y:0},R:3,P:[{x:-4,y:0,n:'A'},{x:4,y:0,n:'B'}],edit:['I','R']},
- {mode:'circle',emoji:'🛰️',sub:'Đường tròn đi qua ba điểm',
+ {mode:'circle',emoji:'🛰️',live:false,
   text:'Kéo <b>tâm I</b> và <b>bán kính</b> để đường tròn đi qua cả ba trạm A, B, C.',
   fixI:false,I:{x:2,y:2},R:3,P:[{x:0,y:0,n:'A'},{x:6,y:0,n:'B'},{x:0,y:8,n:'C'}],edit:['I','R']},
- {mode:'ellipse',emoji:'🌍',sub:'Quỹ đạo elip đi qua một điểm',
+ {mode:'ellipse',emoji:'🌍',live:false,
   text:'Kéo hai <b>bán trục a, b</b> để quỹ đạo elip của vệ tinh đi qua điểm P.',
   a:3,b:2,P:[{x:3,y:2,n:'P'}],edit:['a','b']},
- {mode:'ellipse',emoji:'🪐',sub:'Quỹ đạo elip đi qua hai điểm',
+ {mode:'ellipse',emoji:'🪐',live:false,
   text:'Kéo hai <b>bán trục a, b</b> để quỹ đạo elip đi qua cả hai điểm P và Q.',
   a:4,b:3,P:[{x:3,y:2,n:'P'},{x:4,y:1.5,n:'Q'}],edit:['a','b']},
 ];
 let li=0,L=null,drag=null;
 const TOLC=0.18, TOLE=0.05;
 
+let attempts=0, score=0, levelStars={}, starsTotal=0;
+let quizCorrect=0, quizAsked=0;
+const clearedOnce=new Set(), quizDone=new Set();
+
+/* ===== Báo kết quả về App Luyện Tập (origin giới hạn) ===== */
+const SCT_done=new Set();
+function SCTreport(){
+  var total=LEVELS.length, cleared=SCT_done.size;
+  var percent=Math.round(cleared/total*100);
+  var payload={source:'SCT_GAME',type:'RESULT',game:'duong-tron',
+    percent:percent, stars:starsTotal, starsMax:total*3,
+    timeSec:(window.SCT_elapsed?window.SCT_elapsed():0),
+    quizCorrect:quizCorrect, quizAsked:quizAsked,
+    detail:cleared+'/'+total+' màn · '+starsTotal+'/'+(total*3)+' sao · củng cố đúng '+quizCorrect+'/'+quizAsked};
+  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,SCT_TARGET); }catch(e){}
+  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,SCT_TARGET); }catch(e){}
+}
+
+/* ===== Canvas sắc nét (DPR) ===== */
+function fitCanvas(){
+  const dpr=window.devicePixelRatio||1;
+  cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+  g.setTransform(dpr,0,0,dpr,0,0);
+}
+
 function setLevel(i){
+  li=i;
   L=JSON.parse(JSON.stringify(LEVELS[i]));
-  document.getElementById('ctxEmoji').textContent=L.emoji;
-  document.getElementById('ctxText').innerHTML=L.text;
-  document.getElementById('howto').innerHTML = L.mode==='circle'
+  attempts=0; $('shots').textContent=0;
+  $('ctxEmoji').textContent=L.emoji;
+  $('ctxText').innerHTML=L.text + (L.live ? '' :
+    ' <span class="expert">· Chế độ tính trước: phương trình bị ẩn — tính rồi bấm Kiểm tra!</span>');
+  $('howto').innerHTML = L.mode==='circle'
     ? 'Kéo chấm <b>tâm I</b> để dời tâm, kéo chấm <b>cam</b> trên đường tròn để đổi bán kính. Toạ độ bắt vào số nguyên.'
     : 'Kéo chấm <b>cam</b> trên trục Ox để đổi bán trục a, chấm <b>xanh</b> trên Oy để đổi bán trục b (bước 0,5).';
-  document.getElementById('lvl').textContent=i+1;
-  document.getElementById('score').textContent=SCT_done.size;
+  $('modeTip').innerHTML = L.live
+    ? '<b>Màn làm quen:</b> phương trình và khoảng cách cập nhật ngay khi kéo — quan sát mối liên hệ.'
+    : '<b>Chế độ tính trước:</b> các giá trị kiểm tra hiển thị "?". Tính trên giấy (trung trực, thay toạ độ vào phương trình…), chỉnh hình rồi bấm <b>Kiểm tra</b>. 1 lượt = ★★★, 2–3 lượt = ★★.';
+  $('lvl').textContent=i+1;
   legend();draw();
 }
 function legend(){
   const it = L.mode==='circle'
     ? [['#2A3B8F','tâm I'],['#FF7A1A','bán kính R'],['#C0392B','điểm cần đi qua']]
     : [['#FF7A1A','bán trục a'],['#2A3B8F','bán trục b'],['#C0392B','điểm cần đi qua']];
-  document.getElementById('legend').innerHTML=it.map(x=>`<span><i style="background:${x[0]}"></i>${x[1]}</span>`).join('');
+  $('legend').innerHTML=it.map(x=>`<span><i style="background:${x[0]}"></i>${x[1]}</span>`).join('');
 }
 function grid(){
   g.clearRect(0,0,W,H);g.lineWidth=1;
   for(let x=-11;x<=11;x++){g.strokeStyle=x===0?'#9FB0D8':'#E8EEF7';g.beginPath();g.moveTo(X(x),0);g.lineTo(X(x),H);g.stroke();}
   for(let y=-7;y<=7;y++){g.strokeStyle=y===0?'#9FB0D8':'#E8EEF7';g.beginPath();g.moveTo(0,Y(y));g.lineTo(W,Y(y));g.stroke();}
-  g.fillStyle='#1C2438';g.font='700 13px "Baloo 2"';g.fillText('O',X(0)+5,Y(0)+15);
+  // số trên trục
+  g.font='10.5px "Be Vietnam Pro"'; g.fillStyle='#8A93A8';
+  for(let x=-11;x<=11;x++){ if(x!==0) g.fillText(x, X(x)-(x<0?8:3), Y(0)+14); }
+  for(let y=-7;y<=7;y++){ if(y!==0) g.fillText(y, X(0)+6, Y(y)+4); }
+  g.fillStyle='#1C2438';g.font='700 13px "Baloo 2"';g.fillText('O',X(0)-14,Y(0)+15);
 }
 function pt(x,y,t){g.beginPath();g.arc(X(x),Y(y),5,0,7);g.fillStyle='#C0392B';g.fill();
-  g.fillStyle='#C0392B';g.font='700 15px "Baloo 2"';g.fillText(t,X(x)+8,Y(y)-8);}
+  g.fillStyle='#C0392B';g.font='700 14px "Baloo 2"';
+  g.fillText(`${t}(${fmtN(x)}; ${fmtN(y)})`,X(x)+8,Y(y)-8);}
 function handle(x,y,color){g.beginPath();g.arc(X(x),Y(y),9,0,7);g.fillStyle='#fff';g.fill();g.lineWidth=4;g.strokeStyle=color;g.stroke();}
 
 function draw(){
@@ -256,11 +356,11 @@ function draw(){
     g.beginPath();g.arc(X(L.I.x),Y(L.I.y),L.R*U,0,7);g.strokeStyle='#2A3B8F';g.lineWidth=3;g.stroke();
     g.fillStyle='rgba(107,123,214,.10)';g.fill();
     L.P.forEach(p=>pt(p.x,p.y,p.n));
-    // center
     g.beginPath();g.arc(X(L.I.x),Y(L.I.y),4,0,7);g.fillStyle='#2A3B8F';g.fill();
-    g.fillStyle='#2A3B8F';g.font='700 15px "Baloo 2"';g.fillText('I',X(L.I.x)+8,Y(L.I.y)+16);
+    g.fillStyle='#2A3B8F';g.font='700 15px "Baloo 2"';
+    g.fillText(`I(${L.I.x}; ${L.I.y})`,X(L.I.x)+8,Y(L.I.y)+18);
     if(L.edit.includes('I'))handle(L.I.x,L.I.y,'#2A3B8F');
-    handle(L.I.x+L.R,L.I.y,'#FF7A1A'); // radius handle
+    handle(L.I.x+L.R,L.I.y,'#FF7A1A');
   } else {
     g.beginPath();
     for(let t=0;t<=Math.PI*2+0.01;t+=0.04){const x=L.a*Math.cos(t),y=L.b*Math.sin(t);if(t===0)g.moveTo(X(x),Y(y));else g.lineTo(X(x),Y(y));}
@@ -273,25 +373,45 @@ function draw(){
 function onCircle(p){return Math.abs(Math.hypot(p.x-L.I.x,p.y-L.I.y)-L.R)<TOLC;}
 function onEllipse(p){return Math.abs(p.x*p.x/(L.a*L.a)+p.y*p.y/(L.b*L.b)-1)<TOLE;}
 function ok(){return L.mode==='circle'?L.P.every(onCircle):L.P.every(onEllipse);}
+
+/* (x − a)² viết gọn khi toạ độ tâm bằng 0, đúng dấu khi âm */
+function sqTerm(v,c){
+  if(c===0) return v+'²';
+  return `(${v} ${c<0?'+':'−'} ${Math.abs(c)})²`;
+}
+
 function readout(){
   let main='',rows=[];
+  const live=L.live, HID='<span style="color:#FFB169">?</span>';
   if(L.mode==='circle'){
     const a=L.I.x,b=L.I.y;
-    main=`(x ${a<0?'+ '+(-a):'− '+a})² + (y ${b<0?'+ '+(-b):'− '+b})² = ${L.R*L.R}`;
+    main=`${sqTerm('x',a)} + ${sqTerm('y',b)} = ${L.R*L.R}`;
     rows=[['Tâm I',`(${a}; ${b})`],['Bán kính R',''+L.R]];
-    L.P.forEach(p=>rows.push(['Điểm '+p.n+' '+(onCircle(p)?'✓':'·'),`d(I,${p.n}) = ${Math.hypot(p.x-a,p.y-b).toFixed(2)}`]));
+    L.P.forEach(p=>rows.push(
+      ['Điểm '+p.n+' '+(live?(onCircle(p)?'✓':'·'):''),
+       live?`d(I,${p.n}) = ${Math.hypot(p.x-a,p.y-b).toFixed(2)}`:HID]));
   } else {
-    main=`x²/${(L.a*L.a)} + y²/${(L.b*L.b)} = 1`;
-    const c=Math.sqrt(Math.max(0,L.a*L.a-L.b*L.b));
-    rows=[['Bán trục a',''+L.a],['Bán trục b',''+L.b],['Tiêu cự c = √(a²−b²)',c.toFixed(2)]];
-    L.P.forEach(p=>rows.push(['Điểm '+p.n+' '+(onEllipse(p)?'✓':'·'),`x²/a²+y²/b² = ${(p.x*p.x/(L.a*L.a)+p.y*p.y/(L.b*L.b)).toFixed(2)}`]));
+    const A=L.a*L.a,B=L.b*L.b;
+    main=`x²/${fmtN(A)} + y²/${fmtN(B)} = 1`;
+    rows=[['Bán trục a',''+L.a],['Bán trục b',''+L.b]];
+    // tiêu cự đúng cả khi trục lớn nằm trên Oy
+    if(L.a>L.b) rows.push(['Tiêu cự c = √(a²−b²)', Math.sqrt(A-B).toFixed(2)+' (tiêu điểm trên Ox)']);
+    else if(L.b>L.a) rows.push(['Tiêu cự c = √(b²−a²)', Math.sqrt(B-A).toFixed(2)+' (trục lớn trên Oy)']);
+    else rows.push(['a = b','elip trở thành đường tròn']);
+    L.P.forEach(p=>rows.push(
+      ['Điểm '+p.n+' '+(live?(onEllipse(p)?'✓':'·'):''),
+       live?`x²/a²+y²/b² = ${(p.x*p.x/A+p.y*p.y/B).toFixed(2)}`:HID]));
   }
-  document.getElementById('eqMain').innerHTML=main+(ok()?'  <span class="badge ok">ĐẠT</span>':'  <span class="badge no">chưa</span>');
-  document.getElementById('eqRows').innerHTML=rows.map(r=>`<div class="ln"><span class="k">${r[0]}</span><span class="v">${r[1]}</span></div>`).join('');
+  const badge = live ? (ok()?'<span class="badge ok">ĐẠT</span>':'<span class="badge no">chưa</span>')
+                     : '<span class="badge hid">ẩn — bấm Kiểm tra</span>';
+  $('eqMain').innerHTML=main+'  '+badge;
+  $('eqRows').innerHTML=rows.map(r=>`<div class="ln"><span class="k">${r[0]}</span><span class="v">${r[1]}</span></div>`).join('');
 }
+
+/* ===== Kéo ===== */
 function pos(e){const r=cv.getBoundingClientRect();return {px:(e.clientX-r.left)*W/r.width,py:(e.clientY-r.top)*H/r.height};}
 function nearest(px,py){
-  let best=null,bd=22,cand=[];
+  let best=null,bd=24,cand=[];
   if(L.mode==='circle'){ if(L.edit.includes('I'))cand.push(['I',L.I.x,L.I.y]); cand.push(['R',L.I.x+L.R,L.I.y]); }
   else { cand.push(['a',L.a,0]); cand.push(['b',0,L.b]); }
   cand.forEach(c=>{const d=Math.hypot(X(c[1])-px,Y(c[2])-py);if(d<bd){bd=d;best=c[0];}});
@@ -305,32 +425,185 @@ cv.addEventListener('pointermove',e=>{if(!drag)return;const {px,py}=pos(e);
   else if(drag==='a'){L.a=clamp(r2(Math.abs(gxv)),1,10);}
   else if(drag==='b'){L.b=clamp(r2(Math.abs(gyv)),1,7);}
   draw();});
-cv.addEventListener('pointerup',()=>{if(drag){drag=null;if(ok())win();}});
-function win(){
-  if(SCT_done.has(li))return;
-  SCT_done.add(li);SCTreport();document.getElementById('score').textContent=SCT_done.size;
-  const last=li===LEVELS.length-1;
-  document.getElementById('tEmo').textContent=last?'🏆':'🎉';
-  document.getElementById('tTitle').textContent=last?'Hoàn thành tất cả!':'Chính xác!';
-  document.getElementById('tMsg').textContent=last?'Em đã viết được phương trình đường tròn và elip từ điều kiện thực tế.':'Đường cong đã đi qua đúng các điểm yêu cầu!';
-  const b=document.getElementById('tBtn');b.textContent=last?'Chơi lại từ đầu':'Màn tiếp theo';
-  document.getElementById('toast').classList.remove('fail');document.getElementById('toast').classList.add('show');
+cv.addEventListener('pointerup',()=>{
+  if(drag){ drag=null;
+    if(L.live && ok()){ attempts++; $('shots').textContent=attempts; win(); }
+  }
+});
+
+/* ===== Toast dùng chung (sửa lỗi gán onclick lồng nhau ở bản cũ) ===== */
+function endToast(okFlag,title,msg,btnLabel,btnClass,action,emo){
+  const t=$('toast');
+  t.className='toast show'+(okFlag?'':' fail');
+  $('tEmo').textContent=emo||(okFlag?'🎉':'🤔');
+  $('tTitle').textContent=title;
+  $('tMsg').innerHTML=msg;
+  const b=$('tBtn'); b.textContent=btnLabel; b.className=btnClass;
+  b.onclick=()=>{ t.className='toast'; action(); };
 }
-document.getElementById('tBtn').onclick=()=>{document.getElementById('toast').classList.remove('show');li=(li+1)%LEVELS.length;setLevel(li);};
-document.getElementById('checkBtn').onclick=()=>{ if(ok())win(); else {
-  document.getElementById('tEmo').textContent='🤔';document.getElementById('tTitle').textContent='Chưa đúng';
-  document.getElementById('tMsg').textContent='Hãy kéo để mỗi điểm yêu cầu nằm trên đường cong (xuất hiện dấu ✓).';
-  document.getElementById('tBtn').textContent='Thử tiếp';document.getElementById('toast').classList.add('show','fail');
-  document.getElementById('tBtn').onclick=()=>{document.getElementById('toast').classList.remove('show','fail');
-    document.getElementById('tBtn').onclick=()=>{document.getElementById('toast').classList.remove('show');li=(li+1)%LEVELS.length;setLevel(li);};};
-}};
-document.getElementById('resetBtn').onclick=()=>setLevel(li);
+
+/* ===== Bộ giải tìm nghiệm mẫu (cho gợi ý thích ứng) ===== */
+function circleSolution(){
+  if(L.fixI){
+    const p=L.P[0], d=Math.hypot(p.x-L.I.x,p.y-L.I.y);
+    return {x:L.I.x,y:L.I.y,R:Math.round(d)};
+  }
+  for(let iy=-6;iy<=6;iy++)for(let ix=-9;ix<=9;ix++){
+    const d0=Math.hypot(L.P[0].x-ix,L.P[0].y-iy), R=Math.round(d0);
+    if(R<1||R>10||Math.abs(d0-R)>1e-9) continue;
+    if(L.P.every(p=>Math.abs(Math.hypot(p.x-ix,p.y-iy)-R)<1e-9)) return {x:ix,y:iy,R};
+  }
+  return null;
+}
+function ellipseSolution(){
+  for(let ia=2;ia<=20;ia++)for(let ib=2;ib<=14;ib++){
+    const a=ia/2,b=ib/2;
+    if(L.P.every(p=>Math.abs(p.x*p.x/(a*a)+p.y*p.y/(b*b)-1)<TOLE)) return {a,b};
+  }
+  return null;
+}
+function hint(){
+  if(L.mode==='circle'){
+    const s=circleSolution();
+    const concept = L.P.length>=2
+      ? ' Nhớ: tâm cách đều các điểm nên nằm trên trung trực của mỗi đoạn nối hai điểm.'
+      : ' Nhớ: R = khoảng cách IA = √((x_A−x_I)² + (y_A−y_I)²).';
+    return concept + (s?` Thử I(${s.x}; ${s.y}), R = ${s.R}.`:'');
+  } else {
+    const s=ellipseSolution();
+    return ' Thay toạ độ điểm vào x²/a² + y²/b² = 1 rồi giải.' + (s?` Thử a = ${s.a}, b = ${s.b}.`:'');
+  }
+}
+
+/* ===== Câu hỏi củng cố ===== */
+function makeQuiz(){
+  let t;
+  if(li===0){
+    const p=L.P[0], R=Math.round(Math.hypot(p.x-L.I.x,p.y-L.I.y));
+    t={q:`Đường tròn tâm I(${L.I.x}; ${L.I.y}) đi qua ${p.n}(${p.x}; ${p.y}) có bán kính bằng bao nhiêu?`,
+      correct:''+R,
+      opts:[''+R, ''+(Math.abs(p.x)+Math.abs(p.y)), ''+(R*R), ''+Math.max(Math.abs(p.x),Math.abs(p.y))],
+      exp:`R = I${p.n} = √((${p.x} − ${L.I.x})² + (${p.y} − ${L.I.y})²) = ${R}. Đây là công thức khoảng cách giữa hai điểm.`};
+  } else if(li===1){
+    t={q:'Tâm của mọi đường tròn đi qua hai điểm A, B luôn nằm trên đường nào?',
+      correct:'Đường trung trực của đoạn AB',
+      opts:['Đường trung trực của đoạn AB','Đường thẳng AB','Đường tròn đường kính AB','Trục hoành Ox'],
+      exp:'Vì IA = IB = R nên tâm I cách đều A và B, tức I thuộc trung trực của AB. Đây là chìa khoá dựng đường tròn qua nhiều điểm.'};
+  } else if(li===2){
+    const a=L.I.x,b=L.I.y,R2=L.R*L.R;
+    const eq=(sa,sb,r)=>`${sqTerm('x',sa)} + ${sqTerm('y',sb)} = ${r}`;
+    t={q:`Đường tròn tâm I(${a}; ${b}), bán kính R = ${L.R} có phương trình nào?`,
+      correct:eq(a,b,R2),
+      opts:[eq(a,b,R2), eq(-a,-b,R2), eq(a,b,L.R), eq(b,a,R2)],
+      exp:`Dạng chuẩn: (x − x_I)² + (y − y_I)² = R². Chú ý: TRỪ toạ độ tâm và vế phải là R² = ${R2}, không phải R.`};
+  } else if(li===3){
+    const M=2*Math.max(L.a,L.b);
+    t={q:`Elip x²/${fmtN(L.a*L.a)} + y²/${fmtN(L.b*L.b)} = 1 vừa dựng có độ dài trục lớn bằng bao nhiêu?`,
+      correct:fmtN(M),
+      opts:[fmtN(M), fmtN(Math.max(L.a,L.b)), fmtN(L.a*L.b), fmtN(L.a+L.b)],
+      exp:`Trục lớn có độ dài 2·max(a, b) = ${fmtN(M)}; hai đầu mút là hai đỉnh của elip trên trục lớn.`};
+  } else {
+    const A=L.a*L.a,B=L.b*L.b;
+    const big=Math.max(A,B),small=Math.min(A,B);
+    const c=Math.sqrt(big-small);
+    t={q:`Elip x²/${fmtN(A)} + y²/${fmtN(B)} = 1 vừa dựng có tiêu cự c bằng bao nhiêu (làm tròn 2 chữ số)?`,
+      correct:c.toFixed(2),
+      opts:[c.toFixed(2), Math.sqrt(A+B).toFixed(2), Math.abs(L.a-L.b).toFixed(2), (Math.max(L.a,L.b)/2).toFixed(2)],
+      exp:`c = √(a² − b²) với a là bán trục LỚN: c = √(${fmtN(big)} − ${fmtN(small)}) ≈ ${c.toFixed(2)}. Hai tiêu điểm nằm trên trục lớn, cách tâm một khoảng c.`};
+  }
+  t.opts=shuffle([...new Set(t.opts)]);
+  return t;
+}
+function showQuiz(onDone,nextLabel){
+  const qz=makeQuiz(); quizAsked++;
+  const q=$('quiz'), box=$('quizBox');
+  box.innerHTML=`<div class="emo">✏️</div>
+    <h2 style="color:var(--indigo)">Câu hỏi củng cố</h2>
+    <p style="margin-bottom:0">${qz.q}</p>
+    <div class="qopts"></div>
+    <div class="qexp" style="display:none"></div>
+    <button class="next" style="display:none">${nextLabel}</button>`;
+  const wrap=box.querySelector('.qopts');
+  const expEl=box.querySelector('.qexp');
+  const nextBtn=box.querySelector('button.next');
+  qz.opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='qopt'; b.textContent=o;
+    b.onclick=()=>{
+      wrap.querySelectorAll('button').forEach(x=>{
+        x.disabled=true;
+        if(x.textContent===qz.correct) x.classList.add('correct');
+      });
+      const okA=(o===qz.correct);
+      if(!okA){ b.classList.add('wrong'); SFX.buzz(); }
+      else{ quizCorrect++; score+=50; $('score').textContent=score; SFX.ding(); }
+      expEl.style.display='block';
+      expEl.innerHTML=(okA?'✅ Chính xác! +50 điểm. ':'❌ Chưa đúng. ')+qz.exp;
+      nextBtn.style.display='block';
+      SCTreport();
+    };
+    wrap.appendChild(b);
+  });
+  nextBtn.onclick=()=>{ q.className='toast'; onDone(); };
+  q.className='toast show';
+}
+
+function finalToast(){
+  const time=window.SCT_elapsed?fmtT(window.SCT_elapsed()):'—';
+  endToast(true,'Hoàn thành tất cả!',
+    `Em đã viết được phương trình đường tròn và elip từ điều kiện thực tế: ${score} điểm · ${starsTotal}/${LEVELS.length*3} ⭐ · củng cố đúng ${quizCorrect}/${quizAsked} · thời gian ${time}.`,
+    'Chơi lại từ đầu','next',
+    ()=>{ score=0; $('score').textContent=0; setLevel(0); },'🏆');
+}
+
+function win(){
+  const s = attempts<=1 ? 3 : attempts<=3 ? 2 : 1;
+  levelStars[li]=Math.max(s,levelStars[li]||0);
+  starsTotal=Object.values(levelStars).reduce((a,b)=>a+b,0);
+  $('stars').textContent=starsTotal;
+  if(!clearedOnce.has(li)){ score+=100; $('score').textContent=score; clearedOnce.add(li); }
+  SCT_done.add(li); SCTreport();
+  SFX.win(); confetti();
+  const last=li===LEVELS.length-1;
+  const goNext=()=>{ last ? finalToast() : setLevel(li+1); };
+  const msg=`Đường cong đi qua đúng các điểm sau ${attempts} lượt — đạt ${'⭐'.repeat(s)}.`;
+  if(quizDone.has(li)){
+    endToast(true,'Chính xác!',msg, last?'Xem tổng kết 🏆':'Màn tiếp theo','next',goNext);
+  } else {
+    quizDone.add(li);
+    endToast(true,'Chính xác!',msg,'Câu hỏi củng cố ✏️','next',
+      ()=>showQuiz(goNext, last?'Xem tổng kết 🏆':'Màn tiếp theo'));
+  }
+}
+
+$('checkBtn').onclick=()=>{
+  attempts++; $('shots').textContent=attempts;
+  if(ok()){ win(); return; }
+  SFX.fail();
+  // phản hồi cụ thể: hiện giá trị thật của lượt vừa kiểm tra
+  let msg;
+  if(L.mode==='circle'){
+    msg='Lượt này: '+L.P.map(p=>`d(I,${p.n}) = ${Math.hypot(p.x-L.I.x,p.y-L.I.y).toFixed(2)}`).join(', ')
+        +`; còn R = ${L.R}. Cần mọi khoảng cách bằng đúng R.`;
+  } else {
+    msg='Lượt này: '+L.P.map(p=>`tại ${p.n}: x²/a²+y²/b² = ${(p.x*p.x/(L.a*L.a)+p.y*p.y/(L.b*L.b)).toFixed(2)}`).join(', ')
+        +'. Cần mỗi giá trị bằng đúng 1.';
+  }
+  if(attempts>=3) msg+=hint();
+  endToast(false,'Chưa đúng',msg,'Thử tiếp','retry',()=>{});
+};
+$('resetBtn').onclick=()=>setLevel(li);
+window.addEventListener('keydown',e=>{
+  if(e.key==='Enter' && !$('toast').classList.contains('show') && !$('quiz').classList.contains('show'))
+    $('checkBtn').click();
+});
+window.addEventListener('resize',()=>{fitCanvas();draw();});
+
+$('lvlMax').textContent=LEVELS.length;
+$('starsMax').textContent=LEVELS.length*3;
+fitCanvas();
 setLevel(0);
-
 </script>
-
-  <footer>Một hoạt động dạy học môn Toán · điều khiển trực tiếp đối tượng toán học.</footer>
-</div>
 
 <script>
 /* ==== Cải tiến lớp 10: đồng hồ đo thời gian chơi ==== */
@@ -339,7 +612,7 @@ setLevel(0);
   function fmt(s){var m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0');}
   var chip=document.createElement('span');
   chip.className='sct-timer';
-  chip.innerHTML='\u23F1 <b id="sctClock">0:00</b>';
+  chip.innerHTML='⏱ <b id="sctClock">0:00</b>';
   function mount(){
     var host=document.querySelector('.hud')||document.querySelector('.top');
     if(host){ host.appendChild(chip); }
