@@ -43,18 +43,22 @@
   .mission .ctx{font-size:26px;line-height:1}
   .mission .txt{font-size:15px}
   .mission .txt b{color:var(--tangerine)}
+  .mission .txt .expert{color:#C95C09;font-weight:600}
   .stage{
     position:relative;background:#fff;border:1px solid var(--line);
     border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -18px rgba(42,59,143,.4);
   }
-  canvas{display:block;width:100%;height:auto;touch-action:none}
+  canvas{display:block;width:100%;height:auto;touch-action:none;cursor:grab}
+  canvas:active{cursor:grabbing}
   .hud{
-    position:absolute;top:10px;left:10px;display:flex;gap:8px;
-    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px;
+    position:absolute;top:10px;left:10px;display:flex;gap:8px;flex-wrap:wrap;
+    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px;z-index:10;
   }
   .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);
     border-radius:999px;padding:4px 12px;color:var(--indigo)}
   .chip b{color:var(--tangerine)}
+  button.chip{cursor:pointer;flex:none;font-size:13px;box-shadow:none;
+    font-family:"Baloo 2",sans-serif;font-weight:600}
   .panel{
     display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;
   }
@@ -62,26 +66,11 @@
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
   .card h3{margin:0 0 12px;font-family:"Baloo 2",sans-serif;font-weight:600;
     font-size:15px;color:var(--indigo);display:flex;align-items:center;gap:7px}
-  .ctrl{margin-bottom:16px}
-  .ctrl label{display:flex;justify-content:space-between;font-size:13px;
-    font-weight:600;margin-bottom:7px;color:var(--ink)}
-  .ctrl label .val{font-family:"Baloo 2",sans-serif;color:var(--tangerine)}
-  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;
-    border-radius:999px;background:linear-gradient(90deg,var(--indigo-soft),var(--indigo));
-    outline:none}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;
-    border-radius:50%;background:#fff;border:4px solid var(--tangerine);cursor:pointer;
-    box-shadow:0 2px 6px rgba(0,0,0,.2)}
-  input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;
-    background:#fff;border:4px solid var(--tangerine);cursor:pointer}
   .eq{
     background:#0F1530;color:#E8ECFF;border-radius:12px;padding:14px 16px;
     font-family:"Baloo 2",sans-serif;
   }
-  .eq .main{font-size:clamp(18px,4.5vw,24px);font-weight:600;letter-spacing:.3px}
-  .eq .main .a{color:#FFB169}.eq .main .h{color:#86F0C0}.eq .main .k{color:#8FB0FF}
-  .eq .row{display:flex;gap:18px;margin-top:10px;font-size:13px;color:#AAB4E0;flex-wrap:wrap}
-  .eq .row span b{color:#fff;font-weight:600}
+  .eq .main{font-size:20px;font-weight:600;letter-spacing:.3px}
   .actions{display:flex;gap:10px;margin-top:14px}
   button{font-family:"Baloo 2",sans-serif;font-weight:600;font-size:16px;border:none;
     border-radius:12px;padding:13px 18px;cursor:pointer;flex:1;transition:transform .08s ease,filter .15s}
@@ -92,21 +81,55 @@
   .reset{background:#EEF0F7;color:var(--indigo);max-width:120px}
   .toast{
     position:absolute;inset:0;display:none;align-items:center;justify-content:center;
-    background:rgba(15,21,48,.55);backdrop-filter:blur(2px);
+    background:rgba(15,21,48,.55);backdrop-filter:blur(2px);z-index:20;
   }
   .toast.show{display:flex}
   .toast .box{background:#fff;border-radius:18px;padding:26px 28px;text-align:center;
-    max-width:330px;box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
+    max-width:360px;width:calc(100% - 40px);box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
   .toast .emo{font-size:48px}
   .toast h2{font-family:"Baloo 2",sans-serif;margin:6px 0 4px;color:var(--emerald);font-size:24px}
   .toast.fail h2{color:var(--tangerine)}
-  .toast p{margin:0 0 16px;color:var(--muted);font-size:14px}
+  .toast p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.55}
   .toast button{flex:none;width:100%}
   .next{background:var(--emerald);color:#fff;box-shadow:0 6px 0 #15784E}
   .retry{background:var(--indigo);color:#fff;box-shadow:0 6px 0 #1C2A6B}
   .tip{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5}
   .tip b{color:var(--indigo)}
   footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+
+  .readout{display:flex;flex-direction:column;gap:7px}
+  .readout .ln{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+  .readout .ln .k{color:#AAB4E0}.readout .ln .v{color:#fff;font-weight:600}
+  .badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
+  .ok{background:#1FA36B;color:#fff}.no{background:#FF7A1A;color:#fff}
+  .hid{background:#4A5578;color:#DDE3FF}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+  /* ==== KÝ HIỆU VECTƠ: mũi tên vẽ bằng CSS, không dùng U+20D7 (font thiếu glyph → ô vuông) ==== */
+  .vec{display:inline-block;position:relative;font-style:italic;font-weight:700;
+    padding:0 1px;margin-right:1px;line-height:1.35}
+  .vec::before{content:"→";position:absolute;left:50%;transform:translateX(-50%);
+    top:-0.68em;font-size:.58em;font-style:normal;line-height:1}
+
+  /* ==== Câu hỏi củng cố ==== */
+  .qopts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 6px}
+  .qopt{background:#EEF0F7;color:var(--ink);font-size:14px;padding:11px 8px;
+    border-radius:10px;box-shadow:none}
+  .qopt.correct{background:var(--emerald);color:#fff}
+  .qopt.wrong{background:#E85D5D;color:#fff}
+  .qopt:disabled{cursor:default;opacity:.92}
+  .qexp{font-size:13px;color:var(--indigo);background:#F1F4FF;border-radius:10px;
+    padding:10px 12px;margin:10px 0 14px;text-align:left;line-height:1.5}
+
+  /* ==== Pháo giấy ==== */
+  .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:15}
+  .confetti i{position:absolute;top:-16px;width:8px;height:13px;border-radius:2px;
+    opacity:.95;animation:cfall linear forwards}
+  @keyframes cfall{
+    0%{transform:translateY(0) rotate(0deg)}
+    100%{transform:translateY(640px) rotate(660deg);opacity:.7}
+  }
 
 /* ==== Cải tiến: dải nhận diện cấp lớp + đồng hồ ==== */
 :root{--gradec:#2A3B8F;--grade2:#FF7A1A}
@@ -127,15 +150,6 @@
 
 .wrap{position:relative}
 </style>
-<style>
-  .readout{display:flex;flex-direction:column;gap:7px}
-  .readout .ln{display:flex;justify-content:space-between;gap:12px;font-size:14px}
-  .readout .ln .k{color:#AAB4E0}.readout .ln .v{color:#fff;font-weight:600}
-  .badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
-  .ok{background:#1FA36B;color:#fff}.no{background:#FF7A1A;color:#fff}
-  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
-  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-</style>
 </head>
 <body>
 <div class="wrap">
@@ -154,10 +168,13 @@
   </div>
   <div class="stage">
     <div class="hud">
-      <span class="chip">Màn <b id="lvl">1</b>/5</span>
-      <span class="chip">Đã qua <b id="score">0</b></span>
+      <span class="chip">Màn <b id="lvl">1</b>/<span id="lvlMax">5</span></span>
+      <span class="chip">Điểm <b id="score">0</b></span>
+      <span class="chip">⭐ <b id="stars">0</b>/<span id="starsMax">15</span></span>
+      <span class="chip">Lượt KT <b id="shots">0</b></span>
+      <button class="chip" id="sndBtn" title="Bật/tắt âm thanh">🔊</button>
     </div>
-    <canvas id="cv" width="900" height="560"></canvas>
+    <canvas id="cv" width="900" height="560" role="img" aria-label="Lưới toạ độ với các vectơ kéo được"></canvas>
     <div class="toast" id="toast">
       <div class="box">
         <div class="emo" id="tEmo">🎉</div>
@@ -166,6 +183,7 @@
         <button id="tBtn" class="next">Màn tiếp theo</button>
       </div>
     </div>
+    <div class="toast" id="quiz"><div class="box" id="quizBox"></div></div>
   </div>
   <div class="panel">
     <div class="card">
@@ -180,57 +198,167 @@
     <div class="card">
       <h3>📐 Bảng theo dõi</h3>
       <div class="eq">
-        <div class="main" id="eqMain" style="font-size:20px">—</div>
+        <div class="main" id="eqMain">—</div>
         <div class="readout" id="eqRows" style="margin-top:10px"></div>
       </div>
+      <div class="tip" id="modeTip"></div>
     </div>
   </div>
 
-<script>
+  <footer>Một hoạt động dạy học môn Toán · điều khiển trực tiếp đối tượng toán học.</footer>
+</div>
 
-/* ===== Báo kết quả về app Luyện tập (postMessage) ===== */
+<script>
+/* ===================================================================
+   CẤU HÌNH BÁO ĐIỂM VỀ APP LUYỆN TẬP
+   Khi triển khai, đặt origin thật của App Luyện Tập, ví dụ:
+   const SCT_APP_ORIGIN = 'https://sanchoitoanhoc.web.app';
+   Mặc định dùng origin của trang; mở bằng file:// tự hạ về '*'.
+=================================================================== */
+const SCT_APP_ORIGIN = window.SCT_APP_ORIGIN || window.location.origin;
+const SCT_TARGET = /^https?:/i.test(SCT_APP_ORIGIN) ? SCT_APP_ORIGIN : '*';
+
+const W=900,H=560,U=46,cx=W/2,cy=H/2;
+const cv=document.getElementById('cv'),g=cv.getContext('2d');
+const $=id=>document.getElementById(id);
+const X=v=>cx+v*U, Y=v=>cy-v*U;
+function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const fmtT=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+
+/* ==== Ký hiệu vectơ trong HTML: span.vec (mũi tên vẽ bằng CSS) ==== */
+const V=n=>`<span class="vec">${n}</span>`;
+
+/* ==== Ký hiệu vectơ trên canvas: vẽ chữ + mũi tên thủ công ==== */
+function vecText(px,py,tokens,color){
+  g.font='700 16px "Baloo 2",sans-serif'; g.fillStyle=color;
+  let x=px;
+  tokens.forEach(tk=>{
+    const s = tk.v!==undefined ? tk.v : tk.t;
+    const w=g.measureText(s).width;
+    g.fillText(s,x,py);
+    if(tk.v!==undefined){       // gạch mũi tên phía trên chữ
+      g.strokeStyle=color; g.lineWidth=1.6; g.lineCap='round';
+      g.beginPath(); g.moveTo(x+1,py-14); g.lineTo(x+w,py-14); g.stroke();
+      g.beginPath(); g.moveTo(x+w,py-14); g.lineTo(x+w-4,py-17);
+      g.moveTo(x+w,py-14); g.lineTo(x+w-4,py-11); g.stroke();
+    }
+    x+=w+2;
+  });
+}
+const labelVec=(x,y,tokens,color)=>vecText(X(x)+9,Y(y)-9,tokens,color);
+
+/* ===== Âm thanh (Web Audio) ===== */
+const SFX=(function(){
+  let ac=null, muted=false;
+  function ctxA(){
+    if(muted) return null;
+    if(!ac){ try{ ac=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+    if(ac.state==='suspended') ac.resume();
+    return ac;
+  }
+  function tone(f,d,type,t0,vol){
+    const a=ctxA(); if(!a) return;
+    const o=a.createOscillator(),gn=a.createGain();
+    o.type=type||'sine'; o.frequency.value=f;
+    gn.gain.setValueAtTime(vol||.16,a.currentTime+t0);
+    gn.gain.exponentialRampToValueAtTime(.001,a.currentTime+t0+d);
+    o.connect(gn); gn.connect(a.destination);
+    o.start(a.currentTime+t0); o.stop(a.currentTime+t0+d+.05);
+  }
+  return {
+    win(){ [523,659,784,1047].forEach((f,i)=>tone(f,.2,'sine',i*.095,.18)); },
+    fail(){ tone(185,.22,'sawtooth',0,.1); tone(140,.3,'sawtooth',.09,.1); },
+    ding(){ tone(880,.15,'sine',0,.16); tone(1175,.2,'sine',.08,.14); },
+    buzz(){ tone(160,.25,'square',0,.08); },
+    toggle(){ muted=!muted; return muted; }
+  };
+})();
+$('sndBtn').addEventListener('click',()=>{ $('sndBtn').textContent = SFX.toggle() ? '🔇' : '🔊'; });
+
+/* ===== Pháo giấy ===== */
+function confetti(){
+  const box=document.createElement('div'); box.className='confetti';
+  const colors=['#FF7A1A','#2A3B8F','#1FA36B','#FFC94D','#6B7BD6','#E85D5D'];
+  for(let i=0;i<38;i++){
+    const p=document.createElement('i');
+    p.style.left=(Math.random()*100)+'%';
+    p.style.background=colors[i%colors.length];
+    p.style.animationDuration=(1+Math.random()*0.9)+'s';
+    p.style.animationDelay=(Math.random()*0.35)+'s';
+    box.appendChild(p);
+  }
+  document.querySelector('.stage').appendChild(box);
+  setTimeout(()=>box.remove(),2300);
+}
+
+/* ===== Các màn =====
+   live:true  → bảng theo dõi hiện KẾT QUẢ tức thì (màn làm quen)
+   live:false → kết quả bị ẩn (dấu ?), phải TÍNH rồi bấm Kiểm tra   */
+const LEVELS=[
+ {mode:'sum',emoji:'🚀',live:true,
+  text:`Ghép <b>hai lực đẩy</b> ${V('u')} và ${V('v')} sao cho tổng ${V('u')} + ${V('v')} đưa phi thuyền tới đúng trạm đích T.`,
+  u:{x:1,y:0},v:{x:0,y:1},T:{x:4,y:3},edit:['u','v']},
+ {mode:'find',emoji:'🛰️',live:false,
+  text:`Đã biết lực ${V('u')}. Tìm lực <b>${V('v')}</b> còn lại để ${V('u')} + ${V('v')} đưa tàu tới T. Đây chính là phép <b>hiệu</b>: ${V('v')} = ${V('OT')} − ${V('u')}.`,
+  u:{x:3,y:-1},v:{x:0,y:1},T:{x:2,y:4},edit:['v']},
+ {mode:'dot',emoji:'⚙️',live:false,
+  text:`Chỉnh vectơ <b>${V('b')}</b> để <b>tích vô hướng</b> ${V('a')}·${V('b')} = 10. (${V('a')}·${V('b')} = a₁b₁ + a₂b₂)`,
+  a:{x:3,y:1},b:{x:1,y:1},K:10,edit:['b']},
+ {mode:'perp',emoji:'📐',live:false,
+  text:`Đưa vectơ <b>${V('b')}</b> vuông góc với ${V('a')}. Hai vectơ vuông góc khi ${V('a')}·${V('b')} = 0 (${V('b')} ≠ ${V('0')}).`,
+  a:{x:2,y:3},b:{x:1,y:0},edit:['b']},
+ {mode:'work',emoji:'🏋️',live:false,
+  text:`Công của lực: A = ${V('F')}·${V('d')}. Vật dịch chuyển theo ${V('d')}. Chỉnh lực <b>${V('F')}</b> để công A = 12 (đơn vị công).`,
+  d:{x:4,y:0},F:{x:1,y:2},K:12,edit:['F']},
+];
+
+let li=0, L=null, drag=null;
+let attempts=0, score=0, levelStars={}, starsTotal=0;
+let quizCorrect=0, quizAsked=0;
+const clearedOnce=new Set(), quizDone=new Set();
+
+/* ===== Báo kết quả về App Luyện Tập (origin giới hạn) ===== */
 const SCT_done=new Set();
 function SCTreport(){
   var total=LEVELS.length, cleared=SCT_done.size;
   var percent=Math.round(cleared/total*100);
-  var payload={source:'SCT_GAME',type:'RESULT',game:'vecto',percent:percent,stars:cleared,starsMax:total,detail:cleared+'/'+total+' màn hoàn thành'};
-  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,'*'); }catch(e){}
-  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
+  var payload={source:'SCT_GAME',type:'RESULT',game:'vecto',
+    percent:percent, stars:starsTotal, starsMax:total*3,
+    timeSec:(window.SCT_elapsed?window.SCT_elapsed():0),
+    quizCorrect:quizCorrect, quizAsked:quizAsked,
+    detail:cleared+'/'+total+' màn · '+starsTotal+'/'+(total*3)+' sao · củng cố đúng '+quizCorrect+'/'+quizAsked};
+  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,SCT_TARGET); }catch(e){}
+  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,SCT_TARGET); }catch(e){}
 }
-const W=900,H=560,U=46,cx=W/2,cy=H/2;
-const cv=document.getElementById('cv'),g=cv.getContext('2d');
-const X=v=>cx+v*U, Y=v=>cy-v*U;
-function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
 
-const LEVELS=[
- {mode:'sum',emoji:'🚀',text:'Ghép <b>hai lực đẩy</b> u⃗ và v⃗ sao cho tổng u⃗ + v⃗ đưa phi thuyền tới đúng trạm đích T.',
-  u:{x:1,y:0},v:{x:0,y:1},T:{x:4,y:3},edit:['u','v']},
- {mode:'find',emoji:'🛰️',text:'Đã biết lực u⃗. Tìm lực <b>v⃗</b> còn lại để u⃗ + v⃗ đưa tàu tới T. Đây chính là phép <b>hiệu</b>: v⃗ = OT⃗ − u⃗.',
-  u:{x:3,y:-1},v:{x:0,y:1},T:{x:2,y:4},edit:['v']},
- {mode:'dot',emoji:'⚙️',text:'Chỉnh vectơ <b>b⃗</b> để <b>tích vô hướng</b> a⃗·b⃗ = 10. (a⃗·b⃗ = a₁b₁ + a₂b₂)',
-  a:{x:3,y:1},b:{x:1,y:1},K:10,edit:['b']},
- {mode:'perp',emoji:'📐',text:'Đưa vectơ <b>b⃗</b> vuông góc với a⃗. Hai vectơ vuông góc khi a⃗·b⃗ = 0 (b⃗ ≠ 0⃗).',
-  a:{x:2,y:3},b:{x:1,y:0},edit:['b']},
- {mode:'work',emoji:'🏋️',text:'Công của lực: A = F⃗·d⃗. Vật dịch chuyển theo d⃗. Chỉnh lực <b>F⃗</b> để công A = 12 (đơn vị công).',
-  d:{x:4,y:0},F:{x:1,y:2},K:12,edit:['F']},
-];
-let li=0, L=null, drag=null;
+/* ===== Canvas sắc nét trên màn hình retina ===== */
+function fitCanvas(){
+  const dpr=window.devicePixelRatio||1;
+  cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+  g.setTransform(dpr,0,0,dpr,0,0);
+}
 
 function setLevel(i){
+  li=i;
   L=JSON.parse(JSON.stringify(LEVELS[i]));
-  document.getElementById('ctxEmoji').textContent=L.emoji;
-  document.getElementById('ctxText').innerHTML=L.text;
-  document.getElementById('lvl').textContent=i+1;
-  document.getElementById('score').textContent=SCT_done.size;
+  attempts=0; $('shots').textContent=0;
+  $('ctxEmoji').textContent=L.emoji;
+  $('ctxText').innerHTML=L.text + (L.live ? '' :
+    ' <span class="expert">· Chế độ tính trước: kết quả bị ẩn — hãy tính rồi bấm Kiểm tra!</span>');
+  $('lvl').textContent=i+1;
+  $('modeTip').innerHTML = L.live
+    ? '<b>Màn làm quen:</b> kết quả hiện ngay khi kéo — quan sát quy tắc cộng toạ độ.'
+    : '<b>Chế độ tính trước:</b> ô kết quả hiển thị "?". Tính trên giấy, chỉnh vectơ rồi bấm <b>Kiểm tra</b>. Càng ít lượt càng nhiều ⭐ (1 lượt = ★★★, 2–3 lượt = ★★).';
   legend();
   draw();
 }
 function legend(){
   let items=[];
-  if(L.mode==='sum'||L.mode==='find'){items=[['#2A3B8F','u⃗'],['#FF7A1A','v⃗'],['#1FA36B','u⃗+v⃗'],['#C0392B','đích T']];}
-  else if(L.mode==='work'){items=[['#2A3B8F','F⃗ (lực)'],['#6A7184','d⃗ (dịch chuyển)']];}
-  else{items=[['#2A3B8F','a⃗'],['#FF7A1A','b⃗']];}
-  document.getElementById('legend').innerHTML=items.map(x=>`<span><i style="background:${x[0]}"></i>${x[1]}</span>`).join('');
+  if(L.mode==='sum'||L.mode==='find'){items=[['#2A3B8F',V('u')],['#FF7A1A',V('v')],['#1FA36B',V('u')+' + '+V('v')],['#C0392B','đích T']];}
+  else if(L.mode==='work'){items=[['#2A3B8F',V('F')+' (lực)'],['#6A7184',V('d')+' (dịch chuyển)']];}
+  else{items=[['#2A3B8F',V('a')],['#FF7A1A',V('b')]];}
+  $('legend').innerHTML=items.map(x=>`<span><i style="background:${x[0]}"></i>${x[1]}</span>`).join('');
 }
 function arrow(x1,y1,x2,y2,color,lw){
   g.strokeStyle=color;g.fillStyle=color;g.lineWidth=lw||3;
@@ -245,32 +373,38 @@ function handle(x,y,color){
   g.beginPath();g.arc(X(x),Y(y),9,0,7);g.fillStyle='#fff';g.fill();
   g.lineWidth=4;g.strokeStyle=color;g.stroke();
 }
-function label(x,y,t,color){g.fillStyle=color;g.font='700 16px "Baloo 2",sans-serif';g.fillText(t,X(x)+8,Y(y)-8);}
 
 function draw(){
   g.clearRect(0,0,W,H);
-  // grid
+  // lưới + số trên trục (đọc được toạ độ)
   g.lineWidth=1;
   for(let x=-9;x<=9;x++){g.strokeStyle=x===0?'#9FB0D8':'#E4EBF6';g.beginPath();g.moveTo(X(x),0);g.lineTo(X(x),H);g.stroke();}
   for(let y=-6;y<=6;y++){g.strokeStyle=y===0?'#9FB0D8':'#E4EBF6';g.beginPath();g.moveTo(0,Y(y));g.lineTo(W,Y(y));g.stroke();}
-  g.fillStyle='#1C2438';g.font='700 14px "Baloo 2"';g.fillText('O',X(0)+6,Y(0)+16);
+  g.font='10.5px "Be Vietnam Pro"'; g.fillStyle='#8A93A8';
+  for(let x=-9;x<=9;x++){ if(x!==0) g.fillText(x, X(x)-(x<0?8:3), Y(0)+14); }
+  for(let y=-6;y<=6;y++){ if(y!==0) g.fillText(y, X(0)+6, Y(y)+4); }
+  g.fillStyle='#1C2438';g.font='700 14px "Baloo 2"';g.fillText('O',X(0)-14,Y(0)+16);
+
   const m=L.mode;
   if(m==='sum'||m==='find'){
     const s={x:L.u.x+L.v.x,y:L.u.y+L.v.y};
-    g.setLineDash([6,5]);arrow(0,0,s.x,s.y,'#1FA36B',3);g.setLineDash([]);label(s.x,s.y,'u⃗+v⃗','#1FA36B');
-    arrow(0,0,L.u.x,L.u.y,'#2A3B8F',3.5);label(L.u.x,L.u.y,'u⃗','#2A3B8F');
-    arrow(0,0,L.v.x,L.v.y,'#FF7A1A',3.5);label(L.v.x,L.v.y,'v⃗','#FF7A1A');
+    g.setLineDash([6,5]);arrow(0,0,s.x,s.y,'#1FA36B',3);g.setLineDash([]);
+    labelVec(s.x,s.y,[{v:'u'},{t:'+'},{v:'v'}],'#1FA36B');
+    arrow(0,0,L.u.x,L.u.y,'#2A3B8F',3.5);labelVec(L.u.x,L.u.y,[{v:'u'}],'#2A3B8F');
+    arrow(0,0,L.v.x,L.v.y,'#FF7A1A',3.5);labelVec(L.v.x,L.v.y,[{v:'v'}],'#FF7A1A');
     g.beginPath();g.arc(X(L.T.x),Y(L.T.y),16,0,7);g.strokeStyle='#C0392B';g.lineWidth=3;g.stroke();
-    g.beginPath();g.arc(X(L.T.x),Y(L.T.y),4,0,7);g.fillStyle='#C0392B';g.fill();label(L.T.x,L.T.y,'T','#C0392B');
+    g.beginPath();g.arc(X(L.T.x),Y(L.T.y),4,0,7);g.fillStyle='#C0392B';g.fill();
+    g.fillStyle='#C0392B';g.font='700 16px "Baloo 2"';
+    g.fillText(`T(${L.T.x}; ${L.T.y})`,X(L.T.x)+18,Y(L.T.y)-10);
     if(L.edit.includes('u'))handle(L.u.x,L.u.y,'#2A3B8F');
     if(L.edit.includes('v'))handle(L.v.x,L.v.y,'#FF7A1A');
   } else if(m==='work'){
-    arrow(0,0,L.d.x,L.d.y,'#6A7184',3.5);label(L.d.x,L.d.y,'d⃗','#6A7184');
-    arrow(0,0,L.F.x,L.F.y,'#2A3B8F',3.5);label(L.F.x,L.F.y,'F⃗','#2A3B8F');
+    arrow(0,0,L.d.x,L.d.y,'#6A7184',3.5);labelVec(L.d.x,L.d.y,[{v:'d'}],'#6A7184');
+    arrow(0,0,L.F.x,L.F.y,'#2A3B8F',3.5);labelVec(L.F.x,L.F.y,[{v:'F'}],'#2A3B8F');
     handle(L.F.x,L.F.y,'#2A3B8F');
   } else {
-    arrow(0,0,L.a.x,L.a.y,'#2A3B8F',3.5);label(L.a.x,L.a.y,'a⃗','#2A3B8F');
-    arrow(0,0,L.b.x,L.b.y,'#FF7A1A',3.5);label(L.b.x,L.b.y,'b⃗','#FF7A1A');
+    arrow(0,0,L.a.x,L.a.y,'#2A3B8F',3.5);labelVec(L.a.x,L.a.y,[{v:'a'}],'#2A3B8F');
+    arrow(0,0,L.b.x,L.b.y,'#FF7A1A',3.5);labelVec(L.b.x,L.b.y,[{v:'b'}],'#FF7A1A');
     handle(L.b.x,L.b.y,'#FF7A1A');
   }
   readout();
@@ -285,63 +419,210 @@ function ok(){
 }
 function readout(){
   const m=L.mode;let main='',rows=[];
-  const vec=(p)=>`(${p.x}; ${p.y})`;
+  const vec=p=>`(${p.x}; ${p.y})`;
+  const HID='<span style="color:#FFB169">?</span>';
+  const live=L.live;
   if(m==='sum'||m==='find'){
     const s={x:L.u.x+L.v.x,y:L.u.y+L.v.y};
-    main=`u⃗ + v⃗ = ${vec(s)}`;
-    rows=[['u⃗',vec(L.u)],['v⃗',vec(L.v)],['Đích OT⃗',vec(L.T)]];
+    main=`${V('u')} + ${V('v')} = ${live?vec(s):HID}`;
+    rows=[[V('u'),vec(L.u)],[V('v'),vec(L.v)],[`Đích ${V('OT')}`,vec(L.T)]];
   } else if(m==='dot'){
-    main=`a⃗·b⃗ = ${dot(L.a,L.b)}`;
-    rows=[['a⃗',vec(L.a)],['b⃗',vec(L.b)],['a⃗·b⃗ = a₁b₁+a₂b₂',`${L.a.x}·${L.b.x}+${L.a.y}·${L.b.y} = ${dot(L.a,L.b)}`],['Mục tiêu','= '+L.K]];
+    main=`${V('a')}·${V('b')} = ${live?dot(L.a,L.b):HID}`;
+    rows=[[V('a'),vec(L.a)],[V('b'),vec(L.b)],
+          [`${V('a')}·${V('b')} = a₁b₁+a₂b₂`, live?`${L.a.x}·${L.b.x}+${L.a.y}·${L.b.y} = ${dot(L.a,L.b)}`:'tự tính nhé!'],
+          ['Mục tiêu','= '+L.K]];
   } else if(m==='perp'){
-    main=`a⃗·b⃗ = ${dot(L.a,L.b)}`;
-    rows=[['a⃗',vec(L.a)],['b⃗',vec(L.b)],['Điều kiện ⊥','a⃗·b⃗ = 0']];
+    main=`${V('a')}·${V('b')} = ${live?dot(L.a,L.b):HID}`;
+    rows=[[V('a'),vec(L.a)],[V('b'),vec(L.b)],['Điều kiện ⊥',`${V('a')}·${V('b')} = 0`]];
   } else {
-    main=`A = F⃗·d⃗ = ${dot(L.F,L.d)}`;
-    rows=[['F⃗',vec(L.F)],['d⃗',vec(L.d)],['A = F₁d₁+F₂d₂',`${L.F.x}·${L.d.x}+${L.F.y}·${L.d.y} = ${dot(L.F,L.d)}`],['Mục tiêu','A = '+L.K]];
+    main=`A = ${V('F')}·${V('d')} = ${live?dot(L.F,L.d):HID}`;
+    rows=[[V('F'),vec(L.F)],[V('d'),vec(L.d)],
+          ['A = F₁d₁+F₂d₂', live?`${L.F.x}·${L.d.x}+${L.F.y}·${L.d.y} = ${dot(L.F,L.d)}`:'tự tính nhé!'],
+          ['Mục tiêu','A = '+L.K]];
   }
-  document.getElementById('eqMain').innerHTML=main+(ok()?'  <span class="badge ok">ĐẠT</span>':'  <span class="badge no">chưa</span>');
-  document.getElementById('eqRows').innerHTML=rows.map(r=>`<div class="ln"><span class="k">${r[0]}</span><span class="v">${r[1]}</span></div>`).join('');
+  const badge = live ? (ok()?'<span class="badge ok">ĐẠT</span>':'<span class="badge no">chưa</span>')
+                     : '<span class="badge hid">ẩn — bấm Kiểm tra</span>';
+  $('eqMain').innerHTML=main+'  '+badge;
+  $('eqRows').innerHTML=rows.map(r=>`<div class="ln"><span class="k">${r[0]}</span><span class="v">${r[1]}</span></div>`).join('');
 }
-// drag
+
+/* ===== Kéo vectơ ===== */
 function pos(e){const r=cv.getBoundingClientRect();return {px:(e.clientX-r.left)*W/r.width,py:(e.clientY-r.top)*H/r.height};}
 function nearest(px,py){
-  let best=null,bd=24;
+  let best=null,bd=26;
   L.edit.forEach(k=>{const p=L[k];const d=Math.hypot(X(p.x)-px,Y(p.y)-py);if(d<bd){bd=d;best=k;}});
   return best;
 }
 cv.addEventListener('pointerdown',e=>{const {px,py}=pos(e);drag=nearest(px,py);if(drag)cv.setPointerCapture(e.pointerId);});
 cv.addEventListener('pointermove',e=>{if(!drag)return;const {px,py}=pos(e);
   L[drag].x=clamp(Math.round((px-cx)/U),-9,9);L[drag].y=clamp(Math.round((cy-py)/U),-6,6);draw();});
-cv.addEventListener('pointerup',e=>{if(drag){drag=null;if(ok())win();}});
-function win(){
-  if(SCT_done.has(li))return;
-  SCT_done.add(li);SCTreport();document.getElementById('score').textContent=SCT_done.size;
-  const last=li===LEVELS.length-1;
-  document.getElementById('tEmo').textContent=last?'🏆':'🎉';
-  document.getElementById('tTitle').textContent=last?'Hoàn thành tất cả!':'Chính xác!';
-  document.getElementById('tMsg').textContent=last?'Em đã làm chủ tổng – hiệu vectơ và tích vô hướng.':'Tổng/điều kiện đã đúng. Sang màn tiếp theo nhé!';
-  const b=document.getElementById('tBtn');b.textContent=last?'Chơi lại từ đầu':'Màn tiếp theo';
-  document.getElementById('toast').classList.add('show');
+cv.addEventListener('pointerup',()=>{
+  if(drag){ drag=null;
+    if(L.live && ok()){ attempts++; $('shots').textContent=attempts; win(); }  // màn làm quen: tự nhận
+  }
+});
+
+/* ===== Toast dùng chung (không lồng onclick — sửa lỗi bản cũ) ===== */
+function endToast(okFlag,title,msg,btnLabel,btnClass,action,emo){
+  const t=$('toast');
+  t.className='toast show'+(okFlag?'':' fail');
+  $('tEmo').textContent=emo||(okFlag?'🎉':'🤔');
+  $('tTitle').textContent=title;
+  $('tMsg').innerHTML=msg;
+  const b=$('tBtn'); b.textContent=btnLabel; b.className=btnClass;
+  b.onclick=()=>{ t.className='toast'; action(); };
 }
-document.getElementById('tBtn').onclick=()=>{document.getElementById('toast').classList.remove('show');
-  li=(li+1)%LEVELS.length;setLevel(li);};
-document.getElementById('checkBtn').onclick=()=>{ if(ok())win(); else {
-  document.getElementById('tEmo').textContent='🤔';document.getElementById('tTitle').textContent='Chưa đúng';
-  document.getElementById('toast').classList.add('fail');
-  document.getElementById('tMsg').textContent='Hãy kéo mũi tên để giá trị ở bảng theo dõi đạt mục tiêu.';
-  document.getElementById('tBtn').textContent='Thử tiếp';
-  document.getElementById('tBtn').onclick=()=>{document.getElementById('toast').classList.remove('show','fail');
-    document.getElementById('tBtn').onclick=()=>{document.getElementById('toast').classList.remove('show');li=(li+1)%LEVELS.length;setLevel(li);};};
-  document.getElementById('toast').classList.add('show');
-}};
-document.getElementById('resetBtn').onclick=()=>setLevel(li);
+
+/* ===== Gợi ý thích ứng (từ lượt kiểm tra thứ 3) ===== */
+function dotExample(a,K){
+  for(let b1=-9;b1<=9;b1++){
+    if(a.y!==0){ const r=K-a.x*b1; if(r%a.y===0 && Math.abs(r/a.y)<=6) return {x:b1,y:r/a.y}; }
+    else if(a.x*b1===K) return {x:b1,y:0};
+  }
+  return null;
+}
+function hint(){
+  const m=L.mode;
+  if(m==='sum'||m==='find'){
+    const s={x:L.u.x+L.v.x,y:L.u.y+L.v.y};
+    if(m==='find') return ` Gợi ý: ${'v'} = OT − u = (${L.T.x} − ${L.u.x}; ${L.T.y} − (${L.u.y})) = (${L.T.x-L.u.x}; ${L.T.y-L.u.y}).`;
+    return ` Gợi ý: tổng hiện là (${s.x}; ${s.y}), đích là (${L.T.x}; ${L.T.y}) — còn thiếu (${L.T.x-s.x}; ${L.T.y-s.y}).`;
+  }
+  if(m==='dot'){ const ex=dotExample(L.a,L.K);
+    return ex?` Gợi ý: cần ${L.a.x}·b₁ + ${L.a.y}·b₂ = ${L.K}; chẳng hạn b = (${ex.x}; ${ex.y}).`
+             :` Gợi ý: cần ${L.a.x}·b₁ + ${L.a.y}·b₂ = ${L.K}.`; }
+  if(m==='perp') return ` Gợi ý: đổi chỗ hai toạ độ của a = (${L.a.x}; ${L.a.y}) và đổi dấu một toạ độ: b = (${L.a.y}; ${-L.a.x}).`;
+  if(m==='work'){ const ex=dotExample(L.d,L.K);
+    return ex?` Gợi ý: cần F₁·${L.d.x} + F₂·${L.d.y} = ${L.K}; chẳng hạn F = (${ex.x}; ${ex.y}).`
+             :''; }
+  return '';
+}
+
+/* ===== Câu hỏi củng cố ===== */
+function makeQuiz(){
+  const m=L.mode, vecs=p=>`(${p.x}; ${p.y})`;
+  let t;
+  if(m==='sum'){
+    const d={x:L.u.x-L.v.x,y:L.u.y-L.v.y};
+    t={q:`Với ${V('u')} = ${vecs(L.u)} và ${V('v')} = ${vecs(L.v)} vừa dùng, hiệu ${V('u')} − ${V('v')} bằng bao nhiêu?`,
+       correct:vecs(d),
+       opts:[vecs(d),vecs({x:L.v.x-L.u.x,y:L.v.y-L.u.y}),vecs({x:L.u.x+L.v.x,y:L.u.y+L.v.y}),vecs({x:L.u.x*L.v.x,y:L.u.y*L.v.y})],
+       exp:`Trừ toạ độ tương ứng: ${V('u')} − ${V('v')} = (${L.u.x} − ${L.v.x}; ${L.u.y} − ${L.v.y}) = ${vecs(d)}.`};
+  } else if(m==='find'){
+    t={q:`Muốn tìm ${V('v')} sao cho ${V('u')} + ${V('v')} = ${V('OT')}, ta thực hiện phép tính nào?`,
+       correct:`${V('v')} = ${V('OT')} − ${V('u')}`,
+       opts:[`${V('v')} = ${V('OT')} − ${V('u')}`,`${V('v')} = ${V('u')} − ${V('OT')}`,`${V('v')} = ${V('OT')} + ${V('u')}`,`${V('v')} = ${V('u')}·${V('OT')}`],
+       exp:`Chuyển vế như với số: ${V('u')} + ${V('v')} = ${V('OT')} ⇒ ${V('v')} = ${V('OT')} − ${V('u')}. Đây chính là ý nghĩa của phép hiệu vectơ.`};
+  } else if(m==='dot'){
+    t={q:`Với ${V('a')} = ${vecs(L.a)}, nếu tăng b₁ thêm 1 đơn vị (giữ nguyên b₂) thì ${V('a')}·${V('b')} thay đổi thế nào?`,
+       correct:`Tăng thêm ${L.a.x}`,
+       opts:[`Tăng thêm ${L.a.x}`,`Tăng thêm ${L.a.y}`,`Không đổi`,`Tăng thêm 1`],
+       exp:`${V('a')}·${V('b')} = a₁b₁ + a₂b₂ nên khi b₁ tăng 1, tích vô hướng tăng đúng a₁ = ${L.a.x}.`};
+  } else if(m==='perp'){
+    const a=L.a;
+    t={q:`Vectơ nào sau đây vuông góc với ${V('a')} = ${vecs(a)}?`,
+       correct:vecs({x:a.y,y:-a.x}),
+       opts:[vecs({x:a.y,y:-a.x}),vecs(a),vecs({x:a.y,y:a.x}),vecs({x:-a.x,y:-a.y})],
+       exp:`Kiểm tra bằng tích vô hướng: ${a.x}·${a.y} + ${a.y}·(${-a.x}) = 0 ✓. Quy tắc nhanh: đổi chỗ hai toạ độ, đổi dấu một toạ độ.`};
+  } else {
+    t={q:`Vật dịch chuyển theo ${V('d')} = ${vecs(L.d)} (nằm ngang). Thành phần thẳng đứng F₂ của lực đóng góp bao nhiêu vào công A?`,
+       correct:'0 — vì F₂ vuông góc với hướng dịch chuyển',
+       opts:['0 — vì F₂ vuông góc với hướng dịch chuyển',`F₂ · ${L.d.x}`,'Toàn bộ công A','Bằng F₁'],
+       exp:`A = F₁d₁ + F₂d₂ = F₁·${L.d.x} + F₂·0. Lực vuông góc với hướng dịch chuyển không sinh công — đó là ý nghĩa vật lí của tích vô hướng.`};
+  }
+  t.opts=shuffle([...new Set(t.opts)]);
+  return t;
+}
+function showQuiz(onDone,nextLabel){
+  const qz=makeQuiz(); quizAsked++;
+  const q=$('quiz'), box=$('quizBox');
+  box.innerHTML=`<div class="emo">✏️</div>
+    <h2 style="color:var(--indigo)">Câu hỏi củng cố</h2>
+    <p style="margin-bottom:0">${qz.q}</p>
+    <div class="qopts"></div>
+    <div class="qexp" style="display:none"></div>
+    <button class="next" style="display:none">${nextLabel}</button>`;
+  const wrap=box.querySelector('.qopts');
+  const expEl=box.querySelector('.qexp');
+  const nextBtn=box.querySelector('button.next');
+  qz.opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='qopt'; b.innerHTML=o;
+    b.onclick=()=>{
+      wrap.querySelectorAll('button').forEach(x=>{
+        x.disabled=true;
+        if(x.innerHTML===qz.correct||x.textContent===qz.correct.replace(/<[^>]+>/g,'')) x.classList.add('correct');
+      });
+      const ok=(o===qz.correct);
+      if(!ok){ b.classList.add('wrong'); SFX.buzz(); }
+      else{ quizCorrect++; score+=50; $('score').textContent=score; SFX.ding(); }
+      expEl.style.display='block';
+      expEl.innerHTML=(ok?'✅ Chính xác! +50 điểm. ':'❌ Chưa đúng. ')+qz.exp;
+      nextBtn.style.display='block';
+      SCTreport();
+    };
+    wrap.appendChild(b);
+  });
+  nextBtn.onclick=()=>{ q.className='toast'; onDone(); };
+  q.className='toast show';
+}
+
+function finalToast(){
+  const time=window.SCT_elapsed?fmtT(window.SCT_elapsed()):'—';
+  endToast(true,'Hoàn thành tất cả!',
+    `Em đã làm chủ tổng – hiệu vectơ và tích vô hướng: ${score} điểm · ${starsTotal}/${LEVELS.length*3} ⭐ · củng cố đúng ${quizCorrect}/${quizAsked} · thời gian ${time}.`,
+    'Chơi lại từ đầu','next',
+    ()=>{ score=0; $('score').textContent=0; setLevel(0); },'🏆');
+}
+
+function win(){
+  const s = attempts<=1 ? 3 : attempts<=3 ? 2 : 1;
+  levelStars[li]=Math.max(s,levelStars[li]||0);
+  starsTotal=Object.values(levelStars).reduce((a,b)=>a+b,0);
+  $('stars').textContent=starsTotal;
+  if(!clearedOnce.has(li)){ score+=100; $('score').textContent=score; clearedOnce.add(li); }
+  SCT_done.add(li); SCTreport();
+  SFX.win(); confetti();
+  const last=li===LEVELS.length-1;
+  const goNext=()=>{ last ? finalToast() : setLevel(li+1); };
+  if(quizDone.has(li)){
+    endToast(true,'Chính xác!',`Đúng sau ${attempts} lượt — đạt ${'⭐'.repeat(s)}.`,
+      last?'Xem tổng kết 🏆':'Màn tiếp theo','next',goNext);
+  } else {
+    quizDone.add(li);
+    endToast(true,'Chính xác!',`Đúng sau ${attempts} lượt — đạt ${'⭐'.repeat(s)}.`,
+      'Câu hỏi củng cố ✏️','next',
+      ()=>showQuiz(goNext, last?'Xem tổng kết 🏆':'Màn tiếp theo'));
+  }
+}
+
+$('checkBtn').onclick=()=>{
+  attempts++; $('shots').textContent=attempts;
+  if(ok()){ win(); return; }
+  SFX.fail();
+  // phản hồi cụ thể theo màn — hiện giá trị thật của lượt vừa kiểm tra
+  const m=L.mode; let msg='';
+  if(m==='sum'||m==='find'){
+    const s={x:L.u.x+L.v.x,y:L.u.y+L.v.y};
+    msg=`Lượt này: ${V('u')} + ${V('v')} = (${s.x}; ${s.y}), còn đích là (${L.T.x}; ${L.T.y}).`;
+  } else if(m==='dot'){ msg=`Lượt này: ${V('a')}·${V('b')} = ${dot(L.a,L.b)}, mục tiêu là ${L.K}.`; }
+  else if(m==='perp'){ msg=`Lượt này: ${V('a')}·${V('b')} = ${dot(L.a,L.b)}, cần bằng 0.`; }
+  else { msg=`Lượt này: A = ${dot(L.F,L.d)}, mục tiêu A = ${L.K}.`; }
+  if(attempts>=3) msg+=hint();
+  endToast(false,'Chưa đúng',msg,'Thử tiếp','retry',()=>{});
+};
+$('resetBtn').onclick=()=>setLevel(li);
+window.addEventListener('keydown',e=>{
+  if(e.key==='Enter' && !$('toast').classList.contains('show') && !$('quiz').classList.contains('show'))
+    $('checkBtn').click();
+});
+window.addEventListener('resize',()=>{fitCanvas();draw();});
+
+$('lvlMax').textContent=LEVELS.length;
+$('starsMax').textContent=LEVELS.length*3;
+fitCanvas();
 setLevel(0);
-
 </script>
-
-  <footer>Một hoạt động dạy học môn Toán · điều khiển trực tiếp đối tượng toán học.</footer>
-</div>
 
 <script>
 /* ==== Cải tiến lớp 10: đồng hồ đo thời gian chơi ==== */
@@ -350,7 +631,7 @@ setLevel(0);
   function fmt(s){var m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0');}
   var chip=document.createElement('span');
   chip.className='sct-timer';
-  chip.innerHTML='\u23F1 <b id="sctClock">0:00</b>';
+  chip.innerHTML='⏱ <b id="sctClock">0:00</b>';
   function mount(){
     var host=document.querySelector('.hud')||document.querySelector('.top');
     if(host){ host.appendChild(chip); }
