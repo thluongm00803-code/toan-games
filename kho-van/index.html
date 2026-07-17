@@ -320,6 +320,18 @@ function proj(p){
 function line(a,bp,color,w,dash){ ctx.strokeStyle=color;ctx.lineWidth=w||1;ctx.setLineDash(dash||[]);
   const p=proj(a),q=proj(bp); ctx.beginPath();ctx.moveTo(p.X,p.Y);ctx.lineTo(q.X,q.Y);ctx.stroke();ctx.setLineDash([]);}
 
+/* Mũi tên đầu trục: tam giác đặc hướng theo chiều dương của trục (sau phép chiếu) */
+function axisArrow(from,to,color){
+  const p=proj(from), q=proj(to);
+  const ang=Math.atan2(q.Y-p.Y,q.X-p.X), hl=13;
+  ctx.fillStyle=color;
+  ctx.beginPath();
+  ctx.moveTo(q.X,q.Y);
+  ctx.lineTo(q.X-hl*Math.cos(ang-0.42), q.Y-hl*Math.sin(ang-0.42));
+  ctx.lineTo(q.X-hl*Math.cos(ang+0.42), q.Y-hl*Math.sin(ang+0.42));
+  ctx.closePath(); ctx.fill();
+}
+
 function drawScene(){
   const cssW=cv.clientWidth, cssH=cssW*(560/900);
   ctx.clearRect(0,0,cssW,cssH);
@@ -327,10 +339,14 @@ function drawScene(){
     line({x:i,y:0,z:0},{x:i,y:GRID,z:0},'#D5DEEC',1);
     line({x:0,y:i,z:0},{x:GRID,y:i,z:0},'#D5DEEC',1);
   }
-  line({x:0,y:0,z:0},{x:GRID,y:0,z:0},COL.x,2.5);
-  line({x:0,y:0,z:0},{x:0,y:GRID,z:0},COL.y,2.5);
-  line({x:0,y:0,z:0},{x:0,y:0,z:GRID},COL.z,2.5);
-  const lx=proj({x:GRID+0.3,y:0,z:0}), ly=proj({x:0,y:GRID+0.3,z:0}), lz=proj({x:0,y:0,z:GRID+0.3});
+  // trục kéo dài quá lưới một đoạn, có MŨI TÊN chỉ chiều dương
+  line({x:0,y:0,z:0},{x:GRID+0.5,y:0,z:0},COL.x,2.5);
+  line({x:0,y:0,z:0},{x:0,y:GRID+0.5,z:0},COL.y,2.5);
+  line({x:0,y:0,z:0},{x:0,y:0,z:GRID+0.5},COL.z,2.5);
+  axisArrow({x:0,y:0,z:0},{x:GRID+0.5,y:0,z:0},COL.x);
+  axisArrow({x:0,y:0,z:0},{x:0,y:GRID+0.5,z:0},COL.y);
+  axisArrow({x:0,y:0,z:0},{x:0,y:0,z:GRID+0.5},COL.z);
+  const lx=proj({x:GRID+0.9,y:0,z:0}), ly=proj({x:0,y:GRID+0.9,z:0}), lz=proj({x:0,y:0,z:GRID+0.9});
   ctx.font='bold 14px "Baloo 2"';
   ctx.fillStyle=COL.x;ctx.fillText('x',lx.X,lx.Y); ctx.fillStyle=COL.y;ctx.fillText('y',ly.X,ly.Y);
   ctx.fillStyle=COL.z;ctx.fillText('z',lz.X,lz.Y);
