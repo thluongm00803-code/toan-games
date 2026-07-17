@@ -35,6 +35,8 @@
   .stars{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);
     border-radius:999px;padding:7px 16px;font-weight:700;font-family:"Baloo 2",sans-serif;color:var(--gold)}
   .stars b{color:var(--ink)}
+  .sndbtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;
+    cursor:pointer;font-size:14px}
 
   h1{font-family:"Baloo 2",sans-serif;font-weight:700;letter-spacing:-.5px;
     font-size:clamp(28px,5.4vw,44px);line-height:1.05;margin:18px 0 4px;color:var(--indigo)}
@@ -134,7 +136,7 @@
   .converge{font-size:12px;color:var(--emerald);font-weight:600;margin-top:6px;min-height:16px}
 
   /* challenge */
-  .qcard{max-width:620px;margin:0 auto}
+  .qcard{max-width:620px;margin:0 auto;position:relative;overflow:hidden}
   .qmeta{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);
     font-weight:600;margin-bottom:10px}
   .dots{display:flex;gap:5px}
@@ -154,6 +156,7 @@
     padding:11px 22px;cursor:pointer;color:#fff;background:var(--tangerine);box-shadow:0 4px 0 #C95C09}
   .qbtn:active{transform:translateY(2px);box-shadow:0 2px 0 #C95C09}
   .qbtn.next{background:var(--indigo);box-shadow:0 4px 0 #1d2a66}
+  .qbtn.verify{background:var(--sky);box-shadow:0 4px 0 #1E6A94;margin-left:8px}
   .feedback{border-radius:12px;padding:13px 15px;font-size:14px;font-weight:500;margin-bottom:14px;display:none}
   .feedback.show{display:block;animation:fade .2s}
   .feedback.ok{background:#E9F7F0;color:#11724E;border:1px solid #BCE5D2}
@@ -167,18 +170,19 @@
   .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
   .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:middle}
 
+  /* ==== Pháo giấy ==== */
+  .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:15}
+  .confetti i{position:absolute;top:-16px;width:8px;height:13px;border-radius:2px;
+    opacity:.95;animation:cfall linear forwards}
+  @keyframes cfall{
+    0%{transform:translateY(0) rotate(0deg)}
+    100%{transform:translateY(560px) rotate(660deg);opacity:.7}
+  }
+
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 /* ==== Cải tiến: dải nhận diện cấp lớp + đồng hồ ==== */
 :root{--gradec:#2A3B8F;--grade2:#FF7A1A}
-.sct-ribbon{display:flex;align-items:center;justify-content:space-between;gap:10px;
-  margin:0 0 16px;flex-wrap:wrap}
-.sct-ribbon::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;
-  background:linear-gradient(90deg,var(--gradec),var(--grade2));z-index:5}
-.sct-back{font:600 13px/1 "Baloo 2",system-ui,sans-serif;color:var(--gradec);
-  text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:999px;
-  padding:9px 15px;transition:.15s;white-space:nowrap}
-.sct-back:hover{border-color:var(--gradec);transform:translateX(-2px)}
 .sct-tag{font:700 12px/1 "Baloo 2",system-ui,sans-serif;letter-spacing:.6px;color:#fff;
   background:var(--gradec);border-radius:999px;padding:8px 15px;white-space:nowrap}
 .sct-timer{font:600 13px/1 "Baloo 2",system-ui,sans-serif !important;
@@ -197,7 +201,8 @@
   <div class="top">
     <a class="back" href="../">← Sân Chơi Toán Học</a>
     <span class="sct-tag">LỚP 10 · TRỌNG TÂM ĐỀ TÀI</span>
-    <span class="stars">⭐ Sao: <b id="starCount">0</b></span>
+    <span class="stars">⭐ Sao: <b id="starCount">0</b>/<span id="starMax">10</span></span>
+    <button class="sndbtn" id="sndBtn" title="Bật/tắt âm thanh">🔊</button>
   </div>
 
   <h1>Phòng Lab <em>Xác Suất</em></h1>
@@ -243,11 +248,12 @@
 
         <div class="card">
           <h3>③ Mô phỏng — gieo nhiều lần</h3>
-          <p class="sub">Tần suất thực nghiệm sẽ tiến dần về xác suất lý thuyết.</p>
+          <p class="sub">Tần suất thực nghiệm sẽ tiến dần về xác suất lý thuyết (luật số lớn).</p>
           <div class="simbtns">
             <button class="b-go" onclick="run(1)">Gieo 1 lần</button>
             <button class="b-go2" onclick="run(100)">Gieo 100</button>
             <button class="b-go2" onclick="run(1000)">Gieo 1000</button>
+            <button class="b-go2" onclick="run(10000)">Gieo 10 000</button>
             <button class="b-reset" onclick="resetSim()">Đặt lại</button>
           </div>
           <div class="meter">
@@ -287,6 +293,7 @@
         <div class="feedback" id="fb"></div>
         <button class="qbtn" id="checkBtn" onclick="checkAnswer()">Kiểm tra</button>
         <button class="qbtn next" id="nextBtn" style="display:none" onclick="nextQ()">Câu tiếp →</button>
+        <button class="qbtn verify" id="verifyBtn" style="display:none" onclick="verifyInLab()">🔬 Kiểm chứng bằng mô phỏng</button>
       </div>
       <div id="qFinale" style="display:none"></div>
     </div>
@@ -295,12 +302,65 @@
 </div>
 
 <script>
+/* ===================================================================
+   CẤU HÌNH BÁO ĐIỂM VỀ APP LUYỆN TẬP
+   Khi triển khai, đặt origin thật của App Luyện Tập, ví dụ:
+   const SCT_APP_ORIGIN = 'https://sanchoitoanhoc.web.app';
+   Mặc định dùng origin của trang; mở bằng file:// tự hạ về '*'.
+=================================================================== */
+const SCT_APP_ORIGIN = window.SCT_APP_ORIGIN || window.location.origin;
+const SCT_TARGET = /^https?:/i.test(SCT_APP_ORIGIN) ? SCT_APP_ORIGIN : '*';
+
 /* ---------- helpers ---------- */
 function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a||1}
 function fracStr(n,d){if(n===0)return"0";const g=gcd(n,d);return (n/g)+"/"+(d/g)}
 function isPrime(x){if(x<2)return false;for(let i=2;i*i<=x;i++)if(x%i===0)return false;return true}
 const COLORS={do:'#E54B4B',xanh:'#2E8BC0',vang:'#E6A817',luc:'#1FA36B'};
 const COLORNAME={do:'đỏ',xanh:'xanh',vang:'vàng',luc:'lục'};
+
+/* ===== Âm thanh (Web Audio) ===== */
+const SFX=(function(){
+  let ac=null, muted=false;
+  function ctxA(){
+    if(muted) return null;
+    if(!ac){ try{ ac=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+    if(ac.state==='suspended') ac.resume();
+    return ac;
+  }
+  function tone(f,d,type,t0,vol){
+    const a=ctxA(); if(!a) return;
+    const o=a.createOscillator(),gn=a.createGain();
+    o.type=type||'sine'; o.frequency.value=f;
+    gn.gain.setValueAtTime(vol||.16,a.currentTime+t0);
+    gn.gain.exponentialRampToValueAtTime(.001,a.currentTime+t0+d);
+    o.connect(gn); gn.connect(a.destination);
+    o.start(a.currentTime+t0); o.stop(a.currentTime+t0+d+.05);
+  }
+  return {
+    win(){ [523,659,784,1047].forEach((f,i)=>tone(f,.2,'sine',i*.095,.18)); },
+    ding(){ tone(880,.15,'sine',0,.16); tone(1175,.2,'sine',.08,.14); },
+    buzz(){ tone(160,.25,'square',0,.08); },
+    tick(){ tone(660,.07,'sine',0,.08); },
+    toggle(){ muted=!muted; return muted; }
+  };
+})();
+document.getElementById('sndBtn').onclick=()=>{ document.getElementById('sndBtn').textContent = SFX.toggle() ? '🔇' : '🔊'; };
+
+/* ===== Pháo giấy ===== */
+function confetti(host){
+  const box=document.createElement('div'); box.className='confetti';
+  const colors=['#FF7A1A','#2A3B8F','#1FA36B','#FFC94D','#6B7BD6','#E54B4B'];
+  for(let i=0;i<38;i++){
+    const p=document.createElement('i');
+    p.style.left=(Math.random()*100)+'%';
+    p.style.background=colors[i%colors.length];
+    p.style.animationDuration=(1+Math.random()*0.9)+'s';
+    p.style.animationDelay=(Math.random()*0.35)+'s';
+    box.appendChild(p);
+  }
+  host.appendChild(box);
+  setTimeout(()=>box.remove(),2300);
+}
 
 /* ---------- experiments ---------- */
 let marbleCfg={do:3,xanh:2,vang:1};
@@ -362,12 +422,14 @@ function coinOutcomes(){
   return a;
 }
 function coinPresets(){
-  return [
-    {label:'Đúng 2 lần sấp', test:o=>o.heads===2},
+  const ps=[];
+  if(coinN>=2) ps.push({label:'Đúng 2 lần sấp', test:o=>o.heads===2}); // chỉ có nghĩa khi tung ≥ 2 lần
+  ps.push(
     {label:'Cả '+coinN+' lần đều sấp', test:o=>o.heads===coinN},
     {label:'Có ít nhất 1 lần sấp', test:o=>o.heads>=1},
     {label:'Số lần sấp là số chẵn', test:o=>o.heads%2===0},
-  ];
+  );
+  return ps;
 }
 function marbleOutcomes(){
   let a=[],k=0;
@@ -382,7 +444,7 @@ let EXP=buildExperiments();
 let cur='dice2';
 let fav=new Set();
 let trials=0, hits=0;
-let stars=0;
+let bestScore=0;
 
 /* ---------- render ---------- */
 function renderPills(){
@@ -408,9 +470,11 @@ function renderConfig(){
       s.innerHTML=`<span class="dot" style="background:${COLORS[c]}"></span>
         <span class="lbl">${COLORNAME[c]}</span>
         <button aria-label="bớt ${COLORNAME[c]}">−</button><span class="n">${marbleCfg[c]||0}</span><button aria-label="thêm ${COLORNAME[c]}">+</button>`;
-      const [minus,,plus]=s.querySelectorAll('button,.n');
       const btns=s.querySelectorAll('button');
-      btns[0].onclick=()=>{marbleCfg[c]=Math.max(0,(marbleCfg[c]||0)-1);refreshExp()};
+      btns[0].onclick=()=>{
+        const total=Object.values(marbleCfg).reduce((x,y)=>x+(y||0),0);
+        if(total<=1 && (marbleCfg[c]||0)>0){ pulse(s); return; } // hộp phải còn ít nhất 1 viên
+        marbleCfg[c]=Math.max(0,(marbleCfg[c]||0)-1);refreshExp()};
       btns[1].onclick=()=>{marbleCfg[c]=Math.min(9,(marbleCfg[c]||0)+1);refreshExp()};
       wrap.appendChild(s);
     }
@@ -470,7 +534,6 @@ function clearPresetHighlight(){[...document.getElementById('presets').children]
 function renderEvent(flash){
   const e=EXP[cur], nO=e.outcomes.length, nE=fav.size;
   document.getElementById('nE').textContent=nE;
-  // repaint omega cells
   document.querySelectorAll('#omega .out').forEach(d=>{
     const on=fav.has(d.dataset.id);
     d.classList.toggle('fav',on);
@@ -485,7 +548,6 @@ function renderEvent(flash){
     pBig.innerHTML=f.includes('/')?frac(f):f;
     pCalc.innerHTML=`= <b>${nE}/${nO}</b> ≈ <b>${dec.toFixed(4)}</b> = <b>${(dec*100).toFixed(2)}%</b>`;
   }
-  // sync theoretical bar
   const dec=nO?nE/nO:0;
   document.getElementById('barTheory').style.width=(dec*100)+'%';
   document.getElementById('pPct').textContent=(dec*100).toFixed(1)+'%';
@@ -496,10 +558,18 @@ function frac(s){const[a,b]=s.split('/');return `<span class="frac" style="font-
 /* ---------- simulation ---------- */
 function run(times){
   const e=EXP[cur];
-  if(fav.size===0){pulse(document.getElementById('presets'));return}
+  if(fav.size===0||e.outcomes.length===0){pulse(document.getElementById('presets'));return}
+  let last=null;
   for(let t=0;t<times;t++){
     const o=e.outcomes[Math.floor(Math.random()*e.outcomes.length)];
     trials++; if(fav.has(o.id))hits++;
+    last=o;
+  }
+  // gieo 1 lần: nháy đúng ô kết quả vừa gieo để "thấy" phép thử
+  if(times===1&&last){
+    SFX.tick();
+    const cell=document.querySelector(`#omega .out[data-id="${last.id}"]`);
+    if(cell){cell.classList.add('flash');setTimeout(()=>cell.classList.remove('flash'),400);}
   }
   const f=hits/trials;
   document.getElementById('trials').textContent=trials.toLocaleString('vi');
@@ -539,22 +609,40 @@ function switchTab(t){
   if(t==='challenge'&&!challengeStarted)startChallenge();
 }
 
-/* ---------- challenge ---------- */
+/* ---------- challenge ----------
+   sol chỉ hiện SAU khi trả lời (bản cũ hiện trước → lộ cách đếm).
+   exp/preset: kịch bản tương ứng trong tab Khám phá để kiểm chứng. */
 const QUESTIONS=[
   {text:'Gieo một con xúc xắc cân đối. Tính xác suất xuất hiện số nguyên tố.',
-   ctx:'Số nguyên tố trong {1,…,6} là 2, 3, 5.', n:3, d:6},
+   sol:'Số nguyên tố trong {1,…,6} là 2, 3, 5 → n(E) = 3, n(Ω) = 6.', n:3, d:6,
+   exp:'dice1', preset:'Số nguyên tố'},
   {text:'Gieo đồng thời hai con xúc xắc. Tính xác suất tổng số chấm bằng 7.',
-   ctx:'n(Ω) = 36. Các cặp có tổng 7: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1).', n:6, d:36},
+   sol:'n(Ω) = 36. Các cặp có tổng 7: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) → n(E) = 6.', n:6, d:36,
+   exp:'dice2', preset:'Tổng = 7'},
   {text:'Gieo hai con xúc xắc. Tính xác suất hai mặt giống nhau.',
-   ctx:'Các kết quả: (1,1),(2,2),…,(6,6).', n:6, d:36},
+   sol:'Các kết quả: (1,1),(2,2),…,(6,6) → n(E) = 6, n(Ω) = 36.', n:6, d:36,
+   exp:'dice2', preset:'Hai mặt giống nhau'},
   {text:'Tung một đồng xu cân đối 3 lần. Tính xác suất có đúng 2 lần xuất hiện mặt sấp.',
-   ctx:'n(Ω) = 8. Các dãy: SSN, SNS, NSS.', n:3, d:8},
+   sol:'n(Ω) = 2³ = 8. Các dãy có đúng 2 sấp: SSN, SNS, NSS → n(E) = 3.', n:3, d:8,
+   exp:'coin', preset:'Đúng 2 lần sấp'},
   {text:'Tung đồng xu 3 lần. Tính xác suất có ít nhất một lần mặt sấp.',
-   ctx:'Dùng biến cố đối: chỉ có 1 dãy không có sấp là NNN.', n:7, d:8},
+   sol:'Dùng biến cố đối: chỉ có 1 dãy không có sấp là NNN → P = 1 − 1/8 = 7/8.', n:7, d:8,
+   exp:'coin', preset:'Có ít nhất 1 lần sấp'},
   {text:'Hộp có 3 bi đỏ, 2 bi xanh, 1 bi vàng. Lấy ngẫu nhiên 1 viên. Tính xác suất lấy được bi đỏ.',
-   ctx:'Tổng 6 viên đồng khả năng.', n:3, d:6},
+   sol:'Tổng 6 viên đồng khả năng, 3 viên đỏ → P = 3/6 = 1/2.', n:3, d:6,
+   exp:'marble', preset:'Bi đỏ'},
   {text:'Gieo hai con xúc xắc. Tính xác suất tích hai số chấm bé hơn 6.',
-   ctx:'Các cặp: (1,1),(1,2),(1,3),(1,4),(1,5),(2,1),(2,2),(3,1),(4,1),(5,1).', n:10, d:36},
+   sol:'Các cặp: (1,1),(1,2),(1,3),(1,4),(1,5),(2,1),(2,2),(3,1),(4,1),(5,1) → n(E) = 10.', n:10, d:36,
+   exp:'dice2', preset:'Tích < 6'},
+  {text:'Gieo hai con xúc xắc. Tính xác suất có ít nhất một mặt 6 chấm.',
+   sol:'Hàng (6,·) có 6 cặp, cột (·,6) có 6 cặp, nhưng (6,6) bị đếm 2 lần → n(E) = 6 + 6 − 1 = 11.', n:11, d:36,
+   exp:'dice2', preset:'Ít nhất một mặt 6'},
+  {text:'Tung đồng xu 3 lần. Tính xác suất số lần xuất hiện mặt sấp là số chẵn.',
+   sol:'0 sấp: NNN (1 dãy); 2 sấp: SSN, SNS, NSS (3 dãy) → n(E) = 4, n(Ω) = 8.', n:4, d:8,
+   exp:'coin', preset:'Số lần sấp là số chẵn'},
+  {text:'Hộp có 3 bi đỏ, 2 bi xanh, 1 bi vàng. Lấy 1 viên. Tính xác suất KHÔNG lấy được bi đỏ.',
+   sol:'Biến cố đối của "bi đỏ": P = 1 − 3/6 = 3/6 = 1/2.', n:3, d:6,
+   exp:'marble', preset:'Không phải bi đỏ (biến cố đối)'},
 ];
 let qOrder=[], qIdx=0, qScore=0, challengeStarted=false, answered=false;
 
@@ -563,6 +651,7 @@ function startChallenge(){
   qOrder=[...QUESTIONS.keys()].sort(()=>Math.random()-0.5);
   qIdx=0;qScore=0;
   document.getElementById('qTotal').textContent=qOrder.length;
+  document.getElementById('starMax').textContent=qOrder.length;
   document.getElementById('qBody').style.display='';
   document.getElementById('qFinale').style.display='none';
   buildDots();showQ();
@@ -576,12 +665,14 @@ function showQ(){
   const q=QUESTIONS[qOrder[qIdx]];
   document.getElementById('qNum').textContent=qIdx+1;
   document.getElementById('qText').textContent=q.text;
-  document.getElementById('qCtx').textContent=q.ctx;
+  // KHÔNG hiện lời giải trước — chỉ một gợi ý phương pháp chung
+  document.getElementById('qCtx').textContent='💡 Xác định n(Ω) trước, rồi liệt kê và đếm số kết quả thuận lợi n(E). Chưa chắc? Dựng thử trong tab Khám phá!';
   document.getElementById('numIn').value='';
   document.getElementById('denIn').value='';
   document.getElementById('fb').className='feedback';
   document.getElementById('checkBtn').style.display='';
   document.getElementById('nextBtn').style.display='none';
+  document.getElementById('verifyBtn').style.display='none';
   qOrder.forEach((_,i)=>{const d=document.getElementById('dot'+i);d.className='d'+(i<qIdx?' done':i===qIdx?' cur':'')});
   document.getElementById('numIn').focus();
 }
@@ -597,19 +688,21 @@ function checkAnswer(){
     return;
   }
   answered=true;
-  const correct = num*q.d === q.n*den; // equivalent fractions
+  const correct = num*q.d === q.n*den; // chấp nhận phân số bằng nhau
   if(correct){
-    qScore++;stars++;updateStars();
+    qScore++;updateStars();SFX.ding();
     document.getElementById('dot'+qIdx).className='d done';
     fb.className='feedback ok show';
-    fb.innerHTML=`Chính xác! ⭐ +1 sao<div class="sol">Đáp án: P(E) = ${fracStr(q.n,q.d)} (= ${q.n}/${q.d}).</div>`;
+    fb.innerHTML=`Chính xác! ⭐ +1 sao<div class="sol">${q.sol} Vậy P(E) = ${fracStr(q.n,q.d)} (= ${q.n}/${q.d}).</div>`;
   }else{
+    SFX.buzz();
     document.getElementById('dot'+qIdx).className='d';
     fb.className='feedback no show';
-    fb.innerHTML=`Chưa đúng.<div class="sol">Đáp án đúng: P(E) = <b>${fracStr(q.n,q.d)}</b> = ${q.n}/${q.d}. ${q.ctx}</div>`;
+    fb.innerHTML=`Chưa đúng.<div class="sol">Đáp án: P(E) = <b>${fracStr(q.n,q.d)}</b> = ${q.n}/${q.d}. ${q.sol}</div>`;
   }
   document.getElementById('checkBtn').style.display='none';
   document.getElementById('nextBtn').style.display='';
+  document.getElementById('verifyBtn').style.display='';
   document.getElementById('nextBtn').textContent = (qIdx===qOrder.length-1)?'Xem kết quả →':'Câu tiếp →';
   document.getElementById('nextBtn').focus();
 }
@@ -617,34 +710,65 @@ function nextQ(){
   if(qIdx<qOrder.length-1){qIdx++;showQ()}
   else finishChallenge();
 }
-function reportToLMS(percent, stars, starsMax){
-  var payload={source:'SCT_GAME',type:'RESULT',game:'xac-suat',percent:percent,stars:stars,starsMax:starsMax,detail:stars+'/'+starsMax+' câu đúng'};
-  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,'*'); }catch(e){}
-  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
+
+/* Nối Thử thách ↔ Khám phá: dựng đúng kịch bản của câu hỏi để mô phỏng kiểm chứng */
+function applyScenario(q){
+  cur=q.exp;
+  if(q.exp==='coin') coinN=3;
+  if(q.exp==='marble') marbleCfg={do:3,xanh:2,vang:1,luc:0};
+  EXP=buildExperiments();
+  fav.clear(); resetSim();
+  renderAll();
+  const e=EXP[cur];
+  const p=e.presets.find(x=>x.label===q.preset);
+  if(p){
+    e.outcomes.forEach(o=>{if(p.test(o))fav.add(o.id)});
+    renderEvent(true);
+    [...document.getElementById('presets').children].forEach(c=>{
+      if(c.textContent===q.preset) c.classList.add('on');
+    });
+  }
+  switchTab('explore');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function verifyInLab(){ applyScenario(QUESTIONS[qOrder[qIdx]]); }
+
+function reportToLMS(percent, starsGot, starsMax){
+  var payload={source:'SCT_GAME',type:'RESULT',game:'xac-suat',
+    percent:percent, stars:starsGot, starsMax:starsMax,
+    timeSec:(window.SCT_elapsed?window.SCT_elapsed():0),
+    detail:starsGot+'/'+starsMax+' câu đúng (lần tốt nhất)'};
+  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,SCT_TARGET); }catch(e){}
+  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,SCT_TARGET); }catch(e){}
 }
 var FROM_LMS = new URLSearchParams(location.search).has('lms');
 function finishChallenge(){
   document.getElementById('qBody').style.display='none';
   const f=document.getElementById('qFinale');f.style.display='';
-  const total=qOrder.length, pct=Math.round(qScore/total*100);
+  const total=qOrder.length;
+  bestScore=Math.max(bestScore,qScore);            // chống "cày sao" khi làm lại
+  updateStars();
+  const pct=Math.round(qScore/total*100), bestPct=Math.round(bestScore/total*100);
   let msg = pct>=80?'Xuất sắc! Đủ điều kiện nhận giấy chứng nhận.':pct>=50?'Khá tốt — luyện thêm để đạt mốc 80%.':'Cần ôn lại định nghĩa cổ điển của xác suất.';
-  reportToLMS(pct, qScore, total);
+  reportToLMS(bestPct, bestScore, total);          // báo về app KẾT QUẢ TỐT NHẤT
+  if(pct>=80){ SFX.win(); confetti(document.querySelector('.qcard')); }
   const reportLine = FROM_LMS
-    ? `<p class="report">✅ Đã gửi kết quả <code>${pct}%</code> về app Luyện tập.</p>`
-    : `<p class="report">Báo kết quả cho thầy/cô trong app Luyện tập: <code>${pct}%</code> (${qScore}/${total} câu).</p>`;
+    ? `<p class="report">✅ Đã gửi kết quả tốt nhất <code>${bestPct}%</code> về app Luyện tập.</p>`
+    : `<p class="report">Báo kết quả cho thầy/cô trong app Luyện tập: <code>${bestPct}%</code> (tốt nhất ${bestScore}/${total} câu).</p>`;
   f.innerHTML=`<div class="finale">
     <div class="score">⭐ ${qScore}/${total}</div>
-    <p style="font-weight:600;font-size:16px;margin:6px 0">${pct}% chính xác</p>
+    <p style="font-weight:600;font-size:16px;margin:6px 0">${pct}% chính xác${bestScore>qScore?` · tốt nhất: ${bestPct}%`:''}</p>
     <p style="color:var(--muted);font-size:14px">${msg}</p>
     ${reportLine}
     <button class="qbtn" style="margin-top:14px" onclick="startChallenge()">Làm lại 🔄</button>
   </div>`;
 }
-function updateStars(){document.getElementById('starCount').textContent=stars}
+function updateStars(){document.getElementById('starCount').textContent=Math.max(bestScore,qScore)}
 
 /* enter key */
 document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&document.getElementById('challenge').classList.contains('show')){
+  if(e.key==='Enter'&&document.getElementById('challenge').classList.contains('show')
+     &&document.getElementById('qBody').style.display!=='none'){
     if(!answered)checkAnswer();else nextQ();
   }
 });
@@ -660,7 +784,7 @@ renderAll();
   function fmt(s){var m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0');}
   var chip=document.createElement('span');
   chip.className='sct-timer';
-  chip.innerHTML='\u23F1 <b id="sctClock">0:00</b>';
+  chip.innerHTML='⏱ <b id="sctClock">0:00</b>';
   function mount(){
     var host=document.querySelector('.hud')||document.querySelector('.top');
     if(host){ host.appendChild(chip); }
