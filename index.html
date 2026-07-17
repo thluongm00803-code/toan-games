@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#FBFAF4; --ink:#1C2438; --line:#E4E0D4; --muted:#6A7184;
+    --paper:#F6F8FC; --ink:#1C2438; --line:#E3E7F2; --muted:#6A7184;
     /* Lớp 10 — trọng tâm */
     --c10:#2A3B8F; --c10soft:#6B7BD6; --c10a:#FF7A1A;
     /* Lớp 11 — hướng mở rộng (xanh ngọc) */
@@ -17,81 +17,152 @@
     /* Lớp 12 — hướng mở rộng (tím) */
     --c12:#5B3FBF; --c12soft:#9385E6; --c12a:#D6479A;
     --emerald:#1FA36B;
+    --shadow:0 16px 38px -26px rgba(42,59,143,.45);
   }
   *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
   html,body{margin:0;padding:0}
   body{
-    font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);
-    min-height:100vh;
+    font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);min-height:100vh;
     background:
-      linear-gradient(#E3ECF6 1px,transparent 1px) 0 0/100% 34px,
-      linear-gradient(90deg,#E3ECF6 1px,transparent 1px) 0 0/34px 100%,
-      radial-gradient(130% 90% at 78% -8%, #EAF2FF 0%, transparent 55%),
+      radial-gradient(55% 38% at 6% 0%, #FFEEDC 0%, transparent 60%),
+      radial-gradient(60% 45% at 96% 4%, #E2EAFF 0%, transparent 58%),
+      radial-gradient(40% 30% at 50% 100%, #E9F6F0 0%, transparent 60%),
       var(--paper);
   }
-  .wrap{max-width:1060px;margin:0 auto;padding:30px 16px 56px}
+  .wrap{max-width:1080px;margin:0 auto;padding:14px 16px 56px}
+
+  /* ---- Thanh điều hướng dính ---- */
+  .nav{position:sticky;top:10px;z-index:50;display:flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.88);backdrop-filter:blur(12px);
+    border:1px solid var(--line);border-radius:999px;padding:8px 12px;
+    box-shadow:0 10px 30px -20px rgba(42,59,143,.5)}
+  .nav .logo{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:17px;color:var(--c10);
+    display:flex;align-items:center;gap:7px;white-space:nowrap}
+  .nav .logo em{font-style:normal;color:var(--c10a)}
+  .nav .links{display:flex;gap:2px;margin-left:auto}
+  .nav .links a{font-size:12.5px;font-weight:600;color:var(--muted);text-decoration:none;
+    padding:8px 12px;border-radius:999px;transition:.15s}
+  .nav .links a:hover{background:#EEF1FB;color:var(--c10)}
+  @media(max-width:640px){.nav .links{display:none}}
 
   /* ---- Hero ---- */
-  .hero{padding:24px 0 6px}
+  .hero{position:relative;padding:38px 0 8px}
   .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;
-    border:1px solid var(--line);border-radius:999px;padding:6px 14px;
+    border:1px solid var(--line);border-radius:999px;padding:7px 15px;
     font-size:13px;font-weight:600;color:var(--c10);box-shadow:0 6px 18px -12px rgba(42,59,143,.5)}
-  .eyebrow .pin{width:8px;height:8px;border-radius:50%;background:var(--c10a)}
+  .eyebrow .pin{width:8px;height:8px;border-radius:50%;background:var(--c10a);
+    animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 #FF7A1A55}50%{box-shadow:0 0 0 6px #FF7A1A00}}
   h1{font-family:"Baloo 2",sans-serif;font-weight:800;letter-spacing:-.5px;
-    font-size:clamp(34px,7vw,58px);line-height:1.04;margin:16px 0 10px;color:var(--c10)}
-  h1 em{font-style:normal;color:var(--c10a);position:relative}
-  h1 em::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:10px;
-    background:#FFD9B8;border-radius:6px;z-index:-1}
-  .lead{font-size:clamp(15px,2.4vw,18px);color:var(--muted);max-width:600px;font-weight:500}
+    font-size:clamp(36px,7vw,60px);line-height:1.04;margin:16px 0 10px;color:var(--c10)}
+  h1 em{font-style:normal;background:linear-gradient(90deg,var(--c10a),#FFB169);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;position:relative}
+  .lead{font-size:clamp(15px,2.4vw,18px);color:var(--muted);max-width:620px;font-weight:500}
   .lead b{color:var(--ink)}
+  /* icon toán "bay" trong hero */
+  .float{position:absolute;font-family:"Baloo 2",sans-serif;font-weight:800;opacity:.16;
+    user-select:none;pointer-events:none;animation:drift 7s ease-in-out infinite}
+  .float:nth-child(odd){animation-duration:9s}
+  @keyframes drift{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-16px) rotate(5deg)}}
 
-  /* ---- Teacher tools ---- */
-  .teach{margin:26px 0 6px}
+  /* thống kê + hành động nhanh */
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 6px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 18px;
+    text-align:center;box-shadow:0 8px 22px -18px rgba(42,59,143,.5)}
+  .stat .n{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:24px;color:var(--c10)}
+  .stat .l{font-size:11px;font-weight:600;color:var(--muted)}
+  .cta{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 4px}
+  .cta a,.cta button{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:15px;border:none;
+    text-decoration:none;border-radius:13px;padding:13px 22px;cursor:pointer;display:inline-flex;
+    align-items:center;gap:8px;transition:transform .12s}
+  .cta .go{background:var(--c10a);color:#fff;box-shadow:0 5px 0 #C95C09}
+  .cta .go:active{transform:translateY(2px);box-shadow:0 3px 0 #C95C09}
+  .cta .lucky{background:#fff;color:var(--c10);border:1.5px solid var(--line);box-shadow:none}
+  .cta .lucky:hover{border-color:var(--c10soft);transform:translateY(-2px)}
+  .resume{display:none;margin-top:10px;font-size:13px;font-weight:600;color:var(--muted)}
+  .resume a{color:var(--c10);font-weight:700}
+
+  /* ---- Công cụ giáo viên ---- */
+  .teach{margin:30px 0 6px}
   .teach-tag{display:inline-block;font-family:"Baloo 2",sans-serif;font-weight:700;font-size:12px;
-    color:var(--emerald);background:#EAF6EE;border-radius:999px;padding:5px 12px;margin-bottom:10px}
+    color:var(--emerald);background:#EAF6EE;border-radius:999px;padding:6px 13px;margin-bottom:10px}
   .teach-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:14px}
-  .teach-card{display:flex;gap:13px;align-items:center;text-decoration:none;color:var(--ink);
-    background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;
-    box-shadow:0 10px 26px -20px rgba(42,59,143,.5);transition:transform .12s,box-shadow .12s}
-  .teach-card:hover{transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(42,59,143,.55)}
-  .teach-card .te{font-size:30px;flex:none}
+  .teach-card{display:flex;gap:14px;align-items:center;text-decoration:none;color:var(--ink);
+    background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px 18px;
+    box-shadow:var(--shadow);transition:transform .13s,box-shadow .13s;position:relative;overflow:hidden}
+  .teach-card::after{content:"→";position:absolute;right:16px;font-family:"Baloo 2";font-weight:800;
+    font-size:20px;color:var(--emerald);opacity:0;transition:.15s;transform:translateX(-6px)}
+  .teach-card:hover{transform:translateY(-3px);box-shadow:0 20px 38px -22px rgba(42,59,143,.55)}
+  .teach-card:hover::after{opacity:1;transform:none}
+  .teach-card .te{width:52px;height:52px;border-radius:14px;background:#EAF6EE;
+    display:flex;align-items:center;justify-content:center;font-size:27px;flex:none;
+    transition:transform .2s}
+  .teach-card:hover .te{transform:scale(1.12) rotate(-6deg)}
   .teach-card b{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:16px;color:var(--emerald)}
   .teach-card .sub{font-size:13px;line-height:1.45;color:var(--muted)}
 
-  /* ---- Section heading ---- */
-  .sec{margin:40px 0 4px}
+  /* ---- Tìm kiếm & lọc ---- */
+  .filterbar{position:relative;display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+    background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px 14px;
+    margin:26px 0 4px;box-shadow:var(--shadow)}
+  .filterbar .sic{font-size:17px}
+  .filterbar input{flex:1;min-width:180px;border:none;outline:none;font:inherit;font-size:14.5px;
+    font-weight:500;color:var(--ink);background:transparent}
+  .fchips{display:flex;gap:6px;flex-wrap:wrap}
+  .fchips button{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;
+    border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;
+    padding:7px 14px;transition:.13s}
+  .fchips button:hover{transform:translateY(-1px)}
+  .fchips button.on{color:#fff;border-color:transparent}
+  .fchips button[data-g="all"].on{background:var(--ink)}
+  .fchips button[data-g="10"].on{background:var(--c10)}
+  .fchips button[data-g="11"].on{background:var(--c11)}
+  .fchips button[data-g="12"].on{background:var(--c12)}
+  .noresult{display:none;text-align:center;color:var(--muted);font-size:14px;
+    background:#fff;border:1px dashed var(--line);border-radius:16px;padding:26px;margin-top:18px}
+
+  /* ---- Tiêu đề mục ---- */
+  .sec{margin:38px 0 4px}
   .sec .kick{display:inline-flex;align-items:center;gap:8px;font-family:"Baloo 2",sans-serif;
-    font-weight:700;font-size:13px;letter-spacing:.4px;border-radius:999px;padding:6px 14px}
-  .sec.core .kick{color:#fff;background:var(--c10)}
+    font-weight:700;font-size:13px;letter-spacing:.4px;border-radius:999px;padding:7px 15px}
+  .sec.core .kick{color:#fff;background:linear-gradient(90deg,var(--c10),var(--c10soft))}
   .sec.ext .kick{color:var(--c12);background:#F0ECFB;border:1px solid #E0D7F7}
   .sec h2{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:clamp(22px,4vw,30px);
     margin:12px 0 4px;color:var(--ink)}
-  .sec p.note{font-size:14.5px;color:var(--muted);max-width:680px;margin:0;line-height:1.55}
+  .sec p.note{font-size:14.5px;color:var(--muted);max-width:700px;margin:0;line-height:1.55}
   .sec p.note b{color:var(--ink)}
 
-  /* ---- Grid + cards ---- */
+  /* ---- Lưới thẻ game ---- */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-top:18px}
-  .card{position:relative;background:#fff;border:1px solid var(--line);border-radius:18px;
-    padding:20px 20px 20px;display:flex;flex-direction:column;gap:11px;overflow:hidden;
-    box-shadow:0 14px 34px -24px rgba(42,59,143,.5);transition:transform .12s,box-shadow .12s}
+  .card{position:relative;background:#fff;border:1px solid var(--line);border-radius:20px;
+    padding:20px;display:flex;flex-direction:column;gap:11px;overflow:hidden;
+    box-shadow:var(--shadow);transition:transform .14s,box-shadow .14s;
+    opacity:0;transform:translateY(14px)}
+  .card.in{opacity:1;transform:none;transition:opacity .5s,transform .5s,box-shadow .14s}
+  .card.in:hover{transform:translateY(-5px);box-shadow:0 24px 44px -24px rgba(42,59,143,.55)}
   .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px}
-  .card:hover{transform:translateY(-4px);box-shadow:0 22px 40px -22px rgba(42,59,143,.55)}
   .card.g10::before{background:linear-gradient(var(--c10),var(--c10a))}
   .card.g11::before{background:linear-gradient(var(--c11),var(--c11a))}
   .card.g12::before{background:linear-gradient(var(--c12),var(--c12a))}
+  .card.hidden{display:none}
 
   .ord{position:absolute;top:16px;right:18px;font-family:"Baloo 2",sans-serif;font-weight:800;
-    font-size:30px;color:#EEF0F7;line-height:1}
-  .tile{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;
-    justify-content:center;font-size:29px}
-  .card.g10 .tile{background:#FFF1E5}
-  .card.g11 .tile{background:#E6F4F0}
-  .card.g12 .tile{background:#F0ECFB}
+    font-size:32px;color:#EDF0F8;line-height:1}
+  .tile{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;
+    justify-content:center;font-size:30px;transition:transform .22s}
+  .card:hover .tile{transform:scale(1.15) rotate(-8deg)}
+  .card.g10 .tile{background:linear-gradient(135deg,#FFF1E5,#FFE4CB)}
+  .card.g11 .tile{background:linear-gradient(135deg,#E6F4F0,#D2EBE2)}
+  .card.g12 .tile{background:linear-gradient(135deg,#F0ECFB,#E4DBF8)}
   .gradetag{display:inline-flex;align-items:center;gap:6px;font-family:"Baloo 2",sans-serif;
     font-weight:700;font-size:11.5px;letter-spacing:.3px;border-radius:999px;padding:4px 11px;width:fit-content}
   .card.g10 .gradetag{color:#fff;background:var(--c10)}
   .card.g11 .gradetag{color:#fff;background:var(--c11)}
   .card.g12 .gradetag{color:#fff;background:var(--c12)}
+  .recent{display:none;font-size:10.5px;font-weight:700;color:#C9650E;background:#FFF1E5;
+    border-radius:999px;padding:3px 10px;width:fit-content}
+  .card.was-recent .recent{display:inline-block}
   .card h3{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:20px;margin:0;color:var(--ink)}
   .chips{display:flex;gap:6px;flex-wrap:wrap}
   .chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:8px;background:#F3F5FB;color:var(--ink)}
@@ -103,7 +174,7 @@
   .feat{display:flex;gap:6px;flex-wrap:wrap;font-size:11.5px;color:var(--muted)}
   .feat span{background:#F6F7FB;border:1px solid var(--line);border-radius:7px;padding:3px 8px;font-weight:600}
   .play{margin-top:4px;font-family:"Baloo 2",sans-serif;font-weight:700;font-size:15px;
-    text-align:center;text-decoration:none;border-radius:12px;padding:12px;display:block;color:#fff}
+    text-align:center;text-decoration:none;border-radius:13px;padding:13px;display:block;color:#fff}
   .card.g10 .play{background:var(--c10a);box-shadow:0 5px 0 #C95C09}
   .card.g10 .play:active{transform:translateY(2px);box-shadow:0 3px 0 #C95C09}
   .card.g11 .play{background:var(--c11);box-shadow:0 5px 0 #0A4E40}
@@ -111,20 +182,53 @@
   .card.g12 .play{background:var(--c12);box-shadow:0 5px 0 #402C8C}
   .card.g12 .play:active{transform:translateY(2px);box-shadow:0 3px 0 #402C8C}
 
-  footer{margin-top:46px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7}
+  footer{margin-top:46px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.9}
   footer b{color:var(--c10)}
+  footer .fl{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+  footer .fl a{color:var(--muted);text-decoration:none;font-weight:600}
+  footer .fl a:hover{color:var(--c10)}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .card{opacity:1;transform:none}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
 
+  <nav class="nav">
+    <span class="logo">🎲 Sân Chơi <em>Toán Học</em></span>
+    <div class="links">
+      <a href="#teach">🍎 Giáo viên</a>
+      <a href="#core">⭐ Lớp 10</a>
+      <a href="#ext">🧭 Lớp 11–12</a>
+      <a href="luyen-tap/">📊 Luyện tập</a>
+    </div>
+  </nav>
+
   <section class="hero">
+    <span class="float" style="top:10px;right:6%;font-size:44px;color:var(--c10)">∑</span>
+    <span class="float" style="top:90px;right:16%;font-size:30px;color:var(--c10a)">π</span>
+    <span class="float" style="top:30px;right:28%;font-size:26px;color:var(--c11)">√x</span>
+    <span class="float" style="top:130px;right:3%;font-size:28px;color:var(--c12)">f′(x)</span>
     <span class="eyebrow"><span class="pin"></span> Hoạt động dạy học môn Toán · GDPT 2018</span>
     <h1>Sân Chơi <em>Toán Học</em></h1>
     <p class="lead">Bộ trò chơi để học sinh <b>điều khiển trực tiếp đối tượng toán</b> — kéo đỉnh, chỉnh ràng buộc, mô phỏng — rồi thấy ngay kết quả. Toán gắn với mô hình thật ngoài đời sống.</p>
+    <div class="stats">
+      <div class="stat"><div class="n">9</div><div class="l">trò chơi</div></div>
+      <div class="stat"><div class="n">3</div><div class="l">khối lớp</div></div>
+      <div class="stat"><div class="n">2</div><div class="l">công cụ giáo viên</div></div>
+      <div class="stat"><div class="n">100%</div><div class="l">miễn phí · trên trình duyệt</div></div>
+    </div>
+    <div class="cta">
+      <a class="go" href="#core">Chơi ngay 🚀</a>
+      <button class="lucky" id="btnLucky">🎲 Chọn game ngẫu nhiên</button>
+    </div>
+    <p class="resume" id="resume">🕘 Lần trước em đang chơi <a id="resumeLink" href="#"></a> — chơi tiếp nhé!</p>
   </section>
 
-  <section class="teach">
+  <section class="teach" id="teach">
     <span class="teach-tag">🍎 Dành cho giáo viên</span>
     <div class="teach-row">
       <a class="teach-card" href="soan-bai/">
@@ -138,8 +242,20 @@
     </div>
   </section>
 
+  <!-- Tìm kiếm & lọc theo khối -->
+  <div class="filterbar">
+    <span class="sic">🔎</span>
+    <input id="q" placeholder="Tìm game theo tên hoặc chủ đề… (phím tắt: /)">
+    <div class="fchips" id="fchips">
+      <button data-g="all" class="on">Tất cả</button>
+      <button data-g="10">Lớp 10</button>
+      <button data-g="11">Lớp 11</button>
+      <button data-g="12">Lớp 12</button>
+    </div>
+  </div>
+
   <!-- ============ LÕI: 6 GAME LỚP 10 ============ -->
-  <section class="sec core">
+  <section class="sec core" id="core">
     <span class="kick">⭐ Trọng tâm đề tài</span>
     <h2>Sáu trò chơi Toán 10</h2>
     <p class="note">Sáu game được thiết kế sâu cho chương trình lớp 10, mỗi game gắn một mạch kiến thức và một mô hình thực tế. Tất cả đều có <b>đồng hồ đo thời gian chơi</b>, báo kết quả về App Luyện Tập và giao diện thống nhất theo màu <b>indigo–cam</b>.</p>
@@ -147,30 +263,38 @@
   <div class="grid" id="gridCore"></div>
 
   <!-- ============ HƯỚNG MỞ RỘNG: LỚP 11–12 ============ -->
-  <section class="sec ext">
+  <section class="sec ext" id="ext">
     <span class="kick">🧭 Hướng mở rộng của đề tài</span>
     <h2>Mở rộng lên lớp 11 &amp; 12</h2>
     <p class="note">Ba game phát triển ý tưởng lên các lớp trên — <b>cấp số nhân &amp; lãi kép</b> (lớp 11), <b>tối ưu bằng đạo hàm</b> và <b>hình học Oxyz</b> (lớp 12). Đây là <b>định hướng mở rộng</b> của đề tài, dùng hệ màu riêng (xanh ngọc cho lớp 11, tím cho lớp 12) để phân biệt với phần lõi lớp 10.</p>
   </section>
   <div class="grid" id="gridExt"></div>
 
+  <div class="noresult" id="noresult">😅 Không tìm thấy game phù hợp — thử từ khóa khác hoặc bấm “Tất cả”.</div>
+
   <footer>
     <b>Sân Chơi Toán Học</b> — mỗi trò chơi mở trong một thư mục riêng.<br>
     Phần lõi gồm 6 game lớp 10; phần mở rộng gồm 1 game lớp 11 và 2 game lớp 12.
+    <div class="fl">
+      <a href="soan-bai/">📝 Xưởng Soạn Bài</a>
+      <a href="luyen-tap/">📊 App Luyện Tập</a>
+      <a href="#core">⭐ Game lớp 10</a>
+      <a href="#ext">🧭 Lớp 11–12</a>
+    </div>
   </footer>
 </div>
 
 <script>
-// Phần lõi — 6 game lớp 10, theo đúng thứ tự đề tài.
+// Phần lõi — 6 game lớp 10, theo đúng thứ tự đề tài. (GIỮ NGUYÊN liên kết thư mục)
 const CORE = [
   { ord:1, name:"Pháo Thủ Parabol", emoji:"🏀", grade:10,
     topic:"Hàm số bậc hai", real:"Đường bay · ném bóng", folder:"parabol",
-    feat:["⏱ Hẹn giờ","🎯 5 màn"],
+    feat:["⏱ Hẹn giờ","🎯 Nhiều chế độ chơi"],
     desc:"Chỉnh <b>đỉnh I(h; k)</b> của parabol để đường bay xuyên qua đích. Phương trình cập nhật sống theo từng thao tác." },
 
   { ord:2, name:"Nông Trại Tối Ưu", emoji:"🌾", grade:10,
     topic:"Bất PT bậc nhất hai ẩn", real:"Ruộng lúa · ao cá ĐBSCL", folder:"nong-trai",
-    feat:["⏱ Hẹn giờ","🌱 3 vụ"],
+    feat:["⏱ Hẹn giờ","🌱 4 vụ mùa"],
     desc:"Chia <b>đất, vốn, công</b> để lãi cao nhất. Kéo các ràng buộc, thấy vùng nghiệm và đỉnh tối ưu hiện ra." },
 
   { ord:3, name:"Phi Thuyền Vectơ", emoji:"🚀", grade:10,
@@ -194,7 +318,7 @@ const CORE = [
     desc:"Dựng <b>không gian mẫu</b>, chọn biến cố và xem P(E) đổi ngay. Gieo nhiều lần để thấy tần suất hội tụ về xác suất." },
 ];
 
-// Hướng mở rộng — lớp 11 & 12.
+// Hướng mở rộng — lớp 11 & 12. (GIỮ NGUYÊN liên kết thư mục)
 const EXT = [
   { name:"Đầu Tư Thông Minh", emoji:"💰", grade:11,
     topic:"Cấp số nhân · lãi kép", real:"Lãi suất ngân hàng", folder:"dau-tu",
@@ -213,10 +337,12 @@ const EXT = [
 ];
 
 function cardHTML(g, withOrd){
-  return `<div class="card g${g.grade}">
+  return `<div class="card g${g.grade}" data-folder="${g.folder}"
+      data-search="${(g.name+' '+g.topic+' '+g.real).toLowerCase()}" data-grade="${g.grade}">
     ${withOrd ? `<span class="ord">${g.ord}</span>` : ``}
     <div class="tile">${g.emoji}</div>
     <span class="gradetag">Lớp ${g.grade}</span>
+    <span class="recent">🕘 chơi gần đây</span>
     <h3>${g.name}</h3>
     <div class="chips">
       <span class="chip">${g.topic}</span>
@@ -224,12 +350,85 @@ function cardHTML(g, withOrd){
     </div>
     <p class="desc">${g.desc}</p>
     <div class="feat">${g.feat.map(f=>`<span>${f}</span>`).join("")}</div>
-    <a class="play" href="${g.folder}/">Chơi ngay 🚀</a>
+    <a class="play" href="${g.folder}/" data-play="${g.folder}">Chơi ngay 🚀</a>
   </div>`;
 }
 
 document.getElementById('gridCore').innerHTML = CORE.map(g=>cardHTML(g,true)).join("");
 document.getElementById('gridExt').innerHTML  = EXT.map(g=>cardHTML(g,false)).join("");
+
+/* ===== Hiệu ứng xuất hiện lần lượt khi cuộn ===== */
+(function(){
+  const cards=[...document.querySelectorAll('.card')];
+  if(!('IntersectionObserver' in window)){cards.forEach(c=>c.classList.add('in'));return;}
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  }),{threshold:.12});
+  cards.forEach((c,i)=>{ c.style.transitionDelay=(i%3)*70+'ms'; io.observe(c); });
+})();
+
+/* ===== Tìm kiếm + lọc theo khối lớp ===== */
+(function(){
+  const q=document.getElementById('q'), chips=document.getElementById('fchips');
+  let grade='all';
+  function apply(){
+    const kw=q.value.trim().toLowerCase();
+    let shown=0;
+    document.querySelectorAll('.card').forEach(c=>{
+      const ok=(grade==='all'||c.dataset.grade===grade) &&
+               (!kw || c.dataset.search.includes(kw));
+      c.classList.toggle('hidden',!ok); if(ok)shown++;
+    });
+    // ẩn tiêu đề mục nếu cả mục trống
+    const coreShown=[...document.querySelectorAll('#gridCore .card')].some(c=>!c.classList.contains('hidden'));
+    const extShown=[...document.querySelectorAll('#gridExt .card')].some(c=>!c.classList.contains('hidden'));
+    document.getElementById('core').style.display=coreShown?'':'none';
+    document.getElementById('gridCore').style.display=coreShown?'':'none';
+    document.getElementById('ext').style.display=extShown?'':'none';
+    document.getElementById('gridExt').style.display=extShown?'':'none';
+    document.getElementById('noresult').style.display=shown?'none':'block';
+  }
+  q.addEventListener('input',apply);
+  chips.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b)return;
+    grade=b.dataset.g;
+    [...chips.children].forEach(x=>x.classList.toggle('on',x===b));
+    apply();
+  });
+  // phím tắt "/" để nhảy vào ô tìm kiếm
+  window.addEventListener('keydown',e=>{
+    if(e.key==='/'&&document.activeElement!==q){ e.preventDefault(); q.focus(); }
+  });
+})();
+
+/* ===== Nhớ game chơi gần đây (localStorage) ===== */
+(function(){
+  const ALL=[...CORE,...EXT];
+  try{
+    const last=localStorage.getItem('sct_last_game');
+    if(last){
+      const g=ALL.find(x=>x.folder===last);
+      if(g){
+        const c=document.querySelector(`.card[data-folder="${last}"]`);
+        if(c)c.classList.add('was-recent');
+        const r=document.getElementById('resume'), a=document.getElementById('resumeLink');
+        a.textContent=g.emoji+' '+g.name; a.href=g.folder+'/'; r.style.display='block';
+      }
+    }
+  }catch(e){}
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('[data-play]'); if(!a)return;
+    try{localStorage.setItem('sct_last_game',a.dataset.play);}catch(err){}
+  });
+})();
+
+/* ===== Chọn game ngẫu nhiên ===== */
+document.getElementById('btnLucky').onclick=()=>{
+  const ALL=[...CORE,...EXT];
+  const g=ALL[Math.floor(Math.random()*ALL.length)];
+  try{localStorage.setItem('sct_last_game',g.folder);}catch(e){}
+  location.href=g.folder+'/';
+};
 </script>
 </body>
 </html>
