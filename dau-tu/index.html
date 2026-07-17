@@ -28,13 +28,16 @@
     border-radius:14px;padding:12px 16px;margin:14px 0;display:flex;align-items:center;gap:12px}
   .mission .ctx{font-size:26px;line-height:1}.mission .txt{font-size:15px}
   .mission .txt b{color:var(--gold-d)}
+  .mission .txt .expert{color:#C9650E;font-weight:600}
   .stage{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;
     overflow:hidden;box-shadow:0 10px 30px -18px rgba(42,59,143,.4)}
   canvas{display:block;width:100%;height:auto}
-  .hud{position:absolute;top:10px;left:10px;display:flex;gap:8px;
-    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px}
+  .hud{position:absolute;top:10px;left:10px;display:flex;gap:8px;flex-wrap:wrap;
+    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px;z-index:10}
   .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;
     padding:4px 12px;color:var(--indigo)}.chip b{color:var(--gold-d)}
+  button.chip{cursor:pointer;flex:none;font-size:13px;box-shadow:none;
+    font-family:"Baloo 2",sans-serif;font-weight:600}
   .panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
   @media(max-width:640px){.panel{grid-template-columns:1fr}}
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
@@ -60,6 +63,7 @@
   .status{font-size:13px;font-weight:600;padding:9px 12px;border-radius:10px;margin-bottom:12px}
   .status.ok{background:#E8F7EE;color:var(--emerald-d)}
   .status.bad{background:#FDF0E8;color:var(--gold-d)}
+  .status.hid{background:#EEF0F7;color:var(--indigo)}
   .actions{display:flex;gap:8px}
   button.act{font-family:"Baloo 2",sans-serif;font-weight:600;font-size:15px;border:none;
     border-radius:12px;padding:12px 14px;cursor:pointer;transition:transform .08s}
@@ -76,10 +80,10 @@
   .tip b{color:var(--indigo)}
   .tip.warn b{color:var(--red)}
   .toast{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
-    background:rgba(15,21,48,.55);backdrop-filter:blur(2px)}
+    background:rgba(15,21,48,.55);backdrop-filter:blur(2px);z-index:20}
   .toast.show{display:flex}
-  .toast .box{background:#fff;border-radius:18px;padding:24px 26px;text-align:center;max-width:350px;
-    box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
+  .toast .box{background:#fff;border-radius:18px;padding:24px 26px;text-align:center;max-width:360px;
+    width:calc(100% - 40px);box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
   .toast .stars{font-size:30px;letter-spacing:4px}
   .toast h2{font-family:"Baloo 2",sans-serif;margin:8px 0 4px;font-size:23px;color:var(--gold-d)}
   .toast.fail h2{color:var(--tangerine)}
@@ -89,7 +93,27 @@
   .retry{background:var(--indigo);color:#fff;box-shadow:0 5px 0 #1C2A6B}
   footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
 
-/* ==== Cải tiến: dải nhận diện cấp lớp + đồng hồ ==== */
+  /* ==== Câu hỏi củng cố ==== */
+  .qopts{display:grid;grid-template-columns:1fr;gap:8px;margin:14px 0 6px}
+  .qopt{background:#EEF0F7;color:var(--ink);font-size:14px;padding:11px 10px;
+    border-radius:10px;box-shadow:none;text-align:left;border:none;cursor:pointer;
+    font-family:"Be Vietnam Pro",sans-serif;font-weight:500}
+  .qopt.correct{background:var(--emerald);color:#fff}
+  .qopt.wrong{background:#E85D5D;color:#fff}
+  .qopt:disabled{cursor:default;opacity:.92}
+  .qexp{font-size:13px;color:var(--indigo);background:#F1F4FF;border-radius:10px;
+    padding:10px 12px;margin:10px 0 14px;text-align:left;line-height:1.5}
+
+  /* ==== Pháo giấy ==== */
+  .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:15}
+  .confetti i{position:absolute;top:-16px;width:8px;height:13px;border-radius:2px;
+    opacity:.95;animation:cfall linear forwards}
+  @keyframes cfall{
+    0%{transform:translateY(0) rotate(0deg)}
+    100%{transform:translateY(600px) rotate(660deg);opacity:.7}
+  }
+
+/* ==== Cải tiến: dải nhận diện cấp lớp (tông xanh ngọc lớp 11) + đồng hồ ==== */
 :root{--indigo:#0E6F5C;--indigo-soft:#3FA98E;--tangerine:#E0871C;--emerald:#0E6F5C;--gradec:#0E6F5C;--grade2:#E0871C}
 .sct-ribbon{display:flex;align-items:center;justify-content:space-between;gap:10px;
   margin:0 0 16px;flex-wrap:wrap}
@@ -128,8 +152,10 @@
 
   <div class="stage">
     <div class="hud">
-      <span class="chip">Màn <b id="lvl">1</b>/4</span>
+      <span class="chip">Màn <b id="lvl">1</b>/<span id="lvlMax">4</span></span>
       <span class="chip">Điểm <b id="score">0</b></span>
+      <span class="chip">⭐ <b id="stars">0</b>/<span id="starsMax">12</span></span>
+      <button class="chip" id="sndBtn" title="Bật/tắt âm thanh">🔊</button>
     </div>
     <canvas id="cv" width="900" height="520"></canvas>
     <div class="toast" id="toast">
@@ -140,6 +166,7 @@
         <button id="tBtn" class="next"></button>
       </div>
     </div>
+    <div class="toast" id="quiz"><div class="box" id="quizBox"></div></div>
   </div>
 
   <div class="panel">
@@ -179,45 +206,114 @@
 </div>
 
 <script>
+/* ===================================================================
+   CẤU HÌNH BÁO ĐIỂM VỀ APP LUYỆN TẬP
+   Khi triển khai, đặt origin thật của App Luyện Tập, ví dụ:
+   const SCT_APP_ORIGIN = 'https://sanchoitoanhoc.web.app';
+   Mặc định dùng origin của trang; mở bằng file:// tự hạ về '*'.
+=================================================================== */
+const SCT_APP_ORIGIN = window.SCT_APP_ORIGIN || window.location.origin;
+const SCT_TARGET = /^https?:/i.test(SCT_APP_ORIGIN) ? SCT_APP_ORIGIN : '*';
+
 const cv=document.getElementById('cv'), ctx=cv.getContext('2d'), $=id=>document.getElementById(id);
 const fmt=v=>v.toFixed(1).replace('.',',');
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const fmtT=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
 
-// ===== Các màn =====
+/* ===== Âm thanh (Web Audio) ===== */
+const SFX=(function(){
+  let ac=null, muted=false;
+  function ctxA(){
+    if(muted) return null;
+    if(!ac){ try{ ac=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+    if(ac.state==='suspended') ac.resume();
+    return ac;
+  }
+  function tone(f,d,type,t0,vol){
+    const a=ctxA(); if(!a) return;
+    const o=a.createOscillator(),gn=a.createGain();
+    o.type=type||'sine'; o.frequency.value=f;
+    gn.gain.setValueAtTime(vol||.16,a.currentTime+t0);
+    gn.gain.exponentialRampToValueAtTime(.001,a.currentTime+t0+d);
+    o.connect(gn); gn.connect(a.destination);
+    o.start(a.currentTime+t0); o.stop(a.currentTime+t0+d+.05);
+  }
+  return {
+    win(){ [523,659,784,1047].forEach((f,i)=>tone(f,.2,'sine',i*.095,.18)); },
+    fail(){ tone(185,.22,'sawtooth',0,.1); tone(140,.3,'sawtooth',.09,.1); },
+    ding(){ tone(880,.15,'sine',0,.16); tone(1175,.2,'sine',.08,.14); },
+    buzz(){ tone(160,.25,'square',0,.08); },
+    coin(){ tone(988,.09,'square',0,.09); tone(1319,.14,'square',.07,.09); },
+    toggle(){ muted=!muted; return muted; }
+  };
+})();
+$('sndBtn').addEventListener('click',()=>{ $('sndBtn').textContent = SFX.toggle() ? '🔇' : '🔊'; });
+
+/* ===== Pháo giấy ===== */
+function confetti(){
+  const box=document.createElement('div'); box.className='confetti';
+  const colors=['#E8A317','#0E6F5C','#3FA98E','#FFC94D','#6B7BD6','#E0871C'];
+  for(let i=0;i<38;i++){
+    const p=document.createElement('i');
+    p.style.left=(Math.random()*100)+'%';
+    p.style.background=colors[i%colors.length];
+    p.style.animationDuration=(1+Math.random()*0.9)+'s';
+    p.style.animationDelay=(Math.random()*0.35)+'s';
+    box.appendChild(p);
+  }
+  document.querySelector('.stage').appendChild(box);
+  setTimeout(()=>box.remove(),2300);
+}
+
+/* ===== Các màn =====
+   live:true  → thấy cột tiền & trạng thái ngay khi kéo (khám phá)
+   live:false → biểu đồ và số tiền bị ẨN, chọn xong bấm Chốt mới lộ
+                (buộc phải TÍNH bằng lũy thừa/logarit, không mò được)   */
 const LEVELS=[
- { emoji:"🏦", unit:"năm", nMax:12, goal:150, P:100, r:0.08, kind:"single",
+ { emoji:"🏦", unit:"năm", nMax:12, goal:150, P:100, r:0.08, kind:"single", live:true,
    text:"Gửi <b>100 triệu</b> vào ngân hàng, lãi <b>8%/năm</b> (lãi kép). Cần ít nhất <b>150 triệu</b>. Gửi <b>bao nhiêu năm là đủ</b> (và sớm nhất)?",
    formula:n=>`A = 100 · (1,08)<sup>${n}</sup>`,
    seq:()=>`Mỗi năm tiền nhân với công bội <b>q = 1 + 8% = 1,08</b>.<br>Đây là cấp số nhân: 100 → 108 → 116,64 → …` ,
    tipClass:"", tip:`<b>Cấp số nhân:</b> số dư sau n năm là số hạng tổng quát <b>u_n = u_1·q^n</b> với q = 1 + lãi suất.` },
 
- { emoji:"⚖️", unit:"năm", nMax:8, goal:200, P:100, r:0.10, kind:"vs",
+ { emoji:"⚖️", unit:"năm", nMax:8, goal:200, P:100, r:0.10, kind:"vs", live:true,
    text:"Cùng <b>100 triệu</b>, lãi <b>10%/năm</b>. Muốn <b>gấp đôi (200 triệu)</b> trong tối đa 8 năm. Chọn gói nào và mấy năm?",
    formula:(n,sel)=> sel==="don" ? `A = 100·(1 + 0,10·${n})` : `A = 100·(1,10)<sup>${n}</sup>`,
    seq:()=>`<b>Lãi đơn</b> = cấp số cộng (tăng đều mỗi năm 10 triệu).<br><b>Lãi kép</b> = cấp số nhân (nhân 1,10 mỗi năm).`,
    tipClass:"", tip:`<b>So sánh:</b> lãi kép (hàm mũ) luôn vượt lãi đơn (tuyến tính) khi thời gian đủ dài.` },
 
- { emoji:"📈", unit:"năm", nMax:10, goal:150, dep:20, r:0.07, kind:"annuity",
+ { emoji:"📈", unit:"năm", nMax:10, goal:150, dep:20, r:0.07, kind:"annuity", live:false,
    text:"Mỗi cuối năm gửi góp <b>20 triệu</b>, lãi <b>7%/năm</b>. Sau bao nhiêu năm tích luỹ đạt <b>150 triệu</b> (sớm nhất)?",
    formula:n=>`S = 20 · <span style="white-space:nowrap">[(1,07)<sup>${n}</sup> − 1] / 0,07</span>`,
    seq:()=>`Tổng các khoản gửi là <b>tổng cấp số nhân</b>:<br>S = 20·(1 + 1,07 + 1,07² + … + 1,07<sup>n−1</sup>).`,
-   tipClass:"", tip:`<b>Sức mạnh gửi đều &amp; bắt đầu sớm:</b> tổng CSN tích luỹ nhanh hơn ta tưởng nhờ lãi mẹ đẻ lãi con.` },
+   tipClass:"", tip:`<b>Sức mạnh gửi đều &amp; bắt đầu sớm:</b> giải bất phương trình S ≥ 150 bằng lũy thừa/logarit rồi mới chốt — máy sẽ kiểm chứng.` },
 
- { emoji:"⚠️", unit:"tháng", nMax:24, goal:60, P:30, r:0.05, kind:"debt",
+ { emoji:"⚠️", unit:"tháng", nMax:24, goal:60, P:30, r:0.05, kind:"debt", live:false,
    text:"Vay nóng <b>30 triệu</b>, lãi <b>5%/tháng</b> mà <b>chưa trả gì</b>. Hãy dự đoán: sau bao nhiêu <b>tháng</b> món nợ <b>tăng gấp đôi</b> (60 triệu)?",
    formula:n=>`Nợ = 30 · (1,05)<sup>${n}</sup>`,
    seq:()=>`Nợ cũng là cấp số nhân với <b>q = 1,05</b> — nhưng lần này nó chống lại bạn.`,
-   tipClass:"warn", tip:`<b>Bẫy nợ &amp; quy tắc 72:</b> số kỳ để gấp đôi ≈ 72 ÷ lãi(%). Với 5%/tháng ≈ 72/5 ≈ 14–15 tháng!` },
+   tipClass:"warn", tip:`<b>Bẫy nợ &amp; quy tắc 72:</b> số kỳ để gấp đôi ≈ 72 ÷ lãi(%). Hãy ước lượng trước rồi chốt — biểu đồ chỉ hiện sau khi chốt!` },
 ];
 
 let lvlIdx=0, score=0, n=0, sel="kep", cur=null;
-/* ===== Báo kết quả về app Luyện tập (postMessage) ===== */
+let revealed=false;         // màn ẩn: đã chốt lần nào chưa (chốt mới lộ biểu đồ)
+let confirmFails=0;         // số lần chốt sai trong màn
+let levelStars={}, starsTotal=0;
+let quizCorrect=0, quizAsked=0;
+const clearedOnce=new Set(), quizDone=new Set();
+
+/* ===== Báo kết quả về App Luyện Tập (origin giới hạn) ===== */
 const SCT_done=new Set();
 function SCTreport(){
   var total=LEVELS.length, cleared=SCT_done.size;
   var percent=Math.round(cleared/total*100);
-  var payload={source:'SCT_GAME',type:'RESULT',game:'dau-tu',percent:percent,stars:cleared,starsMax:total,detail:cleared+'/'+total+' màn hoàn thành'};
-  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,'*'); }catch(e){}
-  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
+  var payload={source:'SCT_GAME',type:'RESULT',game:'dau-tu',
+    percent:percent, stars:starsTotal, starsMax:total*3,
+    timeSec:(window.SCT_elapsed?window.SCT_elapsed():0),
+    quizCorrect:quizCorrect, quizAsked:quizAsked,
+    detail:cleared+'/'+total+' màn · '+starsTotal+'/'+(total*3)+' sao · củng cố đúng '+quizCorrect+'/'+quizAsked};
+  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,SCT_TARGET); }catch(e){}
+  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,SCT_TARGET); }catch(e){}
 }
 
 // giá trị theo loại
@@ -233,10 +329,11 @@ function primary(L,k){
   if(L.kind==="vs") return value(L,k,sel);
   return value(L,k);
 }
-function nMin(L){ // số kỳ nhỏ nhất đạt mục tiêu (với lựa chọn hiện tại nếu vs)
+function nMin(L){
   for(let k=0;k<=L.nMax;k++){ if(primary(L,k)>=L.goal-1e-9) return k; }
   return Infinity;
 }
+const hidden=()=>!cur.live && !revealed;   // đang ở chế độ ẩn?
 
 // ===== Biểu đồ =====
 let M={l:48,r:16,t:18,b:38}, plotW=0, plotH=0;
@@ -251,7 +348,7 @@ function yMaxFor(L){
   return mx*1.12;
 }
 function draw(){
-  fit(); const L=cur, cssW=cv.clientWidth, cssH=cssW*(520/900);
+  const L=cur, cssW=cv.clientWidth, cssH=cssW*(520/900);
   ctx.clearRect(0,0,cssW,cssH);
   const yMax=yMaxFor(L);
   const X=k=>M.l+ (k/L.nMax)*plotW;
@@ -261,15 +358,30 @@ function draw(){
   for(let g=0;g<=5;g++){ const v=yMax*g/5, y=Y(v);
     ctx.strokeStyle='#EEF1F6'; ctx.lineWidth=1; ctx.beginPath();ctx.moveTo(M.l,y);ctx.lineTo(M.l+plotW,y);ctx.stroke();
     ctx.fillStyle='#9098AC'; ctx.fillText(Math.round(v), 6, y+4); }
+  ctx.fillStyle='#9098AC'; ctx.fillText('triệu', 6, M.t-4);
   // đường mục tiêu
-  ctx.strokeStyle='#1FA36B'; ctx.lineWidth=2; ctx.setLineDash([6,5]);
+  ctx.strokeStyle='#0E6F5C'; ctx.lineWidth=2; ctx.setLineDash([6,5]);
   ctx.beginPath();ctx.moveTo(M.l,Y(L.goal));ctx.lineTo(M.l+plotW,Y(L.goal));ctx.stroke();
-  ctx.setLineDash([]); ctx.fillStyle='#1FA36B';
+  ctx.setLineDash([]); ctx.fillStyle='#0E6F5C';
   ctx.font='bold 11px "Be Vietnam Pro"'; ctx.fillText('Mục tiêu '+L.goal, M.l+plotW-92, Y(L.goal)-6);
   // trục x nhãn
   ctx.fillStyle='#9098AC'; ctx.font='11px "Be Vietnam Pro"';
   for(let k=0;k<=L.nMax;k+=(L.nMax>14?3:1)){ ctx.fillText(k, X(k)-3, M.t+plotH+18); }
   ctx.fillText(L.unit, M.l+plotW-18, M.t+plotH+30);
+
+  // chế độ ẩn: chỉ vẽ dấu chấm hỏi + vị trí n đã chọn, KHÔNG vẽ cột tiền
+  if(hidden()){
+    ctx.fillStyle='#C9D2E8'; ctx.font='700 68px "Baloo 2"';
+    ctx.fillText('?', M.l+plotW/2-18, M.t+plotH/2);
+    ctx.font='600 13px "Be Vietnam Pro"'; ctx.fillStyle='#6A7184';
+    ctx.fillText('Biểu đồ sẽ hiện sau khi bạn CHỐT phương án', M.l+plotW/2-140, M.t+plotH/2+28);
+    if(n>0){ // đánh dấu lựa chọn hiện tại trên trục hoành
+      ctx.fillStyle='#E0871C';
+      ctx.beginPath(); ctx.arc(X(n), M.t+plotH, 6, 0, 7); ctx.fill();
+    }
+    return;
+  }
+
   // cột (cấp số) tới n
   const reached = primary(L,n) >= L.goal-1e-9;
   const barW=Math.max(4, plotW/(L.nMax+1)*0.62);
@@ -277,7 +389,7 @@ function draw(){
     const v=primary(L,k), x=X(k), h=(v/yMax)*plotH;
     const last=k===n;
     if(L.kind==="debt"){ ctx.fillStyle=last?'#C0392B':'#E08A82'; }
-    else ctx.fillStyle=last?(reached?'#1FA36B':'#E8A317'):'#F1C778';
+    else ctx.fillStyle=last?(reached?'#0E6F5C':'#E8A317'):'#F1C778';
     ctx.fillRect(x-barW/2, M.t+plotH-h, barW, h);
   }
   // đường so sánh (chỉ màn vs): gói còn lại
@@ -286,7 +398,7 @@ function draw(){
     ctx.strokeStyle='#9AA6D8'; ctx.lineWidth=2; ctx.setLineDash([4,4]); ctx.beginPath();
     for(let k=0;k<=L.nMax;k++){ const p=X(k),q=Y(value(L,k,other)); k?ctx.lineTo(p,q):ctx.moveTo(p,q); }
     ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle='#6B7BD6'; ctx.font='bold 11px "Be Vietnam Pro"';
+    ctx.fillStyle='#3FA98E'; ctx.font='bold 11px "Be Vietnam Pro"';
     ctx.fillText(other==="kep"?"Lãi kép":"Lãi đơn", X(L.nMax)-58, Y(value(L,L.nMax,other))-6);
   }
   // nhãn giá trị cột cuối
@@ -299,20 +411,24 @@ function draw(){
 function updatePanel(){
   const L=cur;
   $('nVal').textContent=n; $('nShow').textContent=n;
-  $('amtVal').textContent=fmt(primary(L,n));
+  $('amtVal').textContent = hidden() ? '?' : fmt(primary(L,n));
   $('goalVal').textContent=L.goal;
-  $('formula').innerHTML=L.formula(n,sel);
+  $('formula').innerHTML=L.formula(n,sel) + (hidden()?' = <span class="v">?</span>':'');
   $('seqNote').innerHTML=L.seq();
   const st=$('status'), reached=primary(L,n)>=L.goal-1e-9;
   if(n===0){ st.className='status bad'; st.textContent='Kéo thanh trượt để chọn số '+L.unit+'.'; }
+  else if(hidden()){ st.className='status hid';
+    st.textContent='🔒 Chế độ tính trước: kết quả ẩn. Tính bằng lũy thừa/logarit rồi bấm Chốt.'; }
   else if(reached){ st.className='status ok'; st.textContent='✓ Đã đạt mục tiêu ở '+n+' '+L.unit+'.'; }
   else { st.className='status bad'; st.textContent='Chưa đạt — còn thiếu '+fmt(L.goal-primary(L,n))+' triệu.'; }
 }
 function draw_(){ draw(); updatePanel(); }
 
 function setLevel(i){
-  lvlIdx=i; cur=LEVELS[i]; n=0; sel="kep";
-  $('lvl').textContent=i+1; $('ctxEmoji').textContent=cur.emoji; $('ctxText').innerHTML=cur.text;
+  lvlIdx=i; cur=LEVELS[i]; n=0; sel="kep"; revealed=false; confirmFails=0;
+  $('lvl').textContent=i+1; $('ctxEmoji').textContent=cur.emoji;
+  $('ctxText').innerHTML=cur.text + (cur.live ? '' :
+    ' <span class="expert">· Chế độ tính trước: biểu đồ ẩn cho tới khi bạn chốt!</span>');
   $('score').textContent=score;
   $('periodLab').textContent= cur.unit==="tháng"?"Số tháng":"Số năm";
   $('nLabel').firstChild.textContent= (cur.unit==="tháng"?"Số tháng":"Số năm gửi")+" ";
@@ -321,39 +437,152 @@ function setLevel(i){
   $('toggle').classList.toggle('show', cur.kind==="vs");
   [...document.querySelectorAll('#toggle button')].forEach(b=>b.classList.toggle('on',b.dataset.k==="kep"));
   $('tip').className='tip '+(cur.tipClass||''); $('tip').innerHTML=cur.tip;
-  draw_();
+  fit(); draw_();
 }
 
 function stars(extra){ return extra===0?3 : extra===1?2 : 1; }
-function confirmPlan(){
+
+/* ===== Câu hỏi củng cố (đặc trưng lớp 11: lũy thừa – logarit – CSN) ===== */
+function makeQuiz(){
+  const i=lvlIdx; let t;
+  if(i===0){
+    t={q:'Muốn tìm số năm nhỏ nhất để 100·(1,08)ⁿ ≥ 150, cách làm đúng là gì?',
+      correct:'Giải (1,08)ⁿ ≥ 1,5 ⇒ n ≥ log(1,5)/log(1,08) ≈ 5,27 → chọn n = 6',
+      opts:['Giải (1,08)ⁿ ≥ 1,5 ⇒ n ≥ log(1,5)/log(1,08) ≈ 5,27 → chọn n = 6',
+            'Lấy 50 : 8 = 6,25 → chọn n = 7',
+            'Giải n ≥ log(1,08)/log(1,5) ≈ 0,19 → chọn n = 1',
+            'Lấy 150 : 100 = 1,5 → chọn n = 2'],
+      exp:'Chia hai vế cho 100 rồi lấy logarit: n·log(1,08) ≥ log(1,5). Vì 5 < 5,27 < 6 nên n nhỏ nhất là 6 — đúng như biểu đồ.'};
+  } else if(i===1){
+    t={q:'Vì sao khi gửi đủ lâu, lãi kép LUÔN vượt lãi đơn?',
+      correct:'Lãi kép là cấp số nhân (hàm mũ), lãi đơn là cấp số cộng (hàm bậc nhất) — hàm mũ với q > 1 sớm muộn vượt mọi hàm bậc nhất',
+      opts:['Lãi kép là cấp số nhân (hàm mũ), lãi đơn là cấp số cộng (hàm bậc nhất) — hàm mũ với q > 1 sớm muộn vượt mọi hàm bậc nhất',
+            'Vì lãi suất của lãi kép luôn cao hơn lãi đơn',
+            'Vì lãi đơn bị ngân hàng trừ phí hằng năm',
+            'Không đúng — hai gói luôn bằng nhau nếu cùng lãi suất'],
+      exp:'Cùng lãi suất 10%: lãi đơn mỗi năm +10 triệu (tuyến tính), lãi kép nhân 1,10 mỗi năm (mũ). Trên biểu đồ, đường cong mũ cắt và bỏ xa đường thẳng.'};
+  } else if(i===2){
+    t={q:'Công thức S = 20·[(1,07)ⁿ − 1]/0,07 chính là…',
+      correct:'Tổng n số hạng đầu của một cấp số nhân (u₁ = 20, q = 1,07)',
+      opts:['Tổng n số hạng đầu của một cấp số nhân (u₁ = 20, q = 1,07)',
+            'Số hạng tổng quát uₙ của cấp số nhân',
+            'Tổng n số hạng đầu của một cấp số cộng',
+            'Công thức lãi đơn nhân với n'],
+      exp:'Sₙ = u₁(qⁿ − 1)/(q − 1) với u₁ = 20, q = 1,07, q − 1 = 0,07. Mỗi khoản gửi sinh lãi số năm khác nhau nên tổng là tổng CSN.'};
+  } else {
+    t={q:'Quy tắc 72: với lãi 5%/tháng, ước lượng số tháng để món nợ tăng gấp đôi?',
+      correct:'≈ 72/5 ≈ 14,4 → thực tế sang tháng 15 nợ vượt gấp đôi',
+      opts:['≈ 72/5 ≈ 14,4 → thực tế sang tháng 15 nợ vượt gấp đôi',
+            '≈ 5 tháng vì lãi 5%',
+            '≈ 72 tháng theo đúng tên quy tắc',
+            '≈ 36 tháng (một nửa của 72)'],
+      exp:'Chính xác: n = log2/log(1,05) ≈ 14,2. Quy tắc 72 cho ước lượng nhanh 72÷5 ≈ 14,4 — rất gần! Nợ lãi cao gấp đôi nhanh khủng khiếp.'};
+  }
+  t.opts=shuffle([...new Set(t.opts)]);
+  return t;
+}
+function showQuiz(onDone,nextLabel){
+  const qz=makeQuiz(); quizAsked++;
+  const q=$('quiz'), box=$('quizBox');
+  box.innerHTML=`<div style="font-size:42px">✏️</div>
+    <h2 style="color:var(--indigo);font-family:'Baloo 2'">Câu hỏi củng cố</h2>
+    <p style="margin-bottom:0">${qz.q}</p>
+    <div class="qopts"></div>
+    <div class="qexp" style="display:none"></div>
+    <button class="next" style="display:none;font-family:'Baloo 2';font-weight:600;border:none;border-radius:12px;padding:13px;cursor:pointer">${nextLabel}</button>`;
+  const wrap=box.querySelector('.qopts');
+  const expEl=box.querySelector('.qexp');
+  const nextBtn=box.querySelector('button.next');
+  qz.opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='qopt'; b.textContent=o;
+    b.onclick=()=>{
+      wrap.querySelectorAll('button').forEach(x=>{
+        x.disabled=true;
+        if(x.textContent===qz.correct) x.classList.add('correct');
+      });
+      const okA=(o===qz.correct);
+      if(!okA){ b.classList.add('wrong'); SFX.buzz(); }
+      else{ quizCorrect++; score+=50; $('score').textContent=score; SFX.ding(); }
+      expEl.style.display='block';
+      expEl.innerHTML=(okA?'✅ Chính xác! +50 điểm. ':'❌ Chưa đúng. ')+qz.exp;
+      nextBtn.style.display='block';
+      SCTreport();
+    };
+    wrap.appendChild(b);
+  });
+  nextBtn.onclick=()=>{ q.className='toast'; onDone(); };
+  q.className='toast show';
+}
+
+function finalToast(){
+  const time=window.SCT_elapsed?fmtT(window.SCT_elapsed()):'—';
+  showToast(true,'🏆','Nhà đầu tư thông minh!',
+    `Hoàn thành cả ${LEVELS.length} màn: ${score} điểm · ${starsTotal}/${LEVELS.length*3} ⭐ · củng cố đúng ${quizCorrect}/${quizAsked} · thời gian ${time}. Lãi kép làm việc cho bạn — còn nợ lãi cao thì ngược lại!`,
+    'Chơi lại từ đầu','next',
+    ()=>{ score=0; setLevel(0); });
+}
+
+function evaluate(){
   const L=cur, reached=primary(L,n)>=L.goal-1e-9, nm=nMin(L);
   if(!reached){
+    confirmFails++;
+    SFX.fail();
     let extra='';
     if(L.kind==="vs" && sel==="don") extra=' Gói lãi đơn không thể gấp đôi trong 8 năm — hãy thử lãi kép.';
+    if(confirmFails>=2 && !cur.live) extra+=` Gợi ý: giải bất phương trình bằng logarit — n ≥ log(mục tiêu/vốn) / log(1 + lãi).`;
     showToast(false,'', L.kind==="debt"?'Chưa tới mốc':'Chưa đạt mục tiêu',
       `Ở ${n} ${L.unit} mới có ${fmt(primary(L,n))} triệu (cần ${L.goal}).${extra}`,
       'Thử lại','retry',()=>{});
     return;
   }
-  const extra=n-nm, s=stars(extra);
-  score+=10*s; $('score').textContent=score;
+  const extra=n-nm;
+  let s=stars(extra);
+  if(confirmFails>=1) s=Math.min(s,2);
+  if(confirmFails>=3) s=1;
+  levelStars[lvlIdx]=Math.max(s,levelStars[lvlIdx]||0);
+  starsTotal=Object.values(levelStars).reduce((a,b)=>a+b,0);
+  $('stars').textContent=starsTotal;
+  if(!clearedOnce.has(lvlIdx)){ score+=100; $('score').textContent=score; clearedOnce.add(lvlIdx); }
+  SCT_done.add(lvlIdx); SCTreport();
+  SFX.win(); confetti();
   let title, msg;
   if(L.kind==="debt"){
     title = extra===0?'Đúng tháng gấp đôi!':'Có hơi trễ';
     msg = `Nợ chạm 60 triệu ngay ở tháng ${nm}. ${extra===0?'Bạn ước lượng chính xác!':'Mốc gấp đôi sớm nhất là tháng '+nm+'.'} Thấy nợ lãi cao đáng sợ chưa?`;
   } else {
     title = extra===0?'Tối ưu thời gian!':'Đạt mục tiêu!';
-    msg = extra===0?`Đúng mốc sớm nhất: ${nm} ${L.unit}.`
-                   :`Đạt rồi, nhưng sớm nhất chỉ cần ${nm} ${L.unit} (bạn chọn ${n}).`;
+    msg = extra===0?`Đúng mốc sớm nhất: ${nm} ${L.unit} — đạt ${'⭐'.repeat(s)}.`
+                   :`Đạt rồi, nhưng sớm nhất chỉ cần ${nm} ${L.unit} (bạn chọn ${n}) — đạt ${'⭐'.repeat(s)}.`;
   }
   const last=lvlIdx===LEVELS.length-1;
-  showToast(true,'★'.repeat(s)+'☆'.repeat(3-s), title, msg,
-    last?'Chơi lại từ đầu':'Màn tiếp theo','next',
-    ()=>{ if(last){score=0;setLevel(0);} else setLevel(lvlIdx+1); });
+  const goNext=()=>{ last ? finalToast() : setLevel(lvlIdx+1); };
+  if(quizDone.has(lvlIdx)){
+    showToast(true,'★'.repeat(s)+'☆'.repeat(3-s), title, msg,
+      last?'Xem tổng kết 🏆':'Màn tiếp theo','next',goNext);
+  } else {
+    quizDone.add(lvlIdx);
+    showToast(true,'★'.repeat(s)+'☆'.repeat(3-s), title, msg,
+      'Câu hỏi củng cố ✏️','next',
+      ()=>showQuiz(goNext, last?'Xem tổng kết 🏆':'Màn tiếp theo'));
+  }
+}
+
+function confirmPlan(){
+  if(n===0){ SFX.buzz(); return; }
+  if(hidden()){
+    // lần chốt đầu ở màn ẩn: lộ biểu đồ TRƯỚC, cho học sinh nhìn cột tiền lớn dần rồi mới phán quyết
+    revealed=true; SFX.coin();
+    draw_();
+    setTimeout(evaluate, 700);
+    return;
+  }
+  evaluate();
 }
 function showToast(ok,star,title,msg,btn,cls,act){
-  const t=$('toast'); if(ok){SCT_done.add(lvlIdx);SCTreport();} t.className='toast show'+(ok?'':' fail');
-  $('tStars').textContent=star; $('tStars').style.display=ok?'block':'none';
+  const t=$('toast');
+  t.className='toast show'+(ok?'':' fail');
+  $('tStars').textContent=star; $('tStars').style.display=ok&&star?'block':'none';
   $('tTitle').textContent=title; $('tMsg').innerHTML=msg;
   const b=$('tBtn'); b.textContent=btn; b.className=cls;
   b.onclick=()=>{ t.className='toast'; act(); };
@@ -367,10 +596,40 @@ document.getElementById('toggle').addEventListener('click',e=>{
   draw_();
 });
 $('confirmBtn').addEventListener('click',confirmPlan);
-$('resetBtn').addEventListener('click',()=>{score=0;$('toast').className='toast';setLevel(0);});
-window.addEventListener('resize',draw_);
+$('resetBtn').addEventListener('click',()=>{score=0;$('toast').className='toast';$('quiz').className='toast';setLevel(0);});
+window.addEventListener('resize',()=>{fit();draw_();});
+window.addEventListener('keydown',e=>{
+  if(e.key==='Enter' && !$('toast').classList.contains('show') && !$('quiz').classList.contains('show'))
+    confirmPlan();
+});
 
+$('lvlMax').textContent=LEVELS.length;
+$('starsMax').textContent=LEVELS.length*3;
 setLevel(0);
+</script>
+
+<script>
+/* ==== Đồng hồ đo thời gian chơi (bản cũ THIẾU khối này) ==== */
+(function(){
+  var sec=0, started=false, running=false;
+  function fmt(s){var m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0');}
+  var chip=document.createElement('span');
+  chip.className='sct-timer';
+  chip.innerHTML='⏱ <b id="sctClock">0:00</b>';
+  function mount(){
+    var host=document.querySelector('.hud')||document.querySelector('.top');
+    if(host){ host.appendChild(chip); }
+    else{ chip.style.position='fixed'; chip.style.top='12px'; chip.style.right='12px';
+          chip.style.zIndex='99'; document.body.appendChild(chip); }
+  }
+  function tick(){ if(running){ sec++; var c=document.getElementById('sctClock'); if(c) c.textContent=fmt(sec); } }
+  function start(){ if(started) return; started=true; running=true; setInterval(tick,1000); }
+  document.addEventListener('visibilitychange',function(){ running = started && !document.hidden; });
+  ['pointerdown','keydown','input','change'].forEach(function(ev){ document.addEventListener(ev,start); });
+  window.SCT_elapsed=function(){ return sec; };
+  if(document.readyState!=='loading') mount();
+  else document.addEventListener('DOMContentLoaded',mount);
+})();
 </script>
 </body>
 </html>
