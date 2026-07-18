@@ -12,11 +12,13 @@
     --paper:#F6F8FC; --ink:#1C2438; --line:#E3E7F2; --muted:#6A7184;
     /* Lớp 10 — trọng tâm */
     --c10:#2A3B8F; --c10soft:#6B7BD6; --c10a:#FF7A1A;
-    /* Lớp 11 — hướng mở rộng (xanh ngọc) */
+    /* Lớp 11 — mở rộng (xanh ngọc) */
     --c11:#0E6F5C; --c11soft:#3FA98E; --c11a:#E0871C;
-    /* Lớp 12 — hướng mở rộng (tím) */
+    /* Lớp 12 — mở rộng (tím) */
     --c12:#5B3FBF; --c12soft:#9385E6; --c12a:#D6479A;
-    --emerald:#1FA36B;
+    /* Nhận diện hai KHU VỰC */
+    --hs:#FF7A1A; --hs-d:#C95C09; --hs-bg:#FFF8F1; --hs-line:#FFDDBE;
+    --gv:#0E8A57; --gv-d:#0A6B44; --gv-bg:#F0FAF4; --gv-line:#BFE5D2;
     --shadow:0 16px 38px -26px rgba(42,59,143,.45);
   }
   *{box-sizing:border-box}
@@ -32,82 +34,109 @@
   }
   .wrap{max-width:1080px;margin:0 auto;padding:14px 16px 56px}
 
-  /* ---- Thanh điều hướng dính ---- */
-  .nav{position:sticky;top:10px;z-index:50;display:flex;align-items:center;gap:8px;
-    background:rgba(255,255,255,.88);backdrop-filter:blur(12px);
-    border:1px solid var(--line);border-radius:999px;padding:8px 12px;
+  /* ================= THANH ĐIỀU HƯỚNG + MENU THẢ XUỐNG ================= */
+  .nav{position:sticky;top:10px;z-index:50;display:flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,.9);backdrop-filter:blur(12px);
+    border:1px solid var(--line);border-radius:999px;padding:7px 10px;
     box-shadow:0 10px 30px -20px rgba(42,59,143,.5)}
-  .nav .logo{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:17px;color:var(--c10);
-    display:flex;align-items:center;gap:7px;white-space:nowrap}
+  .nav .logo{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:16.5px;color:var(--c10);
+    display:flex;align-items:center;gap:7px;white-space:nowrap;padding:0 4px}
   .nav .logo em{font-style:normal;color:var(--c10a)}
-  .nav .links{display:flex;gap:2px;margin-left:auto}
-  .nav .links a{font-size:12.5px;font-weight:600;color:var(--muted);text-decoration:none;
-    padding:8px 12px;border-radius:999px;transition:.15s}
-  .nav .links a:hover{background:#EEF1FB;color:var(--c10)}
-  @media(max-width:640px){.nav .links{display:none}}
+  .nav .grow{margin-left:auto;display:flex;gap:4px;align-items:center}
+  .dd{position:relative}
+  .dd>button{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:13px;cursor:pointer;
+    border:none;border-radius:999px;padding:9px 14px;display:inline-flex;align-items:center;gap:6px;transition:.14s}
+  .dd.hs>button{background:#FFF1E2;color:var(--hs-d)}
+  .dd.hs>button:hover{background:var(--hs);color:#fff}
+  .dd.gv>button{background:#E7F6EE;color:var(--gv-d)}
+  .dd.gv>button:hover{background:var(--gv);color:#fff}
+  .dd .caret{font-size:10px;transition:transform .18s}
+  .dd:hover .caret,.dd:focus-within .caret{transform:rotate(180deg)}
+  .dd-menu{position:absolute;right:0;top:calc(100% + 8px);min-width:250px;display:none;
+    background:#fff;border:1px solid var(--line);border-radius:16px;padding:8px;
+    box-shadow:0 20px 44px -20px rgba(28,36,56,.35);z-index:60}
+  .dd:hover .dd-menu,.dd:focus-within .dd-menu{display:block;animation:pop .16s ease}
+  @keyframes pop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+  .dd-menu a{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);
+    font-size:13.5px;font-weight:600;border-radius:11px;padding:10px 11px;transition:.12s}
+  .dd-menu a small{display:block;font-weight:500;color:var(--muted);font-size:11.5px}
+  .dd.hs .dd-menu a:hover{background:var(--hs-bg)}
+  .dd.gv .dd-menu a:hover{background:var(--gv-bg)}
+  .dd-menu .mi{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;
+    justify-content:center;font-size:18px;flex:none}
+  .dd.hs .mi{background:#FFF1E2}
+  .dd.gv .mi{background:#E7F6EE}
+  @media(max-width:560px){.nav .logo span.tx{display:none}}
 
-  /* ---- Hero ---- */
-  .hero{position:relative;padding:38px 0 8px}
+  /* ================= HERO + BỘ CHỌN VAI TRÒ ================= */
+  .hero{position:relative;padding:34px 0 8px;text-align:center}
   .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;
     border:1px solid var(--line);border-radius:999px;padding:7px 15px;
     font-size:13px;font-weight:600;color:var(--c10);box-shadow:0 6px 18px -12px rgba(42,59,143,.5)}
-  .eyebrow .pin{width:8px;height:8px;border-radius:50%;background:var(--c10a);
-    animation:pulse 2s infinite}
+  .eyebrow .pin{width:8px;height:8px;border-radius:50%;background:var(--c10a);animation:pulse 2s infinite}
   @keyframes pulse{0%,100%{box-shadow:0 0 0 0 #FF7A1A55}50%{box-shadow:0 0 0 6px #FF7A1A00}}
   h1{font-family:"Baloo 2",sans-serif;font-weight:800;letter-spacing:-.5px;
-    font-size:clamp(36px,7vw,60px);line-height:1.04;margin:16px 0 10px;color:var(--c10)}
+    font-size:clamp(34px,6.6vw,56px);line-height:1.05;margin:14px 0 8px;color:var(--c10)}
   h1 em{font-style:normal;background:linear-gradient(90deg,var(--c10a),#FFB169);
-    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;position:relative}
-  .lead{font-size:clamp(15px,2.4vw,18px);color:var(--muted);max-width:620px;font-weight:500}
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .lead{font-size:clamp(14.5px,2.3vw,17px);color:var(--muted);max-width:640px;font-weight:500;margin:0 auto}
   .lead b{color:var(--ink)}
-  /* icon toán "bay" trong hero */
-  .float{position:absolute;font-family:"Baloo 2",sans-serif;font-weight:800;opacity:.16;
+  .float{position:absolute;font-family:"Baloo 2",sans-serif;font-weight:800;opacity:.15;
     user-select:none;pointer-events:none;animation:drift 7s ease-in-out infinite}
   .float:nth-child(odd){animation-duration:9s}
   @keyframes drift{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-16px) rotate(5deg)}}
 
-  /* thống kê + hành động nhanh */
-  .stats{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 6px}
-  .stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 18px;
-    text-align:center;box-shadow:0 8px 22px -18px rgba(42,59,143,.5)}
-  .stat .n{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:24px;color:var(--c10)}
-  .stat .l{font-size:11px;font-weight:600;color:var(--muted)}
-  .cta{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 4px}
-  .cta a,.cta button{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:15px;border:none;
-    text-decoration:none;border-radius:13px;padding:13px 22px;cursor:pointer;display:inline-flex;
-    align-items:center;gap:8px;transition:transform .12s}
-  .cta .go{background:var(--c10a);color:#fff;box-shadow:0 5px 0 #C95C09}
-  .cta .go:active{transform:translateY(2px);box-shadow:0 3px 0 #C95C09}
-  .cta .lucky{background:#fff;color:var(--c10);border:1.5px solid var(--line);box-shadow:none}
-  .cta .lucky:hover{border-color:var(--c10soft);transform:translateY(-2px)}
-  .resume{display:none;margin-top:10px;font-size:13px;font-weight:600;color:var(--muted)}
-  .resume a{color:var(--c10);font-weight:700}
+  /* Bộ chọn vai trò — hai cánh cửa */
+  .roles{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:640px;margin:22px auto 0}
+  @media(max-width:560px){.roles{grid-template-columns:1fr}}
+  .rolebtn{position:relative;border:2.5px solid transparent;border-radius:22px;padding:20px 16px;
+    cursor:pointer;text-align:center;font-family:inherit;transition:transform .14s,box-shadow .14s;overflow:hidden}
+  .rolebtn:hover{transform:translateY(-4px)}
+  .rolebtn .ric{font-size:42px;display:block;transition:transform .22s}
+  .rolebtn:hover .ric{transform:scale(1.15) rotate(-7deg)}
+  .rolebtn .rnm{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:19px;margin-top:6px}
+  .rolebtn .rds{font-size:12px;font-weight:500;margin-top:3px}
+  .rolebtn.r-hs{background:linear-gradient(160deg,#FFF3E6,#FFE7CF);box-shadow:0 14px 30px -20px rgba(255,122,26,.7)}
+  .rolebtn.r-hs .rnm{color:var(--hs-d)} .rolebtn.r-hs .rds{color:#A6663A}
+  .rolebtn.r-gv{background:linear-gradient(160deg,#E9F8F0,#D6F0E2);box-shadow:0 14px 30px -20px rgba(14,138,87,.6)}
+  .rolebtn.r-gv .rnm{color:var(--gv-d)} .rolebtn.r-gv .rds{color:#3E7A5F}
+  .rolebtn.on{border-color:currentColor}
+  .rolebtn.r-hs.on{border-color:var(--hs)}
+  .rolebtn.r-gv.on{border-color:var(--gv)}
+  .rolebtn .tick{position:absolute;top:10px;right:12px;width:24px;height:24px;border-radius:50%;
+    color:#fff;font-size:13px;display:none;align-items:center;justify-content:center}
+  .rolebtn.r-hs .tick{background:var(--hs)} .rolebtn.r-gv .tick{background:var(--gv)}
+  .rolebtn.on .tick{display:flex}
+  .roleall{margin:10px 0 0;font-size:12.5px}
+  .roleall button{font:inherit;font-weight:600;color:var(--muted);background:none;border:none;
+    cursor:pointer;text-decoration:underline dotted}
+  .roleall button:hover{color:var(--c10)}
 
-  /* ---- Công cụ giáo viên ---- */
-  .teach{margin:30px 0 6px}
-  .teach-tag{display:inline-block;font-family:"Baloo 2",sans-serif;font-weight:700;font-size:12px;
-    color:var(--emerald);background:#EAF6EE;border-radius:999px;padding:6px 13px;margin-bottom:10px}
-  .teach-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:14px}
-  .teach-card{display:flex;gap:14px;align-items:center;text-decoration:none;color:var(--ink);
-    background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px 18px;
-    box-shadow:var(--shadow);transition:transform .13s,box-shadow .13s;position:relative;overflow:hidden}
-  .teach-card::after{content:"→";position:absolute;right:16px;font-family:"Baloo 2";font-weight:800;
-    font-size:20px;color:var(--emerald);opacity:0;transition:.15s;transform:translateX(-6px)}
-  .teach-card:hover{transform:translateY(-3px);box-shadow:0 20px 38px -22px rgba(42,59,143,.55)}
-  .teach-card:hover::after{opacity:1;transform:none}
-  .teach-card .te{width:52px;height:52px;border-radius:14px;background:#EAF6EE;
-    display:flex;align-items:center;justify-content:center;font-size:27px;flex:none;
-    transition:transform .2s}
-  .teach-card:hover .te{transform:scale(1.12) rotate(-6deg)}
-  .teach-card b{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:16px;color:var(--emerald)}
-  .teach-card .sub{font-size:13px;line-height:1.45;color:var(--muted)}
+  /* ================= KHUNG KHU VỰC ================= */
+  .zones{display:flex;flex-direction:column;gap:26px;margin-top:28px}
+  .zone{border-radius:26px;border:1.5px solid;padding:20px 18px 24px;position:relative}
+  .zone-hs{background:var(--hs-bg);border-color:var(--hs-line);order:1}
+  .zone-gv{background:var(--gv-bg);border-color:var(--gv-line);order:2}
+  body.mode-gv .zone-gv{order:1}
+  body.mode-gv .zone-hs{order:2}
+  body.mode-hs .zone-gv{display:none}
+  body.mode-gv .zone-hs .zonehead .zsub::after{content:" (xem trước các game để giao cho lớp)"}
+  .zonehead{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .zbadge{display:inline-flex;align-items:center;gap:9px;font-family:"Baloo 2",sans-serif;
+    font-weight:800;font-size:15px;color:#fff;border-radius:999px;padding:10px 20px;letter-spacing:.4px}
+  .zone-hs .zbadge{background:linear-gradient(90deg,var(--hs),#FFA050);box-shadow:0 8px 20px -10px rgba(255,122,26,.8)}
+  .zone-gv .zbadge{background:linear-gradient(90deg,var(--gv),#2FB578);box-shadow:0 8px 20px -10px rgba(14,138,87,.7)}
+  .zsub{font-size:13px;color:var(--muted);font-weight:500}
+  .zone .close{margin-left:auto;font:700 12px "Baloo 2";border:none;background:#fff;
+    border-radius:999px;padding:7px 13px;cursor:pointer;color:var(--muted);border:1px solid var(--line)}
+  .zone .close:hover{color:var(--ink)}
 
-  /* ---- Tìm kiếm & lọc ---- */
+  /* ---- Khu HỌC SINH: tìm kiếm & lọc ---- */
   .filterbar{position:relative;display:flex;gap:10px;flex-wrap:wrap;align-items:center;
-    background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px 14px;
-    margin:26px 0 4px;box-shadow:var(--shadow)}
+    background:#fff;border:1px solid var(--hs-line);border-radius:16px;padding:11px 14px;
+    margin:14px 0 4px;box-shadow:0 10px 26px -22px rgba(255,122,26,.7)}
   .filterbar .sic{font-size:17px}
-  .filterbar input{flex:1;min-width:180px;border:none;outline:none;font:inherit;font-size:14.5px;
+  .filterbar input{flex:1;min-width:170px;border:none;outline:none;font:inherit;font-size:14.5px;
     font-weight:500;color:var(--ink);background:transparent}
   .fchips{display:flex;gap:6px;flex-wrap:wrap}
   .fchips button{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;
@@ -119,24 +148,33 @@
   .fchips button[data-g="10"].on{background:var(--c10)}
   .fchips button[data-g="11"].on{background:var(--c11)}
   .fchips button[data-g="12"].on{background:var(--c12)}
+  .hsquick{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .hsquick .lucky{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:13.5px;cursor:pointer;
+    background:#fff;color:var(--hs-d);border:1.5px dashed var(--hs);border-radius:999px;padding:9px 16px;transition:.14s}
+  .hsquick .lucky:hover{background:var(--hs);color:#fff;border-style:solid}
+  .hsquick .golearn{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:13.5px;text-decoration:none;
+    background:var(--c10);color:#fff;border-radius:999px;padding:10px 16px;box-shadow:0 4px 0 #1d2a66}
+  .hsquick .golearn:active{transform:translateY(2px);box-shadow:0 2px 0 #1d2a66}
+  .resume{display:none;font-size:12.5px;font-weight:600;color:var(--muted)}
+  .resume a{color:var(--hs-d);font-weight:700}
   .noresult{display:none;text-align:center;color:var(--muted);font-size:14px;
-    background:#fff;border:1px dashed var(--line);border-radius:16px;padding:26px;margin-top:18px}
+    background:#fff;border:1px dashed var(--line);border-radius:16px;padding:24px;margin-top:16px}
 
-  /* ---- Tiêu đề mục ---- */
-  .sec{margin:38px 0 4px}
+  /* ---- Tiêu đề mục game ---- */
+  .sec{margin:24px 0 2px}
   .sec .kick{display:inline-flex;align-items:center;gap:8px;font-family:"Baloo 2",sans-serif;
-    font-weight:700;font-size:13px;letter-spacing:.4px;border-radius:999px;padding:7px 15px}
+    font-weight:700;font-size:12.5px;letter-spacing:.4px;border-radius:999px;padding:6px 14px}
   .sec.core .kick{color:#fff;background:linear-gradient(90deg,var(--c10),var(--c10soft))}
   .sec.ext .kick{color:var(--c12);background:#F0ECFB;border:1px solid #E0D7F7}
-  .sec h2{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:clamp(22px,4vw,30px);
-    margin:12px 0 4px;color:var(--ink)}
-  .sec p.note{font-size:14.5px;color:var(--muted);max-width:700px;margin:0;line-height:1.55}
+  .sec h2{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:clamp(20px,3.6vw,26px);
+    margin:10px 0 3px;color:var(--ink)}
+  .sec p.note{font-size:13.5px;color:var(--muted);max-width:700px;margin:0;line-height:1.55}
   .sec p.note b{color:var(--ink)}
 
   /* ---- Lưới thẻ game ---- */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-top:18px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:16px;margin-top:16px}
   .card{position:relative;background:#fff;border:1px solid var(--line);border-radius:20px;
-    padding:20px;display:flex;flex-direction:column;gap:11px;overflow:hidden;
+    padding:19px;display:flex;flex-direction:column;gap:10px;overflow:hidden;
     box-shadow:var(--shadow);transition:transform .14s,box-shadow .14s;
     opacity:0;transform:translateY(14px)}
   .card.in{opacity:1;transform:none;transition:opacity .5s,transform .5s,box-shadow .14s}
@@ -146,24 +184,23 @@
   .card.g11::before{background:linear-gradient(var(--c11),var(--c11a))}
   .card.g12::before{background:linear-gradient(var(--c12),var(--c12a))}
   .card.hidden{display:none}
-
-  .ord{position:absolute;top:16px;right:18px;font-family:"Baloo 2",sans-serif;font-weight:800;
-    font-size:32px;color:#EDF0F8;line-height:1}
-  .tile{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;
-    justify-content:center;font-size:30px;transition:transform .22s}
+  .ord{position:absolute;top:15px;right:17px;font-family:"Baloo 2",sans-serif;font-weight:800;
+    font-size:30px;color:#EDF0F8;line-height:1}
+  .tile{width:54px;height:54px;border-radius:15px;display:flex;align-items:center;
+    justify-content:center;font-size:29px;transition:transform .22s}
   .card:hover .tile{transform:scale(1.15) rotate(-8deg)}
   .card.g10 .tile{background:linear-gradient(135deg,#FFF1E5,#FFE4CB)}
   .card.g11 .tile{background:linear-gradient(135deg,#E6F4F0,#D2EBE2)}
   .card.g12 .tile{background:linear-gradient(135deg,#F0ECFB,#E4DBF8)}
   .gradetag{display:inline-flex;align-items:center;gap:6px;font-family:"Baloo 2",sans-serif;
-    font-weight:700;font-size:11.5px;letter-spacing:.3px;border-radius:999px;padding:4px 11px;width:fit-content}
+    font-weight:700;font-size:11.5px;border-radius:999px;padding:4px 11px;width:fit-content}
   .card.g10 .gradetag{color:#fff;background:var(--c10)}
   .card.g11 .gradetag{color:#fff;background:var(--c11)}
   .card.g12 .gradetag{color:#fff;background:var(--c12)}
   .recent{display:none;font-size:10.5px;font-weight:700;color:#C9650E;background:#FFF1E5;
     border-radius:999px;padding:3px 10px;width:fit-content}
   .card.was-recent .recent{display:inline-block}
-  .card h3{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:20px;margin:0;color:var(--ink)}
+  .card h3{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:19px;margin:0;color:var(--ink)}
   .chips{display:flex;gap:6px;flex-wrap:wrap}
   .chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:8px;background:#F3F5FB;color:var(--ink)}
   .chip.real{background:#FFF6EE;color:#C9650E}
@@ -174,7 +211,7 @@
   .feat{display:flex;gap:6px;flex-wrap:wrap;font-size:11.5px;color:var(--muted)}
   .feat span{background:#F6F7FB;border:1px solid var(--line);border-radius:7px;padding:3px 8px;font-weight:600}
   .play{margin-top:4px;font-family:"Baloo 2",sans-serif;font-weight:700;font-size:15px;
-    text-align:center;text-decoration:none;border-radius:13px;padding:13px;display:block;color:#fff}
+    text-align:center;text-decoration:none;border-radius:13px;padding:12px;display:block;color:#fff}
   .card.g10 .play{background:var(--c10a);box-shadow:0 5px 0 #C95C09}
   .card.g10 .play:active{transform:translateY(2px);box-shadow:0 3px 0 #C95C09}
   .card.g11 .play{background:var(--c11);box-shadow:0 5px 0 #0A4E40}
@@ -182,7 +219,42 @@
   .card.g12 .play{background:var(--c12);box-shadow:0 5px 0 #402C8C}
   .card.g12 .play:active{transform:translateY(2px);box-shadow:0 3px 0 #402C8C}
 
-  footer{margin-top:46px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.9}
+  /* ---- Khu GIÁO VIÊN ---- */
+  .gv-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:14px}
+  .toolcard{display:flex;gap:14px;align-items:flex-start;text-decoration:none;color:var(--ink);
+    background:#fff;border:1px solid var(--gv-line);border-radius:18px;padding:17px 18px;
+    box-shadow:0 12px 28px -22px rgba(14,138,87,.6);transition:transform .13s,box-shadow .13s;position:relative;overflow:hidden}
+  .toolcard::after{content:"→";position:absolute;right:16px;top:18px;font-family:"Baloo 2";font-weight:800;
+    font-size:20px;color:var(--gv);opacity:0;transition:.15s;transform:translateX(-6px)}
+  .toolcard:hover{transform:translateY(-3px);box-shadow:0 20px 38px -22px rgba(14,138,87,.6)}
+  .toolcard:hover::after{opacity:1;transform:none}
+  .toolcard .te{width:52px;height:52px;border-radius:14px;background:#E7F6EE;
+    display:flex;align-items:center;justify-content:center;font-size:26px;flex:none;transition:transform .2s}
+  .toolcard:hover .te{transform:scale(1.12) rotate(-6deg)}
+  .toolcard b{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:16px;color:var(--gv-d)}
+  .toolcard .sub{font-size:13px;line-height:1.5;color:var(--muted)}
+  .toolcard .tag{display:inline-block;font-size:10.5px;font-weight:700;color:var(--gv-d);
+    background:#DFF3E8;border-radius:999px;padding:2px 9px;margin-top:6px}
+  /* quy trình 4 bước */
+  .flow{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch;margin-top:16px}
+  .fstep{flex:1;min-width:150px;background:#fff;border:1px solid var(--gv-line);border-radius:14px;
+    padding:12px 13px;position:relative}
+  .fstep .fn{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:12px;color:#fff;
+    background:var(--gv);border-radius:999px;padding:3px 10px;display:inline-block}
+  .fstep .ft{font-weight:700;font-size:13.5px;margin-top:7px}
+  .fstep .fd{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.45}
+  .fstep:not(:last-child)::after{content:"➜";position:absolute;right:-13px;top:50%;
+    transform:translateY(-50%);color:var(--gv);font-size:15px;z-index:2}
+  @media(max-width:700px){.fstep:not(:last-child)::after{display:none}}
+  details.guide{margin-top:14px;background:#fff;border:1px dashed var(--gv-line);border-radius:14px;padding:12px 16px}
+  details.guide summary{cursor:pointer;font-weight:700;font-size:13.5px;color:var(--gv-d);list-style:none}
+  details.guide summary::-webkit-details-marker{display:none}
+  details.guide summary::before{content:"▸ "}
+  details.guide[open] summary::before{content:"▾ "}
+  details.guide ul{margin:8px 0 2px;padding-left:20px;font-size:13px;color:var(--muted);line-height:1.7}
+  details.guide b{color:var(--ink)}
+
+  footer{margin-top:44px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.9}
   footer b{color:var(--c10)}
   footer .fl{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:6px}
   footer .fl a{color:var(--muted);text-decoration:none;font-weight:600}
@@ -197,139 +269,191 @@
 <body>
 <div class="wrap">
 
+  <!-- ============ NAV + 2 MENU THẢ XUỐNG ============ -->
   <nav class="nav">
-    <span class="logo">🎲 Sân Chơi <em>Toán Học</em></span>
-    <div class="links">
-      <a href="#teach">🍎 Giáo viên</a>
-      <a href="#core">⭐ Lớp 10</a>
-      <a href="#ext">🧭 Lớp 11–12</a>
-      <a href="luyen-tap/">📊 Luyện tập</a>
+    <span class="logo">🎲 <span class="tx">Sân Chơi <em>Toán Học</em></span></span>
+    <div class="grow">
+      <div class="dd hs">
+        <button type="button">🎒 Học sinh <span class="caret">▾</span></button>
+        <div class="dd-menu">
+          <a href="#zoneHS"><span class="mi">🎮</span><span>Chơi game toán<small>9 trò chơi lớp 10 · 11 · 12</small></span></a>
+          <a href="luyen-tap/"><span class="mi">✏️</span><span>Vào lớp làm bài<small>Phiếu bài tập · nhận sao · giấy chứng nhận</small></span></a>
+          <a href="#zoneHS" data-lucky="1"><span class="mi">🎲</span><span>Chọn game ngẫu nhiên<small>Để trò chơi chọn giúp em!</small></span></a>
+        </div>
+      </div>
+      <div class="dd gv">
+        <button type="button">🍎 Giáo viên <span class="caret">▾</span></button>
+        <div class="dd-menu">
+          <a href="soan-bai/"><span class="mi">📝</span><span>Xưởng Soạn Bài<small>Giáo án · PPTX · phiếu · đề + ma trận</small></span></a>
+          <a href="luyen-tap/"><span class="mi">📊</span><span>App Luyện Tập<small>Tạo lớp · giao bài · thống kê kết quả</small></span></a>
+          <a href="#zoneGV"><span class="mi">🧭</span><span>Khu vực giáo viên<small>Quy trình sử dụng 4 bước</small></span></a>
+        </div>
+      </div>
     </div>
   </nav>
 
+  <!-- ============ HERO + CHỌN VAI TRÒ ============ -->
   <section class="hero">
-    <span class="float" style="top:10px;right:6%;font-size:44px;color:var(--c10)">∑</span>
-    <span class="float" style="top:90px;right:16%;font-size:30px;color:var(--c10a)">π</span>
-    <span class="float" style="top:30px;right:28%;font-size:26px;color:var(--c11)">√x</span>
-    <span class="float" style="top:130px;right:3%;font-size:28px;color:var(--c12)">f′(x)</span>
+    <span class="float" style="top:6px;left:4%;font-size:40px;color:var(--c10)">∑</span>
+    <span class="float" style="top:96px;left:12%;font-size:26px;color:var(--c11)">√x</span>
+    <span class="float" style="top:14px;right:6%;font-size:34px;color:var(--c10a)">π</span>
+    <span class="float" style="top:110px;right:12%;font-size:26px;color:var(--c12)">f′(x)</span>
     <span class="eyebrow"><span class="pin"></span> Hoạt động dạy học môn Toán · GDPT 2018</span>
     <h1>Sân Chơi <em>Toán Học</em></h1>
-    <p class="lead">Bộ trò chơi để học sinh <b>điều khiển trực tiếp đối tượng toán</b> — kéo đỉnh, chỉnh ràng buộc, mô phỏng — rồi thấy ngay kết quả. Toán gắn với mô hình thật ngoài đời sống.</p>
-    <div class="stats">
-      <div class="stat"><div class="n">9</div><div class="l">trò chơi</div></div>
-      <div class="stat"><div class="n">3</div><div class="l">khối lớp</div></div>
-      <div class="stat"><div class="n">2</div><div class="l">công cụ giáo viên</div></div>
-      <div class="stat"><div class="n">100%</div><div class="l">miễn phí · trên trình duyệt</div></div>
+    <p class="lead">Học sinh <b>điều khiển trực tiếp đối tượng toán</b> — kéo đỉnh, chỉnh ràng buộc, mô phỏng — và thấy ngay kết quả. Giáo viên soạn bài, giao bài và theo dõi cả lớp trong một hệ thống.</p>
+
+    <div class="roles">
+      <button class="rolebtn r-hs" id="roleHS">
+        <span class="tick">✓</span>
+        <span class="ric">🎒</span>
+        <span class="rnm">Em là Học sinh</span>
+        <span class="rds">Chơi game · làm phiếu · săn sao ⭐</span>
+      </button>
+      <button class="rolebtn r-gv" id="roleGV">
+        <span class="tick">✓</span>
+        <span class="ric">🍎</span>
+        <span class="rnm">Tôi là Giáo viên</span>
+        <span class="rds">Soạn bài · giao bài · xem báo cáo 📊</span>
+      </button>
     </div>
-    <div class="cta">
-      <a class="go" href="#core">Chơi ngay 🚀</a>
+    <p class="roleall"><button id="roleAll">Hiện cả hai khu vực</button></p>
+  </section>
+
+  <div class="zones">
+  <!-- ================= KHU VỰC HỌC SINH ================= -->
+  <section class="zone zone-hs" id="zoneHS">
+    <div class="zonehead">
+      <span class="zbadge">🎒 KHU VỰC HỌC SINH</span>
+      <span class="zsub">Chọn game để chơi ngay — không cần cài đặt</span>
+    </div>
+
+    <div class="filterbar">
+      <span class="sic">🔎</span>
+      <input id="q" placeholder="Tìm game theo tên hoặc chủ đề… (phím tắt: /)">
+      <div class="fchips" id="fchips">
+        <button data-g="all" class="on">Tất cả</button>
+        <button data-g="10">Lớp 10</button>
+        <button data-g="11">Lớp 11</button>
+        <button data-g="12">Lớp 12</button>
+      </div>
+    </div>
+    <div class="hsquick">
+      <a class="golearn" href="luyen-tap/">✏️ Vào lớp làm bài &amp; nhận sao</a>
       <button class="lucky" id="btnLucky">🎲 Chọn game ngẫu nhiên</button>
+      <span class="resume" id="resume">🕘 Lần trước em đang chơi <a id="resumeLink" href="#"></a></span>
     </div>
-    <p class="resume" id="resume">🕘 Lần trước em đang chơi <a id="resumeLink" href="#"></a> — chơi tiếp nhé!</p>
+
+    <section class="sec core" id="core">
+      <span class="kick">⭐ Trọng tâm đề tài</span>
+      <h2>Sáu trò chơi Toán 10</h2>
+      <p class="note">Mỗi game gắn một mạch kiến thức và một mô hình thực tế; có <b>đồng hồ đo thời gian</b>, hệ <b>sao ⭐</b> và tự báo kết quả về App Luyện Tập.</p>
+    </section>
+    <div class="grid" id="gridCore"></div>
+
+    <section class="sec ext" id="ext">
+      <span class="kick">🧭 Hướng mở rộng của đề tài</span>
+      <h2>Mở rộng lên lớp 11 &amp; 12</h2>
+      <p class="note"><b>Cấp số nhân &amp; lãi kép</b> (lớp 11 · xanh ngọc), <b>tối ưu bằng đạo hàm</b> và <b>hình học Oxyz</b> (lớp 12 · tím).</p>
+    </section>
+    <div class="grid" id="gridExt"></div>
+
+    <div class="noresult" id="noresult">😅 Không tìm thấy game phù hợp — thử từ khóa khác hoặc bấm “Tất cả”.</div>
   </section>
 
-  <section class="teach" id="teach">
-    <span class="teach-tag">🍎 Dành cho giáo viên</span>
-    <div class="teach-row">
-      <a class="teach-card" href="soan-bai/">
+  <!-- ================= KHU VỰC GIÁO VIÊN ================= -->
+  <section class="zone zone-gv" id="zoneGV">
+    <div class="zonehead">
+      <span class="zbadge">🍎 KHU VỰC GIÁO VIÊN</span>
+      <span class="zsub">Bộ công cụ soạn – giao – chấm – thống kê khép kín</span>
+    </div>
+
+    <div class="gv-tools">
+      <a class="toolcard" href="soan-bai/">
         <span class="te">📝</span>
-        <span><b>Xưởng Soạn Bài</b><br><span class="sub">Soạn giáo án, gắn game vào hoạt động, xuất bài giảng PPTX &amp; phiếu bài tập.</span></span>
+        <span><b>Xưởng Soạn Bài</b><br>
+          <span class="sub">Chọn bài → gắn game vào hoạt động → xuất <b>bài giảng PPTX</b>, <b>KHBD</b> (pdf/docx), <b>phiếu BTVN phân hoá</b> và <b>đề kiểm tra + ma trận</b>.</span>
+          <span class="tag">soạn trong ~2 phút</span></span>
       </a>
-      <a class="teach-card" href="luyen-tap/">
+      <a class="toolcard" href="luyen-tap/">
         <span class="te">📊</span>
-        <span><b>App Luyện Tập</b><br><span class="sub">Tạo lớp, giao phiếu &amp; game tự chấm điểm, theo dõi kết quả học sinh.</span></span>
+        <span><b>App Luyện Tập</b><br>
+          <span class="sub">Tạo lớp, phát key, giao phiếu &amp; game <b>tự chấm điểm</b>; xem <b>phổ điểm, câu hỏi khó, học sinh cần hỗ trợ</b>, xuất CSV.</span>
+          <span class="tag">điểm game tự đổ về</span></span>
       </a>
     </div>
-  </section>
 
-  <!-- Tìm kiếm & lọc theo khối -->
-  <div class="filterbar">
-    <span class="sic">🔎</span>
-    <input id="q" placeholder="Tìm game theo tên hoặc chủ đề… (phím tắt: /)">
-    <div class="fchips" id="fchips">
-      <button data-g="all" class="on">Tất cả</button>
-      <button data-g="10">Lớp 10</button>
-      <button data-g="11">Lớp 11</button>
-      <button data-g="12">Lớp 12</button>
+    <div class="flow">
+      <div class="fstep"><span class="fn">Bước 1</span><div class="ft">📝 Soạn bài</div>
+        <div class="fd">Chọn bài trong Xưởng, bật game cho hoạt động phù hợp.</div></div>
+      <div class="fstep"><span class="fn">Bước 2</span><div class="ft">📤 Giao bài</div>
+        <div class="fd">Dán phiếu vào App Luyện Tập, giao kèm game và hạn nộp.</div></div>
+      <div class="fstep"><span class="fn">Bước 3</span><div class="ft">🎮 HS chơi &amp; làm</div>
+        <div class="fd">Học sinh chơi game, làm phiếu — hệ thống tự chấm.</div></div>
+      <div class="fstep"><span class="fn">Bước 4</span><div class="ft">📈 Xem báo cáo</div>
+        <div class="fd">Phổ điểm, câu sai nhiều, em chưa nộp — dạy học phân hoá.</div></div>
     </div>
-  </div>
 
-  <!-- ============ LÕI: 6 GAME LỚP 10 ============ -->
-  <section class="sec core" id="core">
-    <span class="kick">⭐ Trọng tâm đề tài</span>
-    <h2>Sáu trò chơi Toán 10</h2>
-    <p class="note">Sáu game được thiết kế sâu cho chương trình lớp 10, mỗi game gắn một mạch kiến thức và một mô hình thực tế. Tất cả đều có <b>đồng hồ đo thời gian chơi</b>, báo kết quả về App Luyện Tập và giao diện thống nhất theo màu <b>indigo–cam</b>.</p>
+    <details class="guide">
+      <summary>📖 Hướng dẫn nhanh cho lần dùng đầu tiên</summary>
+      <ul>
+        <li><b>Tạo lớp:</b> mở App Luyện Tập → Giáo viên → đặt <b>mã lớp + PIN</b> → dán danh sách học sinh để sinh key.</li>
+        <li><b>Phát key:</b> in "phiếu key" cắt phát cho từng em (trong thẻ Học sinh của App).</li>
+        <li><b>Soạn &amp; giao:</b> Xưởng Soạn Bài → chọn bài → "Sao chép cú pháp" phiếu → dán vào App Luyện Tập → giao kèm game.</li>
+        <li><b>Theo dõi:</b> thẻ "Kết quả &amp; Báo cáo" có phổ điểm, phân tích từng câu và danh sách em cần hỗ trợ.</li>
+      </ul>
+    </details>
   </section>
-  <div class="grid" id="gridCore"></div>
-
-  <!-- ============ HƯỚNG MỞ RỘNG: LỚP 11–12 ============ -->
-  <section class="sec ext" id="ext">
-    <span class="kick">🧭 Hướng mở rộng của đề tài</span>
-    <h2>Mở rộng lên lớp 11 &amp; 12</h2>
-    <p class="note">Ba game phát triển ý tưởng lên các lớp trên — <b>cấp số nhân &amp; lãi kép</b> (lớp 11), <b>tối ưu bằng đạo hàm</b> và <b>hình học Oxyz</b> (lớp 12). Đây là <b>định hướng mở rộng</b> của đề tài, dùng hệ màu riêng (xanh ngọc cho lớp 11, tím cho lớp 12) để phân biệt với phần lõi lớp 10.</p>
-  </section>
-  <div class="grid" id="gridExt"></div>
-
-  <div class="noresult" id="noresult">😅 Không tìm thấy game phù hợp — thử từ khóa khác hoặc bấm “Tất cả”.</div>
+  </div><!-- /zones -->
 
   <footer>
     <b>Sân Chơi Toán Học</b> — mỗi trò chơi mở trong một thư mục riêng.<br>
     Phần lõi gồm 6 game lớp 10; phần mở rộng gồm 1 game lớp 11 và 2 game lớp 12.
     <div class="fl">
+      <a href="#zoneHS">🎒 Khu học sinh</a>
+      <a href="#zoneGV">🍎 Khu giáo viên</a>
       <a href="soan-bai/">📝 Xưởng Soạn Bài</a>
       <a href="luyen-tap/">📊 App Luyện Tập</a>
-      <a href="#core">⭐ Game lớp 10</a>
-      <a href="#ext">🧭 Lớp 11–12</a>
     </div>
   </footer>
 </div>
 
 <script>
-// Phần lõi — 6 game lớp 10, theo đúng thứ tự đề tài. (GIỮ NGUYÊN liên kết thư mục)
+// ===== Dữ liệu 9 game (GIỮ NGUYÊN liên kết thư mục) =====
 const CORE = [
   { ord:1, name:"Pháo Thủ Parabol", emoji:"🏀", grade:10,
     topic:"Hàm số bậc hai", real:"Đường bay · ném bóng", folder:"parabol",
     feat:["⏱ Hẹn giờ","🎯 Nhiều chế độ chơi"],
     desc:"Chỉnh <b>đỉnh I(h; k)</b> của parabol để đường bay xuyên qua đích. Phương trình cập nhật sống theo từng thao tác." },
-
   { ord:2, name:"Nông Trại Tối Ưu", emoji:"🌾", grade:10,
     topic:"Bất PT bậc nhất hai ẩn", real:"Ruộng lúa · ao cá ĐBSCL", folder:"nong-trai",
     feat:["⏱ Hẹn giờ","🌱 4 vụ mùa"],
     desc:"Chia <b>đất, vốn, công</b> để lãi cao nhất. Kéo các ràng buộc, thấy vùng nghiệm và đỉnh tối ưu hiện ra." },
-
   { ord:3, name:"Phi Thuyền Vectơ", emoji:"🚀", grade:10,
     topic:"Vectơ · tích vô hướng", real:"Lực đẩy · phi thuyền", folder:"vecto",
     feat:["⏱ Hẹn giờ","🚀 5 màn"],
     desc:"Kéo <b>đầu mũi tên</b> để ghép tổng – hiệu vectơ và chỉnh <b>tích vô hướng</b>; toạ độ và kết quả đổi tức thì." },
-
   { ord:4, name:"Trạm Vệ Tinh", emoji:"📡", grade:10,
     topic:"Đường tròn · elip", real:"Phủ sóng · quỹ đạo vệ tinh", folder:"duong-tron",
     feat:["⏱ Hẹn giờ","📡 5 màn"],
     desc:"Kéo <b>tâm, bán kính</b> hoặc <b>bán trục</b> để đường tròn/elip đi qua đúng các điểm — phương trình hiện ngay." },
-
   { ord:5, name:"Phá Két Mật Mã", emoji:"🔐", grade:10,
     topic:"Quy tắc đếm · tổ hợp", real:"Mật khẩu · biển số xe", folder:"pha-ket",
     feat:["⏱ Hẹn giờ","🔐 5 két"],
     desc:"Đếm số <b>khả năng</b> để mở két và bẻ khoá. Hiểu vì sao mật khẩu dài thì khó đoán." },
-
   { ord:6, name:"Phòng Lab Xác Suất", emoji:"🎲", grade:10,
     topic:"Xác suất cổ điển", real:"Xúc xắc · đồng xu · hộp bi", folder:"xac-suat",
     feat:["⏱ Hẹn giờ","🔬 Khám phá + 🎯 Thử thách"],
     desc:"Dựng <b>không gian mẫu</b>, chọn biến cố và xem P(E) đổi ngay. Gieo nhiều lần để thấy tần suất hội tụ về xác suất." },
 ];
-
-// Hướng mở rộng — lớp 11 & 12. (GIỮ NGUYÊN liên kết thư mục)
 const EXT = [
   { name:"Đầu Tư Thông Minh", emoji:"💰", grade:11,
     topic:"Cấp số nhân · lãi kép", real:"Lãi suất ngân hàng", folder:"dau-tu",
     feat:["💹 Giáo dục tài chính"],
     desc:"Mô phỏng <b>lãi kép</b> theo thời gian: gửi tiết kiệm hay vay nợ, thấy sức mạnh của hàm số mũ." },
-
   { name:"Nhà Thiết Kế", emoji:"📐", grade:12,
     topic:"Đạo hàm · bài toán tối ưu", real:"Bao bì · rào ruộng", folder:"thiet-ke",
     feat:["📦 Tối ưu vật liệu"],
     desc:"Ít vật liệu nhất cho hộp có <b>thể tích cho trước</b>. Thử và đo, để đạo hàm chỉ ra điểm tối ưu." },
-
   { name:"Kho Vận 3D", emoji:"📦", grade:12,
     topic:"Hình không gian · Oxyz", real:"Giao hàng · kiến trúc", folder:"kho-van",
     feat:["🧊 Không gian xoay"],
@@ -353,11 +477,34 @@ function cardHTML(g, withOrd){
     <a class="play" href="${g.folder}/" data-play="${g.folder}">Chơi ngay 🚀</a>
   </div>`;
 }
-
 document.getElementById('gridCore').innerHTML = CORE.map(g=>cardHTML(g,true)).join("");
 document.getElementById('gridExt').innerHTML  = EXT.map(g=>cardHTML(g,false)).join("");
 
-/* ===== Hiệu ứng xuất hiện lần lượt khi cuộn ===== */
+/* ===== CHỌN VAI TRÒ: hs / gv / all (nhớ bằng localStorage) ===== */
+(function(){
+  const bHS=document.getElementById('roleHS'), bGV=document.getElementById('roleGV'),
+        bAll=document.getElementById('roleAll');
+  function setMode(m,scroll){
+    document.body.classList.remove('mode-hs','mode-gv');
+    if(m==='hs') document.body.classList.add('mode-hs');
+    if(m==='gv') document.body.classList.add('mode-gv');
+    bHS.classList.toggle('on',m==='hs');
+    bGV.classList.toggle('on',m==='gv');
+    try{localStorage.setItem('sct_role',m);}catch(e){}
+    if(scroll){
+      const t=m==='gv'?document.getElementById('zoneGV'):document.getElementById('zoneHS');
+      if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  }
+  bHS.onclick=()=>setMode('hs',true);
+  bGV.onclick=()=>setMode('gv',true);
+  bAll.onclick=()=>setMode('all',false);
+  let saved='all';
+  try{saved=localStorage.getItem('sct_role')||'all';}catch(e){}
+  setMode(saved,false);
+})();
+
+/* ===== Hiệu ứng xuất hiện lần lượt ===== */
 (function(){
   const cards=[...document.querySelectorAll('.card')];
   if(!('IntersectionObserver' in window)){cards.forEach(c=>c.classList.add('in'));return;}
@@ -367,7 +514,7 @@ document.getElementById('gridExt').innerHTML  = EXT.map(g=>cardHTML(g,false)).jo
   cards.forEach((c,i)=>{ c.style.transitionDelay=(i%3)*70+'ms'; io.observe(c); });
 })();
 
-/* ===== Tìm kiếm + lọc theo khối lớp ===== */
+/* ===== Tìm kiếm + lọc theo khối ===== */
 (function(){
   const q=document.getElementById('q'), chips=document.getElementById('fchips');
   let grade='all';
@@ -379,7 +526,6 @@ document.getElementById('gridExt').innerHTML  = EXT.map(g=>cardHTML(g,false)).jo
                (!kw || c.dataset.search.includes(kw));
       c.classList.toggle('hidden',!ok); if(ok)shown++;
     });
-    // ẩn tiêu đề mục nếu cả mục trống
     const coreShown=[...document.querySelectorAll('#gridCore .card')].some(c=>!c.classList.contains('hidden'));
     const extShown=[...document.querySelectorAll('#gridExt .card')].some(c=>!c.classList.contains('hidden'));
     document.getElementById('core').style.display=coreShown?'':'none';
@@ -395,13 +541,12 @@ document.getElementById('gridExt').innerHTML  = EXT.map(g=>cardHTML(g,false)).jo
     [...chips.children].forEach(x=>x.classList.toggle('on',x===b));
     apply();
   });
-  // phím tắt "/" để nhảy vào ô tìm kiếm
   window.addEventListener('keydown',e=>{
     if(e.key==='/'&&document.activeElement!==q){ e.preventDefault(); q.focus(); }
   });
 })();
 
-/* ===== Nhớ game chơi gần đây (localStorage) ===== */
+/* ===== Nhớ game chơi gần đây ===== */
 (function(){
   const ALL=[...CORE,...EXT];
   try{
@@ -412,7 +557,7 @@ document.getElementById('gridExt').innerHTML  = EXT.map(g=>cardHTML(g,false)).jo
         const c=document.querySelector(`.card[data-folder="${last}"]`);
         if(c)c.classList.add('was-recent');
         const r=document.getElementById('resume'), a=document.getElementById('resumeLink');
-        a.textContent=g.emoji+' '+g.name; a.href=g.folder+'/'; r.style.display='block';
+        a.textContent=g.emoji+' '+g.name; a.href=g.folder+'/'; r.style.display='inline';
       }
     }
   }catch(e){}
@@ -422,13 +567,15 @@ document.getElementById('gridExt').innerHTML  = EXT.map(g=>cardHTML(g,false)).jo
   });
 })();
 
-/* ===== Chọn game ngẫu nhiên ===== */
-document.getElementById('btnLucky').onclick=()=>{
+/* ===== Chọn game ngẫu nhiên (nút trong khu HS + mục trong menu HS) ===== */
+function luckyGo(){
   const ALL=[...CORE,...EXT];
   const g=ALL[Math.floor(Math.random()*ALL.length)];
   try{localStorage.setItem('sct_last_game',g.folder);}catch(e){}
   location.href=g.folder+'/';
-};
+}
+document.getElementById('btnLucky').onclick=luckyGo;
+document.querySelectorAll('[data-lucky]').forEach(a=>a.onclick=e=>{e.preventDefault();luckyGo();});
 </script>
 </body>
 </html>
