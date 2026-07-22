@@ -101,13 +101,16 @@
   .fire:active{box-shadow:0 2px 0 #C95C09}
   .fire:disabled{filter:grayscale(.6) opacity(.6);box-shadow:0 6px 0 #C95C09;cursor:default}
   .reset{background:#EEF0F7;color:var(--indigo);max-width:120px}
+  /* Lớp phủ toàn màn hình (position:fixed) — không bị khung sân chơi cắt trên điện thoại */
   .toast{
-    position:absolute;inset:0;display:none;align-items:center;justify-content:center;
-    background:rgba(15,21,48,.55);backdrop-filter:blur(2px);z-index:20;
+    position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+    padding:16px;background:rgba(15,21,48,.55);backdrop-filter:blur(2px);z-index:100;
   }
   .toast.show{display:flex}
-  .toast .box{background:#fff;border-radius:18px;padding:26px 28px;text-align:center;
-    max-width:360px;width:calc(100% - 40px);box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
+  /* Hộp tự cuộn bên trong khi cao hơn màn hình — luôn chạm được đáp án & nút */
+  .toast .box{background:#fff;border-radius:18px;padding:24px 24px;text-align:center;
+    max-width:380px;width:100%;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);
+    overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 20px 50px -20px rgba(0,0,0,.5)}
   .toast .emo{font-size:48px}
   .toast h2{font-family:"Baloo 2",sans-serif;margin:6px 0 4px;color:var(--emerald);font-size:24px}
   .toast.fail h2{color:var(--tangerine)}
