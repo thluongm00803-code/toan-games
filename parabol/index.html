@@ -1,7 +1,1356 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Pháo Thủ Parabol — Toán 10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBFAF4; --grid:#DCE6F0; --grid2:#C9D8EC;
+    --ink:#1C2438; --indigo:#2A3B8F; --indigo-soft:#6B7BD6;
+    --tangerine:#FF7A1A; --emerald:#1FA36B; --wall:#8A8377;
+    --line:#E4E0D4; --muted:#6A7184;
+    --gold:#D4A017; --gold-light:#F5E6A3;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Be Vietnam Pro",system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 70% -10%, #EAF2FF 0%, transparent 55%),
+      var(--paper);
+    min-height:100vh;
+    padding:18px 14px 40px;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:920px;margin:0 auto;position:relative}
+
+  /* ===== Ribbon ===== */
+  .sct-ribbon{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    margin:0 0 16px;flex-wrap:wrap}
+  .sct-ribbon::before{content:"";position:absolute;left:-14px;right:-14px;top:-18px;height:5px;
+    background:linear-gradient(90deg,var(--indigo),var(--tangerine));z-index:5;border-radius:0 0 4px 4px}
+  .sct-back{font:600 13px/1 "Baloo 2",system-ui,sans-serif;color:var(--indigo);
+    text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:999px;
+    padding:9px 15px;transition:.15s;white-space:nowrap}
+  .sct-back:hover{border-color:var(--indigo);transform:translateX(-2px)}
+  .sct-tag{font:700 12px/1 "Baloo 2",system-ui,sans-serif;letter-spacing:.6px;color:#fff;
+    background:var(--indigo);border-radius:999px;padding:8px 15px;white-space:nowrap}
+
+  /* ===== Header ===== */
+  header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  h1{
+    font-family:"Baloo 2",sans-serif;font-weight:700;
+    font-size:clamp(26px,5vw,40px);margin:0;letter-spacing:-.5px;
+    color:var(--indigo);
+  }
+  h1 .dot{color:var(--tangerine)}
+  .sub{color:var(--muted);font-size:14px;font-weight:500}
+
+  /* ===== Mission ===== */
+  .mission{
+    background:linear-gradient(180deg,#fff,#FFF7EF);
+    border:1px solid #FCE0C4;border-radius:14px;
+    padding:12px 16px;margin:14px 0;
+    display:flex;align-items:center;gap:12px;
+  }
+  .mission .ctx{font-size:26px;line-height:1}
+  .mission .txt{font-size:15px}
+  .mission .txt b{color:var(--tangerine)}
+
+  /* ===== Progress Bar ===== */
+  .progress-bar{
+    display:flex;align-items:center;gap:8px;margin:0 0 14px;
+  }
+  .progress-bar .bar-track{
+    flex:1;height:10px;background:#EEF0F7;border-radius:999px;overflow:hidden;
+    position:relative;
+  }
+  .progress-bar .bar-fill{
+    height:100%;background:linear-gradient(90deg,var(--indigo),var(--emerald));
+    border-radius:999px;transition:width .5s cubic-bezier(.4,0,.2,1);
+    position:relative;
+  }
+  .progress-bar .bar-fill::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(255,255,255,.35),transparent);
+    border-radius:999px;
+  }
+  .progress-bar .bar-label{
+    font-family:"Baloo 2",sans-serif;font-weight:700;font-size:13px;
+    color:var(--indigo);white-space:nowrap;min-width:42px;text-align:right;
+  }
+
+  /* ===== Stars row ===== */
+  .stars-row{
+    display:flex;gap:6px;align-items:center;margin-bottom:14px;
+  }
+  .star-item{
+    width:36px;height:36px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;border:2px solid var(--line);
+    background:#fff;transition:all .3s ease;
+    position:relative;
+  }
+  .star-item.done{
+    border-color:var(--gold);background:linear-gradient(135deg,#FFF8E1,#FFFDF5);
+    box-shadow:0 2px 8px rgba(212,160,23,.25);
+    animation:starPop .4s ease;
+  }
+  .star-item.current{
+    border-color:var(--tangerine);
+    animation:pulse 1.5s ease infinite;
+  }
+  @keyframes starPop{
+    0%{transform:scale(0.5)}
+    50%{transform:scale(1.2)}
+    100%{transform:scale(1)}
+  }
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(255,122,26,.3)}
+    50%{box-shadow:0 0 0 6px rgba(255,122,26,0)}
+  }
+
+  /* ===== Stage ===== */
+  .stage{
+    position:relative;background:#fff;border:1px solid var(--line);
+    border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -18px rgba(42,59,143,.4);
+  }
+  canvas{display:block;width:100%;height:auto;touch-action:pan-y pinch-zoom}
+  .hud{
+    position:absolute;top:10px;left:10px;display:flex;gap:8px;flex-wrap:wrap;
+    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:13px;
+    pointer-events:none;
+  }
+  .chip{background:rgba(255,255,255,.92);border:1px solid var(--line);
+    border-radius:999px;padding:4px 12px;color:var(--indigo)}
+  .chip b{color:var(--tangerine)}
+
+  /* ===== Panel ===== */
+  .panel{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;
+  }
+  @media(max-width:640px){.panel{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card h3{margin:0 0 12px;font-family:"Baloo 2",sans-serif;font-weight:600;
+    font-size:15px;color:var(--indigo);display:flex;align-items:center;gap:7px}
+
+  /* ===== Slider Controls (MOBILE FIX) ===== */
+  .ctrl{margin-bottom:16px}
+  .ctrl label{display:flex;justify-content:space-between;font-size:13px;
+    font-weight:600;margin-bottom:7px;color:var(--ink)}
+  .ctrl label .val{font-family:"Baloo 2",sans-serif;color:var(--tangerine)}
+
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;width:100%;height:10px;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--indigo-soft),var(--indigo));
+    outline:none;
+    margin:12px 0;
+    padding:0;
+    cursor:pointer;
+    touch-action:none; /* Only on slider itself, not canvas */
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:36px;height:36px;
+    border-radius:50%;background:#fff;
+    border:4px solid var(--tangerine);cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,.2);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:36px;height:36px;border-radius:50%;
+    background:#fff;border:4px solid var(--tangerine);cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,.2);
+  }
+  /* Extra touch padding for mobile */
+  @media(pointer:coarse){
+    input[type=range]{height:14px;margin:16px 0}
+    input[type=range]::-webkit-slider-thumb{width:44px;height:44px;border-width:5px}
+    input[type=range]::-moz-range-thumb{width:44px;height:44px;border-width:5px}
+  }
+
+  /* ===== Equation ===== */
+  .eq{
+    background:#0F1530;color:#E8ECFF;border-radius:12px;padding:14px 16px;
+    font-family:"Baloo 2",sans-serif;
+  }
+  .eq .main{font-size:clamp(18px,4.5vw,24px);font-weight:600;letter-spacing:.3px}
+  .eq .main .a{color:#FFB169}.eq .main .h{color:#86F0C0}.eq .main .k{color:#8FB0FF}
+  .eq .row{display:flex;gap:18px;margin-top:10px;font-size:13px;color:#AAB4E0;flex-wrap:wrap}
+  .eq .row span b{color:#fff;font-weight:600}
+
+  /* ===== Buttons (MOBILE FIX) ===== */
+  .actions{display:flex;gap:10px;margin-top:14px}
+  button{
+    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:16px;border:none;
+    border-radius:12px;padding:15px 18px;cursor:pointer;flex:1;
+    transition:transform .08s ease,filter .15s;
+    -webkit-user-select:none;user-select:none;
+    min-height:48px; /* Touch target min */
+  }
+  button:active{transform:translateY(2px)}
+  .fire{background:var(--tangerine);color:#fff;box-shadow:0 6px 0 #C95C09}
+  .fire:active{box-shadow:0 2px 0 #C95C09}
+  .fire:disabled{filter:grayscale(.6) opacity(.6);box-shadow:0 6px 0 #C95C09;cursor:default;pointer-events:none}
+  .reset{background:#EEF0F7;color:var(--indigo);max-width:120px}
+
+  /* ===== Toast ===== */
+  .toast{
+    position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(15,21,48,.55);backdrop-filter:blur(2px);
+    z-index:20;
+  }
+  .toast.show{display:flex}
+  .toast .box{
+    background:#fff;border-radius:18px;padding:26px 28px;text-align:center;
+    max-width:330px;width:90%;box-shadow:0 20px 50px -20px rgba(0,0,0,.5);
+    animation:toastIn .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes toastIn{
+    0%{opacity:0;transform:scale(.8) translateY(20px)}
+    100%{opacity:1;transform:scale(1) translateY(0)}
+  }
+  .toast .emo{font-size:48px}
+  .toast h2{font-family:"Baloo 2",sans-serif;margin:6px 0 4px;color:var(--emerald);font-size:24px}
+  .toast.fail h2{color:var(--tangerine)}
+  .toast p{margin:0 0 16px;color:var(--muted);font-size:14px}
+  .toast button{flex:none;width:100%;min-height:50px}
+  .next{background:var(--emerald);color:#fff;box-shadow:0 6px 0 #15784E}
+  .retry{background:var(--indigo);color:#fff;box-shadow:0 6px 0 #1C2A6B}
+
+  /* ===== Quiz Modal ===== */
+  .quiz-overlay{
+    position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(15,21,48,.6);backdrop-filter:blur(4px);
+    z-index:100;padding:20px;
+  }
+  .quiz-overlay.show{display:flex}
+  .quiz-box{
+    background:#fff;border-radius:20px;padding:28px 24px;text-align:center;
+    max-width:400px;width:100%;box-shadow:0 24px 60px -20px rgba(0,0,0,.4);
+    animation:toastIn .4s cubic-bezier(.34,1.56,.64,1);
+    position:relative;overflow:hidden;
+  }
+  .quiz-box::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:4px;
+    background:linear-gradient(90deg,var(--indigo),var(--tangerine));
+  }
+  .quiz-icon{font-size:40px;margin-bottom:8px}
+  .quiz-box h2{
+    font-family:"Baloo 2",sans-serif;font-weight:700;font-size:22px;
+    color:var(--indigo);margin:0 0 12px;
+  }
+  .quiz-question{
+    font-size:15px;line-height:1.6;color:var(--ink);margin-bottom:18px;
+    padding:0 4px;
+  }
+  .quiz-options{
+    display:flex;flex-direction:column;gap:10px;margin-bottom:18px;
+  }
+  .quiz-opt{
+    display:block;width:100%;text-align:center;
+    font-family:"Be Vietnam Pro",sans-serif;font-weight:600;font-size:15px;
+    padding:14px 18px;border-radius:12px;
+    border:2px solid var(--line);background:#FAFBFE;
+    color:var(--ink);cursor:pointer;
+    transition:all .2s ease;
+    -webkit-user-select:none;user-select:none;
+    min-height:50px;
+    position:relative;
+    z-index:10;
+  }
+  .quiz-opt:hover{border-color:var(--indigo-soft);background:#EEF2FF}
+  .quiz-opt:active{transform:scale(.97)}
+  .quiz-opt.selected{
+    border-color:var(--indigo);background:#E8EDFF;color:var(--indigo);
+  }
+  .quiz-opt.correct{
+    border-color:var(--emerald);background:#E6F9F0;color:var(--emerald);
+    animation:correctPulse .5s ease;
+  }
+  .quiz-opt.wrong{
+    border-color:#E53E3E;background:#FFF0F0;color:#E53E3E;
+    animation:shake .4s ease;
+  }
+  .quiz-opt.disabled{pointer-events:none;opacity:.6}
+  @keyframes correctPulse{
+    0%{box-shadow:0 0 0 0 rgba(31,163,107,.4)}
+    100%{box-shadow:0 0 0 12px rgba(31,163,107,0)}
+  }
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-6px)}
+    40%{transform:translateX(6px)}
+    60%{transform:translateX(-4px)}
+    80%{transform:translateX(4px)}
+  }
+  .quiz-result{
+    font-family:"Baloo 2",sans-serif;font-weight:600;font-size:15px;
+    padding:10px;border-radius:10px;margin-bottom:14px;display:none;
+  }
+  .quiz-result.show{display:block}
+  .quiz-result.right{background:#E6F9F0;color:var(--emerald)}
+  .quiz-result.wrong-r{background:#FFF0F0;color:#E53E3E}
+  .quiz-next-btn{
+    background:var(--indigo);color:#fff;box-shadow:0 6px 0 #1C2A6B;
+    display:none;width:100%;min-height:50px;
+  }
+  .quiz-next-btn.show{display:block}
+
+  /* ===== Certificate ===== */
+  .cert-overlay{
+    position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(15,21,48,.7);backdrop-filter:blur(6px);
+    z-index:200;padding:20px;overflow-y:auto;
+  }
+  .cert-overlay.show{display:flex}
+  .cert-wrapper{
+    max-width:600px;width:100%;animation:toastIn .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .certificate{
+    background:linear-gradient(135deg,#FFFDF5,#FFF8E1,#FFFDF5);
+    border:3px solid var(--gold);
+    border-radius:20px;padding:36px 28px;text-align:center;
+    position:relative;overflow:hidden;
+    box-shadow:
+      0 0 0 1px rgba(212,160,23,.2),
+      0 0 0 6px rgba(212,160,23,.08),
+      0 24px 60px -20px rgba(0,0,0,.3);
+  }
+  .certificate::before{
+    content:'';position:absolute;inset:8px;
+    border:2px dashed rgba(212,160,23,.3);border-radius:14px;
+    pointer-events:none;
+  }
+  .certificate::after{
+    content:'';position:absolute;top:-60px;right:-60px;
+    width:180px;height:180px;
+    background:radial-gradient(circle,rgba(212,160,23,.12),transparent 70%);
+    pointer-events:none;
+  }
+  .cert-badge{
+    width:80px;height:80px;margin:0 auto 12px;
+    background:linear-gradient(135deg,#FFD700,#FFA500);
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:40px;box-shadow:0 4px 16px rgba(212,160,23,.35);
+    position:relative;
+  }
+  .cert-badge::after{
+    content:'';position:absolute;inset:-4px;border-radius:50%;
+    border:2px solid rgba(255,215,0,.5);
+  }
+  .cert-ribbon{
+    display:flex;justify-content:center;gap:8px;margin-bottom:8px;
+  }
+  .cert-ribbon span{
+    display:inline-block;width:28px;height:40px;
+    background:linear-gradient(180deg,#E53E3E,#C53030);
+    clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%);
+  }
+  .cert-ribbon span:nth-child(2){
+    background:linear-gradient(180deg,#FFD700,#D4A017);
+  }
+  .cert-title{
+    font-family:"Baloo 2",sans-serif;font-weight:800;
+    font-size:clamp(22px,5vw,30px);
+    background:linear-gradient(135deg,var(--gold),#B8860B);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;
+    margin:0 0 4px;letter-spacing:1px;
+  }
+  .cert-subtitle{
+    font-family:"Baloo 2",sans-serif;font-weight:600;
+    font-size:16px;color:var(--indigo);margin:0 0 18px;
+  }
+  .cert-content{font-size:15px;line-height:1.7;color:#4A4A4A;margin:0 0 18px}
+  .cert-content .name{
+    font-family:"Baloo 2",sans-serif;font-weight:700;font-size:22px;
+    color:var(--indigo);display:block;margin:8px 0;
+    padding-bottom:4px;
+    border-bottom:2px solid var(--gold-light);
+  }
+  .cert-stats{
+    display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:16px 0;
+  }
+  .cert-stat{
+    background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);
+    border-radius:12px;padding:10px 16px;text-align:center;min-width:80px;
+  }
+  .cert-stat .num{
+    font-family:"Baloo 2",sans-serif;font-weight:700;font-size:22px;
+    color:var(--gold);
+  }
+  .cert-stat .lbl{font-size:11px;color:var(--muted);font-weight:600}
+  .cert-quote{
+    font-style:italic;font-size:14px;color:var(--muted);
+    margin:14px 0;padding:0 16px;line-height:1.6;
+  }
+  .cert-date{font-size:12px;color:var(--muted);margin:12px 0 0}
+  .cert-seal{
+    display:inline-block;margin-top:12px;
+    font-family:"Baloo 2",sans-serif;font-weight:700;font-size:11px;
+    letter-spacing:1px;color:var(--gold);
+    border:2px solid var(--gold);border-radius:50%;
+    width:60px;height:60px;
+    display:flex;align-items:center;justify-content:center;
+    margin:12px auto 0;
+    text-align:center;line-height:1.2;
+  }
+  .cert-actions{
+    display:flex;gap:10px;margin-top:16px;justify-content:center;
+  }
+  .cert-actions button{
+    flex:none;min-width:140px;min-height:48px;font-size:15px;
+  }
+  .cert-close{background:#EEF0F7;color:var(--indigo);box-shadow:0 4px 0 #D1D5E4}
+  .cert-save{background:var(--gold);color:#fff;box-shadow:0 4px 0 #B8860B}
+
+  /* ===== Name Input Modal ===== */
+  .name-overlay{
+    position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(15,21,48,.6);backdrop-filter:blur(4px);
+    z-index:150;padding:20px;
+  }
+  .name-overlay.show{display:flex}
+  .name-box{
+    background:#fff;border-radius:20px;padding:28px 24px;text-align:center;
+    max-width:380px;width:100%;box-shadow:0 24px 60px -20px rgba(0,0,0,.4);
+    animation:toastIn .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  .name-box h2{
+    font-family:"Baloo 2",sans-serif;font-weight:700;font-size:22px;
+    color:var(--indigo);margin:0 0 8px;
+  }
+  .name-box p{color:var(--muted);font-size:14px;margin:0 0 16px}
+  .name-input{
+    width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:12px;
+    font-family:"Be Vietnam Pro",sans-serif;font-size:16px;text-align:center;
+    outline:none;transition:border-color .2s;
+    min-height:48px;
+  }
+  .name-input:focus{border-color:var(--indigo)}
+  .name-submit{
+    background:var(--emerald);color:#fff;box-shadow:0 6px 0 #15784E;
+    width:100%;margin-top:14px;min-height:50px;
+  }
+
+  /* ===== Confetti ===== */
+  .confetti-container{position:fixed;inset:0;pointer-events:none;z-index:300;overflow:hidden}
+  .confetti-piece{
+    position:absolute;width:10px;height:10px;top:-20px;
+    animation:confettiFall linear forwards;
+  }
+  @keyframes confettiFall{
+    0%{transform:translateY(0) rotate(0deg);opacity:1}
+    100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+  }
+
+  .tip{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5}
+  .tip b{color:var(--indigo)}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+
+  /* ===== Timer ===== */
+  .sct-timer{
+    font:600 13px/1 "Baloo 2",system-ui,sans-serif !important;
+    background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:999px;
+    padding:5px 13px;color:var(--indigo);display:inline-flex;align-items:center;gap:5px;
+  }
+  .sct-timer b{color:var(--tangerine);font-weight:700}
+
+  /* ===== Fireworks Canvas ===== */
+  #fireworksCanvas{
+    position:fixed;inset:0;pointer-events:none;z-index:250;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="sct-ribbon">
+    <a class="sct-back" href="../">← Về Sân Chơi Toán Học</a>
+    <span class="sct-tag">LỚP 10 · TRỌNG TÂM ĐỀ TÀI</span>
+  </div>
+
+  <header>
+    <h1>Pháo Thủ Parabol<span class="dot">.</span></h1>
+    <span class="sub">Toán 10 · Hàm số bậc hai &amp; đường bay thực tế</span>
+  </header>
+
+  <div class="mission">
+    <div class="ctx" id="ctxEmoji">🏀</div>
+    <div class="txt" id="ctxText">Chỉnh <b>đỉnh parabol</b> sao cho đường bay đi xuyên qua vòng tròn đích.</div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-bar">
+    <div class="bar-track"><div class="bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="bar-label" id="progressLabel">0%</div>
+  </div>
+
+  <!-- Stars row -->
+  <div class="stars-row" id="starsRow"></div>
+
+  <div class="stage">
+    <div class="hud">
+      <span class="chip">Màn <b id="lvl">1</b>/5</span>
+      <span class="chip">Điểm <b id="score">0</b></span>
+    </div>
+    <canvas id="cv" width="900" height="560"></canvas>
+    <div class="toast" id="toast">
+      <div class="box">
+        <div class="emo" id="tEmo">🎉</div>
+        <h2 id="tTitle">Trúng đích!</h2>
+        <p id="tMsg"></p>
+        <button id="tBtn" class="next">Màn tiếp theo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="card">
+      <h3>🎯 Điều khiển đỉnh parabol</h3>
+      <div class="ctrl">
+        <label>Đỉnh cao bao nhiêu? <span class="val" id="kVal">4.0 m</span></label>
+        <input type="range" id="kRange" min="1" max="8" step="0.1" value="4">
+      </div>
+      <div class="ctrl">
+        <label>Đỉnh ở xa bao nhiêu? <span class="val" id="hVal">4.0 m</span></label>
+        <input type="range" id="hRange" min="1" max="11" step="0.1" value="4">
+      </div>
+      <div class="actions">
+        <button class="fire" id="fireBtn">Ném! 🚀</button>
+        <button class="reset" id="resetBtn">Chơi lại</button>
+      </div>
+      <div class="tip">Bóng xuất phát từ gốc <b>O(0;0)</b>, bay theo parabol có đỉnh <b>I(h;k)</b> và rơi xuống tại <b>x = 2h</b>.</div>
+    </div>
+
+    <div class="card">
+      <h3>📐 Phương trình đường bay</h3>
+      <div class="eq">
+        <div class="main">y = <span class="a" id="eqA">a</span>(x − <span class="h" id="eqH">h</span>)² + <span class="k" id="eqK">k</span></div>
+        <div class="row">
+          <span>Dạng khai triển: <b id="eqExp">y = ax² + bx</b></span>
+        </div>
+        <div class="row">
+          <span>Đỉnh <b id="eqVertex">I(4; 4)</b></span>
+          <span>Trục đối xứng <b id="eqAxis">x = 4</b></span>
+          <span>Hệ số <b id="eqACoef">a = −0.25</b></span>
+        </div>
+      </div>
+      <div class="tip"><b>Để ý:</b> a &lt; 0 nên bề lõm quay xuống. |a| càng lớn, đường bay càng "nhọn"; |a| càng nhỏ, đường bay càng "bè".</div>
+    </div>
+  </div>
+
+  <footer>Một hoạt động dạy học môn Toán · điều khiển trực tiếp đối tượng toán học.</footer>
+</div>
+
+<!-- Quiz Modal -->
+<div class="quiz-overlay" id="quizOverlay">
+  <div class="quiz-box">
+    <div class="quiz-icon">✏️</div>
+    <h2>Câu hỏi củng cố</h2>
+    <div class="quiz-question" id="quizQuestion"></div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-result" id="quizResult"></div>
+    <button class="quiz-next-btn" id="quizNextBtn">Tiếp tục ➜</button>
+  </div>
+</div>
+
+<!-- Name Input Modal -->
+<div class="name-overlay" id="nameOverlay">
+  <div class="name-box">
+    <div style="font-size:40px;margin-bottom:8px">🏆</div>
+    <h2>Xin chúc mừng!</h2>
+    <p>Bạn đã hoàn thành xuất sắc. Nhập tên để nhận Giấy Chứng Nhận!</p>
+    <input type="text" class="name-input" id="nameInput" placeholder="Nhập tên của bạn...">
+    <button class="name-submit" id="nameSubmit">Nhận Giấy Chứng Nhận 🎖️</button>
+  </div>
+</div>
+
+<!-- Certificate Modal -->
+<div class="cert-overlay" id="certOverlay">
+  <div class="cert-wrapper">
+    <div class="certificate" id="certificate">
+      <div class="cert-badge">🏆</div>
+      <div class="cert-ribbon"><span></span><span></span><span></span></div>
+      <h1 class="cert-title">GIẤY CHỨNG NHẬN</h1>
+      <p class="cert-subtitle">Pháo Thủ Parabol — Toán 10</p>
+      <div class="cert-content">
+        Chứng nhận bạn
+        <span class="name" id="certName">—</span>
+        đã hoàn thành xuất sắc trò chơi <strong>Pháo Thủ Parabol</strong>,
+        thể hiện khả năng vận dụng kiến thức về <strong>hàm số bậc hai</strong>
+        và <strong>parabol</strong> vào giải quyết bài toán thực tế.
+      </div>
+      <div class="cert-stats">
+        <div class="cert-stat">
+          <div class="num" id="certScore">0</div>
+          <div class="lbl">ĐIỂM</div>
+        </div>
+        <div class="cert-stat">
+          <div class="num" id="certStars">0/5</div>
+          <div class="lbl">MÀN</div>
+        </div>
+        <div class="cert-stat">
+          <div class="num" id="certTime">0:00</div>
+          <div class="lbl">THỜI GIAN</div>
+        </div>
+        <div class="cert-stat">
+          <div class="num" id="certQuiz">0/5</div>
+          <div class="lbl">CÂU HỎI</div>
+        </div>
+      </div>
+      <div class="cert-quote" id="certQuote">
+        "Toán học không phải là việc học thuộc công thức — mà là hiểu được vẻ đẹp ẩn sau mỗi đường cong."
+      </div>
+      <div class="cert-date" id="certDate"></div>
+      <div class="cert-seal">✦<br>MATH</div>
+    </div>
+    <div class="cert-actions">
+      <button class="cert-close" id="certClose">Đóng</button>
+      <button class="cert-save" id="certSave">📷 Lưu ảnh</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confetti container -->
+<div class="confetti-container" id="confettiContainer"></div>
+
+<!-- Fireworks canvas -->
+<canvas id="fireworksCanvas"></canvas>
+
+<script>
+const cv = document.getElementById('cv');
+const ctx2d = cv.getContext('2d');
+
+// ---- Thế giới toạ độ (mét) ----
+const WORLD = { xMax: 13, yMax: 9 };
+let MARGIN = { l: 48, r: 16, t: 16, b: 40 };
+let scale = 1, plotW = 0, plotH = 0;
+
+function fitCanvas(){
+  const cssW = cv.clientWidth;
+  const cssH = cssW * (560/900);
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = Math.round(cssW*dpr);
+  cv.height = Math.round(cssH*dpr);
+  ctx2d.setTransform(dpr,0,0,dpr,0,0);
+  plotW = cssW - MARGIN.l - MARGIN.r;
+  plotH = cssH - MARGIN.t - MARGIN.b;
+  scale = Math.min(plotW/WORLD.xMax, plotH/WORLD.yMax);
+}
+function X(x){ return MARGIN.l + x*scale; }
+function Y(y){ return MARGIN.t + plotH - y*scale; }
+
+// ---- Các màn (mô hình thực tế) ----
+const LEVELS = [
+  { emoji:'🏀', text:'Ném bóng vào <b>rổ</b>: cho đường bay xuyên qua vòng tròn đích.', target:{x:8, y:3} },
+  { emoji:'⛲', text:'<b>Vòi phun nước</b> phải rơi đúng vào chậu cây ở xa.', target:{x:10, y:1.5} },
+  { emoji:'🎆', text:'<b>Pháo hoa</b> nổ đúng vị trí trên cao cho đẹp.', target:{x:6, y:6} },
+  { emoji:'🛟', text:'Ném <b>phao cứu sinh</b> qua bức tường tới người gặp nạn.', target:{x:9, y:2.2}, wall:{x:5, h:4} },
+  { emoji:'🏀', text:'Cú <b>ném 3 điểm</b>: vượt qua hậu vệ rồi vào rổ.', target:{x:11, y:3}, wall:{x:6.5, h:3.2} },
+];
+
+// ---- Câu hỏi củng cố mỗi màn ----
+const QUIZZES = [
+  {
+    q: 'Trục đối xứng của parabol vừa dùng là đường thẳng nào?',
+    gen: function(h,k){
+      var correct = 'x = ' + h.toFixed(1);
+      var wrong1 = 'x = ' + k.toFixed(1);
+      var wrong2 = 'y = ' + h.toFixed(1);
+      var wrong3 = 'x = ' + (2*h).toFixed(1);
+      return { correct:correct, options: shuffle([correct,wrong1,wrong2,wrong3]) };
+    }
+  },
+  {
+    q: 'Toạ độ đỉnh của parabol vừa dùng là gì?',
+    gen: function(h,k){
+      var correct = 'I(' + h.toFixed(1) + '; ' + k.toFixed(1) + ')';
+      var wrong1 = 'I(' + k.toFixed(1) + '; ' + h.toFixed(1) + ')';
+      var wrong2 = 'I(0; ' + k.toFixed(1) + ')';
+      var wrong3 = 'I(' + h.toFixed(1) + '; 0)';
+      return { correct:correct, options: shuffle([correct,wrong1,wrong2,wrong3]) };
+    }
+  },
+  {
+    q: 'Hệ số a trong phương trình parabol vừa dùng có giá trị nào?',
+    gen: function(h,k){
+      var a = -k/(h*h);
+      var correct = 'a = ' + a.toFixed(2);
+      var wrong1 = 'a = ' + (-a).toFixed(2);
+      var wrong2 = 'a = ' + (a*2).toFixed(2);
+      var wrong3 = 'a = ' + (1/a).toFixed(2);
+      return { correct:correct, options: shuffle([correct,wrong1,wrong2,wrong3]) };
+    }
+  },
+  {
+    q: 'Bóng rơi xuống đất tại điểm nào trên trục Ox?',
+    gen: function(h,k){
+      var land = 2*h;
+      var correct = 'x = ' + land.toFixed(1);
+      var wrong1 = 'x = ' + h.toFixed(1);
+      var wrong2 = 'x = ' + (3*h).toFixed(1);
+      var wrong3 = 'x = ' + (land+1).toFixed(1);
+      return { correct:correct, options: shuffle([correct,wrong1,wrong2,wrong3]) };
+    }
+  },
+  {
+    q: 'Vì sao parabol mở xuống dưới (bề lõm quay xuống)?',
+    gen: function(h,k){
+      var correct = 'V\u00EC h\u1EC7 s\u1ED1 a \x3c 0';
+      var wrong1 = 'V\u00EC h\u1EC7 s\u1ED1 a \x3e 0';
+      var wrong2 = 'Vì đỉnh ở trên trục Ox';
+      var wrong3 = 'Vì parabol qua gốc O';
+      return { correct:correct, options: shuffle([correct,wrong1,wrong2,wrong3]) };
+    }
+  }
+];
+
+function shuffle(arr){
+  var a = arr.slice();
+  for(var i=a.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var tmp=a[i]; a[i]=a[j]; a[j]=tmp;
+  }
+  return a;
+}
+
+let lvlIdx = 0, score = 0, flying = false, hitThisLevel = false;
+let quizCorrectCount = 0;
+const SCT_done = new Set();
+
+function SCTreport(){
+  var total=LEVELS.length, cleared=SCT_done.size;
+  var percent=Math.round(cleared/total*100);
+  var payload={source:'SCT_GAME',type:'RESULT',game:'parabol',percent:percent,stars:cleared,starsMax:total,detail:cleared+'/'+total+' màn hoàn thành'};
+  try{ if(window.opener&&!window.opener.closed) window.opener.postMessage(payload,'*'); }catch(e){}
+  try{ if(window.parent&&window.parent!==window) window.parent.postMessage(payload,'*'); }catch(e){}
+}
+
+let h = 4, k = 4;
+const TOL = 0.55;
+
+const $ = id => document.getElementById(id);
+
+function coeffs(){
+  const a = -k/(h*h);
+  const b = 2*k/h;
+  return {a,b};
+}
+function curveY(x){ const {a}=coeffs(); return a*(x-h)*(x-h)+k; }
+
+function updateEq(){
+  const {a,b}=coeffs();
+  $('kVal').textContent = k.toFixed(1)+' m';
+  $('hVal').textContent = h.toFixed(1)+' m';
+  $('eqA').textContent = a.toFixed(2);
+  $('eqH').textContent = h.toFixed(1);
+  $('eqK').textContent = k.toFixed(1);
+  $('eqExp').textContent = 'y = '+a.toFixed(2)+'x² + '+b.toFixed(2)+'x';
+  $('eqVertex').textContent = 'I('+h.toFixed(1)+'; '+k.toFixed(1)+')';
+  $('eqAxis').textContent = 'x = '+h.toFixed(1);
+  $('eqACoef').textContent = 'a = '+a.toFixed(2);
+}
+
+// ===== Progress & Stars =====
+function updateProgress(){
+  var pct = Math.round(SCT_done.size / LEVELS.length * 100);
+  $('progressFill').style.width = pct + '%';
+  $('progressLabel').textContent = pct + '%';
+}
+
+function buildStars(){
+  var row = $('starsRow');
+  row.innerHTML = '';
+  for(var i=0;i<LEVELS.length;i++){
+    var s = document.createElement('div');
+    s.className = 'star-item' + (SCT_done.has(i) ? ' done' : '') + (i===lvlIdx ? ' current' : '');
+    s.textContent = SCT_done.has(i) ? '⭐' : (i+1);
+    row.appendChild(s);
+  }
+}
+
+// ===== Drawing =====
+function drawGrid(){
+  const cssW = cv.clientWidth, cssH = cssW*(560/900);
+  ctx2d.clearRect(0,0,cssW,cssH);
+  ctx2d.lineWidth=1;
+  for(let x=0;x<=WORLD.xMax;x++){
+    ctx2d.strokeStyle = x%2===0 ? '#C9D8EC' : '#E3ECF6';
+    ctx2d.beginPath(); ctx2d.moveTo(X(x),Y(0)); ctx2d.lineTo(X(x),Y(WORLD.yMax)); ctx2d.stroke();
+  }
+  for(let y=0;y<=WORLD.yMax;y++){
+    ctx2d.strokeStyle = y%2===0 ? '#C9D8EC' : '#E3ECF6';
+    ctx2d.beginPath(); ctx2d.moveTo(X(0),Y(y)); ctx2d.lineTo(X(WORLD.xMax),Y(y)); ctx2d.stroke();
+  }
+  ctx2d.strokeStyle='#1C2438'; ctx2d.lineWidth=2;
+  ctx2d.beginPath(); ctx2d.moveTo(X(0),Y(0)); ctx2d.lineTo(X(WORLD.xMax),Y(0)); ctx2d.stroke();
+  ctx2d.beginPath(); ctx2d.moveTo(X(0),Y(0)); ctx2d.lineTo(X(0),Y(WORLD.yMax)); ctx2d.stroke();
+  ctx2d.fillStyle='#6A7184'; ctx2d.font='12px "Be Vietnam Pro"';
+  ctx2d.fillText('O', X(0)-14, Y(0)+16);
+  ctx2d.fillText('x (m)', X(WORLD.xMax)-34, Y(0)+22);
+  // Y axis label
+  ctx2d.save();
+  ctx2d.translate(X(0)-30, Y(WORLD.yMax)+10);
+  ctx2d.fillText('y (m)', 0, 0);
+  ctx2d.restore();
+  // Grid numbers
+  ctx2d.fillStyle='#AAB4C6'; ctx2d.font='10px "Be Vietnam Pro"';
+  for(let x=2;x<=WORLD.xMax;x+=2){
+    ctx2d.fillText(x, X(x)-4, Y(0)+14);
+  }
+  for(let y=2;y<=WORLD.yMax;y+=2){
+    ctx2d.fillText(y, X(0)-18, Y(y)+4);
+  }
+}
+
+function drawWall(){
+  const w = LEVELS[lvlIdx].wall; if(!w) return;
+  const wpx = 0.35*scale;
+  // Shadow
+  ctx2d.fillStyle='rgba(0,0,0,.08)';
+  ctx2d.fillRect(X(w.x)-wpx/2+3, Y(w.h)+3, wpx, w.h*scale);
+  // Wall body
+  ctx2d.fillStyle='#8A8377';
+  ctx2d.fillRect(X(w.x)-wpx/2, Y(w.h), wpx, w.h*scale);
+  // Brick lines
+  ctx2d.fillStyle='#6E685D';
+  for(let i=0;i<Math.floor(w.h);i++){
+    ctx2d.fillRect(X(w.x)-wpx/2, Y(i+1)+2, wpx, 2);
+  }
+  // Wall top
+  ctx2d.fillStyle='#9E9889';
+  ctx2d.fillRect(X(w.x)-wpx/2-2, Y(w.h)-2, wpx+4, 4);
+}
+
+function drawTarget(){
+  const t = LEVELS[lvlIdx].target;
+  // Glow
+  ctx2d.fillStyle='rgba(31,163,107,.08)';
+  ctx2d.beginPath(); ctx2d.arc(X(t.x), Y(t.y), TOL*scale*1.5, 0, Math.PI*2); ctx2d.fill();
+  // Ring
+  ctx2d.strokeStyle='#1FA36B'; ctx2d.lineWidth=4;
+  ctx2d.beginPath(); ctx2d.arc(X(t.x), Y(t.y), TOL*scale, 0, Math.PI*2); ctx2d.stroke();
+  ctx2d.fillStyle='rgba(31,163,107,.15)';
+  ctx2d.beginPath(); ctx2d.arc(X(t.x), Y(t.y), TOL*scale, 0, Math.PI*2); ctx2d.fill();
+  // Center dot
+  ctx2d.fillStyle='#1FA36B'; ctx2d.beginPath();
+  ctx2d.arc(X(t.x), Y(t.y), 3, 0, Math.PI*2); ctx2d.fill();
+  // Label
+  ctx2d.fillStyle='#1FA36B'; ctx2d.font='bold 11px "Be Vietnam Pro"';
+  ctx2d.fillText('(' + t.x + '; ' + t.y + ')', X(t.x)+TOL*scale+4, Y(t.y)+4);
+}
+
+function drawLauncher(){
+  // Base
+  ctx2d.fillStyle='#1C2438';
+  ctx2d.fillRect(X(0)-6, Y(0)-2, 24, 6);
+  // Cannon
+  ctx2d.fillStyle='#2A3B8F';
+  ctx2d.beginPath();
+  ctx2d.moveTo(X(0)-2, Y(0));
+  ctx2d.lineTo(X(0)+18, Y(0));
+  ctx2d.lineTo(X(0)+2, Y(0)-22);
+  ctx2d.closePath(); ctx2d.fill();
+  // Highlight
+  ctx2d.fillStyle='rgba(255,255,255,.2)';
+  ctx2d.beginPath();
+  ctx2d.moveTo(X(0)+2, Y(0));
+  ctx2d.lineTo(X(0)+10, Y(0));
+  ctx2d.lineTo(X(0)+2, Y(0)-18);
+  ctx2d.closePath(); ctx2d.fill();
+}
+
+function drawVertexMarker(){
+  // Draw vertex point on preview
+  const vx = X(h), vy = Y(k);
+  ctx2d.strokeStyle='rgba(42,59,143,.3)';
+  ctx2d.lineWidth=1;
+  ctx2d.setLineDash([4,4]);
+  // Vertical line from vertex to x-axis
+  ctx2d.beginPath(); ctx2d.moveTo(vx, vy); ctx2d.lineTo(vx, Y(0)); ctx2d.stroke();
+  // Horizontal line from vertex to y-axis
+  ctx2d.beginPath(); ctx2d.moveTo(vx, vy); ctx2d.lineTo(X(0), vy); ctx2d.stroke();
+  ctx2d.setLineDash([]);
+  // Vertex dot
+  ctx2d.fillStyle='#2A3B8F';
+  ctx2d.beginPath(); ctx2d.arc(vx, vy, 5, 0, Math.PI*2); ctx2d.fill();
+  ctx2d.strokeStyle='#fff'; ctx2d.lineWidth=2; ctx2d.stroke();
+  // Label
+  ctx2d.fillStyle='#2A3B8F'; ctx2d.font='bold 11px "Be Vietnam Pro"';
+  ctx2d.fillText('I('+h.toFixed(1)+'; '+k.toFixed(1)+')', vx+8, vy-8);
+}
+
+function drawCurve(upto=null){
+  ctx2d.lineWidth=3;
+  const end = upto===null ? 2*h : upto;
+
+  // Gradient effect for the curve
+  if(upto !== null){
+    ctx2d.strokeStyle='#2A3B8F';
+    ctx2d.setLineDash([]);
+  } else {
+    ctx2d.strokeStyle='rgba(42,59,143,.5)';
+    ctx2d.setLineDash([8,7]);
+  }
+
+  ctx2d.beginPath();
+  let started=false;
+  for(let x=0;x<=end+0.01;x+=0.05){
+    const y=curveY(x); if(y<-0.2) break;
+    const px=X(x),py=Y(Math.max(y,0));
+    if(!started){ctx2d.moveTo(px,py);started=true;} else ctx2d.lineTo(px,py);
+  }
+  ctx2d.stroke(); ctx2d.setLineDash([]);
+
+  // Draw landing point marker
+  if(upto===null){
+    const landX = 2*h;
+    if(landX <= WORLD.xMax){
+      ctx2d.fillStyle='rgba(255,122,26,.3)';
+      ctx2d.beginPath(); ctx2d.arc(X(landX), Y(0), 6, 0, Math.PI*2); ctx2d.fill();
+      ctx2d.fillStyle='#FF7A1A'; ctx2d.font='10px "Be Vietnam Pro"';
+      ctx2d.fillText((2*h).toFixed(1), X(landX)-8, Y(0)+16);
+    }
+  }
+}
+
+function drawBall(x){
+  const y=Math.max(curveY(x),0);
+  // Shadow
+  ctx2d.fillStyle='rgba(0,0,0,.1)';
+  ctx2d.beginPath(); ctx2d.ellipse(X(x), Y(0)+4, 8, 3, 0, 0, Math.PI*2); ctx2d.fill();
+  // Ball
+  const grad = ctx2d.createRadialGradient(X(x)-3, Y(y)-3, 2, X(x), Y(y), 10);
+  grad.addColorStop(0, '#FFA04D');
+  grad.addColorStop(1, '#FF7A1A');
+  ctx2d.fillStyle = grad;
+  ctx2d.beginPath(); ctx2d.arc(X(x),Y(y),9,0,Math.PI*2); ctx2d.fill();
+  ctx2d.strokeStyle='#C95C09'; ctx2d.lineWidth=2; ctx2d.stroke();
+  // Highlight
+  ctx2d.fillStyle='rgba(255,255,255,.4)';
+  ctx2d.beginPath(); ctx2d.arc(X(x)-3,Y(y)-3,3,0,Math.PI*2); ctx2d.fill();
+}
+
+function render(ballX=null){
+  fitCanvas(); drawGrid(); drawWall(); drawTarget(); drawLauncher();
+  if(ballX===null){ drawCurve(); drawVertexMarker(); drawBall(0); }
+  else { drawCurve(ballX); drawBall(ballX); }
+}
+
+function setLevel(i){
+  lvlIdx=i; flying=false; hitThisLevel=false;
+  $('lvl').textContent=i+1;
+  $('ctxEmoji').textContent=LEVELS[i].emoji;
+  $('ctxText').innerHTML=LEVELS[i].text;
+  $('fireBtn').disabled=false;
+  buildStars();
+  updateProgress();
+  render();
+}
+
+// ===== Toast =====
+function endToast(ok, title, msg, btnLabel, btnClass, action){
+  const t=$('toast');
+  t.className='toast show'+(ok?'':' fail');
+  $('tEmo').textContent=ok?'🎉':'🤏';
+  $('tTitle').textContent=title;
+  $('tMsg').textContent=msg;
+  const b=$('tBtn'); b.textContent=btnLabel; b.className=btnClass;
+  b.onclick=function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    t.className='toast';
+    action();
+  };
+}
+
+// ===== Fire =====
+function fire(){
+  if(flying) return;
+  flying=true; $('fireBtn').disabled=true;
+  const t=LEVELS[lvlIdx].target, w=LEVELS[lvlIdx].wall;
+  const land=2*h;
+  let x=0;
+  // Play launch sound
+  playSound('launch');
+  function step(){
+    x+=Math.max(land,1)/90;
+    if(w && x>=w.x){
+      const yAtWall=curveY(w.x);
+      if(yAtWall < w.h){
+        render(w.x);
+        flying=false;
+        playSound('fail');
+        endToast(false,'Vướng tường!',
+          'Tại x = '+w.x+' đường bay chỉ cao '+yAtWall.toFixed(1)+' m, thấp hơn tường '+w.h+' m. Hãy nâng đỉnh k lên.',
+          'Thử lại','retry',function(){$('fireBtn').disabled=false; render();});
+        return;
+      }
+    }
+    if(x>=land){ render(land); checkHit(); flying=false; return; }
+    render(x);
+    requestAnimationFrame(step);
+  }
+  step();
+}
+
+function checkHit(){
+  const t=LEVELS[lvlIdx].target;
+  const land=2*h;
+  if(land < t.x){
+    playSound('fail');
+    endToast(false,'Chưa tới đích!',
+      'Bóng rơi tại x = '+land.toFixed(1)+' m, chưa tới đích ở x = '+t.x+'. Tăng "đỉnh ở xa" (h).',
+      'Thử lại','retry',function(){$('fireBtn').disabled=false; render();});
+    return;
+  }
+  const yAt=curveY(t.x);
+  const d=Math.abs(yAt-t.y);
+  if(d<=TOL){
+    if(!hitThisLevel){ score+=100; $('score').textContent=score; hitThisLevel=true; }
+    SCT_done.add(lvlIdx); SCTreport();
+    playSound('hit');
+    buildStars();
+    updateProgress();
+
+    // Show quiz after success
+    endToast(true,'Trúng đích!','Đường bay đi qua đúng vòng tròn. Đỉnh I('+h.toFixed(1)+'; '+k.toFixed(1)+').',
+      'Trả lời câu hỏi ✏️','next',function(){ showQuiz(lvlIdx); });
+  } else {
+    playSound('fail');
+    const hint = yAt>t.y ? 'Đường bay cao hơn đích — hạ đỉnh k hoặc dời đỉnh h.'
+                         : 'Đường bay thấp hơn đích — nâng đỉnh k hoặc dời đỉnh h.';
+    endToast(false,'Sát rồi!','Tại x = '+t.x+', đường bay ở độ cao '+yAt.toFixed(1)+' m còn đích ở '+t.y+' m. '+hint,
+      'Thử lại','retry',function(){$('fireBtn').disabled=false; render();});
+  }
+}
+
+// ===== Quiz System =====
+function showQuiz(levelIndex){
+  var quiz = QUIZZES[levelIndex];
+  var data = quiz.gen(h, k);
+  var overlay = $('quizOverlay');
+  var qEl = $('quizQuestion');
+  var optsEl = $('quizOptions');
+  var resultEl = $('quizResult');
+  var nextBtn = $('quizNextBtn');
+
+  qEl.textContent = quiz.q;
+  optsEl.innerHTML = '';
+  resultEl.className = 'quiz-result';
+  resultEl.textContent = '';
+  nextBtn.className = 'quiz-next-btn';
+
+  var answered = false;
+
+  data.options.forEach(function(opt){
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+
+    // Use both click and touchend for reliable mobile interaction
+    function handleAnswer(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if(answered) return;
+      answered = true;
+
+      // Disable all options
+      var allOpts = optsEl.querySelectorAll('.quiz-opt');
+      allOpts.forEach(function(o){ o.classList.add('disabled'); });
+
+      if(opt === data.correct){
+        btn.classList.add('correct');
+        resultEl.textContent = '✅ Chính xác! Bạn hiểu rất rõ bài toán.';
+        resultEl.className = 'quiz-result show right';
+        quizCorrectCount++;
+        score += 50;
+        $('score').textContent = score;
+        playSound('correct');
+      } else {
+        btn.classList.add('wrong');
+        // Highlight correct answer
+        allOpts.forEach(function(o){
+          if(o.textContent === data.correct) o.classList.add('correct');
+        });
+        resultEl.textContent = '❌ Chưa đúng! Đáp án đúng: ' + data.correct;
+        resultEl.className = 'quiz-result show wrong-r';
+        playSound('fail');
+      }
+
+      nextBtn.className = 'quiz-next-btn show';
+    }
+
+    btn.addEventListener('click', handleAnswer);
+    optsEl.appendChild(btn);
+  });
+
+  nextBtn.onclick = function(e){
+    e.preventDefault();
+    overlay.className = 'quiz-overlay';
+    afterQuiz();
+  };
+
+  overlay.className = 'quiz-overlay show';
+}
+
+function afterQuiz(){
+  if(lvlIdx < LEVELS.length-1){
+    setLevel(lvlIdx+1);
+  } else {
+    // Game finished!
+    checkCertificate();
+  }
+}
+
+// ===== Certificate System =====
+function checkCertificate(){
+  var totalLevels = LEVELS.length;
+  var cleared = SCT_done.size;
+  var percent = Math.round(cleared/totalLevels*100);
+
+  if(percent >= 80){
+    // Ask for name
+    $('nameOverlay').className = 'name-overlay show';
+    $('nameInput').value = '';
+    setTimeout(function(){ $('nameInput').focus(); }, 400);
+  } else {
+    // Not enough to earn certificate
+    endToast(false, 'Chưa đủ điểm!',
+      'Bạn hoàn thành ' + cleared + '/' + totalLevels + ' màn (' + percent + '%). Cần đạt ít nhất 80% để nhận Giấy Chứng Nhận.',
+      'Chơi lại','retry', function(){
+        score=0; $('score').textContent=0;
+        quizCorrectCount=0;
+        SCT_done.clear();
+        setLevel(0);
+      });
+  }
+}
+
+$('nameSubmit').addEventListener('click', function(e){
+  e.preventDefault();
+  var name = $('nameInput').value.trim();
+  if(!name){
+    $('nameInput').style.borderColor = '#E53E3E';
+    $('nameInput').setAttribute('placeholder', 'Vui lòng nhập tên!');
+    return;
+  }
+  $('nameOverlay').className = 'name-overlay';
+  showCertificate(name);
+});
+
+$('nameInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    $('nameSubmit').click();
+  }
+  this.style.borderColor = '';
+});
+
+function showCertificate(name){
+  $('certName').textContent = name;
+  $('certScore').textContent = score;
+  $('certStars').textContent = SCT_done.size + '/' + LEVELS.length;
+  $('certTime').textContent = typeof SCT_elapsed === 'function' ? fmtTime(SCT_elapsed()) : '--:--';
+  $('certQuiz').textContent = quizCorrectCount + '/' + LEVELS.length;
+
+  // Set date
+  var now = new Date();
+  var day = now.getDate();
+  var month = now.getMonth() + 1;
+  var year = now.getFullYear();
+  $('certDate').textContent = 'Ngày ' + day + ' tháng ' + month + ' năm ' + year;
+
+  // Pick inspirational quote based on performance
+  var quotes = [
+    '"Toán học là nữ hoàng của các ngành khoa học." — Carl Friedrich Gauss',
+    '"Mỗi bài toán đều ẩn chứa một câu chuyện tuyệt vời chờ bạn khám phá."',
+    '"Không có con đường hoàng gia nào dẫn tới toán học — và đó chính là vẻ đẹp của nó."',
+    '"Người giỏi toán không sợ sai, vì mỗi sai lầm đều là bước tiến."',
+    '"Parabol không chỉ là đường cong — nó là ngôn ngữ của vũ trụ."',
+  ];
+  $('certQuote').textContent = quotes[Math.floor(Math.random()*quotes.length)];
+
+  $('certOverlay').className = 'cert-overlay show';
+
+  // Launch celebration effects
+  launchConfetti();
+  playSound('celebrate');
+}
+
+function fmtTime(s){
+  var m = Math.floor(s/60);
+  return m + ':' + String(s%60).padStart(2,'0');
+}
+
+$('certClose').addEventListener('click', function(e){
+  e.preventDefault();
+  $('certOverlay').className = 'cert-overlay';
+  // Reset game
+  score=0; $('score').textContent=0;
+  quizCorrectCount=0;
+  SCT_done.clear();
+  setLevel(0);
+});
+
+$('certSave').addEventListener('click', function(e){
+  e.preventDefault();
+  saveCertificateAsImage();
+});
+
+// ===== Save certificate as image =====
+function saveCertificateAsImage(){
+  var certEl = $('certificate');
+  // Use canvas-based approach for broader compatibility
+  // We'll use a simpler approach: create a styled canvas
+  try {
+    // Try using the toBlob approach with a temporary canvas
+    var w = certEl.offsetWidth * 2;
+    var hh = certEl.offsetHeight * 2;
+
+    // Fallback: tell user to screenshot
+    var blob = new Blob([certEl.outerHTML], {type:'text/html'});
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.download = 'GiayChungNhan_PhaoThuParabol.html';
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } catch(err){
+    alert('Vui lòng chụp màn hình để lưu Giấy Chứng Nhận!');
+  }
+}
+
+// ===== Confetti =====
+function launchConfetti(){
+  var container = $('confettiContainer');
+  container.innerHTML = '';
+  var colors = ['#FF7A1A','#2A3B8F','#1FA36B','#FFD700','#E53E3E','#6B7BD6','#FF69B4'];
+  for(var i=0;i<80;i++){
+    var piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    var color = colors[Math.floor(Math.random()*colors.length)];
+    var size = 6 + Math.random()*10;
+    var left = Math.random()*100;
+    var duration = 2 + Math.random()*3;
+    var delay = Math.random()*2;
+    var shape = Math.random() > 0.5 ? '50%' : '0';
+    piece.style.cssText = 'left:'+left+'%;width:'+size+'px;height:'+size+'px;'+
+      'background:'+color+';border-radius:'+shape+';'+
+      'animation-duration:'+duration+'s;animation-delay:'+delay+'s;';
+    container.appendChild(piece);
+  }
+  // Cleanup after animation
+  setTimeout(function(){ container.innerHTML=''; }, 6000);
+}
+
+// ===== Sound Effects (Web Audio API) =====
+var audioCtx = null;
+function getAudioCtx(){
+  if(!audioCtx){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioCtx;
+}
+
+function playSound(type){
+  try {
+    var ctx = getAudioCtx();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    gain.gain.value = 0.08;
+
+    switch(type){
+      case 'launch':
+        osc.frequency.setValueAtTime(200, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.3);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.4);
+        break;
+      case 'hit':
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523, ctx.currentTime);
+        osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.5);
+        break;
+      case 'fail':
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.3);
+        gain.gain.value = 0.04;
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.4);
+        break;
+      case 'correct':
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        osc.frequency.setValueAtTime(554, ctx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(659, ctx.currentTime + 0.16);
+        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.24);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.5);
+        break;
+      case 'celebrate':
+        // Play a little melody
+        for(var i=0;i<5;i++){
+          var o = ctx.createOscillator();
+          var g = ctx.createGain();
+          o.connect(g); g.connect(ctx.destination);
+          o.type = 'sine';
+          var notes = [523, 659, 784, 1047, 784];
+          o.frequency.value = notes[i];
+          g.gain.setValueAtTime(0.06, ctx.currentTime + i*0.15);
+          g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i*0.15 + 0.3);
+          o.start(ctx.currentTime + i*0.15);
+          o.stop(ctx.currentTime + i*0.15 + 0.3);
+        }
+        break;
+    }
+  } catch(e){}
+}
+
+// ---- Sự kiện (MOBILE FIX: using input event which works on both) ----
+$('hRange').addEventListener('input', function(e){ h=+e.target.value; updateEq(); if(!flying) render(); });
+$('kRange').addEventListener('input', function(e){ k=+e.target.value; updateEq(); if(!flying) render(); });
+$('fireBtn').addEventListener('click', function(e){ e.preventDefault(); fire(); });
+$('resetBtn').addEventListener('click', function(e){
+  e.preventDefault();
+  score=0; $('score').textContent=0;
+  quizCorrectCount=0;
+  SCT_done.clear();
+  $('toast').className='toast';
+  setLevel(0);
+});
+
+// Prevent canvas touch from scrolling page while allowing other interactions
+cv.addEventListener('touchstart', function(e){
+  // Only prevent default if the touch is on the canvas itself
+  // This allows the range sliders to work properly
+}, {passive: true});
+
 window.addEventListener('resize', function(){ if(!flying) render(); });
+
 updateEq();
 setLevel(0);
 </script>
+
 <script>
 /* ==== Cải tiến lớp 10: đồng hồ đo thời gian chơi ==== */
 (function(){
