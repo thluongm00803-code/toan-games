@@ -5,10 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Nông Trại Tối Ưu — Toán 10</title>
+  <meta name="description"
+    content="Game học toán qua mô hình nông trại tối ưu hóa. Hệ bất phương trình bậc nhất hai ẩn và bài toán tối ưu.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap"
     rel="stylesheet">
   <style>
     :root {
@@ -25,6 +27,8 @@
       --red: #E85D5D;
       --blue: #00A3E0;
       --yellow: #F4A261;
+      --gold: #FFD700;
+      --purple: #8B5CF6;
     }
 
     * {
@@ -39,17 +43,57 @@
     }
 
     body {
-      font-family: "Be Vietnam Pro", system-ui, sans-serif;
+      font-family: "Nunito", "Be Vietnam Pro", system-ui, sans-serif;
       color: var(--ink);
       background: radial-gradient(120% 80% at 50% -10%, #EAF6EE 0%, transparent 65%), #F4FAEE;
       min-height: 100vh;
       padding: 24px 14px 40px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ===== PARTICLE BACKGROUND ===== */
+    .particles-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      font-size: 20px;
+      opacity: 0.15;
+      animation: floatParticle linear infinite;
+      will-change: transform;
+    }
+
+    @keyframes floatParticle {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.15;
+      }
+
+      90% {
+        opacity: 0.15;
+      }
+
+      100% {
+        transform: translateY(-60px) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     .wrap {
-      max-width: 960px;
+      max-width: 1140px;
       margin: 0 auto;
-      position: relative
+      position: relative;
+      z-index: 1;
     }
 
     header {
@@ -66,11 +110,33 @@
       font-size: clamp(26px, 5vw, 40px);
       margin: 0;
       letter-spacing: -.5px;
-      color: var(--emerald-d)
+      color: var(--emerald-d);
+      position: relative;
     }
 
     h1 .dot {
       color: var(--tangerine)
+    }
+
+    h1 .emoji-bounce {
+      display: inline-block;
+      animation: emojiBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes emojiBounce {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      25% {
+        transform: translateY(-6px) rotate(-5deg);
+      }
+
+      75% {
+        transform: translateY(-3px) rotate(5deg);
+      }
     }
 
     .sub {
@@ -79,8 +145,218 @@
       font-weight: 500
     }
 
+    /* ===== COMBO DISPLAY ===== */
+    .combo-display {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      z-index: 100;
+      font-family: "Baloo 2", sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--tangerine);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border: 2px solid var(--tangerine);
+      border-radius: 16px;
+      padding: 8px 16px;
+      display: none;
+      animation: comboPulse 0.5s ease;
+      box-shadow: 0 4px 15px rgba(255, 122, 26, 0.3);
+    }
+
+    .combo-display.show {
+      display: block;
+    }
+
+    @keyframes comboPulse {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* ===== ENTRANCE ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeInUp 0.6s ease-out both;
+    }
+
+    .animate-in-delay-1 {
+      animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+
+    .animate-in-delay-2 {
+      animation: fadeInUp 0.6s ease-out 0.2s both;
+    }
+
+    .animate-in-delay-3 {
+      animation: fadeInUp 0.6s ease-out 0.3s both;
+    }
+
+    /* ===== SPARKLE EFFECT ===== */
+    @keyframes sparkle {
+
+      0%,
+      100% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1) rotate(180deg);
+      }
+    }
+
+    .sparkle-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .sparkle-star {
+      position: absolute;
+      pointer-events: none;
+      font-size: 14px;
+      animation: sparkle 1.5s ease-in-out infinite;
+    }
+
+    /* ===== LEVEL TRANSITION ===== */
+    .level-transition {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 21, 48, 0.85);
+      backdrop-filter: blur(8px);
+    }
+
+    .level-transition.show {
+      display: flex;
+    }
+
+    .level-transition-content {
+      text-align: center;
+      animation: levelTransIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes levelTransIn {
+      from {
+        opacity: 0;
+        transform: scale(0.5) rotate(-10deg);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    .level-transition-emoji {
+      font-size: 72px;
+      animation: emojiBounce 1s ease-in-out infinite;
+    }
+
+    .level-transition-text {
+      font-family: "Baloo 2", sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 12px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .level-transition-diff {
+      font-family: "Nunito", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-top: 6px;
+    }
+
+    /* ===== TRACTOR ANIMATION ===== */
+    @keyframes tractorDrive {
+      0% {
+        transform: translateX(-100vw);
+      }
+
+      100% {
+        transform: translateX(100vw);
+      }
+    }
+
+    .tractor-anim {
+      position: fixed;
+      bottom: 30px;
+      left: 0;
+      font-size: 48px;
+      z-index: 501;
+      pointer-events: none;
+      animation: tractorDrive 1.5s ease-in-out forwards;
+    }
+
+    /* ===== MISSION ===== */
     .mission {
-      background: linear-gradient(180deg, #ffffff, #F0FAF3);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 250, 243, 0.9));
+      backdrop-filter: blur(10px);
       border: 2px solid #C7EAD4;
       border-radius: 20px;
       padding: 16px 20px;
@@ -89,11 +365,18 @@
       align-items: center;
       gap: 16px;
       box-shadow: 0 4px 15px rgba(31, 163, 107, 0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .mission:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(31, 163, 107, 0.15);
     }
 
     .mission .ctx {
-      font-size: 26px;
-      line-height: 1
+      font-size: 32px;
+      line-height: 1;
+      animation: emojiBounce 3s ease-in-out infinite;
     }
 
     .mission .txt {
@@ -109,9 +392,58 @@
       font-weight: 600
     }
 
+    .mission .diff-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .diff-easy {
+      background: #E8F7EE;
+      color: var(--emerald-d);
+    }
+
+    .diff-medium {
+      background: #FFF5EB;
+      color: #C9650E;
+    }
+
+    .diff-hard {
+      background: #FEE;
+      color: #C62936;
+    }
+
+    .diff-expert {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+    }
+
+    .diff-boss {
+      background: linear-gradient(135deg, #f12711, #f5af19);
+      color: #fff;
+      animation: bossGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes bossGlow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 5px rgba(241, 39, 17, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 0 15px rgba(241, 39, 17, 0.6);
+      }
+    }
+
     /* ==== Progress bar + sao ==== */
     .progress-container {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
       border: 2px solid var(--line);
       border-radius: 18px;
       padding: 14px 20px;
@@ -120,19 +452,45 @@
     }
 
     .progress-bar-bg {
-      height: 8px;
+      height: 10px;
       background: var(--line);
-      border-radius: 4px;
+      border-radius: 5px;
       overflow: hidden;
-      margin-bottom: 12px
+      margin-bottom: 12px;
+      position: relative;
     }
 
     .progress-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--blue), var(--emerald));
+      background: linear-gradient(90deg, var(--blue), var(--emerald), var(--gold));
+      background-size: 200% 100%;
       width: 0%;
       transition: width .5s ease;
-      border-radius: 4px
+      border-radius: 5px;
+      position: relative;
+      animation: shimmer 2s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -2px;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(31, 163, 107, 0.6);
     }
 
     .levels-dots {
@@ -142,8 +500,8 @@
     }
 
     .level-dot {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       background: var(--line);
       display: flex;
@@ -152,19 +510,37 @@
       font-family: "Baloo 2", sans-serif;
       font-weight: 700;
       color: #fff;
-      font-size: .85rem;
+      font-size: .8rem;
       position: relative;
       z-index: 2;
-      transition: all .3s
+      transition: all .3s;
+      cursor: default;
     }
 
     .level-dot.active {
       background: var(--blue);
-      box-shadow: 0 0 0 3px rgba(0, 163, 224, .3)
+      box-shadow: 0 0 0 3px rgba(0, 163, 224, .3);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 3px rgba(0, 163, 224, .3);
+      }
+
+      50% {
+        box-shadow: 0 0 0 6px rgba(0, 163, 224, .15);
+      }
     }
 
     .level-dot.done {
       background: var(--emerald)
+    }
+
+    .level-dot.boss-dot {
+      background: linear-gradient(135deg, #f12711, #f5af19);
     }
 
     .dot-stars {
@@ -172,7 +548,7 @@
       top: -16px;
       display: flex;
       gap: 1px;
-      font-size: .55rem;
+      font-size: .5rem;
       color: var(--yellow);
       opacity: 0;
       transition: opacity .3s
@@ -184,14 +560,20 @@
 
     .stage {
       position: relative;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
       border: 2px solid var(--line);
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 15px 35px -15px rgba(31, 163, 107, 0.3)
+      box-shadow: 0 15px 35px -15px rgba(31, 163, 107, 0.3);
+      transition: box-shadow 0.3s;
     }
 
-    canvas {
+    .stage:hover {
+      box-shadow: 0 20px 45px -15px rgba(31, 163, 107, 0.35);
+    }
+
+    canvas#cv {
       display: block;
       width: 100%;
       height: auto;
@@ -199,7 +581,7 @@
       cursor: grab
     }
 
-    canvas:active {
+    canvas#cv:active {
       cursor: grabbing
     }
 
@@ -218,10 +600,16 @@
 
     .chip {
       background: rgba(255, 255, 255, .92);
+      backdrop-filter: blur(4px);
       border: 1px solid var(--line);
       border-radius: 999px;
       padding: 4px 12px;
-      color: var(--emerald-d)
+      color: var(--emerald-d);
+      transition: transform 0.2s;
+    }
+
+    .chip:hover {
+      transform: scale(1.05);
     }
 
     .chip b {
@@ -239,25 +627,48 @@
       touch-action: manipulation
     }
 
-    .panel {
+    .game-layout {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 16px
+      grid-template-columns: 1fr;
+      gap: 24px;
+      align-items: start;
     }
 
-    @media(max-width:640px) {
-      .panel {
-        grid-template-columns: 1fr
+    @media(min-width: 900px) {
+      .game-layout {
+        grid-template-columns: 7fr 3fr;
       }
     }
 
+    .panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 0;
+    }
+
     .card {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
       border: 2px solid var(--line);
       border-radius: 18px;
-      padding: 20px;
+      padding: 16px;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px dashed var(--line);
+      margin: 12px 0;
     }
 
     .card h3 {
@@ -273,15 +684,20 @@
 
     .readout {
       display: flex;
-      gap: 10px;
-      margin-bottom: 12px
+      gap: 8px;
+      margin-bottom: 10px
     }
 
     .ro {
       flex: 1;
-      background: #F4F8F5;
+      background: linear-gradient(135deg, #F4F8F5, #EDF5EE);
       border-radius: 10px;
-      padding: 10px 12px
+      padding: 8px 10px;
+      transition: transform 0.2s;
+    }
+
+    .ro:hover {
+      transform: scale(1.02);
     }
 
     .ro .lab {
@@ -303,10 +719,10 @@
     }
 
     .profit {
-      background: #0F1530;
+      background: linear-gradient(135deg, #0F1530, #1A2344);
       color: #E8ECFF;
       border-radius: 12px;
-      padding: 12px 16px;
+      padding: 8px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -330,11 +746,12 @@
     }
 
     .status {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 10px;
-      margin-bottom: 12px
+      margin-bottom: 10px;
+      transition: all 0.3s;
     }
 
     .status.ok {
@@ -348,18 +765,22 @@
     }
 
     .actions {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
-      flex-wrap: wrap
+    }
+
+    .actions .harvest {
+      grid-column: span 2;
     }
 
     button {
       font-family: "Baloo 2", sans-serif;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 14.5px;
       border: none;
-      border-radius: 14px;
-      padding: 12px 16px;
+      border-radius: 10px;
+      padding: 8px 12px;
       cursor: pointer;
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s;
       touch-action: manipulation;
@@ -376,10 +797,10 @@
 
     .harvest {
       flex: 1;
-      background: var(--emerald);
+      background: linear-gradient(135deg, var(--emerald), #26C97F);
       color: #fff;
-      box-shadow: 0 6px 0 var(--emerald-d);
-      min-height: 48px;
+      box-shadow: 0 4px 0 var(--emerald-d);
+      min-height: 40px;
     }
 
     .harvest:active {
@@ -390,7 +811,7 @@
       background: #FFF3E8;
       color: #C9650E;
       border: 1px solid #FBD9B6;
-      min-height: 48px
+      min-height: 40px
     }
 
     .ghint.on {
@@ -402,32 +823,25 @@
     .reset {
       background: #EEF0F7;
       color: var(--indigo);
-      min-height: 48px
+      min-height: 40px
     }
 
     .sys {
-      background: #0F1530;
+      background: linear-gradient(135deg, #0F1530, #1A2344);
       color: #E8ECFF;
       border-radius: 12px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       font-family: "Baloo 2", sans-serif
     }
 
     .sys .legend {
-      font-size: 12.5px;
-      color: #AAB4E0;
-      margin-bottom: 10px;
-      line-height: 1.6
-    }
-
-    .sys .legend b {
-      color: #86F0C0
+      display: none;
     }
 
     .sys .ineq {
-      font-size: 15px;
-      line-height: 2;
-      letter-spacing: .3px
+      font-size: 14px;
+      line-height: 1.6;
+      letter-spacing: .2px
     }
 
     .sys .ineq .tag {
@@ -458,7 +872,7 @@
       color: var(--emerald-d)
     }
 
-    /* ==== Toast (kết quả màn chơi) ==== */
+    /* ==== Toast (level result) ==== */
     .toast {
       position: absolute;
       inset: 0;
@@ -466,7 +880,7 @@
       align-items: center;
       justify-content: center;
       background: rgba(15, 21, 48, .55);
-      backdrop-filter: blur(2px);
+      backdrop-filter: blur(4px);
       z-index: 20
     }
 
@@ -479,15 +893,15 @@
       border-radius: 24px;
       padding: 30px 26px;
       text-align: center;
-      max-width: 380px;
+      max-width: 400px;
       width: calc(100% - 40px);
       box-shadow: 0 25px 60px -20px rgba(0, 0, 0, .6);
       animation: modalEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .toast .stars {
-      font-size: 30px;
-      letter-spacing: 4px
+    .toast .stars-display {
+      font-size: 36px;
+      letter-spacing: 6px
     }
 
     .toast h2 {
@@ -519,29 +933,18 @@
     }
 
     .next {
-      background: var(--emerald);
+      background: linear-gradient(135deg, var(--emerald), #26C97F);
       color: #fff;
       box-shadow: 0 6px 0 var(--emerald-d);
     }
 
     .retry {
-      background: var(--indigo);
+      background: linear-gradient(135deg, var(--indigo), #3F51B5);
       color: #fff;
       box-shadow: 0 6px 0 #1C2A6B;
     }
 
-    footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 24px
-    }
-
-    footer a {
-      color: var(--emerald-d)
-    }
-
-    /* ==== Câu hỏi củng cố — overlay TOÀN MÀN HÌNH (tránh canvas chặn touch) ==== */
+    /* ==== Quiz overlay ==== */
     .quiz-overlay {
       position: fixed;
       inset: 0;
@@ -549,7 +952,7 @@
       align-items: center;
       justify-content: center;
       background: rgba(15, 21, 48, .65);
-      backdrop-filter: blur(3px);
+      backdrop-filter: blur(4px);
       z-index: 200;
       padding: 20px
     }
@@ -563,7 +966,7 @@
       border-radius: 24px;
       padding: 30px 26px;
       text-align: center;
-      max-width: 420px;
+      max-width: 460px;
       width: 100%;
       box-shadow: 0 25px 60px -20px rgba(0, 0, 0, .6);
       animation: modalEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -577,7 +980,7 @@
     }
 
     .qopt {
-      background: #F4F8F5;
+      background: linear-gradient(135deg, #F4F8F5, #EDF5EE);
       color: var(--ink);
       font-size: 15px;
       padding: 14px 16px;
@@ -589,7 +992,7 @@
       touch-action: manipulation;
       cursor: pointer;
       transition: all .15s;
-      font-family: "Be Vietnam Pro", sans-serif;
+      font-family: "Nunito", sans-serif;
       font-weight: 600;
     }
 
@@ -606,14 +1009,14 @@
     }
 
     .qopt.correct {
-      background: var(--emerald);
+      background: linear-gradient(135deg, var(--emerald), #26C97F);
       color: #fff;
       border-color: var(--emerald);
       box-shadow: 0 4px 0 var(--emerald-d);
     }
 
     .qopt.wrong {
-      background: var(--red);
+      background: linear-gradient(135deg, var(--red), #FF6B6B);
       color: #fff;
       border-color: var(--red);
       box-shadow: 0 4px 0 #C62936;
@@ -629,7 +1032,7 @@
     .qexp {
       font-size: 13px;
       color: var(--indigo);
-      background: #F1F4FF;
+      background: linear-gradient(135deg, #F1F4FF, #E8ECFF);
       border-radius: 10px;
       padding: 10px 12px;
       margin: 10px 0 14px;
@@ -665,7 +1068,7 @@
       }
     }
 
-    /* ==== Pháo giấy ==== */
+    /* ==== Confetti ==== */
     .confetti {
       position: fixed;
       inset: 0;
@@ -695,7 +1098,7 @@
       }
     }
 
-    /* ==== Overlay chung (nhập tên, chứng nhận) ==== */
+    /* ==== Overlays ==== */
     .overlay {
       position: fixed;
       inset: 0;
@@ -704,7 +1107,7 @@
       justify-content: center;
       background: rgba(0, 0, 0, .7);
       z-index: 300;
-      backdrop-filter: blur(3px);
+      backdrop-filter: blur(4px);
       padding: 20px
     }
 
@@ -714,7 +1117,7 @@
 
     .modal {
       background: #fff;
-      border-radius: 16px;
+      border-radius: 20px;
       padding: 25px;
       max-width: 90%;
       width: 450px;
@@ -759,7 +1162,7 @@
     }
 
     .name-input-modal button {
-      background: var(--emerald);
+      background: linear-gradient(135deg, var(--emerald), #26C97F);
       color: #fff;
       border: none;
       padding: 12px;
@@ -774,7 +1177,7 @@
       font-family: "Baloo 2", sans-serif
     }
 
-    /* ==== Giấy chứng nhận ==== */
+    /* ==== Certificate ==== */
     .cert-modal {
       max-width: 95%;
       width: 950px;
@@ -809,7 +1212,7 @@
     }
 
     .btn-download {
-      background: var(--indigo);
+      background: linear-gradient(135deg, var(--indigo), #3F51B5);
       color: #fff;
       border: none;
       padding: 12px 25px;
@@ -842,7 +1245,746 @@
       touch-action: manipulation
     }
 
-    /* ==== Dải nhận diện cấp lớp + đồng hồ ==== */
+    /* ==== Achievements ==== */
+    .achievements-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #EEF0F7;
+      color: var(--muted);
+      opacity: 0.5;
+      transition: all 0.3s;
+    }
+
+    .badge.unlocked {
+      opacity: 1;
+      animation: badgeUnlock 0.5s ease;
+    }
+
+    .badge.unlocked.bronze {
+      background: linear-gradient(135deg, #cd7f32, #e8a850);
+      color: #fff;
+    }
+
+    .badge.unlocked.silver {
+      background: linear-gradient(135deg, #8a9bae, #bbc8d8);
+      color: #fff;
+    }
+
+    .badge.unlocked.gold {
+      background: linear-gradient(135deg, #daa520, #ffd700);
+      color: #5a3e00;
+    }
+
+    .badge.unlocked.diamond {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+    }
+
+    @keyframes badgeUnlock {
+      0% {
+        transform: scale(0);
+      }
+
+      50% {
+        transform: scale(1.3);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* ==== LEADERBOARD ==== */
+    .leaderboard-card {
+      margin-top: 8px;
+    }
+
+    .leaderboard-card .card {
+      height: auto;
+      background: linear-gradient(160deg, #fffdf5 0%, #f0faf5 60%, #e8f0ff 100%);
+      border: 2.5px solid transparent;
+      background-clip: padding-box;
+      box-shadow:
+        0 0 0 2.5px #FFD700,
+        0 8px 32px -8px rgba(255, 179, 0, 0.25),
+        0 2px 12px rgba(31, 163, 107, 0.10);
+      border-radius: 22px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .leaderboard-card .card::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #FFD700 0%, #1FA36B 40%, #2A3B8F 80%, #FF7A1A 100%);
+      z-index: -1;
+      animation: lbBorderGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes lbBorderGlow {
+
+      0%,
+      100% {
+        opacity: 0.7;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .leaderboard-card .card h3 {
+      background: linear-gradient(135deg, #2A3B8F, #1FA36B);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 17px;
+      letter-spacing: .3px;
+    }
+
+    /* Podium Top 3 */
+    .lb-podium {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding: 14px 4px 0;
+    }
+
+    .lb-podium-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .lb-podium-item:hover {
+      transform: translateY(-6px) scale(1.04);
+    }
+
+    /* Icon area */
+    .lb-podium-icon {
+      font-size: 36px;
+      line-height: 1;
+      margin-bottom: 4px;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.18));
+    }
+
+    .lb-podium-item.gold .lb-podium-icon {
+      font-size: 44px;
+      animation: trophyBounce 2.2s ease-in-out infinite;
+    }
+
+    .lb-podium-item.silver .lb-podium-icon {
+      animation: medalSwing 2.8s ease-in-out 0.4s infinite;
+    }
+
+    .lb-podium-item.bronze .lb-podium-icon {
+      animation: medalSwing 3.2s ease-in-out 0.8s infinite;
+    }
+
+    @keyframes trophyBounce {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-3deg);
+      }
+
+      30% {
+        transform: translateY(-8px) rotate(3deg);
+      }
+
+      60% {
+        transform: translateY(-4px) rotate(-2deg);
+      }
+    }
+
+    @keyframes medalSwing {
+
+      0%,
+      100% {
+        transform: rotate(-5deg);
+      }
+
+      50% {
+        transform: rotate(5deg);
+      }
+    }
+
+    /* Avatar circle */
+    .lb-podium-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 5px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+      border: 3px solid rgba(255, 255, 255, 0.6);
+      position: relative;
+    }
+
+    .lb-podium-item.gold .lb-podium-avatar {
+      width: 56px;
+      height: 56px;
+      font-size: 24px;
+      background: linear-gradient(145deg, #FFE566, #FFB300, #FF8C00);
+      box-shadow: 0 6px 24px rgba(255, 165, 0, 0.5), 0 0 0 3px #FFD700;
+    }
+
+    .lb-podium-item.silver .lb-podium-avatar {
+      background: linear-gradient(145deg, #E8E8E8, #B0B0B0, #888);
+      box-shadow: 0 4px 16px rgba(150, 150, 150, 0.4), 0 0 0 3px #C0C0C0;
+    }
+
+    .lb-podium-item.bronze .lb-podium-avatar {
+      background: linear-gradient(145deg, #E8A870, #C47830, #8B4513);
+      box-shadow: 0 4px 16px rgba(139, 90, 43, 0.4), 0 0 0 3px #CD7F32;
+    }
+
+    .lb-podium-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink);
+      max-width: 82px;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 2px;
+    }
+
+    .lb-podium-score {
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .lb-podium-item.gold .lb-podium-score {
+      color: #B8860B;
+    }
+
+    .lb-podium-item.silver .lb-podium-score {
+      color: #6A7184;
+    }
+
+    .lb-podium-item.bronze .lb-podium-score {
+      color: #8B5A2B;
+    }
+
+    .lb-podium-bar {
+      width: 62px;
+      border-radius: 8px 8px 0 0;
+      margin-top: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lb-podium-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.25);
+      transform: skewX(-20deg);
+      animation: barShine 2.5s ease-in-out infinite;
+    }
+
+    @keyframes barShine {
+      0% {
+        left: -100%;
+      }
+
+      60%,
+      100% {
+        left: 150%;
+      }
+    }
+
+    .lb-podium-item.gold .lb-podium-bar {
+      background: linear-gradient(180deg, #FFE566, #FFB300);
+      height: 64px;
+      width: 72px;
+      box-shadow: 0 -4px 12px rgba(255, 179, 0, 0.3);
+    }
+
+    .lb-podium-item.silver .lb-podium-bar {
+      background: linear-gradient(180deg, #D8D8D8, #A0A0A0);
+      height: 48px;
+      box-shadow: 0 -3px 8px rgba(150, 150, 150, 0.2);
+    }
+
+    .lb-podium-item.bronze .lb-podium-bar {
+      background: linear-gradient(180deg, #E0A060, #B07030);
+      height: 36px;
+      box-shadow: 0 -3px 8px rgba(139, 90, 43, 0.2);
+    }
+
+    /* Search */
+    .lb-search-wrap {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .lb-search {
+      width: 100%;
+      padding: 9px 12px 9px 34px;
+      border: 2px solid var(--line);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      background: #FAFFF8;
+    }
+
+    .lb-search:focus {
+      border-color: var(--emerald);
+      box-shadow: 0 0 0 3px rgba(31, 163, 107, 0.12);
+    }
+
+    .lb-search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    /* Search prompt hint */
+    .lb-search-hint {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 10px 0 4px;
+      font-style: italic;
+    }
+
+    /* List */
+    .lb-list-container {
+      max-height: 300px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--line) transparent;
+    }
+
+    .lb-list-container::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .lb-list-container::-webkit-scrollbar-thumb {
+      background: var(--line);
+      border-radius: 10px;
+    }
+
+    .lb-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      border-bottom: 1px dashed var(--line);
+      font-size: 13px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .lb-row:hover {
+      background: #F4F8F5;
+    }
+
+    .lb-row:last-child {
+      border-bottom: none;
+    }
+
+    .lb-row.highlight {
+      background: linear-gradient(135deg, #E8F7EE, #D4F0E0);
+      border: 1px solid var(--emerald);
+      font-weight: 800;
+    }
+
+    .lb-rank {
+      font-weight: 800;
+      width: 30px;
+      color: var(--tangerine);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .lb-name {
+      flex: 1;
+      font-weight: 600;
+      margin-left: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .lb-score {
+      font-weight: 800;
+      color: var(--emerald-d);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    .lb-stars-col {
+      font-size: 11px;
+      color: var(--yellow);
+      margin-left: 6px;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .lb-date-col {
+      font-size: 10px;
+      color: var(--muted);
+      margin-left: 6px;
+      min-width: 60px;
+      text-align: right;
+    }
+
+    /* Pagination */
+    .lb-pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .lb-page-btn {
+      font-family: "Baloo 2", sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 30px;
+    }
+
+    .lb-page-btn:hover {
+      background: #E8F7EE;
+      border-color: var(--emerald);
+    }
+
+    .lb-page-btn.active {
+      background: var(--emerald);
+      color: #fff;
+      border-color: var(--emerald);
+    }
+
+    .lb-page-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .lb-stats {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+
+    /* ==== Tutorial / Intro Screen ==== */
+
+    .tutorial-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10, 18, 40, .82);
+      backdrop-filter: blur(8px);
+      z-index: 400;
+      padding: 16px;
+    }
+
+    .tutorial-overlay.show {
+      display: flex;
+    }
+
+    .tutorial-box {
+      background: #fff;
+      border-radius: 28px;
+      padding: 28px 26px 22px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .65);
+      animation: modalEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-height: 96vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+
+    /* Header icons */
+    .tut-header-icons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .tut-header-icons .ic1 {
+      font-size: 40px;
+      animation: emojiBounce 2.2s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    .tut-header-icons .ic2 {
+      font-size: 44px;
+      animation: emojiBounce 2.5s ease-in-out 0.3s infinite;
+      display: inline-block;
+    }
+
+    .tut-title {
+      font-family: "Baloo 2", sans-serif;
+      font-weight: 800;
+      font-size: 23px;
+      color: var(--emerald-d);
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .tut-subtitle {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin: 0 0 16px;
+      font-weight: 500;
+    }
+
+    /* Info Cards */
+    .tut-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .tut-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      background: #F7FAF8;
+      border: 1.5px solid #E2EDE8;
+      border-radius: 14px;
+      padding: 12px 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: fadeInUp 0.5s ease-out both;
+    }
+
+    .tut-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(31, 163, 107, .12);
+    }
+
+    .tut-card-icon {
+      font-size: 26px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .tut-card-body {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #2d3a30;
+    }
+
+    .tut-card-body .tut-label {
+      font-family: "Baloo 2", sans-serif;
+      font-weight: 700;
+      color: var(--emerald-d);
+      font-size: 14px;
+    }
+
+    .tut-card-body .tut-hl {
+      font-weight: 700;
+      color: var(--emerald-d);
+    }
+
+    .tut-card-body .tut-hl-orange {
+      font-weight: 700;
+      color: #C9650E;
+    }
+
+    .tut-card-body .tut-star {
+      color: #F4A261;
+    }
+
+    /* Start button */
+    .tut-start-btn {
+      width: 100%;
+      min-height: 52px;
+      font-size: 17px;
+      font-family: "Baloo 2", sans-serif;
+      font-weight: 800;
+      letter-spacing: .3px;
+      background: linear-gradient(135deg, #1FA36B, #26C97F);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #15784E, 0 10px 20px rgba(31, 163, 107, .3);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s;
+      touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .tut-start-btn:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.07);
+      box-shadow: 0 9px 0 #15784E, 0 14px 25px rgba(31, 163, 107, .35);
+    }
+
+    .tut-start-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #15784E;
+    }
+
+    @keyframes tutPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.85) translateY(20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* Certificate Banner - PROMINENT */
+    .cert-banner {
+      margin: 16px 0;
+      padding: 16px 20px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #FFF8E1, #FFECB3, #FFE082);
+      border: 2px solid #FFB300;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      animation: certBannerGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes certBannerGlow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 10px rgba(255, 179, 0, 0.3), 0 0 20px rgba(255, 179, 0, 0.1);
+      }
+
+      50% {
+        box-shadow: 0 0 20px rgba(255, 179, 0, 0.5), 0 0 40px rgba(255, 179, 0, 0.2);
+      }
+    }
+
+    .cert-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%);
+      animation: certShine 3s ease-in-out infinite;
+    }
+
+    @keyframes certShine {
+      0% {
+        transform: translateX(-100%) rotate(45deg);
+      }
+
+      100% {
+        transform: translateX(100%) rotate(45deg);
+      }
+    }
+
+    .cert-banner-icon {
+      font-size: 40px;
+      flex-shrink: 0;
+      animation: emojiBounce 2s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cert-banner-text {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cert-banner-text .cert-title {
+      font-family: "Baloo 2", sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: #E65100;
+      margin-bottom: 2px;
+    }
+
+    .cert-banner-text .cert-desc {
+      font-size: 13px;
+      color: #5D4037;
+      line-height: 1.4;
+    }
+
+    .cert-banner-text .cert-highlight {
+      display: inline-block;
+      background: linear-gradient(135deg, #E65100, #FF6D00);
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 14px;
+      animation: certPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes certPulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    /* ==== Ribbon ==== */
     :root {
       --gradec: #2A3B8F;
       --grade2: #FF7A1A
@@ -857,6 +1999,58 @@
       flex-wrap: wrap
     }
 
+    /* ==== Title row: h1 left + QR right ==== */
+    .title-qr-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .title-qr-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .title-qr-right {
+      flex-shrink: 0;
+      background: #fff;
+      border: 1.5px solid #C7EAD4;
+      border-radius: 12px;
+      padding: 8px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 3px 10px rgba(31, 163, 107, .1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .title-qr-right:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(31, 163, 107, .18);
+    }
+
+    .qr-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
+    .qr-label a {
+      color: var(--emerald-d);
+      text-decoration: none;
+      font-size: 10px;
+      word-break: break-all;
+    }
+
+    .qr-label a:hover {
+      text-decoration: underline;
+    }
+
     .sct-ribbon::before {
       content: "";
       position: absolute;
@@ -864,7 +2058,7 @@
       right: 0;
       top: 0;
       height: 5px;
-      background: linear-gradient(90deg, var(--gradec), var(--grade2));
+      background: linear-gradient(90deg, var(--gradec), var(--emerald), var(--grade2));
       z-index: 5
     }
 
@@ -914,104 +2108,320 @@
       color: var(--grade2);
       font-weight: 700
     }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 24px
+    }
+
+    footer a {
+      color: var(--emerald-d)
+    }
+
+    /* ==== Score popup ==== */
+    .score-popup {
+      position: fixed;
+      font-family: "Baloo 2", sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      pointer-events: none;
+      z-index: 999;
+      animation: scoreFloat 1s ease-out forwards;
+    }
+
+    @keyframes scoreFloat {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-60px) scale(1.5);
+      }
+    }
+
+    /* ==== BGM Controls ==== */
+    .bgm-chip {
+      background: linear-gradient(135deg, #667eea20, #764ba220);
+      border: 1px solid #667eea40;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bgm-chip.playing {
+      background: linear-gradient(135deg, #1FA36B, #26C97F);
+      color: #fff;
+      border-color: #1FA36B;
+    }
+
+    /* Music note animation */
+    @keyframes noteBounce {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-8deg);
+      }
+
+      50% {
+        transform: translateY(-4px) rotate(8deg);
+      }
+    }
+
+    .bgm-chip.playing .bgm-note {
+      display: inline-block;
+      animation: noteBounce 0.7s ease-in-out infinite;
+    }
+
+    /* ==== Volume slider ==== */
+    .vol-slider {
+      width: 55px;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 2px;
+      outline: none;
+      vertical-align: middle;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .bgm-chip:not(.playing) .vol-slider {
+      background: var(--line);
+    }
+
+    .vol-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .25);
+    }
+
+    .bgm-chip:not(.playing) .vol-slider::-webkit-slider-thumb {
+      background: var(--emerald);
+    }
+
+    /* ==== QR Code Card ==== */
+    .qr-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .qr-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .qr-card h3 {
+      margin: 0 0 10px;
+      font-family: "Baloo 2", sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--emerald-d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    #qrCanvas {
+      border-radius: 10px;
+      display: block;
+      margin: 0 auto 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+    }
+
+    .qr-url {
+      font-size: 10px;
+      color: var(--muted);
+      word-break: break-all;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .qr-url a {
+      color: var(--emerald-d);
+      text-decoration: none;
+    }
+
+    .qr-url a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- BGM Audio -->
+  <audio id="bgmAudio" src="music-nong-trai.mp3" preload="auto" loop style="display:none"></audio>
+
+  <!-- Particle Background -->
+  <div class="particles-bg" id="particlesBg"></div>
+
+  <!-- Combo Display -->
+  <div class="combo-display" id="comboDisplay">🔥 Combo x1</div>
+
+  <!-- Level Transition -->
+  <div class="level-transition" id="levelTransition">
+    <div class="level-transition-content">
+      <div class="level-transition-emoji" id="ltEmoji">🌾</div>
+      <div class="level-transition-text" id="ltText">Vụ 1</div>
+      <div class="level-transition-diff" id="ltDiff">Dễ</div>
+    </div>
+  </div>
+
   <div class="wrap">
     <div class="sct-ribbon">
       <a class="sct-back" href="../">← Về Sân Chơi Toán Học</a>
       <span class="sct-tag">LỚP 10 · TRỌNG TÂM ĐỀ TÀI</span>
     </div>
 
-    <header>
-      <h1>Nông Trại Tối Ưu<span class="dot">.</span></h1>
-      <span class="sub">Toán 10 · Hệ bất phương trình bậc nhất hai ẩn &amp; bài toán tối ưu</span>
+    <!-- Title row: h1 left + QR right (same line) -->
+    <div class="title-qr-row animate-in">
+      <div class="title-qr-left">
+        <h1><span class="emoji-bounce">🌾</span> Nông Trại Tối Ưu</h1>
+        <span class="sub">Toán 10 · Hệ bất phương trình bậc nhất hai ẩn &amp; bài toán tối ưu</span>
+      </div>
+      <div class="title-qr-right">
+        <canvas id="qrCanvas" width="72" height="72" style="border-radius:6px;display:block;flex-shrink:0;"></canvas>
+        <div class="qr-label">
+          📱 Quét mã QR để chơi<br>
+          <a href="https://thluongm00803-code.github.io/toan-games/nong-trai/" target="_blank" rel="noopener">
+            thluongm00803-code.github.io/<br>toan-games/nong-trai/
+          </a>
+        </div>
+      </div>
+    </div>
     </header>
 
-    <!-- Progress bar + hàng sao -->
-    <div class="progress-container">
+    <!-- Achievements -->
+    <div class="achievements-bar animate-in-delay-1" id="achievementsBar">
+      <span class="badge" id="badge-first" title="Hoàn thành vụ đầu tiên">🌱 Nhà nông mới</span>
+      <span class="badge" id="badge-combo" title="Combo 3 câu liên tiếp">🔥 Combo Master</span>
+      <span class="badge" id="badge-half" title="Hoàn thành 50% vụ">🏅 Nửa đường</span>
+      <span class="badge" id="badge-star" title="Đạt 3 sao ở 1 vụ">⭐ 3 Sao Hoàn Hảo</span>
+      <span class="badge" id="badge-nohint" title="Hoàn thành không dùng gợi ý">🧠 Tự Lực</span>
+      <span class="badge" id="badge-all" title="Hoàn thành tất cả vụ">🏆 Siêu Nông Dân</span>
+    </div>
+
+    <!-- Progress bar + sao -->
+    <div class="progress-container animate-in-delay-2">
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progressFill"></div>
       </div>
-      <div class="levels-dots" id="levelsDots">
-        <!-- JS generates dots -->
-      </div>
+      <div class="levels-dots" id="levelsDots"></div>
     </div>
 
-    <div class="mission">
+    <div class="mission animate-in-delay-3">
       <div class="ctx" id="ctxEmoji">🌾</div>
       <div class="txt" id="ctxText"></div>
     </div>
 
-    <div class="stage">
-      <div class="hud">
-        <span class="chip">Vụ <b id="lvl">1</b>/<span id="lvlMax">7</span></span>
-        <span class="chip">Điểm <b id="score">0</b></span>
-        <span class="chip">⭐ <b id="stars">0</b>/<span id="starsMax">21</span></span>
-        <button class="chip" id="sndBtn" title="Bật/tắt âm thanh">🔊</button>
-      </div>
-      <canvas id="cv" width="900" height="600" role="img"
-        aria-label="Đồng ruộng: miền nghiệm của hệ bất phương trình"></canvas>
-      <div class="toast" id="toast">
-        <div class="box">
-          <div class="stars" id="tStars"></div>
-          <h2 id="tTitle"></h2>
-          <p id="tMsg"></p>
-          <button id="tBtn" class="next"></button>
-          <button id="tBtn2" class="reset btn2" style="display:none"></button>
+    <div class="game-layout">
+      <div class="stage">
+        <div class="hud">
+          <span class="chip">Vụ <b id="lvl">1</b>/<span id="lvlMax">10</span></span>
+          <span class="chip">Điểm <b id="score">0</b></span>
+          <span class="chip">⭐ <b id="stars">0</b>/<span id="starsMax">30</span></span>
+          <button class="chip" id="sndBtn" title="Bật/tắt âm thanh">🔊</button>
+          <button class="chip bgm-chip" id="bgmBtn" title="Bật/tắt nhạc nền">
+            <span class="bgm-note">🎵</span>
+            <span id="bgmLabel">Nhạc nền</span>
+            <input type="range" class="vol-slider" id="volSlider" min="0" max="1" step="0.05" value="0.5"
+              title="Âm lượng">
+          </button>
         </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="card">
-        <h3>🚜 Kế hoạch canh tác</h3>
-        <div class="readout">
-          <div class="ro">
-            <div class="lab" id="lab1">Lúa</div>
-            <div class="num"><span id="xVal">0</span> <small id="u1">ha</small></div>
-          </div>
-          <div class="ro">
-            <div class="lab" id="lab2">Cá</div>
-            <div class="num"><span id="yVal">0</span> <small id="u2">ha</small></div>
+        <canvas id="cv" width="900" height="600" role="img"
+          aria-label="Đồng ruộng: miền nghiệm của hệ bất phương trình"></canvas>
+        <div class="toast" id="toast">
+          <div class="box">
+            <div class="stars-display" id="tStars"></div>
+            <h2 id="tTitle"></h2>
+            <p id="tMsg"></p>
+            <button id="tBtn" class="next"></button>
+            <button id="tBtn2" class="reset btn2" style="display:none"></button>
           </div>
         </div>
-        <div class="profit">
-          <span class="lab" id="fLab">Lợi nhuận F</span>
-          <span class="val"><span id="fVal">0</span> <small id="fUnit">triệu</small></span>
-        </div>
-        <div class="status ok" id="status">Hợp lệ — kéo điểm trên đồng để tìm lãi cao nhất.</div>
-        <div class="actions">
-          <button class="harvest" id="harvestBtn">Thu hoạch! 🌾</button>
-          <button class="ghint" id="hintBtn">Gợi ý 💡 (tối đa ★★)</button>
-          <button class="reset" id="resetBtn">Chơi lại</button>
-        </div>
-        <div class="tip"><b>Kéo</b> điểm vàng trên đồng (hoặc dùng phím mũi tên). Điểm phải nằm trong <b>miền nghiệm</b>
-          — vùng thỏa mọi nguồn lực.</div>
       </div>
 
-      <div class="card">
-        <h3>📋 Ràng buộc &amp; mục tiêu</h3>
-        <div class="sys">
-          <div class="legend" id="legend"></div>
-          <div class="ineq" id="ineqList"></div>
-          <div class="obj" id="objLine"></div>
+      <div class="panel">
+        <div class="card">
+          <h3>🚜 Kế hoạch canh tác</h3>
+          <div class="readout">
+            <div class="ro">
+              <div class="lab" id="lab1">Lúa</div>
+              <div class="num"><span id="xVal">0</span> <small id="u1">ha</small></div>
+            </div>
+            <div class="ro">
+              <div class="lab" id="lab2">Cá</div>
+              <div class="num"><span id="yVal">0</span> <small id="u2">ha</small></div>
+            </div>
+          </div>
+          <div class="profit">
+            <span class="lab" id="fLab">Lợi nhuận F</span>
+            <span class="val"><span id="fVal">0</span> <small id="fUnit">triệu</small></span>
+          </div>
+          <div class="status ok" id="status">Hợp lệ — kéo điểm trên đồng để tìm lãi cao nhất.</div>
+          <div class="actions">
+            <button class="harvest" id="harvestBtn">Thu hoạch! 🌾</button>
+            <button class="ghint" id="hintBtn">Gợi ý 💡</button>
+            <button class="reset" id="resetBtn">Chơi lại</button>
+          </div>
+
+          <hr class="divider">
+
+          <h3>📋 Ràng buộc &amp; mục tiêu</h3>
+          <div class="sys">
+            <div class="legend" id="legend"></div>
+            <div class="ineq" id="ineqList"></div>
+            <div class="obj" id="objLine"></div>
+          </div>
         </div>
-        <div class="tip"><b>Mẹo toán học:</b> giá trị lớn nhất/nhỏ nhất của F luôn đạt tại một <b>đỉnh</b> của miền
-          nghiệm. Cách làm chuẩn: tìm các đỉnh, tính F tại từng đỉnh rồi so sánh.</div>
+
+        <!-- Leaderboard (Optimized for 200+) -->
+        <div class="leaderboard-card" id="leaderboardCard">
+          <div class="card" style="height:auto">
+            <h3>🏆 Bảng Vinh Danh</h3>
+            <div id="lbPodium" class="lb-podium"></div>
+            <div class="lb-search-wrap">
+              <span class="lb-search-icon">🔍</span>
+              <input type="text" class="lb-search" id="lbSearch" placeholder="Tìm tên người chơi..." autocomplete="off">
+            </div>
+            <div class="lb-list-container" id="lbListContainer">
+              <div id="lbContent">
+                <div style="color:var(--muted);font-size:13px;text-align:center;padding:10px;">Chưa có kết quả</div>
+              </div>
+            </div>
+            <div class="lb-pagination" id="lbPagination"></div>
+            <div class="lb-stats" id="lbStats"></div>
+          </div>
+        </div>
+
       </div>
     </div>
 
     <footer>Một hoạt động dạy học môn Toán · điều khiển trực tiếp miền nghiệm và hàm mục tiêu.</footer>
   </div>
 
-  <!-- Quiz overlay — FIXED: đặt NGOÀI .stage để không bị canvas touch-action:none chặn -->
+  <!-- Quiz overlay -->
   <div class="quiz-overlay" id="quiz">
     <div class="qbox" id="quizBox"></div>
   </div>
 
-  <!-- Overlay nhập tên -->
+  <!-- Name overlay -->
   <div class="overlay" id="nameOverlay">
     <div class="modal name-input-modal">
       <h3>🎉 Chúc mừng hoàn thành!</h3>
@@ -1021,7 +2431,7 @@
     </div>
   </div>
 
-  <!-- Overlay chứng nhận -->
+  <!-- Certificate overlay -->
   <div class="overlay" id="certOverlay">
     <div class="modal cert-modal">
       <div class="cert-container">
@@ -1035,83 +2445,188 @@
     </div>
   </div>
 
+  <!-- Tutorial / Intro Screen -->
+  <div class="tutorial-overlay" id="tutorialOverlay">
+    <div class="tutorial-box">
+
+      <!-- Header icons -->
+      <div class="tut-header-icons">
+        <span class="ic1">🌾</span>
+        <span class="ic2">🚜</span>
+      </div>
+
+      <h2 class="tut-title">Chào mừng đến Nông Trại Tối Ưu!</h2>
+      <p class="tut-subtitle">Học toán qua trò chơi quản lý nông trại</p>
+
+      <!-- 4 Info Cards -->
+      <div class="tut-cards">
+
+        <!-- Card 1: Mục tiêu -->
+        <div class="tut-card" style="animation-delay:0.08s">
+          <div class="tut-card-icon">🎯</div>
+          <div class="tut-card-body">
+            <span class="tut-label">Mục tiêu:</span>
+            Kéo điểm trên bản đồ để tìm giá trị
+            <span class="tut-hl">tối ưu</span>
+            của hàm mục tiêu F trong miền nghiệm.
+          </div>
+        </div>
+
+        <!-- Card 2: Miền nghiệm -->
+        <div class="tut-card" style="animation-delay:0.18s">
+          <div class="tut-card-icon">📐</div>
+          <div class="tut-card-body">
+            <span class="tut-label">Miền nghiệm</span>
+            là vùng xanh trên bản đồ —
+            điểm phải nằm trong vùng này!
+          </div>
+        </div>
+
+        <!-- Card 3: Gợi ý -->
+        <div class="tut-card" style="animation-delay:0.28s">
+          <div class="tut-card-icon">💡</div>
+          <div class="tut-card-body">
+            Bí mắc? Nhấn <span class="tut-hl">Gợi ý</span> để xem các đỉnh
+            của miền nghiệm.
+            Gợi ý sẽ giảm sao tối đa xuống
+            2<span class="tut-star">⭐</span>.
+          </div>
+        </div>
+
+        <!-- Card 4: Giấy Chứng Nhận -->
+        <div class="tut-card" style="animation-delay:0.38s">
+          <div class="tut-card-icon">🏆</div>
+          <div class="tut-card-body">
+            Hoàn thành
+            <span class="tut-hl-orange">80% số vụ</span>
+            để nhận
+            <span class="tut-hl">Giấy Chứng Nhận</span>
+            đặc biệt!
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Start button -->
+      <button class="tut-start-btn" id="tutorialStart">
+        Bắt đầu chơi!&nbsp;🚀
+      </button>
+
+    </div>
+  </div>
+
   <script>
     const cv = document.getElementById('cv'), ctx = cv.getContext('2d'), $ = id => document.getElementById(id);
 
     /* ===================================================================
-       CẤU HÌNH BÁO ĐIỂM VỀ APP LUYỆN TẬP
+       CONFIG
     =================================================================== */
     const SCT_APP_ORIGIN = window.SCT_APP_ORIGIN || window.location.origin;
     const SCT_TARGET = /^https?:/i.test(SCT_APP_ORIGIN) ? SCT_APP_ORIGIN : '*';
 
-    /* ===== Dữ liệu 7 vụ (mô hình thực tế ĐBSCL) — từ dễ đến khó =====
-       Ràng buộc: a*x + b*y (op) c, op = '<=' | '>='. Mặc định x,y >= 0.
-       min:true  → bài toán TỐI THIỂU chi phí.
-       hideRegion:true → chế độ chuyên gia: không tô sẵn miền nghiệm. */
+    /* ===== 10 LEVELS — EASY to BOSS ===== */
     const LEVELS = [
-      // Vụ 1 — DỄ: 2 ràng buộc đơn giản, miền nghiệm hiển thị
+      // Level 1 — EASY
       {
-        emoji: "🌾", crop1: "Lúa", crop2: "Cá", unit: "ha", fUnit: "triệu",
+        emoji: "\u{1F33E}", crop1: "Lúa", crop2: "Cá", unit: "ha", fUnit: "triệu",
+        diff: "Dễ", diffClass: "diff-easy",
         text: "Bác Tư có ruộng ở <b>Đồng Tháp</b>. Trồng <b>lúa</b> (x ha) hay nuôi <b>cá</b> (y ha) sao cho lãi cao nhất?",
         cons: [{ a: 1, b: 1, c: 8, op: '<=', tag: "đất (ha)" }, { a: 2, b: 3, c: 18, op: '<=', tag: "vốn (triệu)" }],
         obj: { a: 4, b: 5 }, world: { x: 10, y: 9 }
       },
-
-      // Vụ 2 — DỄ: 2 ràng buộc, hệ số khác
+      // Level 2 — EASY
       {
-        emoji: "🦐", crop1: "Tôm", crop2: "Cá tra", unit: "ha", fUnit: "triệu",
+        emoji: "\u{1F990}", crop1: "Tôm", crop2: "Cá tra", unit: "ha", fUnit: "triệu",
+        diff: "Dễ", diffClass: "diff-easy",
         text: "Trại thủy sản nuôi <b>tôm</b> (x ha) và <b>cá tra</b> (y ha). Phân bổ ao thế nào để lãi nhất?",
         cons: [{ a: 5, b: 3, c: 35, op: '<=', tag: "vốn (chục triệu)" }, { a: 1, b: 4, c: 24, op: '<=', tag: "công chăm (ngày)" }],
         obj: { a: 2, b: 3 }, world: { x: 8, y: 8 }
       },
-
-      // Vụ 3 — TRUNG BÌNH: 3 ràng buộc, miền nghiệm ẩn
+      // Level 3 — MEDIUM
       {
-        emoji: "🥭", crop1: "Xoài", crop2: "Sen", unit: "ha", fUnit: "triệu",
+        emoji: "\u{1F96D}", crop1: "Xoài", crop2: "Sen", unit: "ha", fUnit: "triệu",
+        diff: "Trung bình", diffClass: "diff-medium",
         text: "Trang trại tổng hợp trồng <b>xoài</b> (x ha) và <b>sen</b> (y ha) với ba nguồn lực giới hạn.",
         cons: [{ a: 1, b: 2, c: 10, op: '<=', tag: "vốn (chục triệu)" }, { a: 3, b: 1, c: 15, op: '<=', tag: "công (ngày)" }, { a: 1, b: 1, c: 6, op: '<=', tag: "đất (ha)" }],
         obj: { a: 3, b: 4 }, world: { x: 7, y: 7 }, hideRegion: true
       },
-
-      // Vụ 4 — TRUNG BÌNH-KHÓ: bài toán TỐI THIỂU chi phí, miền nghiệm ẩn
+      // Level 4 — MEDIUM-HARD: Minimize
       {
-        emoji: "🐔", crop1: "Thức ăn A", crop2: "Thức ăn B", unit: "tạ", fUnit: "triệu", min: true,
+        emoji: "\u{1F414}", crop1: "Thức ăn A", crop2: "Thức ăn B", unit: "tạ", fUnit: "triệu", min: true,
+        diff: "Trung bình", diffClass: "diff-medium",
         text: "Trại gà cần mua <b>thức ăn A</b> (x tạ) và <b>thức ăn B</b> (y tạ) đủ dinh dưỡng tối thiểu với <b>chi phí thấp nhất</b>.",
         cons: [{ a: 2, b: 1, c: 8, op: '>=', tag: "đạm (kg)" }, { a: 1, b: 1, c: 6, op: '>=', tag: "tinh bột (kg)" }],
         obj: { a: 3, b: 2 }, world: { x: 9, y: 9 }, hideRegion: true, start: { x: 5, y: 4 }
       },
-
-      // Vụ 5 — KHÓ: 4 ràng buộc, miền nghiệm phức tạp
+      // Level 5 — HARD
       {
-        emoji: "🍊", crop1: "Cam", crop2: "Bưởi", unit: "ha", fUnit: "triệu",
-        text: "Vườn cây ăn trái trồng <b>cam</b> (x ha) và <b>bưởi</b> (y ha) với 4 nguồn lực giới hạn. Tìm lợi nhuận tối đa!",
+        emoji: "\u{1F34A}", crop1: "Cam", crop2: "Bưởi", unit: "ha", fUnit: "triệu",
+        diff: "Khó", diffClass: "diff-hard",
+        text: "Vườn cây ăn trái trồng <b>cam</b> (x ha) và <b>bưởi</b> (y ha) với 4 nguồn lực giới hạn.",
         cons: [{ a: 1, b: 1, c: 10, op: '<=', tag: "đất (ha)" }, { a: 2, b: 1, c: 14, op: '<=', tag: "vốn (chục triệu)" }, { a: 1, b: 3, c: 18, op: '<=', tag: "công (ngày)" }, { a: 1, b: 0, c: 6, op: '<=', tag: "giống cam (ha)" }],
         obj: { a: 5, b: 4 }, world: { x: 10, y: 8 }, hideRegion: true
       },
-
-      // Vụ 6 — KHÓ: tối thiểu, 3 ràng buộc >=, miền nghiệm ẩn
+      // Level 6 — HARD: Minimize
       {
-        emoji: "🐄", crop1: "Cỏ voi", crop2: "Cám hỗn hợp", unit: "tấn", fUnit: "triệu", min: true,
+        emoji: "\u{1F404}", crop1: "Cỏ voi", crop2: "Cám hỗn hợp", unit: "tấn", fUnit: "triệu", min: true,
+        diff: "Khó", diffClass: "diff-hard",
         text: "Trang trại bò sữa cần <b>cỏ voi</b> (x tấn) và <b>cám hỗn hợp</b> (y tấn) đủ chất dinh dưỡng với <b>chi phí thấp nhất</b>.",
-        cons: [{ a: 3, b: 2, c: 12, op: '>=', tag: "đạm (kg)" }, { a: 1, b: 2, c: 8, op: '>=', tag: "khoáng (kg)" }, { a: 2, b: 1, c: 6, op: '>=', tag: "vitamin (đv)" }],
+        cons: [{ a: 3, b: 2, c: 12, op: '>=', tag: "đạm (kg)" }, { a: 1, b: 2, c: 8, op: '>=', tag: "khoáng (kg)" }, { a: 2, b: 1, c: 6, op: '>=', tag: "vitamin (đv)" }, { a: 1, b: 1, c: 9, op: '<=', tag: "sức chứa kho (tấn)" }],
         obj: { a: 4, b: 3 }, world: { x: 8, y: 8 }, hideRegion: true, start: { x: 4, y: 4 }
       },
-
-      // Vụ 7 — RẤT KHÓ: 4 ràng buộc hỗn hợp, miền nghiệm ẩn, tối đa
+      // Level 7 — VERY HARD
       {
-        emoji: "🌻", crop1: "Hoa hướng dương", crop2: "Hoa cúc", unit: "sào", fUnit: "triệu",
-        text: "Nông trại hoa trồng <b>hoa hướng dương</b> (x sào) và <b>hoa cúc</b> (y sào). Với 4 điều kiện giới hạn, tìm lãi <b>tối đa</b>!",
-        cons: [{ a: 1, b: 1, c: 12, op: '<=', tag: "đất (sào)" }, { a: 3, b: 2, c: 30, op: '<=', tag: "vốn (triệu)" }, { a: 1, b: 2, c: 16, op: '<=', tag: "công (ngày)" }, { a: 2, b: 5, c: 40, op: '<=', tag: "phân bón (bao)" }],
+        emoji: "\u{1F33B}", crop1: "Hoa hướng dương", crop2: "Hoa cúc", unit: "sào", fUnit: "triệu",
+        diff: "Rất khó", diffClass: "diff-expert",
+        text: "Nông trại hoa trồng <b>hoa hướng dương</b> (x sào) và <b>hoa cúc</b> (y sào). Với 5 điều kiện giới hạn, tìm lãi <b>tối đa</b>!",
+        cons: [{ a: 1, b: 1, c: 12, op: '<=', tag: "đất (sào)" }, { a: 3, b: 2, c: 30, op: '<=', tag: "vốn (triệu)" }, { a: 1, b: 2, c: 16, op: '<=', tag: "công (ngày)" }, { a: 2, b: 5, c: 40, op: '<=', tag: "phân bón (bao)" }, { a: 1, b: 0, c: 2, op: '>=', tag: "HĐ bao tiêu (sào)" }],
         obj: { a: 6, b: 5 }, world: { x: 12, y: 10 }, hideRegion: true
       },
+      // Level 8 — VERY HARD: Mixed constraints
+      {
+        emoji: "\u{1F347}", crop1: "Nho", crop2: "Thanh long", unit: "ha", fUnit: "triệu",
+        diff: "Rất khó", diffClass: "diff-expert",
+        text: "Trang trại trái cây xuất khẩu trồng <b>nho</b> (x ha) và <b>thanh long</b> (y ha) với <b>5 ràng buộc hỗn hợp</b>.",
+        cons: [{ a: 1, b: 1, c: 15, op: '<=', tag: "đất (ha)" }, { a: 4, b: 3, c: 48, op: '<=', tag: "vốn (chục triệu)" }, { a: 1, b: 2, c: 20, op: '<=', tag: "công (ngày)" }, { a: 1, b: 0, c: 3, op: '>=', tag: "đơn hàng nho (ha)" }, { a: 0, b: 1, c: 2, op: '>=', tag: "đơn hàng TL (ha)" }],
+        obj: { a: 7, b: 5 }, world: { x: 16, y: 12 }, hideRegion: true
+      },
+      // Level 9 — EXTREME: Minimize, 4 constraints
+      {
+        emoji: "\u{1F41F}", crop1: "Thức ăn X", crop2: "Thức ăn Y", unit: "tạ", fUnit: "triệu", min: true,
+        diff: "Cực khó", diffClass: "diff-expert",
+        text: "Trại cá tra xuất khẩu cần pha trộn <b>thức ăn X</b> (x tạ) và <b>thức ăn Y</b> (y tạ) đủ dinh dưỡng với <b>chi phí thấp nhất</b>.",
+        cons: [{ a: 3, b: 1, c: 9, op: '>=', tag: "đạm (kg)" }, { a: 1, b: 2, c: 8, op: '>=', tag: "chất béo (kg)" }, { a: 2, b: 3, c: 12, op: '>=', tag: "khoáng (kg)" }, { a: 1, b: 1, c: 10, op: '<=', tag: "sức chứa (tạ)" }],
+        obj: { a: 5, b: 4 }, world: { x: 10, y: 10 }, hideRegion: true, start: { x: 5, y: 5 }
+      },
+      // Level 10 — BOSS: 6 constraints
+      {
+        emoji: "\u{1F451}", crop1: "Sầu riêng", crop2: "Cà phê", unit: "ha", fUnit: "triệu",
+        diff: "BOSS", diffClass: "diff-boss",
+        text: "\u{1F525} <b>SIÊU NÔNG TRẠI</b> — Trồng <b>sầu riêng</b> (x ha) và <b>cà phê</b> (y ha) với <b>6 ràng buộc phức tạp</b>. Tìm lợi nhuận <b>tối đa</b>!",
+        cons: [
+          { a: 1, b: 1, c: 20, op: '<=', tag: "đất (ha)" },
+          { a: 5, b: 3, c: 80, op: '<=', tag: "vốn (chục triệu)" },
+          { a: 2, b: 4, c: 56, op: '<=', tag: "công (ngày)" },
+          { a: 1, b: 0, c: 12, op: '<=', tag: "giống SR (ha)" },
+          { a: 0, b: 1, c: 10, op: '<=', tag: "giống CP (ha)" },
+          { a: 1, b: 1, c: 5, op: '>=', tag: "hợp đồng tối thiểu (ha)" }
+        ],
+        obj: { a: 8, b: 6 }, world: { x: 18, y: 16 }, hideRegion: true
+      }
     ];
 
+    /* ===== State ===== */
     let lvlIdx = 0, score = 0, P = { x: 0, y: 0 }, showHints = false, hintUsed = false, dragging = false;
     let levelStars = {}, starsTotal = 0;
     let quizCorrect = 0, quizAsked = 0;
+    let comboStreak = 0, maxCombo = 0;
+    let noHintLevels = new Set();
     const clearedOnce = new Set(), quizDone = new Set();
+    let cur = null;
+    const EPS = 1e-6;
+    let currentPlayerName = '';
 
-    /* ===== Báo kết quả về App Luyện Tập ===== */
+    /* ===== SCT Report ===== */
     const SCT_done = new Set();
     function SCTreport() {
       var total = LEVELS.length, cleared = SCT_done.size;
@@ -1127,10 +2642,7 @@
       try { if (window.parent && window.parent !== window) window.parent.postMessage(payload, SCT_TARGET); } catch (e) { }
     }
 
-    let cur = null;
-    const EPS = 1e-6;
-
-    /* ===== Âm thanh (Web Audio) ===== */
+    /* ===== Audio SFX ===== */
     const SFX = (function () {
       let ac = null, muted = false;
       function ctxA() {
@@ -1153,20 +2665,123 @@
         fail() { tone(185, .22, 'sawtooth', 0, .1); tone(140, .3, 'sawtooth', .09, .1); },
         ding() { tone(880, .15, 'sine', 0, .16); tone(1175, .2, 'sine', .08, .14); },
         buzz() { tone(160, .25, 'square', 0, .08); },
+        combo() { tone(660, .1, 'sine', 0, .14); tone(880, .12, 'sine', .06, .14); tone(1100, .15, 'sine', .12, .14); },
         celebrate() {
           const notes = [440, 554, 659, 880, 1109, 1319];
           notes.forEach((f, i) => setTimeout(() => tone(f, .2, 'sine', 0, .14), i * 150));
           setTimeout(() => tone(1760, .6, 'sine', 0, .14), notes.length * 150);
         },
-        toggle() { muted = !muted; return muted; }
+        toggle() { muted = !muted; return muted; },
+        getContext() { return ctxA(); }
       };
     })();
     $('sndBtn').addEventListener('click', () => { $('sndBtn').textContent = SFX.toggle() ? '🔇' : '🔊'; });
 
-    /* ===== Pháo giấy (confetti) ===== */
+    /* ===== BACKGROUND MUSIC — music-nong-trai.mp3 ===== */
+    const BGM = (function () {
+      const audio = document.getElementById('bgmAudio');
+      let playing = false;
+      let volume = 0.5;
+
+      audio.volume = volume;
+      audio.loop = true;
+
+      // Auto-pause/resume when tab hidden
+      document.addEventListener('visibilitychange', () => {
+        if (!playing) return;
+        if (document.hidden) { audio.pause(); }
+        else { audio.play().catch(() => { }); }
+      });
+
+      function start() {
+        audio.play().then(() => {
+          playing = true;
+        }).catch(() => {
+          // Autoplay blocked — wait for user gesture
+          playing = false;
+        });
+      }
+
+      function stop() {
+        audio.pause();
+        playing = false;
+      }
+
+      function toggle() {
+        if (playing) { stop(); }
+        else { start(); }
+        return playing;
+      }
+
+      function setVolume(v) {
+        volume = v;
+        audio.volume = Math.max(0, Math.min(1, v));
+      }
+
+      // setLevel kept for API compatibility (single track loops)
+      function setLevel() { }
+
+      return { toggle, isPlaying: () => playing, setVolume, setLevel, start, stop };
+    })();
+
+    // BGM button — click to toggle play/pause
+    $('bgmBtn').addEventListener('click', function (e) {
+      // Don't toggle if click was on the volume slider
+      if (e.target.id === 'volSlider') return;
+      const playing = BGM.toggle();
+      $('bgmLabel').textContent = playing ? 'Tắt nhạc' : 'Nhạc nền';
+      $('bgmBtn').classList.toggle('playing', playing);
+    });
+
+    // Volume slider — adjust without toggling play state
+    $('volSlider').addEventListener('input', function (e) {
+      e.stopPropagation();
+      BGM.setVolume(parseFloat(this.value));
+    });
+    $('volSlider').addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
+
+    // Auto-start BGM on first user interaction
+    (function () {
+      let started = false;
+      function tryStart() {
+        if (started) return;
+        started = true;
+        BGM.start();
+        if (BGM.isPlaying()) {
+          $('bgmLabel').textContent = 'Tắt nhạc';
+          $('bgmBtn').classList.add('playing');
+        }
+        ['pointerdown', 'keydown', 'touchstart'].forEach(ev =>
+          document.removeEventListener(ev, tryStart)
+        );
+      }
+      ['pointerdown', 'keydown', 'touchstart'].forEach(ev =>
+        document.addEventListener(ev, tryStart, { once: true })
+      );
+    })();
+
+    /* ===== Particles ===== */
+    (function initParticles() {
+      const emojis = ['🌾', '🍃', '🌱', '🌻', '☘', '🍂', '🌿', '✨', '🐄', '🐔', '🌸', '🦋'];
+      const bg = $('particlesBg');
+      for (let i = 0; i < 22; i++) {
+        const p = document.createElement('span');
+        p.className = 'particle';
+        p.textContent = emojis[i % emojis.length];
+        p.style.left = (Math.random() * 100) + '%';
+        p.style.fontSize = (16 + Math.random() * 14) + 'px';
+        p.style.animationDuration = (12 + Math.random() * 18) + 's';
+        p.style.animationDelay = (Math.random() * 15) + 's';
+        bg.appendChild(p);
+      }
+    })();
+
+    /* ===== Confetti ===== */
     function confetti(full) {
       const box = document.createElement('div'); box.className = 'confetti';
-      const colors = ['#FF7A1A', '#2A3B8F', '#1FA36B', '#FFC94D', '#6B7BD6', '#E85D5D', '#00A3E0'];
+      const colors = ['#FF7A1A', '#2A3B8F', '#1FA36B', '#FFC94D', '#6B7BD6', '#E85D5D', '#00A3E0', '#8B5CF6'];
       const count = full ? 80 : 38;
       for (let i = 0; i < count; i++) {
         const p = document.createElement('i');
@@ -1184,7 +2799,244 @@
       setTimeout(() => box.remove(), full ? 3500 : 2400);
     }
 
-    /* ===== Progress bar + sao ===== */
+    /* ===== Score Popup ===== */
+    function showScorePopup(text, color, x, y) {
+      const el = document.createElement('div');
+      el.className = 'score-popup';
+      el.textContent = text;
+      el.style.color = color;
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1000);
+    }
+
+    /* ===== Combo ===== */
+    function updateCombo(correct) {
+      if (correct) {
+        comboStreak++;
+        if (comboStreak > maxCombo) maxCombo = comboStreak;
+        if (comboStreak >= 2) {
+          const cd = $('comboDisplay');
+          cd.textContent = '\u{1F525} Combo x' + comboStreak;
+          cd.className = 'combo-display show';
+          SFX.combo();
+          if (comboStreak >= 3) checkAchievement('combo');
+          clearTimeout(cd._tid);
+          cd._tid = setTimeout(() => { cd.className = 'combo-display'; }, 3000);
+        }
+      } else {
+        comboStreak = 0;
+        $('comboDisplay').className = 'combo-display';
+      }
+    }
+
+    /* ===== Achievements ===== */
+    const achievementsUnlocked = new Set();
+    function checkAchievement(id) {
+      if (achievementsUnlocked.has(id)) return;
+      achievementsUnlocked.add(id);
+      const el = $('badge-' + id);
+      if (!el) return;
+      const classes = { first: 'bronze', combo: 'silver', half: 'silver', star: 'gold', nohint: 'gold', all: 'diamond' };
+      el.classList.add('unlocked', classes[id] || 'bronze');
+    }
+
+    /* ===== LEADERBOARD (Optimized for 200+ players) ===== */
+    const LB_PAGE_SIZE = 10;
+    const LB_MAX_ENTRIES = 200;
+    let lbPage = 0;
+    let lbSearchQuery = '';
+
+    function loadLeaderboard() {
+      try {
+        const data = JSON.parse(localStorage.getItem('ntt_leaderboard') || '[]');
+        return data.slice(0, LB_MAX_ENTRIES);
+      } catch (e) { return []; }
+    }
+
+    function saveLeaderboard(name, sc, starCount) {
+      try {
+        let data = loadLeaderboard();
+        data.push({
+          name,
+          score: sc,
+          stars: starCount || 0,
+          date: new Date().toLocaleDateString('vi-VN'),
+          ts: Date.now()
+        });
+        data.sort((a, b) => b.score - a.score);
+        localStorage.setItem('ntt_leaderboard', JSON.stringify(data.slice(0, LB_MAX_ENTRIES)));
+      } catch (e) { }
+    }
+
+    function getFilteredLB() {
+      let data = loadLeaderboard();
+      if (lbSearchQuery) {
+        const q = lbSearchQuery.toLowerCase();
+        data = data.filter(r => r.name.toLowerCase().includes(q));
+      }
+      return data;
+    }
+
+    function renderPodium(data) {
+      const pod = $('lbPodium');
+      if (data.length < 1) {
+        pod.innerHTML = '';
+        pod.style.display = 'none';
+        return;
+      }
+      pod.style.display = 'flex';
+      const top3 = data.slice(0, 3);
+      const classes = ['gold', 'silver', 'bronze'];
+      // Icons: 1st=trophy, 2nd=silver medal, 3rd=ribbon/bronze
+      const icons = ['\uD83C\uDFC6', '\uD83E\uDD48', '\uD83E\uDD49'];
+      const rankLabels = ['Quán quân', 'Á quân', 'Hạng ba'];
+      // Display order: 2nd, 1st, 3rd
+      const order = top3.length >= 3 ? [1, 0, 2] : top3.length === 2 ? [1, 0] : [0];
+
+      pod.innerHTML = order.map(i => {
+        const r = top3[i];
+        if (!r) return '';
+        const initial = r.name.charAt(0).toUpperCase();
+        return `<div class="lb-podium-item ${classes[i]}">
+          <div class="lb-podium-icon">${icons[i]}</div>
+          <div class="lb-podium-avatar">${initial}</div>
+          <div class="lb-podium-name" title="${r.name}">${r.name}</div>
+          <div class="lb-podium-score">${r.score} ★</div>
+          <div class="lb-podium-bar"></div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderLeaderboard() {
+      const allData = getFilteredLB();
+      const fullData = loadLeaderboard();
+      const el = $('lbContent');
+
+      // Podium: show when NOT searching
+      if (!lbSearchQuery) {
+        renderPodium(fullData);
+      } else {
+        $('lbPodium').style.display = 'none';
+      }
+
+      // When NOT searching: only show top-3 rows (hidden); the podium IS the display
+      // When searching: show matched results as full list
+      if (!lbSearchQuery) {
+        // No search — hide row list, show hint instead
+        const total = fullData.length;
+        if (total === 0) {
+          el.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:10px;">Chưa có kết quả</div>';
+        } else {
+          el.innerHTML = `<div class="lb-search-hint">🔍 Gõ tên vào ô tìm kiếm để xem thông tin đầy đủ của người chơi</div>`;
+        }
+        $('lbPagination').innerHTML = '';
+        $('lbStats').textContent = total > 3 ? `${total} người chơi · Chỉ hiển thị Top 3` : '';
+        return;
+      }
+
+      // Searching mode: show full matching list
+      if (!allData.length) {
+        el.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:10px;">Không tìm thấy "' + lbSearchQuery + '"</div>';
+        $('lbPagination').innerHTML = '';
+        $('lbStats').textContent = '';
+        return;
+      }
+
+      const totalPages = Math.ceil(allData.length / LB_PAGE_SIZE);
+      if (lbPage >= totalPages) lbPage = totalPages - 1;
+      const start = lbPage * LB_PAGE_SIZE;
+      const pageData = allData.slice(start, start + LB_PAGE_SIZE);
+      const medals = ['\uD83E\uDD47', '\uD83E\uDD48', '\uD83E\uDD49'];
+
+      el.innerHTML = pageData.map((r, i) => {
+        const globalIdx = start + i;
+        const rankDisplay = globalIdx < 3 ? medals[globalIdx] : (globalIdx + 1);
+        const isMe = currentPlayerName && r.name === currentPlayerName;
+        return `<div class="lb-row${isMe ? ' highlight' : ''}">
+          <span class="lb-rank">${rankDisplay}</span>
+          <span class="lb-name" title="${r.name}">${r.name}</span>
+          <span class="lb-stars-col">${r.stars ? '⭐' + r.stars : ''}</span>
+          <span class="lb-score">${r.score} ★</span>
+          <span class="lb-date-col">${r.date || ''}</span>
+        </div>`;
+      }).join('');
+
+      // Pagination
+      const pagEl = $('lbPagination');
+      if (totalPages <= 1) {
+        pagEl.innerHTML = '';
+      } else {
+        let pHtml = `<button class="lb-page-btn" onclick="lbGoPage(0)" ${lbPage === 0 ? 'disabled' : ''}>«</button>`;
+        pHtml += `<button class="lb-page-btn" onclick="lbGoPage(${lbPage - 1})" ${lbPage === 0 ? 'disabled' : ''}>‹</button>`;
+        let startPage = Math.max(0, lbPage - 2);
+        let endPage = Math.min(totalPages - 1, startPage + 4);
+        if (endPage - startPage < 4) startPage = Math.max(0, endPage - 4);
+        for (let p = startPage; p <= endPage; p++) {
+          pHtml += `<button class="lb-page-btn${p === lbPage ? ' active' : ''}" onclick="lbGoPage(${p})">${p + 1}</button>`;
+        }
+        pHtml += `<button class="lb-page-btn" onclick="lbGoPage(${lbPage + 1})" ${lbPage >= totalPages - 1 ? 'disabled' : ''}>›</button>`;
+        pHtml += `<button class="lb-page-btn" onclick="lbGoPage(${totalPages - 1})" ${lbPage >= totalPages - 1 ? 'disabled' : ''}>»</button>`;
+        pagEl.innerHTML = pHtml;
+      }
+
+      $('lbStats').textContent = `${allData.length} kết quả tìm thấy`;
+    }
+
+    function lbGoPage(p) {
+      const allData = getFilteredLB();
+      const totalPages = Math.ceil(allData.length / LB_PAGE_SIZE);
+      lbPage = Math.max(0, Math.min(p, totalPages - 1));
+      renderLeaderboard();
+    }
+    window.lbGoPage = lbGoPage;
+
+    // Search handler
+    $('lbSearch').addEventListener('input', (e) => {
+      lbSearchQuery = e.target.value.trim();
+      lbPage = 0;
+      renderLeaderboard();
+    });
+
+    renderLeaderboard();
+
+    /* ===== Level Transition Animation ===== */
+    function showLevelTransition(levelIdx, callback) {
+      const L = LEVELS[levelIdx];
+      const lt = $('levelTransition');
+      $('ltEmoji').textContent = L.emoji;
+      $('ltText').textContent = 'Vụ ' + (levelIdx + 1);
+      $('ltDiff').textContent = L.diff;
+      lt.classList.add('show');
+
+      // Tractor animation
+      const tractor = document.createElement('div');
+      tractor.className = 'tractor-anim';
+      tractor.textContent = '🚜';
+      document.body.appendChild(tractor);
+
+      setTimeout(() => {
+        lt.classList.remove('show');
+        tractor.remove();
+        if (callback) callback();
+      }, 1200);
+    }
+
+    /* ===== Tutorial — shows every time Level 1 starts ===== */
+    function showTutorial(onDone) {
+      $('tutorialOverlay').classList.add('show');
+      // Remove old listener then add fresh one
+      const btn = $('tutorialStart');
+      const newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+      newBtn.addEventListener('click', function () {
+        $('tutorialOverlay').classList.remove('show');
+        if (onDone) onDone();
+      }, { once: true });
+    }
+
+    /* ===== Progress bar ===== */
     function renderProgress() {
       const dotsEl = $('levelsDots');
       dotsEl.innerHTML = '';
@@ -1194,10 +3046,11 @@
         dot.textContent = i + 1;
         if (i === lvlIdx) dot.classList.add('active');
         if (clearedOnce.has(i)) dot.classList.add('done');
+        if (i === LEVELS.length - 1) dot.classList.add('boss-dot');
         const starSpan = document.createElement('div');
         starSpan.className = 'dot-stars';
         const s = levelStars[i] || 0;
-        starSpan.textContent = '⭐'.repeat(s);
+        starSpan.textContent = '\u2B50'.repeat(s);
         dot.appendChild(starSpan);
         dotsEl.appendChild(dot);
       }
@@ -1205,7 +3058,7 @@
       $('progressFill').style.width = pct + '%';
     }
 
-    /* ===== Hình học ===== */
+    /* ===== Geometry ===== */
     function intersect(L1, L2) {
       const d = L1.a * L2.b - L2.a * L1.b; if (Math.abs(d) < EPS) return null;
       return { x: (L1.c * L2.b - L2.c * L1.b) / d, y: (L1.a * L2.c - L2.a * L1.c) / d };
@@ -1215,7 +3068,7 @@
       return c.op === '>=' ? v >= c.c - 1e-4 : v <= c.c + 1e-4;
     }
     function feasible(p, L) {
-      if (p.x < -EPS || p.y < -EPS) return { op: '>=', tag: 'điều kiện x ≥ 0, y ≥ 0' };
+      if (p.x < -EPS || p.y < -EPS) return { op: '>=', tag: 'điều kiện x >= 0, y >= 0' };
       for (const c of L.cons) { if (!satisfies(p, c)) return c; }
       return false;
     }
@@ -1248,9 +3101,9 @@
       const t = []; if (a) t.push((a === 1 ? '' : a) + 'x'); if (b) t.push((b === 1 ? '' : b) + 'y');
       return t.join(' + ');
     }
-    const ineqStr = c => `${fmtTerms(c.a, c.b)} ${c.op === '>=' ? '≥' : '≤'} ${c.c}`;
+    const ineqStr = c => `${fmtTerms(c.a, c.b)} ${c.op === '>=' ? '\u2265' : '\u2264'} ${c.c}`;
 
-    /* ===== Toạ độ màn hình ===== */
+    /* ===== Screen coords ===== */
     let M = { l: 46, r: 18, t: 18, b: 40 }, sx = 1, sy = 1, plotW = 0, plotH = 0;
     function fit() {
       const cssW = cv.clientWidth, cssH = cssW * (600 / 900), dpr = window.devicePixelRatio || 1;
@@ -1261,10 +3114,15 @@
     const X = x => M.l + x * sx, Y = y => M.t + plotH - y * sy;
     const invX = px => (px - M.l) / sx, invY = py => (M.t + plotH - py) / sy;
 
-    /* ===== Vẽ ===== */
+    /* ===== Drawing ===== */
     function drawGrid() {
       const cssW = cv.clientWidth, cssH = cssW * (600 / 900);
       ctx.clearRect(0, 0, cssW, cssH);
+      const bgGrd = ctx.createLinearGradient(0, 0, cssW, cssH);
+      bgGrd.addColorStop(0, '#FAFFF6');
+      bgGrd.addColorStop(1, '#F0FAF3');
+      ctx.fillStyle = bgGrd;
+      ctx.fillRect(0, 0, cssW, cssH);
       ctx.lineWidth = 1;
       for (let x = 0; x <= cur.world.x; x++) {
         ctx.strokeStyle = x % 2 === 0 ? '#C9D8EC' : '#E6EEF6';
@@ -1282,8 +3140,11 @@
       ctx.beginPath();
       cur.verts.forEach((p, i) => { const px = X(p.x), py = Y(p.y); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
       ctx.closePath();
-      ctx.fillStyle = 'rgba(31,163,107,.16)'; ctx.fill();
-      ctx.strokeStyle = '#1FA36B'; ctx.lineWidth = 2; ctx.stroke();
+      const grad = ctx.createLinearGradient(X(0), Y(cur.world.y), X(cur.world.x), Y(0));
+      grad.addColorStop(0, 'rgba(31,163,107,0.25)');
+      grad.addColorStop(1, 'rgba(31,163,107,0.05)');
+      ctx.fillStyle = grad; ctx.fill();
+      ctx.strokeStyle = '#1FA36B'; ctx.lineWidth = 2.5; ctx.stroke();
     }
     function drawConstraintLines() {
       ctx.save(); ctx.beginPath(); ctx.rect(X(0), Y(cur.world.y), plotW, plotH); ctx.clip();
@@ -1300,12 +3161,12 @@
       ctx.strokeStyle = '#1C2438'; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(cur.world.x), Y(0)); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(0), Y(cur.world.y)); ctx.stroke();
-      ctx.fillStyle = '#6A7184'; ctx.font = '12px "Be Vietnam Pro"';
+      ctx.fillStyle = '#6A7184'; ctx.font = '12px "Nunito", sans-serif';
       ctx.fillText('O', X(0) - 13, Y(0) + 15);
-      ctx.fillText('x · ' + LEVELS[lvlIdx].crop1, X(cur.world.x) - 72, Y(0) + 24);
+      ctx.fillText('x', X(cur.world.x) - 12, Y(0) + 24);
       ctx.save(); ctx.translate(X(0) - 30, Y(cur.world.y) + 40); ctx.rotate(-Math.PI / 2);
-      ctx.fillText('y · ' + LEVELS[lvlIdx].crop2, 0, 0); ctx.restore();
-      ctx.font = '10.5px "Be Vietnam Pro"'; ctx.fillStyle = '#8A93A8';
+      ctx.fillText('y', 0, 0); ctx.restore();
+      ctx.font = '10.5px "Nunito", sans-serif'; ctx.fillStyle = '#8A93A8';
       for (let x = 1; x <= cur.world.x; x++) ctx.fillText(x, X(x) - 3, Y(0) + 14);
       for (let y = 1; y <= cur.world.y; y++) ctx.fillText(y, X(0) - 16, Y(y) + 4);
     }
@@ -1319,18 +3180,19 @@
       else { p1 = { x: F / a, y: -1 }; p2 = { x: F / a, y: cur.world.y + 1 }; }
       ctx.beginPath(); ctx.moveTo(X(p1.x), Y(p1.y)); ctx.lineTo(X(p2.x), Y(p2.y)); ctx.stroke();
       ctx.setLineDash([]);
-      const n = Math.hypot(a, b), ux = dir * a / n, uy = dir * b / n, len = 0.9;
+      const n = Math.hypot(a, b), ux = dir * a / n, uy = dir * b / n, len = 1.2;
       const tipX = P.x + ux * len, tipY = P.y + uy * len;
-      ctx.strokeStyle = '#FF7A1A'; ctx.lineWidth = 2.5;
+      ctx.strokeStyle = '#FF7A1A'; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.moveTo(X(P.x), Y(P.y)); ctx.lineTo(X(tipX), Y(tipY)); ctx.stroke();
       ctx.fillStyle = '#FF7A1A';
       const ang = Math.atan2(-(uy), (ux));
       ctx.beginPath(); ctx.moveTo(X(tipX), Y(tipY));
-      ctx.lineTo(X(tipX) - 8 * Math.cos(ang - .5), Y(tipY) + 8 * Math.sin(ang - .5));
-      ctx.lineTo(X(tipX) - 8 * Math.cos(ang + .5), Y(tipY) + 8 * Math.sin(ang + .5));
+      ctx.lineTo(X(tipX) - 10 * Math.cos(ang - .5), Y(tipY) + 10 * Math.sin(ang - .5));
+      ctx.lineTo(X(tipX) - 10 * Math.cos(ang + .5), Y(tipY) + 10 * Math.sin(ang + .5));
       ctx.closePath(); ctx.fill();
-      ctx.font = '600 11px "Be Vietnam Pro"';
-      ctx.fillText(LEVELS[lvlIdx].min ? 'chi phí giảm' : 'lãi tăng', X(tipX) + 6, Y(tipY) - 4);
+      ctx.font = 'bold 12px "Nunito", sans-serif';
+      ctx.fillStyle = '#C95C09';
+      ctx.fillText(LEVELS[lvlIdx].min ? 'Giảm chi phí' : 'Tăng lợi nhuận', X(tipX) + 8, Y(tipY) - 6);
       ctx.restore();
     }
     function drawVertices() {
@@ -1338,14 +3200,18 @@
       cur.hintVerts.forEach(p => {
         ctx.fillStyle = '#2A3B8F';
         ctx.beginPath(); ctx.arc(X(p.x), Y(p.y), 5.5, 0, 7); ctx.fill();
-        ctx.fillStyle = '#1C2438'; ctx.font = 'bold 11px "Be Vietnam Pro"';
+        ctx.fillStyle = '#1C2438'; ctx.font = 'bold 11px "Nunito", sans-serif';
         ctx.fillText(`(${fmtN(p.x)}; ${fmtN(p.y)})`, X(p.x) + 9, Y(p.y) - 7);
       });
     }
     function drawPoint() {
-      ctx.fillStyle = '#FF7A1A'; ctx.strokeStyle = '#C95C09'; ctx.lineWidth = 2.5;
-      ctx.beginPath(); ctx.arc(X(P.x), Y(P.y), 10, 0, 7); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(X(P.x), Y(P.y), 3, 0, 7); ctx.fill();
+      ctx.shadowColor = 'rgba(0,0,0,0.4)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 3;
+      ctx.fillStyle = '#FF7A1A'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc(X(P.x), Y(P.y), 14, 0, 7); ctx.fill(); ctx.stroke();
+      ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+      ctx.font = '16px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('\u{1F69C}', X(P.x), Y(P.y) + 1);
+      ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
     }
     function render() {
       drawGrid(); drawRegion(); drawConstraintLines(); drawAxes();
@@ -1353,7 +3219,7 @@
       updatePanel();
     }
 
-    /* ===== Bảng thông tin ===== */
+    /* ===== Panel ===== */
     function updatePanel() {
       const lv = LEVELS[lvlIdx];
       $('xVal').textContent = P.x.toFixed(1);
@@ -1362,12 +3228,12 @@
       const v = feasible(P, cur), st = $('status');
       if (v === false) {
         st.className = 'status ok';
-        st.textContent = lv.min ? '✓ Hợp lệ — đủ dinh dưỡng, hãy hạ chi phí thấp nhất.' :
-          '✓ Hợp lệ — đang trong vùng nguồn lực cho phép.';
+        st.textContent = lv.min ? '\u2713 Hợp lệ — đủ dinh dưỡng, hãy hạ chi phí thấp nhất.' :
+          '\u2713 Hợp lệ — đang trong vùng nguồn lực cho phép.';
       } else {
         st.className = 'status bad';
-        st.textContent = v.op === '>=' ? '✗ Chưa đạt mức tối thiểu ' + v.tag + ' — tăng x hoặc y.'
-          : '✗ Vượt quá ' + v.tag + ' — hãy đưa điểm về miền nghiệm.';
+        st.textContent = v.op === '>=' ? '\u2717 Chưa đạt mức tối thiểu ' + v.tag + ' — tăng x hoặc y.'
+          : '\u2717 Vượt quá ' + v.tag + ' — hãy đưa điểm về miền nghiệm.';
       }
     }
     function buildSystem() {
@@ -1379,36 +3245,57 @@
       $('legend').innerHTML = `<b>x</b> = ${L.unit} ${L.crop1} &nbsp;·&nbsp; <b>y</b> = ${L.unit} ${L.crop2}`;
       $('ineqList').innerHTML =
         L.cons.map(c => `${ineqStr(c)} <span class="tag">${c.tag}</span>`).join('<br>')
-        + `<br>x ≥ 0,&nbsp; y ≥ 0`;
-      $('objLine').innerHTML = `F = ${fmtTerms(L.obj.a, L.obj.b)} <b>→ ${L.min ? 'tối thiểu' : 'tối đa'}</b>`;
-      $('harvestBtn').textContent = L.min ? 'Chốt đơn hàng! 🐔' : 'Thu hoạch! 🌾';
+        + `<br>x \u2265 0,&nbsp; y \u2265 0`;
+      $('objLine').innerHTML = `F = ${fmtTerms(L.obj.a, L.obj.b)} <b>\u2192 ${L.min ? 'tối thiểu' : 'tối đa'}</b>`;
+      $('harvestBtn').textContent = L.min ? 'Chốt đơn hàng! \u{1F414}' : 'Thu hoạch! \u{1F33E}';
     }
 
-    /* ===== Vào / qua vụ ===== */
-    function setLevel(i) {
-      lvlIdx = i;
-      const L = LEVELS[i];
-      const cv2 = computeVertices(L);
-      cur = { cons: L.cons, obj: L.obj, world: L.world, verts: cv2.verts, hintVerts: cv2.hintVerts };
-      let best = { f: L.min ? Infinity : -Infinity, p: null };
-      cur.hintVerts.forEach(p => {
-        const f = Fval(p, cur);
-        if (L.min ? f < best.f : f > best.f) best = { f, p };
-      });
-      cur.optPt = best.p; cur.optF = best.f;
-      P = L.start ? { ...L.start } : { x: 0, y: 0 };
-      showHints = false; hintUsed = false; $('hintBtn').classList.remove('on');
-      $('lvl').textContent = i + 1; $('ctxEmoji').textContent = L.emoji;
-      const note =
-        L.min ? ' <span class="expert">· Chiều ngược: tìm GIÁ TRỊ NHỎ NHẤT — miền nghiệm cũng phải tự suy luận!</span>' :
-          L.hideRegion ? ' <span class="expert">· Chế độ chuyên gia: miền nghiệm không tô sẵn — tự xác định từ hệ bất phương trình!</span>' : '';
-      $('ctxText').innerHTML = L.text + note;
-      buildSystem(); renderProgress(); fit(); render();
+    /* ===== Set Level ===== */
+    function setLevel(i, skipTransition) {
+      const doSet = () => {
+        lvlIdx = i;
+        const L = LEVELS[i];
+        const cv2 = computeVertices(L);
+        cur = { cons: L.cons, obj: L.obj, world: L.world, verts: cv2.verts, hintVerts: cv2.hintVerts };
+        let best = { f: L.min ? Infinity : -Infinity, p: null };
+        cur.hintVerts.forEach(p => {
+          const f = Fval(p, cur);
+          if (L.min ? f < best.f : f > best.f) best = { f, p };
+        });
+        cur.optPt = best.p; cur.optF = best.f;
+        P = L.start ? { ...L.start } : { x: 0, y: 0 };
+        showHints = false; hintUsed = false; $('hintBtn').classList.remove('on');
+        $('lvl').textContent = i + 1; $('ctxEmoji').textContent = L.emoji;
+        const diffBadge = `<span class="diff-badge ${L.diffClass}">${L.diff}</span>`;
+        const note =
+          L.min ? ' <span class="expert">\u00B7 Chiều ngược: tìm GIÁ TRỊ NHỎ NHẤT — miền nghiệm cũng phải tự suy luận!</span>' :
+            L.hideRegion ? ' <span class="expert">\u00B7 Chế độ chuyên gia: miền nghiệm không tô sẵn!</span>' : '';
+        $('ctxText').innerHTML = L.text + diffBadge + note;
+        buildSystem(); renderProgress(); fit(); render();
+        BGM.setLevel(i);
+      };
+
+      if (skipTransition || i === 0) {
+        if (i === 0) {
+          // Always show tutorial before Level 1
+          doSet();
+          showTutorial(null);
+        } else {
+          doSet();
+        }
+      } else {
+        showLevelTransition(i, doSet);
+      }
     }
 
-    function stars(ratio) { return ratio >= 0.999 ? 3 : ratio >= 0.92 ? 2 : ratio >= 0.75 ? 1 : 0; }
+    function starsFromRatio(ratio) { return ratio >= 0.999 ? 3 : ratio >= 0.92 ? 2 : ratio >= 0.75 ? 1 : 0; }
 
-    /* ===== Câu hỏi củng cố — MỖI LEVEL 1 CÂU RIÊNG, TỪ DỄ → KHÓ ===== */
+    /* ===================================================================
+       NGÂN HÀNG CÂU HỎI — Toán 10 (CT 2018)
+       Chủ đề: Bài toán tối ưu · Hệ bất phương trình bậc nhất hai ẩn
+       Mỗi level có 4-5 câu KHÔNG TRÙNG NHAU, tăng dần độ khó
+       Phù hợp trình độ nhận thức học sinh lớp 10
+    =================================================================== */
     function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; } return a; }
 
     function makeQuizForLevel(lvl) {
@@ -1417,108 +3304,386 @@
       const v0 = vs.find(p => Math.abs(p.x - cur.optPt.x) > 1e-3 || Math.abs(p.y - cur.optPt.y) > 1e-3) || vs[0];
       const f0 = Fval(v0, cur);
 
-      switch (lvl) {
-        case 0: // DỄ: Tính F tại gốc O
-          return {
-            q: `Tại gốc O(0; 0), giá trị F = ${fmtTerms(o.a, o.b)} bằng bao nhiêu?`,
+      // Question bank per level — Toán 10 CT 2018
+      // Chương: Bất phương trình bậc nhất hai ẩn · Bài toán tối ưu
+      const banks = {
+        /* ═══════════════════════════════════════════
+           LEVEL 1 — NHẬN BIẾT (Bloom 1)
+           Biểu diễn bất phương trình, ý nghĩa biến
+        ═══════════════════════════════════════════ */
+        0: [
+          {
+            q: `Bất phương trình ${ineqStr(L.cons[0])} biểu diễn nửa mặt phẳng nào trên hệ tọa độ Oxy?`,
+            correct: `Nửa mặt phẳng chứa gốc O (nếu O thỏa mãn) hoặc phía đối diện`,
+            opts: shuffle(['Nửa mặt phẳng chứa gốc O (nếu O thỏa mãn) hoặc phía đối diện', 'Một đường thẳng', 'Toàn bộ mặt phẳng', 'Chỉ một điểm']),
+            exp: `Mỗi bất phương trình bậc nhất hai ẩn chia mặt phẳng thành hai nửa. Ta thử điểm O(0;0) vào bất phương trình để xác định nửa nào là miền nghiệm. Đây là kiến thức cơ bản trong SGK Toán 10 (CT 2018).`
+          },
+          {
+            q: `Trong bài toán này, biến x đại diện cho đại lượng nào?`,
+            correct: `Số ${L.unit} ${L.crop1}`,
+            opts: shuffle([`Số ${L.unit} ${L.crop1}`, `Số ${L.unit} ${L.crop2}`, 'Tổng lợi nhuận', 'Tổng chi phí']),
+            exp: `Trong mô hình hóa bài toán thực tế, x biểu diễn số ${L.unit} ${L.crop1} cần tìm. Việc xác định đúng ý nghĩa biến là bước đầu tiên khi giải bài toán tối ưu.`
+          },
+          {
+            q: `Tại gốc tọa độ O(0; 0), giá trị hàm mục tiêu F = ${fmtTerms(o.a, o.b)} bằng bao nhiêu?`,
             correct: '0',
             opts: ['0', fmtN(o.a), fmtN(o.b), fmtN(o.a + o.b)],
-            exp: `F(0;0) = ${o.a}·0 + ${o.b}·0 = 0. Gốc tọa độ luôn cho F = 0 khi hàm mục tiêu không có hằng số.`
-          };
-
-        case 1: // DỄ: Khái niệm cơ bản — F max đạt ở đâu
-          return {
-            q: `Trên miền nghiệm đa giác, giá trị lớn nhất của F = ${fmtTerms(o.a, o.b)} đạt được ở đâu?`,
-            correct: 'Tại một đỉnh của miền nghiệm',
-            opts: ['Tại một đỉnh của miền nghiệm', 'Tại trọng tâm của miền nghiệm', 'Tại một điểm bất kỳ bên trong miền', 'Luôn tại gốc toạ độ O'],
-            exp: 'Định lí: F = ax + by đạt GTLN và GTNN trên miền đa giác lồi tại các đỉnh của miền. Vì vậy chỉ cần tính F tại từng đỉnh rồi so sánh.'
-          };
-
-        case 2: // TRUNG BÌNH: Tính F tại một đỉnh cụ thể
-          return {
-            q: `Tại đỉnh (${fmtN(v0.x)}; ${fmtN(v0.y)}), giá trị F = ${fmtTerms(o.a, o.b)} bằng bao nhiêu?`,
-            correct: fmtN(f0),
-            opts: [fmtN(f0), fmtN(f0 + o.a), fmtN(Math.max(0, f0 - o.b)), fmtN(v0.x + v0.y)],
-            exp: `F = ${o.a}·${fmtN(v0.x)} + ${o.b}·${fmtN(v0.y)} = ${fmtN(f0)}. Thay tọa độ đỉnh vào hàm mục tiêu.`
-          };
-
-        case 3: { // TRUNG BÌNH-KHÓ: Bài toán tối thiểu — chọn đỉnh cho F nhỏ nhất
-          const cands = [cur.optPt, ...vs.filter(p => p !== cur.optPt)].slice(0, 4);
-          return {
-            q: 'Trong các đỉnh của miền nghiệm, đỉnh nào cho chi phí F nhỏ nhất?',
-            correct: `(${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)})`,
-            opts: cands.map(p => `(${fmtN(p.x)}; ${fmtN(p.y)})`),
-            exp: 'So sánh: ' + cands.map(p => `F(${fmtN(p.x)};${fmtN(p.y)}) = ${fmtN(Fval(p, cur))}`).join(' ; ') + '.'
-          };
-        }
-
-        case 4: { // KHÓ: Kiểm tra một điểm có thuộc miền nghiệm không
-          const Mq = { x: cur.optPt.x + 1.5, y: cur.optPt.y + 1.5 };
-          const viol = cur.cons.filter(c => !satisfies(Mq, c));
-          if (viol.length) {
-            const sat = cur.cons.filter(c => satisfies(Mq, c));
-            return {
-              q: `Điểm M(${fmtN(Mq.x)}; ${fmtN(Mq.y)}) có thuộc miền nghiệm của hệ không?`,
-              correct: `Không — M vi phạm ${ineqStr(viol[0])}`,
-              opts: [`Không — M vi phạm ${ineqStr(viol[0])}`,
-                'Có — M thoả mọi bất phương trình',
-              sat.length ? `Không — M vi phạm ${ineqStr(sat[0])}` : 'Không — M vi phạm x ≥ 0',
-                'Có — vì M nằm gần đỉnh tối ưu'],
-              exp: `Thay M vào: ${viol[0].a}·${fmtN(Mq.x)} + ${viol[0].b}·${fmtN(Mq.y)} = ${fmtN(viol[0].a * Mq.x + viol[0].b * Mq.y)} ${viol[0].op === '>=' ? '< ' + viol[0].c + ' (chưa đạt mức tối thiểu)' : '> ' + viol[0].c + ' (vượt giới hạn)'} → M không thuộc miền nghiệm.`
-            };
+            exp: `F(0;0) = ${o.a}·0 + ${o.b}·0 = 0. Khi không trồng trọt gì (x=0, y=0), lợi nhuận bằng 0. Đây là cách thay giá trị cụ thể vào biểu thức đại số.`
+          },
+          {
+            q: `Điều kiện x ≥ 0 và y ≥ 0 có ý nghĩa gì trong bài toán nông trại?`,
+            correct: `Số ${L.unit} ${L.crop1} và ${L.crop2} không thể âm`,
+            opts: shuffle([`Số ${L.unit} ${L.crop1} và ${L.crop2} không thể âm`, 'Lợi nhuận phải dương', 'Tổng vốn phải dương', 'Số công nhân phải dương']),
+            exp: `x, y là các đại lượng thực tế (diện tích, số lượng...) nên luôn không âm. Ràng buộc x ≥ 0, y ≥ 0 gọi là điều kiện tự nhiên trong bài toán tối ưu.`
           }
-          // Fallback
-          return {
+        ],
+
+        /* ═══════════════════════════════════════════
+           LEVEL 2 — NHẬN BIẾT + THÔNG HIỂU (Bloom 1-2)
+           Khái niệm miền nghiệm, đường thẳng biên
+        ═══════════════════════════════════════════ */
+        1: [
+          {
+            q: `Miền nghiệm của hệ bất phương trình bậc nhất hai ẩn có dạng hình học gì?`,
+            correct: 'Miền đa giác lồi (có thể bị chặn hoặc không bị chặn)',
+            opts: shuffle(['Miền đa giác lồi (có thể bị chặn hoặc không bị chặn)', 'Hình tròn', 'Hình elip', 'Luôn là tam giác']),
+            exp: `Theo SGK Toán 10: Giao của hữu hạn nửa mặt phẳng là một miền lồi. Khi các ràng buộc đều tuyến tính, miền nghiệm là đa giác lồi — có thể là tam giác, tứ giác, ngũ giác...`
+          },
+          {
+            q: `Đường thẳng ${fmtTerms(L.cons[0].a, L.cons[0].b)} = ${L.cons[0].c} là gì trong hệ bất phương trình?`,
+            correct: 'Đường biên (đường bờ) của bất phương trình tương ứng',
+            opts: shuffle(['Đường biên (đường bờ) của bất phương trình tương ứng', 'Hàm mục tiêu', 'Trục tọa độ', 'Đường đẳng trị']),
+            exp: `Khi đổi dấu ≤ (hoặc ≥) thành =, ta được đường thẳng biên. Đường này chia mặt phẳng thành hai nửa, một nửa là miền nghiệm của bất phương trình.`
+          },
+          {
+            q: `Nếu điểm A(1; 1) thỏa mãn ${ineqStr(L.cons[0])}, thì A nằm ở vị trí nào?`,
+            correct: satisfies({ x: 1, y: 1 }, L.cons[0]) ? 'Thuộc miền nghiệm (cùng phía với miền nghiệm)' : 'Không thuộc miền nghiệm (khác phía)',
+            opts: shuffle(['Thuộc miền nghiệm (cùng phía với miền nghiệm)', 'Không thuộc miền nghiệm (khác phía)', 'Nằm trên đường biên', 'Không xác định được']),
+            exp: `Thay A(1;1) vào: ${L.cons[0].a}·1 + ${L.cons[0].b}·1 = ${L.cons[0].a + L.cons[0].b}. So sánh với ${L.cons[0].c}: ${L.cons[0].a + L.cons[0].b} ${satisfies({ x: 1, y: 1 }, L.cons[0]) ? (L.cons[0].op === '>=' ? '≥' : '≤') : (L.cons[0].op === '>=' ? '<' : '>')} ${L.cons[0].c} → ${satisfies({ x: 1, y: 1 }, L.cons[0]) ? 'thỏa mãn' : 'không thỏa mãn'}.`
+          },
+          {
+            q: `Hàm mục tiêu F = ${fmtTerms(o.a, o.b)} là hàm số dạng gì?`,
+            correct: 'Hàm bậc nhất hai biến (hàm tuyến tính)',
+            opts: shuffle(['Hàm bậc nhất hai biến (hàm tuyến tính)', 'Hàm bậc hai', 'Hàm mũ', 'Hàm lượng giác']),
+            exp: `F = ${fmtTerms(o.a, o.b)} có bậc 1 theo cả x và y → là hàm tuyến tính hai biến. Tính chất tuyến tính giúp ta chỉ cần kiểm tra các đỉnh.`
+          }
+        ],
+
+        /* ═══════════════════════════════════════════
+           LEVEL 3 — THÔNG HIỂU (Bloom 2)
+           Xác định đỉnh, giải hệ 2 phương trình
+        ═══════════════════════════════════════════ */
+        2: [
+          {
+            q: `Để tìm tọa độ các đỉnh của miền nghiệm, ta thực hiện bước nào?`,
+            correct: 'Giải từng cặp phương trình (đổi ≤ hoặc ≥ thành =) rồi kiểm tra nghiệm',
+            opts: shuffle(['Giải từng cặp phương trình (đổi ≤ hoặc ≥ thành =) rồi kiểm tra nghiệm', 'Tính đạo hàm hàm mục tiêu', 'Thử các số nguyên', 'Chia đôi miền nghiệm']),
+            exp: `Theo phương pháp trong SGK Toán 10: Đỉnh miền nghiệm = giao điểm của các đường biên. Giải hệ 2 phương trình bậc nhất 2 ẩn từ từng cặp ràng buộc, rồi kiểm tra giao điểm có thỏa TẤT CẢ ràng buộc không.`
+          },
+          {
             q: `Hệ bất phương trình ở vụ này có bao nhiêu ràng buộc (không tính x≥0, y≥0)?`,
             correct: L.cons.length.toString(),
-            opts: [L.cons.length.toString(), (L.cons.length + 1).toString(), (L.cons.length - 1).toString(), '2'],
-            exp: `Hệ có ${L.cons.length} ràng buộc chính (ngoài x ≥ 0, y ≥ 0).`
-          };
-        }
+            opts: shuffle([L.cons.length.toString(), (L.cons.length + 1).toString(), (Math.max(1, L.cons.length - 1)).toString(), '2']),
+            exp: `Hệ có ${L.cons.length} ràng buộc chính + 2 ràng buộc tự nhiên (x ≥ 0, y ≥ 0). Tổng cộng ${L.cons.length + 2} bất phương trình tạo nên miền nghiệm.`
+          },
+          {
+            q: `Miền nghiệm ở vụ này có bao nhiêu đỉnh (không tính đỉnh nằm trên trục tọa độ)?`,
+            correct: cur.hintVerts.length.toString(),
+            opts: shuffle([cur.hintVerts.length.toString(), (cur.hintVerts.length + 1).toString(), (Math.max(1, cur.hintVerts.length - 1)).toString(), (cur.hintVerts.length + 2).toString()]),
+            exp: `Miền nghiệm có ${cur.hintVerts.length} đỉnh. Mỗi đỉnh là giao của 2 đường biên và thỏa mãn mọi ràng buộc còn lại.`
+          },
+          {
+            q: `Đường biên ${fmtTerms(L.cons[0].a, L.cons[0].b)} = ${L.cons[0].c} cắt trục Ox tại điểm nào?`,
+            correct: L.cons[0].a !== 0 ? `(${fmtN(L.cons[0].c / L.cons[0].a)}; 0)` : 'Không cắt trục Ox (song song)',
+            opts: shuffle([L.cons[0].a !== 0 ? `(${fmtN(L.cons[0].c / L.cons[0].a)}; 0)` : 'Không cắt trục Ox (song song)', `(0; ${fmtN(L.cons[0].c)})`, `(${fmtN(L.cons[0].c)}; ${fmtN(L.cons[0].c)})`, `(0; 0)`]),
+            exp: `Cắt trục Ox ↔ y = 0. Thay y = 0 vào: ${L.cons[0].a !== 0 ? `${L.cons[0].a}x = ${L.cons[0].c} → x = ${fmtN(L.cons[0].c / L.cons[0].a)}` : 'phương trình vô nghiệm (hệ số x = 0)'}. Đây là kỹ năng vẽ đường thẳng trong SGK Toán 10.`
+          }
+        ],
 
-        case 5: { // KHÓ: Bài toán tối thiểu — lý do F đạt min tại đỉnh
-          return {
-            q: `Trong bài toán tối thiểu, tại sao ta chỉ cần kiểm tra các đỉnh của miền nghiệm?`,
-            correct: 'Vì F = ax + by là hàm tuyến tính, GTNN luôn đạt tại đỉnh đa giác lồi',
-            opts: [
-              'Vì F = ax + by là hàm tuyến tính, GTNN luôn đạt tại đỉnh đa giác lồi',
-              'Vì bên trong miền nghiệm không có điểm nào',
-              'Vì các đỉnh luôn có tọa độ nguyên',
-              'Vì hàm mục tiêu là hàm bậc hai'
-            ],
-            exp: 'Tính chất quan trọng: hàm tuyến tính F = ax + by đạt cực trị (max và min) trên miền đa giác lồi tại các đỉnh. Điều này giúp ta chỉ cần tính F tại hữu hạn đỉnh thay vì vô số điểm.'
-          };
-        }
+        /* ═══════════════════════════════════════════
+           LEVEL 4 — THÔNG HIỂU + VẬN DỤNG (Bloom 2-3)
+           Tính F tại đỉnh, phân biệt max / min
+        ═══════════════════════════════════════════ */
+        3: [
+          {
+            q: `Tại đỉnh (${fmtN(v0.x)}; ${fmtN(v0.y)}), giá trị F = ${fmtTerms(o.a, o.b)} bằng bao nhiêu?`,
+            correct: fmtN(f0),
+            opts: shuffle([fmtN(f0), fmtN(f0 + o.a), fmtN(Math.max(0, f0 - o.b)), fmtN(v0.x + v0.y)]),
+            exp: `F(${fmtN(v0.x)}; ${fmtN(v0.y)}) = ${o.a}×${fmtN(v0.x)} + ${o.b}×${fmtN(v0.y)} = ${fmtN(f0)}. Đây là bước "thay tọa độ đỉnh vào hàm mục tiêu" — bước quan trọng nhất trong bài toán tối ưu.`
+          },
+          {
+            q: `Bài toán này yêu cầu tìm giá trị nào của hàm mục tiêu F?`,
+            correct: L.min ? 'Giá trị nhỏ nhất (GTNN)' : 'Giá trị lớn nhất (GTLN)',
+            opts: shuffle(['Giá trị nhỏ nhất (GTNN)', 'Giá trị lớn nhất (GTLN)', 'Giá trị trung bình', 'Giá trị tại gốc O']),
+            exp: L.min ? 'Bài toán yêu cầu tối thiểu hóa chi phí → tìm GTNN của F trên miền nghiệm.' : 'Bài toán yêu cầu tối đa hóa lợi nhuận → tìm GTLN của F trên miền nghiệm.'
+          },
+          {
+            q: `Khi bài toán chuyển từ "tìm GTLN" sang "tìm GTNN", phần nào KHÔNG thay đổi?`,
+            correct: 'Miền nghiệm và các đỉnh (chỉ đổi đỉnh tối ưu)',
+            opts: shuffle(['Miền nghiệm và các đỉnh (chỉ đổi đỉnh tối ưu)', 'Hàm mục tiêu thay đổi hoàn toàn', 'Số đỉnh miền nghiệm giảm đi', 'Tất cả đều thay đổi']),
+            exp: `Miền nghiệm chỉ phụ thuộc vào hệ ràng buộc. Khi chuyển max → min, ta chỉ chọn đỉnh khác (đỉnh cho F nhỏ nhất thay vì lớn nhất). Đây là nội dung SGK Toán 10, mục "Bài toán tìm GTLN, GTNN".`
+          },
+          {
+            q: `F đạt giá trị tối ưu tại đỉnh (${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)}). Giá trị tối ưu F = ?`,
+            correct: fmtN(cur.optF),
+            opts: shuffle([fmtN(cur.optF), fmtN(cur.optF + 2), fmtN(Math.max(0, cur.optF - 3)), fmtN(cur.optPt.x * cur.optPt.y)]),
+            exp: `F(${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)}) = ${o.a}×${fmtN(cur.optPt.x)} + ${o.b}×${fmtN(cur.optPt.y)} = ${fmtN(cur.optF)}. Đây là giá trị ${L.min ? 'nhỏ nhất' : 'lớn nhất'} của F trên miền nghiệm.`
+          }
+        ],
 
-        case 6: { // RẤT KHÓ: Tổng hợp — so sánh F tại các đỉnh và chọn max
+        /* ═══════════════════════════════════════════
+           LEVEL 5 — VẬN DỤNG (Bloom 3)
+           Kiểm tra feasibility, chọn đỉnh tối ưu
+        ═══════════════════════════════════════════ */
+        4: (() => {
+          const cands = [cur.optPt, ...vs.filter(p => p !== cur.optPt)].slice(0, 4);
+          const Mq = { x: cur.optPt.x + 1.5, y: cur.optPt.y + 1.5 };
+          const viol = cur.cons.filter(c => !satisfies(Mq, c));
+          const questions = [
+            {
+              q: L.min ? 'So sánh F tại các đỉnh, đỉnh nào cho chi phí F nhỏ nhất?' : 'So sánh F tại các đỉnh, đỉnh nào cho lợi nhuận F lớn nhất?',
+              correct: `(${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)})`,
+              opts: shuffle(cands.map(p => `(${fmtN(p.x)}; ${fmtN(p.y)})`)),
+              exp: 'Tính F tại từng đỉnh: ' + cands.map(p => `F(${fmtN(p.x)};${fmtN(p.y)}) = ${fmtN(Fval(p, cur))}`).join('; ') + `. → Đỉnh tối ưu: (${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)}) với F = ${fmtN(cur.optF)}.`
+            },
+            {
+              q: `Theo định lí trong SGK Toán 10, hàm F = ax + by đạt GTLN (hoặc GTNN) trên miền đa giác lồi tại đâu?`,
+              correct: 'Tại một trong các đỉnh của miền nghiệm',
+              opts: shuffle(['Tại một trong các đỉnh của miền nghiệm', 'Tại trọng tâm đa giác', 'Tại trung điểm một cạnh', 'Tại gốc tọa độ O']),
+              exp: `Định lí quan trọng (SGK Toán 10 CT 2018): "Nếu F đạt GTLN (GTNN) trên miền đa giác lồi thì F đạt GTLN (GTNN) tại ít nhất một đỉnh của đa giác đó." Đây là cơ sở để giải bài toán tối ưu.`
+            },
+            {
+              q: `Hệ ràng buộc ở vụ này có tổng cộng bao nhiêu bất phương trình (kể cả x≥0, y≥0)?`,
+              correct: (L.cons.length + 2).toString(),
+              opts: shuffle([(L.cons.length + 2).toString(), L.cons.length.toString(), (L.cons.length + 1).toString(), (L.cons.length + 3).toString()]),
+              exp: `${L.cons.length} ràng buộc chính + 2 ràng buộc tự nhiên (x ≥ 0, y ≥ 0) = ${L.cons.length + 2} bất phương trình.`
+            }
+          ];
+          if (viol.length) {
+            questions.push({
+              q: `Điểm M(${fmtN(Mq.x)}; ${fmtN(Mq.y)}) có thuộc miền nghiệm không? Kiểm tra bằng cách nào?`,
+              correct: `Không — vì vi phạm ràng buộc ${ineqStr(viol[0])}`,
+              opts: shuffle([`Không — vì vi phạm ràng buộc ${ineqStr(viol[0])}`, 'Có — M thỏa mọi bất phương trình', 'Không — vì M nằm ngoài trục Ox', 'Có — vì M có tọa độ dương']),
+              exp: `Kiểm tra M bằng cách thay tọa độ vào TỪNG bất phương trình. Thay M vào ${ineqStr(viol[0])}: ${viol[0].a}×${fmtN(Mq.x)} + ${viol[0].b}×${fmtN(Mq.y)} = ${fmtN(viol[0].a * Mq.x + viol[0].b * Mq.y)} ${viol[0].op === '>=' ? '<' : '>'} ${viol[0].c} → vi phạm!`
+            });
+          }
+          return questions;
+        })(),
+
+        /* ═══════════════════════════════════════════
+           LEVEL 6 — VẬN DỤNG (Bloom 3)
+           Phương pháp đường đẳng trị, lý thuyết
+        ═══════════════════════════════════════════ */
+        5: [
+          {
+            q: `Theo SGK Toán 10, phương pháp giải bài toán tối ưu gồm mấy bước chính?`,
+            correct: '4 bước: Lập hệ → Vẽ miền nghiệm → Tìm đỉnh → Tính F tại đỉnh',
+            opts: shuffle(['4 bước: Lập hệ → Vẽ miền nghiệm → Tìm đỉnh → Tính F tại đỉnh', '2 bước: Lập hệ → Giải hệ', '1 bước: Tính F tại O', '3 bước: Vẽ đồ thị → Đạo hàm → Tìm cực trị']),
+            exp: `SGK Toán 10 CT 2018 nêu rõ quy trình: (1) Lập hệ bất phương trình từ bài toán thực tế, (2) Biểu diễn miền nghiệm trên mặt phẳng tọa độ, (3) Tìm tọa độ các đỉnh, (4) Tính F tại mỗi đỉnh và chọn giá trị tối ưu.`
+          },
+          {
+            q: `Đường đẳng trị F = ${fmtTerms(o.a, o.b)} = k (với k thay đổi) tạo thành họ đường thẳng có đặc điểm gì?`,
+            correct: 'Họ đường thẳng song song với nhau',
+            opts: shuffle(['Họ đường thẳng song song với nhau', 'Họ đường thẳng đồng quy', 'Họ đường cong', 'Họ đường tròn đồng tâm']),
+            exp: `Khi k thay đổi, đường ${fmtTerms(o.a, o.b)} = k tịnh tiến song song. Tất cả đều có cùng hệ số góc = -${o.a}/${o.b}. Dịch đường lên → k tăng → F tăng (khi tìm max).`
+          },
+          {
+            q: `Nếu miền nghiệm là tập rỗng (các ràng buộc mâu thuẫn), bài toán tối ưu có lời giải không?`,
+            correct: 'Không — bài toán vô nghiệm',
+            opts: shuffle(['Không — bài toán vô nghiệm', 'Có — F = 0', 'Có — chọn gốc O', 'Tùy hàm mục tiêu']),
+            exp: `Nếu không tồn tại điểm (x; y) nào thỏa tất cả ràng buộc → miền nghiệm rỗng → không có giá trị F nào → bài toán vô nghiệm. Đây là trường hợp đặc biệt cần nhận biết.`
+          },
+          {
+            q: `Hướng tăng nhanh nhất của F = ${fmtTerms(o.a, o.b)} là hướng nào?`,
+            correct: `Hướng véc-tơ gradient (${o.a}; ${o.b})`,
+            opts: shuffle([`Hướng véc-tơ gradient (${o.a}; ${o.b})`, `Hướng trục Ox`, `Hướng trục Oy`, `Hướng (1; 1)`]),
+            exp: `Véc-tơ gradient ∇F = (${o.a}; ${o.b}) vuông góc với đường đẳng trị và chỉ theo hướng F tăng nhanh nhất. Dịch đường đẳng trị theo hướng này để tìm GTLN.`
+          }
+        ],
+
+        /* ═══════════════════════════════════════════
+           LEVEL 7 — VẬN DỤNG CAO (Bloom 3-4)
+           So sánh F tại nhiều đỉnh, phân tích
+        ═══════════════════════════════════════════ */
+        6: (() => {
           const cands = [cur.optPt, ...vs.filter(p => p !== cur.optPt)].slice(0, 4);
           const fOpt = Fval(cur.optPt, cur);
-          return {
-            q: `Cho F = ${fmtTerms(o.a, o.b)}. Biết các đỉnh miền nghiệm gồm: ${cands.map(p => `(${fmtN(p.x)};${fmtN(p.y)})`).join(', ')}. Giá trị F lớn nhất là bao nhiêu?`,
-            correct: fmtN(fOpt),
-            opts: shuffle([fmtN(fOpt), ...cands.filter(p => p !== cur.optPt).slice(0, 3).map(p => fmtN(Fval(p, cur)))]),
-            exp: 'Tính F tại từng đỉnh: ' + cands.map(p => `F(${fmtN(p.x)};${fmtN(p.y)}) = ${fmtN(Fval(p, cur))}`).join(' ; ') + `. → F_max = ${fmtN(fOpt)}.`
-          };
-        }
+          return [
+            {
+              q: `Cho các đỉnh: ${cands.map(p => `(${fmtN(p.x)};${fmtN(p.y)})`).join(', ')}. Tính F = ${fmtTerms(o.a, o.b)} tại mỗi đỉnh, GTLN F bằng bao nhiêu?`,
+              correct: fmtN(fOpt),
+              opts: shuffle([fmtN(fOpt), ...cands.filter(p => p !== cur.optPt).slice(0, 3).map(p => fmtN(Fval(p, cur)))]),
+              exp: 'Lần lượt thay tọa độ: ' + cands.map(p => `F(${fmtN(p.x)};${fmtN(p.y)}) = ${fmtN(Fval(p, cur))}`).join('; ') + `. So sánh → GTLN = ${fmtN(fOpt)}.`
+            },
+            {
+              q: `Nếu thay đổi hệ số của F (ví dụ tăng a), miền nghiệm có thay đổi không?`,
+              correct: 'Không — miền nghiệm chỉ phụ thuộc vào hệ ràng buộc, không phụ thuộc F',
+              opts: shuffle(['Không — miền nghiệm chỉ phụ thuộc vào hệ ràng buộc, không phụ thuộc F', 'Có — miền nghiệm mở rộng', 'Có — miền nghiệm thu hẹp', 'Tùy thuộc giá trị a']),
+              exp: `Miền nghiệm được xác định BỞI HỆ RÀNG BUỘC (các bất phương trình). Hàm mục tiêu F chỉ quyết định ĐỈNH NÀO là tối ưu, không ảnh hưởng đến hình dạng miền nghiệm.`
+            },
+            {
+              q: `Cho A(${fmtN(cands[0].x)};${fmtN(cands[0].y)}) và B(${fmtN(cands[1].x)};${fmtN(cands[1].y)}). Hiệu F(A) − F(B) = ?`,
+              correct: fmtN(Fval(cands[0], cur) - Fval(cands[1], cur)),
+              opts: shuffle([fmtN(Fval(cands[0], cur) - Fval(cands[1], cur)), fmtN(Fval(cands[1], cur) - Fval(cands[0], cur)), '0', fmtN(Fval(cands[0], cur))]),
+              exp: `F(A) = ${fmtN(Fval(cands[0], cur))}, F(B) = ${fmtN(Fval(cands[1], cur))} → F(A) − F(B) = ${fmtN(Fval(cands[0], cur) - Fval(cands[1], cur))}.`
+            },
+            {
+              q: `Khi tăng hệ số a trong F = ax + by, đỉnh tối ưu có thể thay đổi không?`,
+              correct: 'Có — đỉnh tối ưu có thể nhảy sang đỉnh có x lớn hơn',
+              opts: shuffle(['Có — đỉnh tối ưu có thể nhảy sang đỉnh có x lớn hơn', 'Không — đỉnh tối ưu luôn cố định', 'Chỉ thay đổi khi a > b', 'Miền nghiệm sẽ thay đổi']),
+              exp: `Khi tăng a, gradient ∇F = (a; b) xoay → đường đẳng trị đổi góc nghiêng → có thể "chạm" đỉnh khác trước → đỉnh tối ưu thay đổi.`
+            }
+          ];
+        })(),
 
-        default: // Fallback
-          return {
-            q: `F = ${fmtTerms(o.a, o.b)} đạt giá trị ${L.min ? 'nhỏ' : 'lớn'} nhất tại đỉnh nào?`,
-            correct: `(${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)})`,
-            opts: vs.slice(0, 4).map(p => `(${fmtN(p.x)}; ${fmtN(p.y)})`),
-            exp: `F tối ưu = ${fmtN(cur.optF)} tại (${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)}).`
-          };
-      }
+        /* ═══════════════════════════════════════════
+           LEVEL 8 — PHÂN TÍCH (Bloom 4)
+           Ràng buộc chặt/dư, phân tích hệ
+        ═══════════════════════════════════════════ */
+        7: (() => {
+          const active = [];
+          for (let ci = 0; ci < L.cons.length; ci++) {
+            const c = L.cons[ci];
+            const touching = cur.hintVerts.some(p => Math.abs(c.a * p.x + c.b * p.y - c.c) < 0.01);
+            if (!touching) active.push(ci);
+          }
+          const questions = [
+            {
+              q: `Tại đỉnh tối ưu (${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)}), ràng buộc nào trở thành đẳng thức ("ràng buộc chặt")?`,
+              correct: (() => {
+                const tight = L.cons.find(c => Math.abs(c.a * cur.optPt.x + c.b * cur.optPt.y - c.c) < 0.1);
+                return tight ? ineqStr(tight) + ' (' + tight.tag + ')' : ineqStr(L.cons[0]) + ' (' + L.cons[0].tag + ')';
+              })(),
+              opts: shuffle(L.cons.slice(0, 4).map(c => ineqStr(c) + ' (' + c.tag + ')')),
+              exp: `Ràng buộc "chặt" (active constraint) tại đỉnh: khi thay tọa độ đỉnh vào bất phương trình, ta được đẳng thức. Nghĩa là nguồn lực đó được sử dụng hết.`
+            },
+            {
+              q: `Nếu bỏ một ràng buộc khỏi hệ, miền nghiệm sẽ thay đổi thế nào?`,
+              correct: 'Miền nghiệm mở rộng hoặc không đổi (không bao giờ thu hẹp)',
+              opts: shuffle(['Miền nghiệm mở rộng hoặc không đổi (không bao giờ thu hẹp)', 'Miền nghiệm luôn thu hẹp', 'Miền nghiệm luôn không đổi', 'Miền nghiệm trở thành tập rỗng']),
+              exp: `Bỏ ràng buộc = bỏ một "rào chắn". Miền nghiệm mới = miền cũ ∪ phần bị chắn → rộng hơn hoặc bằng. Nếu ràng buộc đó "dư" (không tham gia tạo biên), miền không đổi.`
+            },
+            {
+              q: `F = ${fmtTerms(o.a, o.b)} đạt giá trị ${L.min ? 'nhỏ' : 'lớn'} nhất tại đỉnh nào?`,
+              correct: `(${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)})`,
+              opts: shuffle(vs.slice(0, 4).map(p => `(${fmtN(p.x)}; ${fmtN(p.y)})`)),
+              exp: `So sánh F tại tất cả đỉnh → F tối ưu = ${fmtN(cur.optF)} tại (${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)}).`
+            }
+          ];
+          if (active.length > 0) {
+            const redC = L.cons[active[0]];
+            questions.push({
+              q: `Ràng buộc nào là "ràng buộc dư" (không ảnh hưởng đến miền nghiệm)?`,
+              correct: ineqStr(redC) + ' (' + redC.tag + ')',
+              opts: shuffle(L.cons.slice(0, 4).map(c => ineqStr(c) + ' (' + c.tag + ')')),
+              exp: `Ràng buộc ${ineqStr(redC)} không đi qua đỉnh nào → là ràng buộc dư (redundant). Bỏ ràng buộc này, miền nghiệm và nghiệm tối ưu không thay đổi.`
+            });
+          }
+          return questions;
+        })(),
+
+        /* ═══════════════════════════════════════════
+           LEVEL 9 — PHÂN TÍCH + ĐÁNH GIÁ (Bloom 4-5)
+           Bài toán minimize, nhạy cảm tham số
+        ═══════════════════════════════════════════ */
+        8: (() => {
+          const cands = [cur.optPt, ...vs.filter(p => p !== cur.optPt)].slice(0, 4);
+          return [
+            {
+              q: `Trong bài toán tìm GTNN, ta dịch đường đẳng trị theo hướng nào?`,
+              correct: 'Ngược hướng véc-tơ gradient (hướng F giảm)',
+              opts: shuffle(['Ngược hướng véc-tơ gradient (hướng F giảm)', 'Cùng hướng véc-tơ gradient', 'Song song trục Ox', 'Vuông góc với đường biên']),
+              exp: `Tìm GTNN: dịch đường đẳng trị ngược hướng gradient cho đến khi đường chỉ còn tiếp xúc với miền nghiệm → điểm tiếp xúc cuối là đỉnh tối ưu. Hướng ngược gradient = hướng F giảm nhanh nhất.`
+            },
+            {
+              q: `F đạt giá trị ${L.min ? 'nhỏ' : 'lớn'} nhất bằng bao nhiêu? Tại đỉnh nào?`,
+              correct: `${fmtN(cur.optF)} tại (${fmtN(cur.optPt.x)}; ${fmtN(cur.optPt.y)})`,
+              opts: shuffle(cands.map(p => `${fmtN(Fval(p, cur))} tại (${fmtN(p.x)}; ${fmtN(p.y)})`)),
+              exp: 'So sánh: ' + cands.map(p => `F(${fmtN(p.x)};${fmtN(p.y)}) = ${fmtN(Fval(p, cur))}`).join('; ') + `. → ${L.min ? 'GTNN' : 'GTLN'} F = ${fmtN(cur.optF)}.`
+            },
+            {
+              q: `Nếu nới lỏng ràng buộc "${L.cons[0].tag}" (tăng vế phải thêm 1), giá trị F tối ưu sẽ thế nào?`,
+              correct: L.min ? 'F tối ưu có thể giảm (cải thiện) hoặc không đổi' : 'F tối ưu có thể tăng (cải thiện) hoặc không đổi',
+              opts: shuffle([L.min ? 'F tối ưu có thể giảm (cải thiện) hoặc không đổi' : 'F tối ưu có thể tăng (cải thiện) hoặc không đổi', 'F tối ưu luôn tăng', 'F tối ưu luôn giảm', 'Không ảnh hưởng gì']),
+              exp: `Nới lỏng ràng buộc → miền nghiệm mở rộng → có thể tìm được nghiệm tốt hơn. Nếu ràng buộc đó "chặt" tại đỉnh tối ưu, F sẽ cải thiện. Nếu là ràng buộc dư, F không đổi. Đây là phân tích độ nhạy — ứng dụng nâng cao.`
+            },
+            {
+              q: `So sánh bài toán tìm max F (ràng buộc ≤) với bài toán tìm min F (ràng buộc ≥): phương pháp giải có khác nhau không?`,
+              correct: 'Phương pháp giải GIỐNG NHAU: tìm đỉnh → so sánh F → chọn tối ưu',
+              opts: shuffle(['Phương pháp giải GIỐNG NHAU: tìm đỉnh → so sánh F → chọn tối ưu', 'Phương pháp hoàn toàn khác', 'Bài min không giải được bằng đồ thị', 'Bài min luôn vô nghiệm']),
+              exp: `Dù là max hay min, quy trình giải trong SGK Toán 10 đều giống nhau: (1) Xác định miền nghiệm, (2) Tìm đỉnh, (3) Tính F tại mỗi đỉnh, (4) Chọn giá trị lớn nhất hoặc nhỏ nhất.`
+            }
+          ];
+        })(),
+
+        /* ═══════════════════════════════════════════
+           LEVEL 10 — ĐÁNH GIÁ + SÁNG TẠO (Bloom 5-6)
+           Thay đổi hàm mục tiêu, ứng dụng thực tiễn
+        ═══════════════════════════════════════════ */
+        9: (() => {
+          const newA = o.a + 2, newB = Math.max(1, o.b - 1);
+          let newBest = { f: -Infinity, p: null };
+          vs.forEach(p => {
+            const f = newA * p.x + newB * p.y;
+            if (f > newBest.f) newBest = { f, p };
+          });
+          const sameOpt = newBest.p && Math.abs(newBest.p.x - cur.optPt.x) < 1e-3 && Math.abs(newBest.p.y - cur.optPt.y) < 1e-3;
+          const cands = [cur.optPt, newBest.p, ...vs.filter(p => p !== cur.optPt && p !== newBest.p)].filter(Boolean).slice(0, 4);
+
+          return [
+            {
+              q: `Nếu đổi hàm mục tiêu thành G = ${fmtTerms(newA, newB)} (miền nghiệm giữ nguyên), GTLN của G đạt tại đỉnh nào?`,
+              correct: `(${fmtN(newBest.p.x)}; ${fmtN(newBest.p.y)})`,
+              opts: shuffle(cands.map(p => `(${fmtN(p.x)}; ${fmtN(p.y)})`)),
+              exp: `Tính G tại các đỉnh: ${cands.map(p => `G(${fmtN(p.x)};${fmtN(p.y)}) = ${fmtN(newA * p.x + newB * p.y)}`).join('; ')}. ${sameOpt ? 'Đỉnh tối ưu không đổi!' : 'Đỉnh tối ưu đã thay đổi!'} → Thay đổi hàm mục tiêu có thể làm thay đổi đỉnh tối ưu.`
+            },
+            {
+              q: `Phương pháp giải bài toán quy hoạch tuyến tính bằng đồ thị gồm các bước nào?`,
+              correct: 'Biểu diễn miền nghiệm → Tìm đỉnh → Tính F tại đỉnh → Chọn tối ưu',
+              opts: shuffle(['Biểu diễn miền nghiệm → Tìm đỉnh → Tính F tại đỉnh → Chọn tối ưu', 'Thử tất cả điểm có tọa độ nguyên', 'Đạo hàm F rồi cho bằng 0', 'Chỉ cần giải hệ phương trình']),
+              exp: `Đây là phương pháp đồ thị trong SGK Toán 10 CT 2018: (1) Biểu diễn miền nghiệm bằng cách vẽ các đường biên, (2) Xác định đỉnh, (3) Tính F tại mỗi đỉnh, (4) Chọn giá trị max/min.`
+            },
+            {
+              q: `Nếu thêm ràng buộc x + y ≥ ${Math.ceil(cur.optPt.x + cur.optPt.y + 2)}, đỉnh tối ưu hiện tại (${fmtN(cur.optPt.x)};${fmtN(cur.optPt.y)}) còn khả thi không?`,
+              correct: `Không — vì ${fmtN(cur.optPt.x)} + ${fmtN(cur.optPt.y)} = ${fmtN(cur.optPt.x + cur.optPt.y)} < ${Math.ceil(cur.optPt.x + cur.optPt.y + 2)}`,
+              opts: shuffle([`Không — vì ${fmtN(cur.optPt.x)} + ${fmtN(cur.optPt.y)} = ${fmtN(cur.optPt.x + cur.optPt.y)} < ${Math.ceil(cur.optPt.x + cur.optPt.y + 2)}`, 'Có — ràng buộc mới không ảnh hưởng', 'Tùy thuộc vào hàm mục tiêu', 'Luôn luôn khả thi']),
+              exp: `Thay tọa độ đỉnh vào ràng buộc mới: ${fmtN(cur.optPt.x)} + ${fmtN(cur.optPt.y)} = ${fmtN(cur.optPt.x + cur.optPt.y)} < ${Math.ceil(cur.optPt.x + cur.optPt.y + 2)} → vi phạm → đỉnh cũ bị loại. Thêm ràng buộc có thể thay đổi hoàn toàn bài toán!`
+            },
+            {
+              q: `Bài toán quy hoạch tuyến tính (SGK Toán 10) được ứng dụng trong những lĩnh vực nào?`,
+              correct: 'Nông nghiệp, kinh tế, sản xuất, vận tải — tất cả đều đúng',
+              opts: shuffle(['Nông nghiệp, kinh tế, sản xuất, vận tải — tất cả đều đúng', 'Chỉ trong nông nghiệp', 'Chỉ trong kinh doanh', 'Chỉ trong toán lý thuyết']),
+              exp: `Quy hoạch tuyến tính là công cụ toán học mạnh mẽ, ứng dụng rộng rãi: tối ưu phân bổ đất nông nghiệp, lập kế hoạch sản xuất, tối ưu vận tải, quản lý tài chính... Đây chính là lý do môn Toán 10 CT 2018 đưa chủ đề này vào giảng dạy.`
+            },
+            {
+              q: `Nếu hệ có ${L.cons.length} ràng buộc tuyến tính, tại sao ta không thể dùng phương pháp đạo hàm để tìm cực trị F?`,
+              correct: 'Vì F tuyến tính nên không có cực trị nội (cực trị chỉ xảy ra trên biên)',
+              opts: shuffle(['Vì F tuyến tính nên không có cực trị nội (cực trị chỉ xảy ra trên biên)', 'Vì F là hàm bậc hai', 'Vì F không liên tục', 'Vì F không khả vi']),
+              exp: `Hàm tuyến tính F = ax + by không có cực trị nội (đạo hàm ≠ 0 ∀ (x,y)). Cực trị chỉ xảy ra trên biên miền nghiệm, cụ thể tại các đỉnh đa giác. Đây là lý do ta dùng phương pháp đồ thị thay vì đạo hàm.`
+            }
+          ];
+        })()
+      };
+
+      // Select random question from the bank for this level
+      const bank = banks[lvl] || banks[0];
+      const idx = Math.floor(Math.random() * bank.length);
+      const q = { ...bank[idx] };
+      q.opts = shuffle([...new Set(q.opts)]);
+      return q;
     }
+
+    /* ===== Quiz Display ===== */
+    const DIFF_LABELS = ['Dễ', 'Dễ', 'Trung bình', 'Trung bình', 'Khó', 'Khó', 'Rất khó', 'Rất khó', 'Cực khó', 'BOSS'];
+    const DIFF_STARS = ['\u2B50', '\u2B50', '\u2B50\u2B50', '\u2B50\u2B50', '\u2B50\u2B50\u2B50', '\u2B50\u2B50\u2B50', '\u2B50\u2B50\u2B50\u2B50', '\u2B50\u2B50\u2B50\u2B50', '\u2B50\u2B50\u2B50\u2B50\u2B50', '\u{1F451}'];
 
     function showQuiz(onDone, nextLabel) {
       const qz = makeQuizForLevel(lvlIdx);
       quizAsked++;
-      qz.opts = shuffle([...new Set(qz.opts)]);
       const q = $('quiz'), box = $('quizBox');
-      box.innerHTML = `<div style="font-size:42px">✏️</div>
+      box.innerHTML = `<div style="font-size:42px">\u270F\uFE0F</div>
     <h2 style="color:var(--indigo);font-family:'Baloo 2',sans-serif;margin:8px 0 4px">Câu hỏi củng cố</h2>
-    <p style="margin:0 0 4px;font-size:13px;color:var(--muted)">Vụ ${lvlIdx + 1} · Mức độ: ${['Dễ', 'Dễ', 'Trung bình', 'Trung bình', 'Khó', 'Khó', 'Rất khó'][lvlIdx] || 'Khó'}</p>
+    <p style="margin:0 0 4px;font-size:13px;color:var(--muted)">Vụ ${lvlIdx + 1} \u00B7 Mức độ: ${DIFF_LABELS[lvlIdx] || 'Khó'} ${DIFF_STARS[lvlIdx] || ''}</p>
     <p style="margin-bottom:0;font-weight:600;line-height:1.5">${qz.q}</p>
     <div class="qopts"></div>
     <div class="qexp" style="display:none"></div>
@@ -1537,10 +3702,17 @@
             if (x.textContent === qz.correct) x.classList.add('correct');
           });
           const ok = (o === qz.correct);
-          if (!ok) { b.classList.add('wrong'); SFX.buzz(); }
-          else { quizCorrect++; score += 50; $('score').textContent = score; SFX.ding(); }
+          if (!ok) { b.classList.add('wrong'); SFX.buzz(); updateCombo(false); }
+          else {
+            const comboMultiplier = comboStreak >= 2 ? comboStreak : 1;
+            const pts = 50 * comboMultiplier;
+            quizCorrect++; score += pts; $('score').textContent = score;
+            SFX.ding();
+            updateCombo(true);
+            showScorePopup('+' + pts + (comboMultiplier > 1 ? ' (x' + comboMultiplier + ')' : ''), 'var(--emerald)', window.innerWidth / 2, window.innerHeight / 2);
+          }
           expEl.style.display = 'block';
-          expEl.innerHTML = (ok ? '✅ Chính xác! +50 điểm. ' : '❌ Chưa đúng. ') + qz.exp;
+          expEl.innerHTML = (ok ? '\u2705 Chính xác! +điểm. ' : '\u274C Chưa đúng. ') + qz.exp;
           nextBtn.style.display = 'block';
           SCTreport();
         });
@@ -1556,7 +3728,7 @@
 
     const fmtT = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
 
-    /* ===== Giấy chứng nhận ===== */
+    /* ===== Certificate — Farm Theme ===== */
     function drawStarShape(cx, cy, spikes, outerR, innerR, c) {
       let rot = Math.PI / 2 * 3, x = cx, y = cy, step = Math.PI / spikes;
       c.beginPath(); c.moveTo(cx, cy - outerR);
@@ -1574,77 +3746,136 @@
       c.lineTo(x, y + r); c.quadraticCurveTo(x, y, x + r, y); c.closePath();
     }
 
+    function drawWheatStalk(c, bx, by, h, side) {
+      c.save();
+      c.translate(bx, by);
+      c.strokeStyle = '#8B6914';
+      c.lineWidth = 2;
+      c.beginPath(); c.moveTo(0, 0); c.lineTo(0, -h); c.stroke();
+      for (let i = 0; i < 5; i++) {
+        const yy = -h * 0.3 - i * h * 0.12;
+        const dx = side * (8 + i * 2);
+        c.fillStyle = '#DAA520';
+        c.beginPath();
+        c.ellipse(dx * 0.5, yy, 4 + i, 8, side * 0.3, 0, Math.PI * 2);
+        c.fill();
+      }
+      c.fillStyle = '#DAA520';
+      for (let i = 0; i < 3; i++) {
+        c.beginPath();
+        c.ellipse(side * 2, -h - 5 + i * 6, 3, 7, side * 0.2, 0, Math.PI * 2);
+        c.fill();
+      }
+      c.restore();
+    }
+
     function generateCertificate(name) {
       const cc = document.getElementById('certCanvas');
       const c = cc.getContext('2d');
       const W = cc.width, H = cc.height;
 
-      // Background gradient (warm earthy paper)
+      // Background
       const bgGrd = c.createLinearGradient(0, 0, W, H);
-      bgGrd.addColorStop(0, '#FFFDF8'); bgGrd.addColorStop(1, '#F6ECD5');
+      bgGrd.addColorStop(0, '#FFFDF8');
+      bgGrd.addColorStop(0.5, '#FFF8E8');
+      bgGrd.addColorStop(1, '#F6ECD5');
       c.fillStyle = bgGrd; c.fillRect(0, 0, W, H);
 
-      // Borders — Nâu gỗ (Wood brown)
+      c.fillStyle = 'rgba(139, 105, 20, 0.02)';
+      for (let i = 0; i < 80; i++) {
+        c.beginPath();
+        c.arc(Math.random() * W, Math.random() * H, 1 + Math.random() * 3, 0, Math.PI * 2);
+        c.fill();
+      }
+
+      // Double border
       c.lineWidth = 14;
       const borderGrd = c.createLinearGradient(0, 0, W, H);
       borderGrd.addColorStop(0, '#8B5A2B'); borderGrd.addColorStop(0.5, '#A0522D'); borderGrd.addColorStop(1, '#6B4226');
       c.strokeStyle = borderGrd;
-      roundRect(c, 24, 24, W - 48, H - 48, 20); c.stroke();
+      roundRect(c, 20, 20, W - 40, H - 40, 22); c.stroke();
 
-      // Viền đứt nét bên trong (Xanh lá cây)
-      c.lineWidth = 2.5; c.strokeStyle = '#2E8B57'; c.setLineDash([12, 10]);
-      roundRect(c, 48, 48, W - 96, H - 96, 12); c.stroke(); c.setLineDash([]);
+      c.lineWidth = 2.5; c.strokeStyle = '#2E8B57'; c.setLineDash([12, 8]);
+      roundRect(c, 44, 44, W - 88, H - 88, 14); c.stroke(); c.setLineDash([]);
 
-      // Huy hiệu tròn phía trên (thay cho ribbon)
+      // Wheat stalks
+      drawWheatStalk(c, 80, H - 60, 100, 1);
+      drawWheatStalk(c, W - 80, H - 60, 100, -1);
+      drawWheatStalk(c, 110, H - 60, 80, 1);
+      drawWheatStalk(c, W - 110, H - 60, 80, -1);
+
+      // Top badge
       c.fillStyle = '#2E8B57';
-      c.beginPath(); c.arc(W / 2, 48, 38, 0, Math.PI * 2); c.fill();
+      c.beginPath(); c.arc(W / 2, 44, 38, 0, Math.PI * 2); c.fill();
       c.fillStyle = '#FFF';
-      drawStarShape(W / 2, 48, 5, 20, 9, c); c.fill();
+      drawStarShape(W / 2, 44, 5, 20, 9, c); c.fill();
 
-      // Thêm hoạ tiết lá mờ làm watermark ở góc
-      const drawLeaf = (lx, ly, scale) => {
-        c.save(); c.translate(lx, ly); c.scale(scale, scale); c.rotate(-Math.PI/4);
-        c.beginPath(); c.moveTo(0, -25);
-        c.quadraticCurveTo(25, -25, 25, 0); c.quadraticCurveTo(25, 25, 0, 25);
-        c.quadraticCurveTo(-25, 25, -25, 0); c.quadraticCurveTo(-25, -25, 0, -25);
-        c.fillStyle = 'rgba(46, 139, 87, 0.08)'; c.fill(); c.restore();
-      };
-      drawLeaf(120, 150, 1.5);
-      drawLeaf(W - 120, 150, 1.5);
-
-      // Tiêu đề
+      // Corner emojis
+      c.font = '28px sans-serif';
       c.textAlign = 'center';
-      // Shadow cho tiêu đề
+      const cornerEmojis = ['\u{1F33E}', '\u{1F69C}', '\u{1F33B}', '\u{1F990}', '\u{1F414}', '\u{1F96D}', '\u{1F34A}', '\u{1F404}'];
+      cornerEmojis.forEach((em, i) => {
+        const angle = (i / cornerEmojis.length) * Math.PI * 2;
+        const rx = W / 2 + Math.cos(angle) * (W * 0.42);
+        const ry = H / 2 + Math.sin(angle) * (H * 0.42);
+        c.globalAlpha = 0.15;
+        c.fillText(em, rx, ry);
+      });
+      c.globalAlpha = 1;
+
+      // Title
+      c.textAlign = 'center';
       c.shadowColor = 'rgba(139, 90, 43, 0.3)'; c.shadowBlur = 4; c.shadowOffsetY = 3;
-      c.font = '900 52px "Nunito", "Be Vietnam Pro", sans-serif';
-      c.fillStyle = '#8B5A2B'; // Nâu gỗ
+      c.font = '900 50px "Nunito", sans-serif';
+      c.fillStyle = '#8B5A2B';
       c.fillText('GIẤY CHỨNG NHẬN', W / 2, 140);
       c.shadowColor = 'transparent'; c.shadowBlur = 0; c.shadowOffsetY = 0;
 
-      c.font = '700 24px "Nunito", "Be Vietnam Pro", sans-serif';
+      c.font = '700 22px "Nunito", sans-serif';
       c.fillStyle = '#4A5B6C';
-      c.fillText('Vinh danh nhà nông xuất sắc', W / 2, 185);
+      c.fillText('Vinh danh nhà nông xuất sắc', W / 2, 178);
 
-      // Tên học sinh (Nhỏ lại, cân đối hơn)
-      c.font = '900 36px "Nunito", "Be Vietnam Pro", sans-serif';
-      c.fillStyle = '#1FA36B'; // Xanh ngọc
-      c.fillText(name.toUpperCase(), W / 2, 260);
+      c.font = '36px sans-serif';
+      c.fillText('\u{1F69C}', W / 2, 218);
 
-      // Gạch dưới tên mềm mại
-      c.beginPath(); c.moveTo(W / 2 - 160, 280); c.lineTo(W / 2 + 160, 280);
-      c.lineWidth = 2.5; c.strokeStyle = '#2E8B57'; c.stroke();
+      // Student name
+      c.font = '900 38px "Nunito", sans-serif';
+      c.fillStyle = '#1FA36B';
+      c.fillText(name.toUpperCase(), W / 2, 270);
 
-      // Lời khen
-      c.font = '700 21px "Nunito", "Be Vietnam Pro", sans-serif';
+      const nameW = c.measureText(name.toUpperCase()).width;
+      const lineHalf = Math.max(nameW / 2 + 20, 120);
+      c.beginPath();
+      c.moveTo(W / 2 - lineHalf, 290);
+      c.lineTo(W / 2 + lineHalf, 290);
+      c.lineWidth = 2.5;
+      c.strokeStyle = '#2E8B57';
+      c.setLineDash([]);
+      c.stroke();
+
+      // Achievement text
+      c.font = '700 20px "Nunito", sans-serif';
       c.fillStyle = '#2B2D42';
-      c.fillText('Đã hoàn thành xuất sắc Khóa Nông Trại Tối Ưu — Toán 10', W / 2, 330);
+      c.fillText('Đã hoàn thành xuất sắc Khóa Nông Trại Tối Ưu — Toán 10', W / 2, 335);
       c.fillText('và thể hiện kỹ năng tối ưu hóa nguồn lực tuyệt vời!', W / 2, 365);
 
-      // Thống kê - Hộp màu nông trại
-      const statY = 410, boxW = 160, boxSpacing = 30;
+      const pctDone = Math.round(SCT_done.size / LEVELS.length * 100);
+      let encourageMsg = '';
+      if (pctDone === 100 && starsTotal >= LEVELS.length * 2.5) {
+        encourageMsg = '\u{1F31F} Siêu Nông Dân — Bạn là bậc thầy tối ưu hóa!';
+      } else if (pctDone === 100) {
+        encourageMsg = '\u{1F3C6} Nhà Nông Giỏi — Phá đảo tất cả thử thách!';
+      } else {
+        encourageMsg = '\u{1F3C5} Nhà Nông Xuất Sắc — Tiếp tục phát huy!';
+      }
+      c.font = '800 16px "Nunito", sans-serif';
+      c.fillStyle = '#C9650E';
+      c.fillText(encourageMsg, W / 2, 400);
+
+      // Stats boxes
+      const statY = 430, boxW = 150, boxSpacing = 22;
       const startX = W / 2 - (boxW * 2 + boxSpacing * 1.5);
-      const time = window.SCT_elapsed ? fmtT(window.SCT_elapsed()) : '—';
-      const accuracy = quizAsked > 0 ? Math.round(quizCorrect / quizAsked * 100) + '%' : '—';
+      const time = window.SCT_elapsed ? fmtT(window.SCT_elapsed()) : '--';
       const statData = [
         { lbl: 'ĐIỂM SỐ', val: score.toString(), col: '#00A3E0', bg: '#E6F7FF' },
         { lbl: 'SỐ SAO', val: starsTotal + '/' + LEVELS.length * 3, col: '#F4A261', bg: '#FFF5EB' },
@@ -1654,30 +3885,31 @@
       statData.forEach((st, i) => {
         const x = startX + i * (boxW + boxSpacing);
         c.fillStyle = st.bg; c.strokeStyle = st.col; c.lineWidth = 2.5;
-        roundRect(c, x, statY, boxW, 86, 16); c.fill(); c.stroke();
-        c.fillStyle = '#4A5B6C'; c.font = '800 14px "Nunito", "Be Vietnam Pro", sans-serif';
-        c.fillText(st.lbl, x + boxW / 2, statY + 28);
-        c.fillStyle = st.col; c.font = '900 32px "Nunito", "Be Vietnam Pro", sans-serif';
-        c.fillText(st.val, x + boxW / 2, statY + 68);
+        roundRect(c, x, statY, boxW, 80, 14); c.fill(); c.stroke();
+        c.fillStyle = '#4A5B6C'; c.font = '800 13px "Nunito", sans-serif';
+        c.fillText(st.lbl, x + boxW / 2, statY + 26);
+        c.fillStyle = st.col; c.font = '900 28px "Nunito", sans-serif';
+        c.fillText(st.val, x + boxW / 2, statY + 62);
       });
 
-      // Câu trích dẫn
+      // Quote
       const quotes = [
         '"Giá trị tối ưu luôn đợi bạn ở một đỉnh của miền nghiệm."',
         '"Nông trại phát triển nhờ tính toán và tư duy logic."',
-        '"Toán học giúp mỗi quyết định gieo trồng đều mang lại quả ngọt."',
-        '"Mỗi bài toán tối ưu là một cánh cửa dẫn đến mùa màng bội thu."'
+        '"Toán học giúp mọi quyết định gieo trồng đều mang lại quả ngọt."',
+        '"Mỗi bài toán tối ưu là một cánh cửa dẫn đến mùa màng bội thu."',
+        '"Nghề nông là nghề của khoa học và sự kiên nhẫn."'
       ];
-      c.font = 'italic 500 16px "Nunito", "Be Vietnam Pro", sans-serif';
+      c.font = '600 14px "Nunito", sans-serif';
       c.fillStyle = '#6C757D'; c.textAlign = 'left';
-      c.fillText(quotes[Math.floor(Math.random() * quotes.length)], 65, 575);
+      c.fillText(quotes[Math.floor(Math.random() * quotes.length)], 65, 572);
 
-      // Ngày + con dấu gỗ/xanh
       const today = new Date();
       const dateStr = `Ngày ${today.getDate()} tháng ${today.getMonth() + 1} năm ${today.getFullYear()}`;
-      c.font = '800 18px "Nunito", "Be Vietnam Pro", sans-serif'; c.fillStyle = '#2B2D42'; c.textAlign = 'right';
-      c.fillText(dateStr, W - 80, 575);
+      c.font = '800 16px "Nunito", sans-serif'; c.fillStyle = '#2B2D42'; c.textAlign = 'right';
+      c.fillText(dateStr, W - 75, 572);
 
+      // Seals
       c.fillStyle = '#8B5A2B';
       c.beginPath(); c.arc(W - 80, 605, 26, 0, Math.PI * 2); c.fill();
       c.fillStyle = '#FFF';
@@ -1685,16 +3917,20 @@
       c.strokeStyle = '#2E8B57'; c.lineWidth = 2;
       c.beginPath(); c.arc(W - 80, 605, 22, 0, Math.PI * 2); c.stroke();
 
-      // Hiển thị
+      c.fillStyle = '#2E8B57';
+      c.beginPath(); c.arc(80, 605, 22, 0, Math.PI * 2); c.fill();
+      c.font = '18px sans-serif';
+      c.textAlign = 'center';
+      c.fillText('\u{1F33E}', 80, 611);
+
       $('certOverlay').classList.add('show');
     }
 
-    /* ===== Kết thúc game — kiểm tra ≥ 80% ===== */
+    /* ===== Certificate Check (>=80%) ===== */
     function checkCertificate() {
       const cleared = SCT_done.size;
       const pct = Math.round(cleared / LEVELS.length * 100);
       if (pct >= 80) {
-        // Đủ điều kiện → hiển thị nhập tên
         setTimeout(() => {
           SFX.celebrate();
           confetti(true);
@@ -1707,45 +3943,43 @@
 
     $('btnClaimCert').addEventListener('click', () => {
       const name = $('studentName').value.trim() || 'Nhà Nông Ẩn Danh';
+      currentPlayerName = name;
       $('nameOverlay').classList.remove('show');
       generateCertificate(name);
       confetti(true);
-      // Lưu best score
-      try {
-        let best = localStorage.getItem('ntt_best_score') || 0;
-        if (score > best) {
-          localStorage.setItem('ntt_best_score', score);
-          localStorage.setItem('ntt_best_name', name);
-        }
-      } catch (e) { }
+      saveLeaderboard(name, score, starsTotal);
+      renderLeaderboard();
     });
 
     $('btnDownloadCert').addEventListener('click', () => {
       const cc = document.getElementById('certCanvas');
       const link = document.createElement('a');
-      link.download = 'Chung_Nhan_Nong_Trai_Toi_Uu.png';
+      link.download = 'Chứng_Nhận_Nông_Trại_Tối_Ưu.png';
       link.href = cc.toDataURL('image/png');
       link.click();
     });
 
     function finalToast() {
-      const time = window.SCT_elapsed ? fmtT(window.SCT_elapsed()) : '—';
+      const time = window.SCT_elapsed ? fmtT(window.SCT_elapsed()) : '--';
       const cleared = SCT_done.size;
       const pct = Math.round(cleared / LEVELS.length * 100);
       const certMsg = pct >= 80
-        ? '🏅 Bạn đủ điều kiện nhận Giấy Chứng Nhận!'
+        ? '\u{1F3C5} Bạn đủ điều kiện nhận Giấy Chứng Nhận!'
         : `Bạn cần đạt ít nhất ${Math.ceil(LEVELS.length * 0.8)} vụ để nhận Giấy Chứng Nhận.`;
-      showToast(true, '🏆', 'Hoàn thành cả ' + LEVELS.length + ' vụ!',
-        `${score} điểm · ${starsTotal}/${LEVELS.length * 3} ⭐ · củng cố đúng ${quizCorrect}/${quizAsked} · thời gian ${time}.<br>${certMsg}`,
-        pct >= 80 ? 'Nhận Chứng Nhận 🏆' : 'Chơi lại từ đầu', 'next',
+
+      checkAchievement('all');
+
+      showToast(true, '\u{1F3C6}', 'Hoàn thành cả ' + LEVELS.length + ' vụ!',
+        `${score} điểm \u00B7 ${starsTotal}/${LEVELS.length * 3} \u2B50 \u00B7 củng cố đúng ${quizCorrect}/${quizAsked} \u00B7 combo cao nhất x${maxCombo} \u00B7 thời gian ${time}.<br>${certMsg}`,
+        pct >= 80 ? 'Nhận Chứng Nhận \u{1F3C6}' : 'Chơi lại từ đầu', 'next',
         () => {
           if (pct >= 80) {
             checkCertificate();
           } else {
-            score = 0; $('score').textContent = 0; setLevel(0);
+            score = 0; $('score').textContent = 0; setLevel(0, true);
           }
         },
-        pct >= 80 ? { label: 'Chơi lại từ đầu', action: () => { score = 0; $('score').textContent = 0; setLevel(0); } } : null
+        pct >= 80 ? { label: 'Chơi lại từ đầu', action: () => { score = 0; $('score').textContent = 0; setLevel(0, true); } } : null
       );
     }
 
@@ -1762,7 +3996,7 @@
       }
       const f = Fval(P, cur);
       const ratio = L.min ? cur.optF / f : f / cur.optF;
-      let s = stars(ratio);
+      let s = starsFromRatio(ratio);
       if (s === 0) {
         SFX.fail();
         showToast(false, '', L.min ? 'Chi phí còn cao!' : 'Lãi còn thấp!',
@@ -1772,27 +4006,32 @@
         return;
       }
       if (hintUsed) s = Math.min(s, 2);
-      if (!clearedOnce.has(lvlIdx)) { score += 100; $('score').textContent = score; clearedOnce.add(lvlIdx); }
+      if (!hintUsed) noHintLevels.add(lvlIdx);
+      if (!clearedOnce.has(lvlIdx)) { score += 100; $('score').textContent = score; clearedOnce.add(lvlIdx); checkAchievement('first'); }
       levelStars[lvlIdx] = Math.max(s, levelStars[lvlIdx] || 0);
       starsTotal = Object.values(levelStars).reduce((a, b) => a + b, 0);
       $('stars').textContent = starsTotal;
       SCT_done.add(lvlIdx); SCTreport(); renderProgress();
       SFX.win(); confetti(false);
 
+      if (s === 3) checkAchievement('star');
+      if (SCT_done.size >= Math.ceil(LEVELS.length / 2)) checkAchievement('half');
+      if (noHintLevels.size >= 3) checkAchievement('nohint');
+
       const last = lvlIdx === LEVELS.length - 1;
       const goNext = () => { last ? finalToast() : setLevel(lvlIdx + 1); };
-      const mainLabel = quizDone.has(lvlIdx) ? (last ? 'Xem tổng kết 🏆' : 'Vụ tiếp theo') : 'Câu hỏi củng cố ✏️';
+      const mainLabel = quizDone.has(lvlIdx) ? (last ? 'Xem tổng kết \u{1F3C6}' : 'Vụ tiếp theo') : 'Câu hỏi củng cố \u270F\uFE0F';
       const mainAction = quizDone.has(lvlIdx) ? goNext
-        : () => { quizDone.add(lvlIdx); showQuiz(goNext, last ? 'Xem tổng kết 🏆' : 'Vụ tiếp theo'); };
+        : () => { quizDone.add(lvlIdx); showQuiz(goNext, last ? 'Xem tổng kết \u{1F3C6}' : 'Vụ tiếp theo'); };
       const optTxt = s < 3
-        ? (L.min ? `Mức thấp nhất là ${cur.optF.toFixed(0)} ${L.fUnit} — thử lại để đạt ★★★.`
-          : `Vẫn còn cách mức tối đa — thử lại để đạt ★★★.`)
+        ? (L.min ? `Mức thấp nhất là ${cur.optF.toFixed(0)} ${L.fUnit} — thử lại để đạt \u2605\u2605\u2605.`
+          : `Vẫn còn cách mức tối đa — thử lại để đạt \u2605\u2605\u2605.`)
         : (L.min ? 'Đúng phương án chi phí thấp nhất!' : 'Đúng đỉnh cho lãi cao nhất!');
-      showToast(true, '★'.repeat(s) + '☆'.repeat(3 - s),
+      showToast(true, '\u2605'.repeat(s) + '\u2606'.repeat(3 - s),
         s === 3 ? 'Tối ưu hoàn hảo!' : (L.min ? 'Đơn hàng ổn!' : 'Thu hoạch tốt!'),
         `${L.min ? 'Chi phí' : 'Bạn đạt'} ${f.toFixed(0)} ${L.fUnit}${hintUsed ? ' (có dùng gợi ý)' : ''}. ${optTxt}`,
         mainLabel, 'next', mainAction,
-        s < 3 ? { label: 'Làm lại vụ này (săn ★★★)', action: () => setLevel(lvlIdx) } : null);
+        s < 3 ? { label: 'Làm lại vụ này (săn \u2605\u2605\u2605)', action: () => setLevel(lvlIdx, true) } : null);
     }
 
     function showToast(ok, starStr, title, msg, btn, cls, act, second) {
@@ -1810,7 +4049,7 @@
       else b2.style.display = 'none';
     }
 
-    /* ===== Tương tác kéo điểm ===== */
+    /* ===== Drag Interaction ===== */
     function setFromEvent(e) {
       const r = cv.getBoundingClientRect();
       const cxp = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
@@ -1830,7 +4069,7 @@
     cv.addEventListener('pointerup', () => dragging = false);
     cv.addEventListener('pointercancel', () => dragging = false);
 
-    // điều khiển bằng bàn phím
+    // Keyboard controls
     window.addEventListener('keydown', e => {
       if ($('toast').classList.contains('show') || $('quiz').classList.contains('show')) return;
       const step = 0.5; let moved = true;
@@ -1853,24 +4092,25 @@
     $('resetBtn').addEventListener('click', () => {
       score = 0; $('score').textContent = 0;
       starsTotal = 0; $('stars').textContent = 0; levelStars = {};
+      comboStreak = 0; maxCombo = 0; noHintLevels.clear();
       clearedOnce.clear(); SCT_done.clear(); quizDone.clear(); quizCorrect = 0; quizAsked = 0;
-      $('toast').className = 'toast'; $('quiz').classList.remove('show'); setLevel(0);
+      $('toast').className = 'toast'; $('quiz').classList.remove('show'); setLevel(0, true);
     });
     window.addEventListener('resize', () => { fit(); render(); });
 
     $('lvlMax').textContent = LEVELS.length;
     $('starsMax').textContent = LEVELS.length * 3;
-    setLevel(0);
+    setLevel(0, true);
   </script>
 
   <script>
-    /* ==== Đồng hồ đo thời gian chơi ==== */
+    /* ==== Timer ==== */
     (function () {
       var sec = 0, started = false, running = false;
       function fmt(s) { var m = Math.floor(s / 60); return m + ':' + String(s % 60).padStart(2, '0'); }
       var chip = document.createElement('span');
       chip.className = 'sct-timer';
-      chip.innerHTML = '⏱ <b id="sctClock">0:00</b>';
+      chip.innerHTML = '\u23F1 <b id="sctClock">0:00</b>';
       function mount() {
         var host = document.querySelector('.hud') || document.querySelector('.top');
         if (host) { host.appendChild(chip); }
@@ -1886,6 +4126,48 @@
       window.SCT_elapsed = function () { return sec; };
       if (document.readyState !== 'loading') mount();
       else document.addEventListener('DOMContentLoaded', mount);
+    })();
+  </script>
+
+  <!-- QR Code library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    /* ==== QR Code Generator ==== */
+    (function () {
+      var GAME_URL = 'https://thluongm00803-code.github.io/toan-games/nong-trai/';
+      var canvas = document.getElementById('qrCanvas');
+      if (!canvas || typeof QRCode === 'undefined') return;
+
+      var ctx2 = canvas.getContext('2d');
+      ctx2.clearRect(0, 0, canvas.width, canvas.height);
+
+      var tmp = document.createElement('div');
+      tmp.style.display = 'none';
+      document.body.appendChild(tmp);
+
+      new QRCode(tmp, {
+        text: GAME_URL,
+        width: 148,
+        height: 148,
+        colorDark: '#15784E',
+        colorLight: '#F7FAF8',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
+      setTimeout(function () {
+        var qrImg = tmp.querySelector('canvas') || tmp.querySelector('img');
+        if (qrImg) {
+          var W = canvas.width, H = canvas.height;
+          if (qrImg.tagName === 'CANVAS') {
+            ctx2.drawImage(qrImg, 0, 0, W, H);
+          } else {
+            var img = new Image();
+            img.onload = function () { ctx2.drawImage(img, 0, 0, W, H); };
+            img.src = qrImg.src;
+          }
+        }
+        tmp.remove();
+      }, 300);
     })();
   </script>
 </body>
