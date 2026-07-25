@@ -595,7 +595,24 @@
       font-family: "Baloo 2", sans-serif;
       font-weight: 600;
       font-size: 13px;
-      z-index: 10
+      z-index: 10;
+      /* prevent chips from wrapping over canvas on small screens */
+      max-width: calc(100% - 20px);
+    }
+
+    /* Mobile: compact BGM chip so HUD fits in one row */
+    @media (max-width: 560px) {
+      #bgmLabel {
+        display: none;
+      }
+
+      .vol-slider {
+        display: none;
+      }
+
+      .bgm-chip {
+        padding: 4px 8px;
+      }
     }
 
     .chip {
@@ -2266,7 +2283,8 @@
 <body>
 
   <!-- BGM Audio -->
-  <audio id="bgmAudio" src="music-nong-trai.mp3" preload="auto" loop style="display:none"></audio>
+  <audio id="bgmAudio" src="music-nong-trai.mp3" preload="auto" loop playsinline webkit-playsinline
+    style="display:none"></audio>
 
   <!-- Particle Background -->
   <div class="particles-bg" id="particlesBg"></div>
@@ -2694,12 +2712,12 @@
       });
 
       function start() {
-        audio.play().then(() => {
-          playing = true;
-        }).catch(() => {
-          // Autoplay blocked — wait for user gesture
-          playing = false;
-        });
+        // Return the promise so callers can react to success/failure
+        const p = audio.play();
+        if (p !== undefined) {
+          p.then(() => { playing = true; }).catch(() => { playing = false; });
+        }
+        return p || Promise.resolve();
       }
 
       function stop() {
@@ -2742,23 +2760,32 @@
       e.stopPropagation();
     });
 
-    // Auto-start BGM on first user interaction
+    // Auto-start BGM on first user interaction (mobile-safe: waits for promise)
     (function () {
       let started = false;
-      function tryStart() {
-        if (started) return;
-        started = true;
-        BGM.start();
-        if (BGM.isPlaying()) {
-          $('bgmLabel').textContent = 'Tắt nhạc';
-          $('bgmBtn').classList.add('playing');
-        }
+      function removeListeners() {
         ['pointerdown', 'keydown', 'touchstart'].forEach(ev =>
           document.removeEventListener(ev, tryStart)
         );
       }
+      function tryStart() {
+        if (started) return;
+        BGM.start().then(() => {
+          if (BGM.isPlaying()) {
+            started = true;
+            $('bgmLabel').textContent = 'Tắt nhạc';
+            $('bgmBtn').classList.add('playing');
+            removeListeners();
+          }
+          // If isPlaying() still false, autoplay was blocked — keep listeners
+          // so next user gesture retries
+        }).catch(() => {
+          // Blocked — keep listeners active for retry
+        });
+      }
+      // No once:true — retry until play succeeds
       ['pointerdown', 'keydown', 'touchstart'].forEach(ev =>
-        document.addEventListener(ev, tryStart, { once: true })
+        document.addEventListener(ev, tryStart)
       );
     })();
 
