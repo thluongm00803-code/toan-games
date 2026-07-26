@@ -586,34 +586,44 @@
     }
 
     .hud {
-      position: absolute;
-      top: 10px;
-      left: 10px;
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: nowrap;
       font-family: "Baloo 2", sans-serif;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 12px;
       z-index: 10;
-      /* prevent chips from wrapping over canvas on small screens */
-      max-width: calc(100% - 20px);
+      flex: 1 1 auto;
+      min-width: 0;
+      justify-content: center;
     }
 
-    /* Mobile: compact BGM chip so HUD fits in one row */
-    @media (max-width: 560px) {
-      #bgmLabel {
-        display: none;
-      }
-
-      .vol-slider {
-        display: none;
-      }
-
-      .bgm-chip {
-        padding: 4px 8px;
-      }
+    .hud .chip {
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding: 4px 9px;
     }
+
+    /* Hide vol-slider by default; reveal on hover */
+    .hud .vol-slider {
+      width: 0;
+      opacity: 0;
+      padding: 0;
+      margin: 0;
+      pointer-events: none;
+      transition: width .2s, opacity .2s, margin .2s;
+    }
+
+    .hud .bgm-chip:hover .vol-slider,
+    .hud .bgm-chip:focus-within .vol-slider {
+      width: 46px;
+      opacity: 1;
+      margin-left: 4px;
+      pointer-events: auto;
+    }
+
+
 
     .chip {
       background: rgba(255, 255, 255, .92);
@@ -2001,35 +2011,47 @@
       }
     }
 
-    /* ==== Ribbon ==== */
+    /* ==== Header ==== */
     :root {
       --gradec: #2A3B8F;
       --grade2: #FF7A1A
     }
 
-    .sct-ribbon {
+    /* Main row: h1 + HUD + QR on one line */
+    .header-main-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin: 0 0 16px;
-      flex-wrap: wrap
+      gap: 12px;
+      flex-wrap: nowrap;
+      margin-bottom: 8px;
     }
 
-    /* ==== Title row: h1 left + QR right ==== */
-    .title-qr-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 6px;
+    .header-main-row h1 {
+      flex: 0 1 auto;
+      white-space: nowrap;
     }
 
-    .title-qr-left {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+    /* Tablet: hide BGM label to save space */
+    @media (max-width: 900px) {
+      #bgmLabel {
+        display: none;
+      }
+
+      .bgm-chip {
+        padding: 4px 8px;
+      }
+    }
+
+    /* Narrow: allow header row to wrap so HUD gets full width */
+    @media (max-width: 960px) {
+      .header-main-row {
+        flex-wrap: wrap;
+      }
+
+      .hud {
+        flex-basis: 100%;
+        justify-content: flex-start;
+      }
     }
 
     .title-qr-right {
@@ -2037,10 +2059,10 @@
       background: #fff;
       border: 1.5px solid #C7EAD4;
       border-radius: 12px;
-      padding: 8px 12px;
+      padding: 6px 10px;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       box-shadow: 0 3px 10px rgba(31, 163, 107, .1);
       transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -2051,16 +2073,16 @@
     }
 
     .qr-label {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--muted);
       font-weight: 700;
-      line-height: 1.55;
+      line-height: 1.45;
     }
 
     .qr-label a {
       color: var(--emerald-d);
       text-decoration: none;
-      font-size: 10px;
+      font-size: 9px;
       word-break: break-all;
     }
 
@@ -2068,48 +2090,48 @@
       text-decoration: underline;
     }
 
-    .sct-ribbon::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      height: 5px;
-      background: linear-gradient(90deg, var(--gradec), var(--emerald), var(--grade2));
-      z-index: 5
+    /* Sub row: Home icon + subtitle text */
+    .sub-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
     }
 
-    .sct-back {
-      font: 600 13px/1 "Baloo 2", system-ui, sans-serif;
-      color: var(--gradec);
-      text-decoration: none;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 9px 15px;
-      transition: .15s;
-      white-space: nowrap;
-      min-height: 40px;
+    .home-icon-btn {
       display: inline-flex;
-      align-items: center
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      background: #fff;
+      color: var(--gradec);
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      font-size: 15px;
+      text-decoration: none;
+      transition: .15s;
     }
 
-    .sct-back:hover {
+    .home-icon-btn:hover {
       border-color: var(--gradec);
-      transform: translateX(-2px)
-    }
-
-    .sct-tag {
-      font: 700 12px/1 "Baloo 2", system-ui, sans-serif;
-      letter-spacing: .6px;
-      color: #fff;
       background: var(--gradec);
-      border-radius: 999px;
-      padding: 8px 15px;
-      white-space: nowrap
+      color: #fff;
+      transform: translateY(-2px);
     }
 
-    .sct-timer {
+    /* Gradient line spanning full container width */
+    .header-gradient-line {
+      height: 4px;
+      width: 100%;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      background: linear-gradient(90deg, var(--gradec), var(--emerald), var(--grade2));
+    }
+
+        .sct-timer {
       font: 600 13px/1 "Baloo 2", system-ui, sans-serif !important;
       background: rgba(255, 255, 255, .94);
       border: 1px solid var(--line);
@@ -2302,19 +2324,25 @@
   </div>
 
   <div class="wrap">
-    <div class="sct-ribbon">
-      <a class="sct-back" href="../">← Về Sân Chơi Toán Học</a>
-      <span class="sct-tag">LỚP 10 · TRỌNG TÂM ĐỀ TÀI</span>
-    </div>
+    <!-- Header: Title + HUD + QR on one row -->
+    <div class="header-main-row animate-in">
+      <h1><span class="emoji-bounce">🌾</span> Nông Trại Tối Ưu</h1>
 
-    <!-- Title row: h1 left + QR right (same line) -->
-    <div class="title-qr-row animate-in">
-      <div class="title-qr-left">
-        <h1><span class="emoji-bounce">🌾</span> Nông Trại Tối Ưu</h1>
-        <span class="sub">Toán 10 · Hệ bất phương trình bậc nhất hai ẩn &amp; bài toán tối ưu</span>
-      </div>
+      <div class="hud">
+        <span class="chip">🌾 Vụ <b id="lvl">1</b>/<span id="lvlMax">10</span></span>
+        <span class="chip">🏆 Điểm <b id="score">0</b></span>
+        <span class="chip">⭐ <b id="stars">0</b>/<span id="starsMax">30</span></span>
+        <button class="chip" id="sndBtn" title="Bật/tắt âm thanh">🔊</button>
+        <button class="chip bgm-chip" id="bgmBtn" title="Bật/tắt nhạc nền">
+          <span class="bgm-note">🎵</span>
+          <span id="bgmLabel">Nhạc nền</span>
+          <input type="range" class="vol-slider" id="volSlider" min="0" max="1" step="0.05" value="0.5"
+            title="Âm lượng">
+        </button>
+        </div>
+
       <div class="title-qr-right">
-        <canvas id="qrCanvas" width="72" height="72" style="border-radius:6px;display:block;flex-shrink:0;"></canvas>
+        <canvas id="qrCanvas" width="64" height="64" style="border-radius:6px;display:block;flex-shrink:0;"></canvas>
         <div class="qr-label">
           📱 Quét mã QR để chơi<br>
           <a href="https://thluongm00803-code.github.io/toan-games/nong-trai/" target="_blank" rel="noopener">
@@ -2323,7 +2351,13 @@
         </div>
       </div>
     </div>
-    </header>
+
+    <div class="sub-row animate-in">
+      <a class="home-icon-btn" href="../" title="Về Sân Chơi Toán Học" aria-label="Về Sân Chơi Toán Học">🏠</a>
+      <span class="sub">Toán 10 · Hệ bất phương trình bậc nhất hai ẩn và bài toán tối ưu</span>
+    </div>
+
+    <div class="header-gradient-line"></div>
 
     <!-- Achievements -->
     <div class="achievements-bar animate-in-delay-1" id="achievementsBar">
@@ -2350,18 +2384,6 @@
 
     <div class="game-layout">
       <div class="stage">
-        <div class="hud">
-          <span class="chip">Vụ <b id="lvl">1</b>/<span id="lvlMax">10</span></span>
-          <span class="chip">Điểm <b id="score">0</b></span>
-          <span class="chip">⭐ <b id="stars">0</b>/<span id="starsMax">30</span></span>
-          <button class="chip" id="sndBtn" title="Bật/tắt âm thanh">🔊</button>
-          <button class="chip bgm-chip" id="bgmBtn" title="Bật/tắt nhạc nền">
-            <span class="bgm-note">🎵</span>
-            <span id="bgmLabel">Nhạc nền</span>
-            <input type="range" class="vol-slider" id="volSlider" min="0" max="1" step="0.05" value="0.5"
-              title="Âm lượng">
-          </button>
-        </div>
         <canvas id="cv" width="900" height="600" role="img"
           aria-label="Đồng ruộng: miền nghiệm của hệ bất phương trình"></canvas>
         <div class="toast" id="toast">
@@ -2396,7 +2418,7 @@
           <div class="actions">
             <button class="harvest" id="harvestBtn">Thu hoạch! 🌾</button>
             <button class="ghint" id="hintBtn">Gợi ý 💡</button>
-            <button class="reset" id="resetBtn">Chơi lại</button>
+            <button class="reset" id="resetBtn">Chơi lại 🔄</button>
           </div>
 
           <hr class="divider">
