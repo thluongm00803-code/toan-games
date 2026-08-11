@@ -1462,9 +1462,13 @@
     /* small screens tuning */
     @media (max-width: 560px) {
       .brand h1 { font-size: 21px; }
-      .wrap { padding: 12px 12px 34px; }
+      .wrap { padding: 12px 8px 34px; }
       .hud { justify-content: flex-start; }
       .ctrl-row { flex-wrap: wrap; justify-content: flex-start; }
+      .stage { padding: 8px 8px 12px; }
+      .canvas-box { border-radius: 12px; touch-action: none; }
+      /* Khung chơi to hơn, dễ thao tác trên điện thoại */
+      #cv { cursor: default; }
     }
     @media (max-width: 430px) {
       .vol { width: 60px; }
@@ -2907,7 +2911,13 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       dpr = window.devicePixelRatio || 1;
       const box = cv.parentElement.getBoundingClientRect();
       Wd = Math.max(280, box.width);
-      Hd = Wd * 620 / 900;
+      const mobile = window.innerWidth <= 760;
+      if (mobile) {
+        // Điện thoại: khung vuông (giới hạn theo chiều cao màn) → ô lưới TO, dễ kéo phi thuyền
+        Hd = Math.min(Wd, Math.max(300, (window.innerHeight || 700) * 0.60));
+      } else {
+        Hd = Wd * 620 / 900;
+      }
       cv.style.width = Wd + 'px';
       cv.style.height = Hd + 'px';
       cv.width = Math.round(Wd * dpr);
@@ -2916,7 +2926,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     }
 
     function makeTransform(view) {
-      const pad = 42;
+      const pad = window.innerWidth <= 760 ? 26 : 42;
       const sx = (Wd - 2 * pad) / (view.xmax - view.xmin);
       const sy = (Hd - 2 * pad) / (view.ymax - view.ymin);
       const s = Math.min(sx, sy);
@@ -5332,7 +5342,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       }
       // Chơi lại từ Màn 1: xoá tiến trình → tải lại → hiện màn giới thiệu
       { const fb = $('freshBtn'); if (fb) fb.addEventListener('click', () => { try { localStorage.removeItem(SAVE_KEY); } catch (e) { } location.reload(); }); }
-      window.addEventListener('resize', () => { if (LEVELS[state.lvl] && LEVELS[state.lvl].mode !== 'worksheet') render(); });
+      const relayout = () => { if (LEVELS[state.lvl] && LEVELS[state.lvl].mode !== 'worksheet') render(); };
+      window.addEventListener('resize', relayout);
+      window.addEventListener('orientationchange', () => setTimeout(relayout, 250));
       // expose for testing
       window.__game = {
         LEVELS, state, generateWorksheet, gradeWorksheet: () => gradeWorksheet(),
