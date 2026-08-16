@@ -1720,7 +1720,7 @@
 
             /* Thu gọn bảng thông số để chừa không gian lớn cho khung chơi */
             .eq-display {
-                padding: 7px;
+                padding: 6px;
             }
 
             .eq-row {
@@ -1729,33 +1729,81 @@
             }
 
             .live-info {
-                gap: 6px;
+                gap: 5px;
             }
 
             .li-cell {
-                padding: 4px 8px;
+                padding: 3px 8px;
                 border-radius: 8px;
             }
 
             .li-cell .k {
-                font-size: 9px;
+                font-size: 8.5px;
             }
 
             .li-cell .v {
-                font-size: 13px;
+                font-size: 12.5px;
             }
 
             .panel {
-                gap: 9px;
+                padding: 10px;
+                gap: 8px;
             }
 
-            .slider-block .lbl,
+            .controls {
+                gap: 7px;
+            }
+
+            .ctrl-group {
+                gap: 1px;
+            }
+
             .ctrl-label {
                 font-size: 12px;
             }
 
+            .ctrl-val {
+                font-size: 14px;
+            }
+
             input[type=range] {
-                height: 26px;
+                height: 20px;
+            }
+
+            input[type=range]::-webkit-slider-thumb {
+                width: 22px;
+                height: 22px;
+            }
+
+            input[type=range]::-moz-range-thumb {
+                width: 22px;
+                height: 22px;
+            }
+
+            .btn-fire {
+                padding: 10px;
+                font-size: 16px;
+                min-height: 44px;
+                box-shadow: 0 3px 0 var(--fire-d);
+            }
+
+            .aim-bar-wrap {
+                padding: 6px 9px;
+            }
+
+            .aim-bar-head {
+                font-size: 10.5px;
+                margin-bottom: 4px;
+            }
+
+            .aim-bar-bg {
+                height: 8px;
+            }
+
+            .live-panel>.hint-tip,
+            .hint-tip {
+                font-size: 11px;
+                padding: 5px 8px;
             }
 
             #zoomHint {
@@ -3470,7 +3518,7 @@
             <div class="canvas-container">
                 <canvas id="gameCanvas" width="640" height="440"></canvas>
                 <button id="btnZoomReset" title="Đặt lại parabol về mặc định" aria-label="Đặt lại parabol">⟲</button>
-                <span id="zoomHint">✥ Rê parabol để di chuyển · chụm 2 ngón để đổi độ mở</span>
+                <span id="zoomHint">🤏 Chụm/xoè 2 ngón trên parabol để đổi độ mở (hệ số a)</span>
             </div>
 
             <div class="panel">
@@ -4586,9 +4634,13 @@
             cssW = cv.clientWidth || 640;
             const baseH = cssW * (440 / 640);
             const cont = cv.parentElement;
-            // lấp đầy chiều cao khung (bỏ khoảng trống) + phóng to để dễ quan sát; giới hạn tỉ lệ ≤ 0.94 tránh méo
-            let availH = cont ? (cont.clientHeight - 20) : 0;
-            cssH = Math.round(Math.max(baseH, Math.min(availH || baseH, cssW * 1.06)));
+            if (innerWidth < 860) {
+                // Điện thoại: giới hạn chiều cao khung chơi để Bảng điều khiển + nút Khai hoả cùng nằm trong 1 màn hình
+                cssH = Math.round(Math.max(cssW * 0.42, Math.min(cssW * 0.58, innerHeight * 0.33)));
+            } else {
+                let availH = cont ? (cont.clientHeight - 20) : 0;
+                cssH = Math.round(Math.max(baseH, Math.min(availH || baseH, cssW * 1.06)));
+            }
             cv.style.height = cssH + 'px';
             const dpr = window.devicePixelRatio || 1;
             cv.width = Math.round(cssW * dpr);
@@ -5150,39 +5202,21 @@
                 handleIdentifyClick(px, py);
             }
         });
-        // ===== THAO TÁC PARABOL bằng ngón tay (khung/hệ trục cố định) =====
-        let cvDragged = false, gActive = false, gMode = '', gLastX = 0, gLastY = 0, gD0 = 0, gA0 = 0, gVx = 0, gVy = 0;
+        // ===== ĐIỀU KHIỂN ĐỘ MỞ PARABOL bằng ngón tay (khung/hệ trục cố định; KHÔNG rê) =====
+        let cvDragged = false, gActive = false, gD0 = 0, gA0 = 0, gVx = 0, gVy = 0;
         const touchDist = ts => Math.hypot(ts[0].clientX - ts[1].clientX, ts[0].clientY - ts[1].clientY);
         cv.addEventListener('touchstart', e => {
             if (state.isPlaying || !isManipMode()) return;
-            if (e.touches.length === 1) { gActive = true; gMode = 'drag'; gLastX = e.touches[0].clientX; gLastY = e.touches[0].clientY; cvDragged = false; }
-            else if (e.touches.length === 2) { gActive = true; gMode = 'pinch'; gD0 = touchDist(e.touches) || 1; gA0 = state.a; const v = vertex(); gVx = v.x; gVy = v.y; cvDragged = true; }
+            if (e.touches.length === 2) { gActive = true; gD0 = touchDist(e.touches) || 1; gA0 = state.a; const v = vertex(); gVx = v.x; gVy = v.y; cvDragged = true; }
         }, { passive: true });
         cv.addEventListener('touchmove', e => {
-            if (!gActive) return;
-            const r = cv.getBoundingClientRect(), scX = cssW / r.width, scY = cssH / r.height;
-            if (gMode === 'pinch' && e.touches.length === 2) {
-                e.preventDefault(); const d = touchDist(e.touches) || 1;
-                scaleParabola(gA0, gVx, gVy, gD0 / d);   // xoè ra → parabol rộng (|a| nhỏ); chụm → hẹp
-                cvDragged = true;
-            } else if (gMode === 'drag' && e.touches.length === 1) {
-                const dxS = (e.touches[0].clientX - gLastX) * scX, dyS = (e.touches[0].clientY - gLastY) * scY;
-                if (Math.abs(dxS) > 1.5 || Math.abs(dyS) > 1.5) {
-                    e.preventDefault(); cvDragged = true;
-                    dragParabola(dxS / sx, -dyS / sy);
-                    gLastX = e.touches[0].clientX; gLastY = e.touches[0].clientY;
-                }
-            }
+            if (!gActive || e.touches.length !== 2) return;
+            e.preventDefault(); const d = touchDist(e.touches) || 1;
+            scaleParabola(gA0, gVx, gVy, gD0 / d);   // xoè ra → parabol rộng (|a| nhỏ); chụm → hẹp
+            cvDragged = true;
         }, { passive: false });
         cv.addEventListener('touchend', e => { if (e.touches.length === 0) { gActive = false; gD0 = 0; setTimeout(() => cvDragged = false, 30); } });
-        // Chuột (máy tính): kéo giữ để di chuyển parabol, lăn để đổi độ mở
-        cv.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse' && e.button === 0 && isManipMode() && !state.isPlaying) { gActive = true; gMode = 'drag'; gLastX = e.clientX; gLastY = e.clientY; cvDragged = false; } });
-        window.addEventListener('pointermove', e => {
-            if (!gActive || gMode !== 'drag' || e.pointerType !== 'mouse') return;
-            const r = cv.getBoundingClientRect(), dxS = (e.clientX - gLastX) * (cssW / r.width), dyS = (e.clientY - gLastY) * (cssH / r.height);
-            if (Math.abs(dxS) > 1.5 || Math.abs(dyS) > 1.5) { cvDragged = true; dragParabola(dxS / sx, -dyS / sy); gLastX = e.clientX; gLastY = e.clientY; }
-        });
-        window.addEventListener('pointerup', e => { if (e.pointerType === 'mouse') { gActive = false; setTimeout(() => cvDragged = false, 20); } });
+        // Chuột (máy tính): lăn để đổi độ mở
         cv.addEventListener('wheel', e => { if (!isManipMode() || state.isPlaying) return; e.preventDefault(); const v = vertex(); scaleParabola(state.a, v.x, v.y, e.deltaY < 0 ? 1.08 : 0.926); }, { passive: false });
         // nút ⟲ đặt lại parabol về mặc định
         const zr = $('btnZoomReset'); if (zr) zr.addEventListener('click', resetParabola);
@@ -6692,7 +6726,7 @@
 
         // ===== Cầu nối cho hệ SKKN v4.0 =====
         window.__game = {
-            setLevel: setLevel, dragParabola: dragParabola, scaleParabola: scaleParabola, resetParabola: resetParabola, vertex: vertex,
+            setLevel: setLevel, scaleParabola: scaleParabola, resetParabola: resetParabola, vertex: vertex,
             generateWorksheet: generateWorksheet, realIll: realIll, graphSVG: graphSVG,
             get worksheetBest() { return worksheetBest; },
             get teacherName() { return currentName; },
