@@ -478,6 +478,52 @@
             display: block;
             border-radius: 10px;
             cursor: crosshair;
+            touch-action: none;
+        }
+
+        #btnZoomReset {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            border: 1.5px solid var(--line);
+            background: rgba(255, 255, 255, .82);
+            color: #2b3a44;
+            font-size: 17px;
+            font-weight: 900;
+            cursor: pointer;
+            z-index: 4;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .16);
+            line-height: 1;
+        }
+
+        body.theme-dark #btnZoomReset {
+            background: rgba(30, 40, 46, .82);
+            color: #E7EFE6;
+        }
+
+        #btnZoomReset:active {
+            transform: scale(.92);
+        }
+
+        #zoomHint {
+            position: absolute;
+            left: 50%;
+            bottom: 14px;
+            transform: translateX(-50%);
+            background: rgba(20, 26, 32, .72);
+            color: #fff;
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 4px 11px;
+            border-radius: 999px;
+            pointer-events: none;
+            z-index: 4;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity .3s;
         }
 
         .panel {
@@ -1670,6 +1716,51 @@
                 width: 26px;
                 height: 26px;
                 font-size: 11px;
+            }
+
+            /* Thu gọn bảng thông số để chừa không gian lớn cho khung chơi */
+            .eq-display {
+                padding: 7px;
+            }
+
+            .eq-row {
+                font-size: 15px;
+                margin: 1px 0;
+            }
+
+            .live-info {
+                gap: 6px;
+            }
+
+            .li-cell {
+                padding: 4px 8px;
+                border-radius: 8px;
+            }
+
+            .li-cell .k {
+                font-size: 9px;
+            }
+
+            .li-cell .v {
+                font-size: 13px;
+            }
+
+            .panel {
+                gap: 9px;
+            }
+
+            .slider-block .lbl,
+            .ctrl-label {
+                font-size: 12px;
+            }
+
+            input[type=range] {
+                height: 26px;
+            }
+
+            #zoomHint {
+                font-size: 9.5px;
+                bottom: 12px;
             }
         }
 
@@ -3378,6 +3469,8 @@
         <div class="stage">
             <div class="canvas-container">
                 <canvas id="gameCanvas" width="640" height="440"></canvas>
+                <button id="btnZoomReset" title="Đặt lại khung nhìn" aria-label="Đặt lại khung nhìn">⟲</button>
+                <span id="zoomHint">✥ Rê để di chuyển · chụm 2 ngón để phóng to/thu nhỏ</span>
             </div>
 
             <div class="panel">
@@ -4257,6 +4350,8 @@
                   <stop offset="0" stop-color="#F7C98B"/><stop offset="1" stop-color="#8FC7E8"/></linearGradient>
                 <linearGradient id="${id}Grd" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0" stop-color="#B78A54"/><stop offset="1" stop-color="#8B6837"/></linearGradient>
+                <linearGradient id="${id}Body" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#FF8A47"/><stop offset="1" stop-color="#DE3418"/></linearGradient>
                 <clipPath id="${id}Clip"><rect width="${w}" height="${h}" rx="12"/></clipPath>
               </defs>
               <g clip-path="url(#${id}Clip)">
@@ -4277,18 +4372,25 @@
                   <rect x="${w * .565}" y="${h * .48}" width="${w * .08}" height="${h * .04}" fill="#5A4636"/>
                 </g>
                 <!-- quỹ đạo parabol -->
-                <path d="M ${w * .12} ${h * .8} Q ${w * .45} ${h * .05} ${w * .82} ${h * .8}" fill="none" stroke="#12A8B8" stroke-width="${Math.max(2, h * .022)}" stroke-dasharray="${h * .05} ${h * .04}" opacity=".9"/>
-                <!-- khẩu pháo -->
-                <g transform="translate(${w * .1},${h * .78})">
-                  <rect x="-4" y="6" width="${w * .07}" height="${h * .1}" rx="3" fill="#39505E"/>
-                  <rect x="0" y="-2" width="${w * .12}" height="${h * .05}" rx="4" fill="#26343E" transform="rotate(-42)"/>
-                  <circle cx="2" cy="4" r="${h * .045}" fill="#39505E"/>
+                <path d="M ${w * .14} ${h * .8} Q ${w * .45} ${h * .05} ${w * .82} ${h * .8}" fill="none" stroke="#12C6D6" stroke-width="${Math.max(2, h * .022)}" stroke-dasharray="${h * .05} ${h * .04}" opacity=".95"/>
+                <!-- XE PHÁO hiện đại (đồng bộ trong game) -->
+                <g transform="translate(${w * .12},${h * .78}) scale(${h / 150})">
+                  <ellipse cx="7" cy="14" rx="26" ry="4" fill="rgba(0,0,0,.16)"/>
+                  <rect x="-20" y="4" width="40" height="11" rx="5.5" fill="#20262e"/>
+                  <circle cx="-13" cy="9.5" r="3.4" fill="#FFC833"/><circle cx="-3" cy="9.5" r="3.4" fill="#FFC833"/><circle cx="7" cy="9.5" r="3.4" fill="#FFC833"/><circle cx="17" cy="9.5" r="3.4" fill="#FFC833"/>
+                  <circle cx="-20" cy="9.5" r="4" fill="#E8901C"/><circle cx="20" cy="9.5" r="4" fill="#E8901C"/>
+                  <path d="M-19 3 L-21 -5 L-9 -10 L13 -10 L21 -3 L21 3 Z" fill="#EA5322"/>
+                  <path d="M-19 3 L-21 -5 L-9 -10 L13 -10 L21 -3 L21 3 Z" fill="url(#${id}Body)"/>
+                  <rect x="-19" y="-2" width="40" height="2.6" rx="1.3" fill="#FFD23E"/>
+                  <path d="M-11 -8 L-8 -15 L8 -15 L11 -8 Z" fill="#FF9F4E"/>
+                  <g transform="translate(0,-11) rotate(-40)"><rect x="0" y="-3.4" width="40" height="6.8" rx="3.2" fill="#5c6b78"/><rect x="34" y="-4.6" width="8" height="9.2" rx="2.4" fill="#FFD23E"/></g>
+                  <circle cx="0" cy="-11" r="3.4" fill="#fff"/>
                 </g>
                 <!-- đạn -->
-                <circle cx="${w * .45}" cy="${h * .17}" r="${Math.max(3, h * .035)}" fill="#EF6C33" stroke="#fff" stroke-width="1.5"/>
+                <circle cx="${w * .45}" cy="${h * .17}" r="${Math.max(3, h * .035)}" fill="#FF6A2A" stroke="#fff" stroke-width="1.5"/>
                 <!-- bia -->
                 <g transform="translate(${w * .82},${h * .8})">
-                  <circle r="${h * .05}" fill="#E23B4E"/><circle r="${h * .03}" fill="#fff"/><circle r="${h * .014}" fill="#E23B4E"/>
+                  <circle r="${h * .05}" fill="#fff"/><circle r="${h * .05}" fill="none" stroke="#E23B4E" stroke-width="${Math.max(1.4, h * .012)}"/><circle r="${h * .02}" fill="#E23B4E"/>
                 </g>
               </g></svg>`;
         }
@@ -4453,6 +4555,19 @@
         const cv = $('gameCanvas'), ctx = cv.getContext('2d');
         let cssW = 640, cssH = 440, uiK = 1, M = { l: 46, r: 22, t: 26, b: 40 };
         let sx = 1, sy = 1, worldY = 11;
+        const view = { zoom: 1, ox: 0, oy: 0 };   // pan/zoom cho khung chơi (điện thoại)
+        function resetView() { view.zoom = 1; view.ox = 0; view.oy = 0; }
+        function flashZoomHint() {
+            const h = document.getElementById('zoomHint'); if (!h) return;
+            if (innerWidth >= 860 && !('ontouchstart' in window)) return;
+            h.style.opacity = '1'; clearTimeout(h.__t); h.__t = setTimeout(() => { h.style.opacity = '0'; }, 3600);
+        }
+        function clampView() {
+            view.zoom = Math.max(0.7, Math.min(3.2, view.zoom));
+            const maxPan = Math.max(cssW, cssH) * (view.zoom) * 0.9;
+            view.ox = Math.max(-maxPan, Math.min(maxPan, view.ox));
+            view.oy = Math.max(-maxPan, Math.min(maxPan, view.oy));
+        }
         let bg = document.createElement('canvas'), bgc = bg.getContext('2d'), bgDirty = true;
         let bubbles = [];
         const F = n => Math.max(8, Math.round(n * uiK));
@@ -4559,9 +4674,11 @@
 
         function drawScene(ball, trail) {
             if (bgDirty) drawBackground();
+            ctx.save();
+            if (view.zoom !== 1 || view.ox || view.oy) { ctx.translate(view.ox, view.oy); ctx.scale(view.zoom, view.zoom); }
             ctx.drawImage(bg, 0, 0, cssW, cssH);
             const T = TH(), L = LEVELS[state.levelIdx], gy = toScr(0, 0).Y;
-            if (L.mode === 'worksheet') return;   // màn về đích không dùng canvas game
+            if (L.mode === 'worksheet') { ctx.restore(); return; }   // màn về đích không dùng canvas game
 
             // XE PHÁO: nòng xoay theo góc bắn (độ dốc parabol tại điểm xuất phát)
             const slope = state.form === 'vert' ? 2 * state.a * (0 - state.h) : (state.b || 0);
@@ -4784,6 +4901,7 @@
                 ctx.fillStyle = 'rgba(255,255,255,.85)';
                 ctx.beginPath(); ctx.arc(b.X - 2.5 * uiK, b.Y - 2.5 * uiK, 2 * uiK, 0, 7); ctx.fill();
             }
+            ctx.restore();
         }
         function drawStar(cx, cy, out, inn) {
             ctx.beginPath(); let rot = -Math.PI / 2; const st = Math.PI / 5;
@@ -5012,12 +5130,14 @@
             el.innerHTML = '🔍 Nhiệm vụ ' + (idStep + 1) + '/' + idTasks.length + ': Nhấp vào <b>' + idTasks[idStep].label + '</b> trên đồ thị.';
         }
 
+        function screenToBase(px, py) { return { x: (px - view.ox) / view.zoom, y: (py - view.oy) / view.zoom }; }
         cv.addEventListener('click', e => {
             const L = LEVELS[state.levelIdx];
-            if (state.isPlaying) return;
+            if (state.isPlaying || cvDragged) return;
             const rect = cv.getBoundingClientRect();
-            const px = (e.clientX - rect.left) * (cssW / rect.width);
-            const py = (e.clientY - rect.top) * (cssH / rect.height);
+            const rawX = (e.clientX - rect.left) * (cssW / rect.width);
+            const rawY = (e.clientY - rect.top) * (cssH / rect.height);
+            const b = screenToBase(rawX, rawY), px = b.x, py = b.y;
             if (L.mode === 'inverse') {
                 let x = Math.round(toWldX(px) * 2) / 2;
                 state.basketX = Math.max(0, Math.min(WORLD_X, x));
@@ -5026,6 +5146,36 @@
                 handleIdentifyClick(px, py);
             }
         });
+        // ===== RÊ / KÉO & PHÓNG TO–THU NHỎ khung chơi (cảm ứng + chuột) =====
+        let cvDragged = false, panActive = false, panSX = 0, panSY = 0, panOX = 0, panOY = 0;
+        let pinchD0 = 0, pinchZ0 = 1, pinchCx = 0, pinchCy = 0, pinchOX0 = 0, pinchOY0 = 0;
+        const touchMid = ts => { const r = cv.getBoundingClientRect(), sc = cssW / r.width; return { x: ((ts[0].clientX + ts[1].clientX) / 2 - r.left) * sc, y: ((ts[0].clientY + ts[1].clientY) / 2 - r.top) * (cssH / r.height) }; };
+        const touchDist = ts => Math.hypot(ts[0].clientX - ts[1].clientX, ts[0].clientY - ts[1].clientY);
+        cv.addEventListener('touchstart', e => {
+            if (e.touches.length === 1) { panActive = true; cvDragged = false; panSX = e.touches[0].clientX; panSY = e.touches[0].clientY; panOX = view.ox; panOY = view.oy; }
+            else if (e.touches.length === 2) { panActive = false; pinchD0 = touchDist(e.touches); pinchZ0 = view.zoom; const m = touchMid(e.touches); pinchCx = m.x; pinchCy = m.y; pinchOX0 = view.ox; pinchOY0 = view.oy; cvDragged = true; }
+        }, { passive: true });
+        cv.addEventListener('touchmove', e => {
+            const r = cv.getBoundingClientRect(), scX = cssW / r.width, scY = cssH / r.height;
+            if (e.touches.length === 2 && pinchD0 > 0) {
+                e.preventDefault();
+                const z = Math.max(0.7, Math.min(3.2, pinchZ0 * touchDist(e.touches) / pinchD0));
+                // giữ tâm pinch cố định khi zoom
+                view.ox = pinchCx - (pinchCx - pinchOX0) * (z / pinchZ0); view.oy = pinchCy - (pinchCy - pinchOY0) * (z / pinchZ0);
+                view.zoom = z; clampView(); cvDragged = true;
+            } else if (panActive && e.touches.length === 1) {
+                const dx = (e.touches[0].clientX - panSX) * scX, dy = (e.touches[0].clientY - panSY) * scY;
+                if (Math.hypot(dx, dy) > 6) { cvDragged = true; e.preventDefault(); view.ox = panOX + dx; view.oy = panOY + dy; clampView(); }
+            }
+        }, { passive: false });
+        cv.addEventListener('touchend', e => { if (e.touches.length === 0) { panActive = false; pinchD0 = 0; setTimeout(() => cvDragged = false, 30); } });
+        // chuột (desktop): kéo giữ để pan, lăn để zoom
+        cv.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse' && e.button === 0) { panActive = true; cvDragged = false; panSX = e.clientX; panSY = e.clientY; panOX = view.ox; panOY = view.oy; } });
+        window.addEventListener('pointermove', e => { if (panActive && e.pointerType === 'mouse') { const r = cv.getBoundingClientRect(), dx = (e.clientX - panSX) * (cssW / r.width), dy = (e.clientY - panSY) * (cssH / r.height); if (Math.hypot(dx, dy) > 5) { cvDragged = true; view.ox = panOX + dx; view.oy = panOY + dy; clampView(); } } });
+        window.addEventListener('pointerup', e => { if (e.pointerType === 'mouse') { panActive = false; setTimeout(() => cvDragged = false, 20); } });
+        cv.addEventListener('wheel', e => { e.preventDefault(); const r = cv.getBoundingClientRect(), mx = (e.clientX - r.left) * (cssW / r.width), my = (e.clientY - r.top) * (cssH / r.height); const z0 = view.zoom, z = Math.max(0.7, Math.min(3.2, z0 * (e.deltaY < 0 ? 1.12 : 0.89))); view.ox = mx - (mx - view.ox) * (z / z0); view.oy = my - (my - view.oy) * (z / z0); view.zoom = z; clampView(); }, { passive: false });
+        // nút ⟲ đặt lại khung nhìn
+        const zr = $('btnZoomReset'); if (zr) zr.addEventListener('click', resetView);
         function handleIdentifyClick(px, py) {
             if (idStep >= idTasks.length) return;
             const task = idTasks[idStep];
@@ -5046,6 +5196,8 @@
         // ============================================================
         function setLevel(idx, replay) {
             if (idx >= LEVELS.length) return;
+            resetView();
+            if (LEVELS[idx].mode !== 'worksheet') flashZoomHint();
             // Màn 1 chơi lại → hiện màn giới thiệu trước
             if (idx === 0 && replay) { pendingLevel = 0; showIntro(); return; }
             // Màn 11 — Về đích: mở Phiếu bài tập
@@ -5611,7 +5763,12 @@
         }
         $('resumeBtn').addEventListener('click', () => {
             const d = loadProgress(); $('resumeBar').style.display = 'none';
-            if (d) { applyProgress(d); setLevel(Math.min(d.lvl, LEVELS.length - 1)); }
+            if (d) {
+                applyProgress(d); renderProgress(); renderBadges();
+                pendingLevel = Math.min(d.lvl || 0, LEVELS.length - 1);
+                if ($('introOverlay').classList.contains('show')) $('introOverlay').classList.remove('show');
+                setLevelDirect(pendingLevel);
+            }
         });
         $('freshBtn').addEventListener('click', () => {
             try { localStorage.removeItem(SAVE_KEY); } catch (e) { }
@@ -6526,6 +6683,7 @@
 
         // ===== Cầu nối cho hệ SKKN v4.0 =====
         window.__game = {
+            view: view, resetView: resetView, setLevel: setLevel,
             generateWorksheet: generateWorksheet, realIll: realIll, graphSVG: graphSVG,
             get worksheetBest() { return worksheetBest; },
             get teacherName() { return currentName; },
@@ -6560,19 +6718,13 @@
 
             const saved = loadProgress();
             if (saved && (saved.cleared || []).length > 0) {
-                applyProgress(saved);
+                // KHÔNG áp tiến trình ngay — luôn vào Màn 1 sạch; chỉ khôi phục khi bấm "Chơi tiếp"
                 const el = $('resumeBar'); el.style.display = 'flex';
                 $('resumeTxt').textContent = '📌 Có tiến trình đã lưu: ' + (saved.cleared || []).length + '/10 màn, ' + (saved.score || 0) + ' điểm.';
-                // vẫn hiện intro lần đầu
-                pendingLevel = Math.min(saved.lvl || 0, LEVELS.length - 1);
-                state.levelIdx = pendingLevel;
-                setLevel(pendingLevel, false);
-                showIntro();
-            } else {
-                pendingLevel = 0;
-                showIntro();
-                setLevel(0, false);
             }
+            pendingLevel = 0;
+            showIntro();
+            setLevel(0, false);
         })();
     </script>
 
