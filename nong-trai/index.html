@@ -639,6 +639,7 @@
       display: block;
       width: 100%;
       height: auto;
+      aspect-ratio: 900 / 600;
       touch-action: none;
       cursor: grab
     }
@@ -1062,6 +1063,10 @@
       text-align: center;
       max-width: 460px;
       width: 100%;
+      max-height: calc(100vh - 40px);
+      max-height: calc(100dvh - 32px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       box-shadow: 0 25px 60px -20px rgba(0, 0, 0, .6);
       animation: modalEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -3212,6 +3217,17 @@
       .toast .box,
       .quiz-overlay .qbox {
         padding: 22px 18px;
+      }
+
+      /* Màn chơi CAO hơn trên điện thoại → khung to, dễ thao tác kéo điểm */
+      canvas#cv {
+        aspect-ratio: 9 / 8;
+      }
+
+      /* Câu hỏi củng cố dài → cho phép cuộn trong hộp để thấy hết & bấm nút */
+      .quiz-overlay {
+        padding: 12px 9px;
+        align-items: center;
       }
     }
 
@@ -10232,7 +10248,7 @@
     /* ===== Screen coords ===== */
     let M = { l: 54, r: 26, t: 42, b: 46 }, sx = 1, sy = 1, plotW = 0, plotH = 0, uiK = 1;
     function fit() {
-      const cssW = cv.clientWidth, cssH = cssW * (600 / 900), dpr = window.devicePixelRatio || 1;
+      const cssW = cv.clientWidth, cssH = cv.clientHeight || Math.round(cssW * 600 / 900), dpr = window.devicePixelRatio || 1;
       cv.width = Math.round(cssW * dpr); cv.height = Math.round(cssH * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       uiK = Math.max(0.62, Math.min(1, cssW / 780));
       M = { l: Math.round(54 * uiK), r: Math.round(26 * uiK), t: Math.round(44 * uiK), b: Math.round(46 * uiK) };
@@ -10241,7 +10257,7 @@
     }
     const X = x => M.l + x * sx, Y = y => M.t + plotH - y * sy;
     const invX = px => (px - M.l) / sx, invY = py => (M.t + plotH - py) / sy;
-    const CW = () => cv.clientWidth, CH = () => cv.clientWidth * (600 / 900);
+    const CW = () => cv.clientWidth, CH = () => cv.clientHeight || cv.clientWidth * (600 / 900);
     const F = n => Math.max(8, Math.round(n * uiK));
 
     /* ===================================================================
@@ -10786,7 +10802,7 @@
           {
             q: `Biểu thức nào dưới đây là một <b>bất phương trình bậc nhất hai ẩn</b>?`,
             correct: `$2x + 3y \\le 12$`,
-            opts: txtOpts('$2x + 3y \\le 12$', ['$x^2 + y \\le 5$', '$$xy$ \\ge 6$', '$\\dfrac{3}{x} + y \\le 2$']),
+            opts: txtOpts('$2x + 3y \\le 12$', ['$x^2 + y \\le 5$', '$xy \\ge 6$', '$\\dfrac{3}{x} + y \\le 2$']),
             exp: `Bất phương trình bậc nhất hai ẩn có dạng $ax + by \\le c$ (hoặc ≥, &lt;, &gt;) với a, b không đồng thời bằng 0 và x, y đều ở <b>bậc một</b>. Các biểu thức chứa $x^2$, $xy$ hay 3/x đều không phải bậc nhất.`
           },
           {
@@ -11293,6 +11309,7 @@
     const DIFF_STARS = ['\u2B50', '\u2B50', '\u2B50\u2B50', '\u2B50\u2B50', '\u2B50\u2B50\u2B50', '\u2B50\u2B50\u2B50', '\u2B50\u2B50\u2B50\u2B50', '\u2B50\u2B50\u2B50\u2B50', '\u2B50\u2B50\u2B50\u2B50\u2B50', '\u{1F451}'];
 
     function showQuiz(onDone, nextLabel) {
+      nextLabel = nextLabel || 'Tiếp tục';
       const qz = makeQuizForLevel(lvlIdx);
       quizAsked++;
       const q = $('quiz'), box = $('quizBox');
