@@ -572,6 +572,128 @@
       letter-spacing: .2px;
     }
 
+    /* ===== Quà bất ngờ ===== */
+    .gift-head {
+      font-family: "Baloo 2", sans-serif;
+      font-weight: 800;
+      font-size: 17px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .gift-stage {
+      min-height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 6px 0 14px;
+    }
+
+    .gift-box {
+      font-size: 96px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      line-height: 1;
+      filter: drop-shadow(0 8px 14px rgba(20, 30, 70, .22));
+      animation: giftBob 1.1s ease-in-out infinite;
+      transition: transform .15s;
+    }
+
+    .gift-box:hover {
+      transform: scale(1.06) rotate(-3deg);
+    }
+
+    .gift-box.opening {
+      animation: giftShake .48s ease;
+    }
+
+    @keyframes giftBob {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-3deg);
+      }
+
+      50% {
+        transform: translateY(-10px) rotate(3deg);
+      }
+    }
+
+    @keyframes giftShake {
+
+      0%,
+      100% {
+        transform: rotate(0);
+      }
+
+      15% {
+        transform: rotate(-14deg) scale(1.05);
+      }
+
+      30% {
+        transform: rotate(12deg) scale(1.08);
+      }
+
+      45% {
+        transform: rotate(-10deg);
+      }
+
+      60% {
+        transform: rotate(8deg);
+      }
+
+      75% {
+        transform: rotate(-5deg);
+      }
+    }
+
+    .gift-reveal {
+      animation: giftPop .5s cubic-bezier(.34, 1.56, .64, 1) both;
+    }
+
+    @keyframes giftPop {
+      0% {
+        transform: scale(.4);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .gr-ic {
+      font-size: 68px;
+      filter: drop-shadow(0 6px 12px rgba(245, 158, 11, .4));
+    }
+
+    .gr-title {
+      font-family: "Baloo 2", sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--gold-d);
+      margin: 6px 0 4px;
+    }
+
+    body.theme-dark .gr-title {
+      color: #fcd34d;
+    }
+
+    .gr-msg {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.5;
+      padding: 0 8px;
+    }
+
+    #giftNext,
+    #giftOpen {
+      margin-top: 4px;
+    }
+
     /* ===================== LAYOUT ===================== */
     .layout {
       display: grid;
@@ -3450,6 +3572,42 @@
         background: #f8fafc;
       }
 
+      #wsPrint .sol-print-q {
+        margin: 10px 0 14px;
+        padding: 12px 16px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 12px;
+        background: #f8fafc;
+        font-size: 12.5pt;
+        line-height: 1.6;
+      }
+
+      #wsPrint .sol-print-q .lab {
+        font-weight: 800;
+        color: #1e3a8a;
+      }
+
+      #wsPrint .sol-print-h {
+        font-family: "Baloo 2", "Nunito", sans-serif;
+        font-weight: 800;
+        font-size: 14pt;
+        color: #4338ca;
+        margin: 8px 0 8px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid #e0e7ff;
+      }
+
+      #wsPrint .sol-print-steps {
+        margin: 0;
+        padding-left: 26px;
+      }
+
+      #wsPrint .sol-print-steps li {
+        margin-bottom: 12px;
+        line-height: 1.65;
+        font-size: 12pt;
+      }
+
       #wsPrint .p-hdrbc {
         text-align: right;
         margin: 0 0 4px;
@@ -5488,6 +5646,26 @@
   </div>
 
   <!-- ============ LEVEL RESULT OVERLAY ============ -->
+  <!-- ============ QUÀ BẤT NGỜ ============ -->
+  <div class="overlay" id="giftOverlay">
+    <div class="modal" style="max-width:400px;">
+      <div class="modal-body" style="text-align:center;">
+        <div class="gift-head">🎉 Chính xác! Có quà bất ngờ cho bạn!</div>
+        <div class="gift-stage" id="giftStage">
+          <button class="gift-box" id="giftBox" title="Mở quà">🎁</button>
+          <div class="gift-reveal" id="giftReveal" style="display:none;">
+            <div class="gr-ic" id="grIc">💎</div>
+            <div class="gr-title" id="grTitle"></div>
+            <div class="gr-msg" id="grMsg"></div>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="giftOpen" style="justify-content:center;width:100%;">🎁 Mở quà</button>
+        <button class="btn btn-primary" id="giftNext" style="justify-content:center;width:100%;display:none;">Câu hỏi
+          củng cố ➜</button>
+      </div>
+    </div>
+  </div>
+
   <div class="overlay" id="resultOverlay">
     <div class="modal" style="max-width:440px;">
       <div class="modal-body">
@@ -5514,7 +5692,10 @@
           <h2>📖 Lời giải từng bước</h2>
           <div class="sub" id="solveSub"></div>
         </div>
-        <button class="close-x" id="solveClose">×</button>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn btn-ghost" id="solvePdf" style="padding:7px 12px;font-size:13px;">📄 Xuất PDF</button>
+          <button class="close-x" id="solveClose">×</button>
+        </div>
       </div>
       <div class="modal-body" id="solveBody"></div>
     </div>
@@ -6811,8 +6992,44 @@
         confetti(st === 3);
         updateHUD(); renderDots(); saveProgress(); SCTreport();
         checkAchievements();
-        // show reinforcement quiz then result
-        setTimeout(() => openQuiz(state.lvl, () => showResult(L, st)), 500);
+        // Luồng: trả lời đúng → 🎁 quà bất ngờ → câu hỏi củng cố → Tiếp tục → màn sau
+        setTimeout(() => showGift(() => openQuiz(state.lvl, () => showResult(L, st))), 500);
+      }
+
+      // ===== Quà bất ngờ =====
+      const GIFTS = [
+        { ic: '💎', title: '+50 điểm thưởng!', bonus: 50, msg: 'Kho báu vũ trụ dành cho phi công giỏi!' },
+        { ic: '⚡', title: '+80 điểm tăng tốc!', bonus: 80, msg: 'Lực đẩy vectơ cực mạnh!' },
+        { ic: '🌟', title: 'Ngôi sao may mắn · +60 điểm!', bonus: 60, msg: 'Toả sáng khắp dải ngân hà!' },
+        { ic: '🛰️', title: '+40 điểm khám phá!', bonus: 40, msg: 'Bạn vừa phát hiện một vệ tinh!' },
+        { ic: '🪐', title: '+100 điểm hành tinh!', bonus: 100, msg: 'Chinh phục một hành tinh mới!' },
+        { ic: '☄️', title: '+70 điểm sao chổi!', bonus: 70, msg: 'Bắt được đuôi sao chổi rực rỡ!' },
+        { ic: '🚀', title: '+90 điểm phi thuyền!', bonus: 90, msg: 'Động cơ nạp đầy năng lượng!' }
+      ];
+      let giftCb = null;
+      function showGift(cb) {
+        giftCb = cb;
+        $('giftReveal').style.display = 'none';
+        $('giftBox').style.display = '';
+        $('giftBox').classList.remove('opening');
+        $('giftOpen').style.display = '';
+        $('giftNext').style.display = 'none';
+        show('giftOverlay');
+      }
+      function openGift() {
+        const g = GIFTS[Math.floor(Math.random() * GIFTS.length)];
+        $('giftBox').classList.add('opening');
+        try { SFX.good(); } catch (e) { }
+        setTimeout(() => {
+          state.score += g.bonus; updateHUD(); saveProgress();
+          showScorePop('+' + g.bonus, css('--gold'));
+          $('grIc').textContent = g.ic; $('grTitle').textContent = g.title; $('grMsg').textContent = g.msg;
+          $('giftBox').style.display = 'none';
+          $('giftReveal').style.display = '';
+          $('giftOpen').style.display = 'none';
+          $('giftNext').style.display = '';
+          confetti(false);
+        }, 480);
       }
 
       function showResult(L, st) {
@@ -6971,6 +7188,29 @@
         typeset($('solveBody'));
         show('solveOverlay');
       });
+      function exportSolutionPDF() {
+        const L = LEVELS[state.lvl]; if (!L || L.mode === 'worksheet') { toast('Không có lời giải cho màn này.'); return; }
+        const steps = levelSolution(L);
+        const diffName = { easy: 'Dễ', med: 'Trung bình', hard: 'Khó' }[L.diff] || '';
+        let h = '<div class="p-doc">';
+        h += '<div class="p-banner">' +
+          '<div class="p-tagline">🚀 Sân chơi Vectơ · Lời giải từng bước</div>' +
+          '<div class="p-title">Lời giải — Trạm ' + (state.lvl + 1) + ': ' + L.name + '</div>' +
+          '<div class="p-sub">Toán 10 · Tổng, hiệu và tích vô hướng của hai vectơ' + (diffName ? ' · Mức độ: ' + diffName : '') + '</div>' +
+          '</div>';
+        h += '<div class="sol-print-q"><span class="lab">📝 Đề bài:</span> ' + (L.text || '') + '</div>';
+        h += '<div class="sol-print-h">Các bước giải</div>';
+        h += '<ol class="sol-print-steps">' + steps.map(s => '<li>' + s + '</li>').join('') + '</ol>';
+        h += '</div>';
+        const host = $('wsPrint'); host.innerHTML = h; typeset(host);
+        let st = document.getElementById('wsPageStyle');
+        if (!st) { st = document.createElement('style'); st.id = 'wsPageStyle'; document.head.appendChild(st); }
+        st.textContent = '@media print{ @page{ @bottom-left{ content: "Phi Thuyền Vectơ · Lời giải"; } } }';
+        const cleanup = () => { st.textContent = ''; window.removeEventListener('afterprint', cleanup); };
+        window.addEventListener('afterprint', cleanup);
+        setTimeout(() => { window.print(); }, 200);
+      }
+      { const sp = $('solvePdf'); if (sp) sp.addEventListener('click', exportSolutionPDF); }
       $('checkBtn').addEventListener('click', () => {
         const L = LEVELS[state.lvl];
         if (L && L.mode === 'worksheet') { openWorksheet(); return; }
@@ -6978,6 +7218,9 @@
       });
       $('resReplay').addEventListener('click', () => { hide('resultOverlay'); state.cleared = false; setLevel(state.lvl); });
       $('resNext').addEventListener('click', nextLevel);
+      { const go = $('giftOpen'); if (go) go.addEventListener('click', openGift); }
+      { const gb = $('giftBox'); if (gb) gb.addEventListener('click', openGift); }
+      { const gn = $('giftNext'); if (gn) gn.addEventListener('click', () => { hide('giftOverlay'); if (giftCb) { const cb = giftCb; giftCb = null; cb(); } }); }
 
       /* ===================== REINFORCEMENT QUIZ ===================== */
       let quizCb = null;
@@ -7658,7 +7901,7 @@
         // 1. Tổng quan
         h += '<div class="r-sec"><span class="r-num">1</span> TỔNG QUAN</div>';
         h += '<div class="r-p">Game <b>“Phi Thuyền Vectơ”</b> là học liệu số tương tác chạy <b>hoàn toàn ngoại tuyến (offline)</b>, giúp học sinh lớp 10 khám phá và luyện tập chủ đề <b>tổng, hiệu và tích vô hướng của hai vectơ</b> thông qua <b>' + nc + ' màn chơi</b> với nhiều cơ chế khác nhau, khó dần theo thang Bloom (Nhận biết → Thông hiểu → Vận dụng → Vận dụng cao), cùng một <b>Phiếu bài tập Về đích</b> đánh giá tổng hợp thang điểm 10. Hoàn thành đủ điều kiện, học sinh nhận <b>Giấy chứng nhận</b>.</div>';
-        const feats = ['🎮 ' + nc + ' màn chơi · 4 cơ chế tương tác', '🧮 Công thức toán hiển thị offline', '❓ Câu hỏi củng cố mỗi màn (có lời giải)', '📝 Phiếu Về Đích (bộ sinh đa đề)', '📄 Xuất PDF đề + đáp án (QR/mã vạch)', '🎖️ Giấy chứng nhận (lớp · trường · sao)', '📊 Kiểm tra đầu vào/đầu ra (đo tiến bộ)', '🏆 Xếp hạng lớp/tuần · 🏅 huy hiệu cột mốc', '👩‍🏫 Chế độ Giáo viên (PIN) · khoá xoá dữ liệu', '⚔️ Đấu 2 người · ⏱️ đếm ngược mỗi câu', '🔊 Giọng đọc đề (tự động) · 🎵 Nhạc nền', '🅰️🅱️ In nhiều mã đề (Kiểm tra) · 💾 lưu tiến trình'];
+        const feats = ['🎮 ' + nc + ' màn chơi · 4 cơ chế tương tác', '🎁 Quà bất ngờ + câu hỏi củng cố mỗi màn', '🧮 Công thức toán hiển thị offline', '✨ Nền động: sao nhấp nháy · sao băng', '📝 Phiếu Về Đích (bộ sinh đa đề)', '📄 Xuất PDF: đề · đáp án · lời giải · báo cáo', '🎖️ Giấy chứng nhận (lớp · trường · sao)', '📊 Kiểm tra đầu vào/đầu ra (đo tiến bộ)', '🏆 Xếp hạng lớp/tuần · 🏅 huy hiệu cột mốc', '👩‍🏫 Chế độ Giáo viên (PIN) · khoá xoá dữ liệu', '⚔️ Đấu 2 người · ⏱️ đếm ngược · 🔊 giọng đọc đề', '🅰️🅱️ In nhiều mã đề (Kiểm tra) · 📱 tối ưu điện thoại'];
         h += '<div class="r-feats">' + feats.map(f => '<div class="r-feat">' + f + '</div>').join('') + '</div>';
 
         // 2. 10 màn chơi
@@ -7674,6 +7917,8 @@
             '</div>';
         }
 
+        h += '<div class="r-p"><b>Luồng chơi mỗi màn:</b> trả lời đúng → <b>🎁 quà bất ngờ</b> (thưởng điểm ngẫu nhiên, tạo hứng thú) → <b>câu hỏi củng cố</b> (khắc sâu kiến thức, có lời giải) → bấm <b>Tiếp tục</b> → sang màn tiếp theo. Mỗi bước qua màn đều ghi sao (3 sao nếu không dùng gợi ý/lời giải).</div>';
+
         // 3. Phiếu Về Đích
         h += '<div class="r-sec"><span class="r-num">3</span> PHIẾU BÀI TẬP VỀ ĐÍCH — THANG ĐIỂM 10</div>';
         h += '<table class="r-tbl"><thead><tr><th>Phần</th><th>Dạng câu hỏi</th><th>Số lượng</th><th>Điểm</th><th>Thiết kế</th></tr></thead><tbody>' +
@@ -7686,7 +7931,7 @@
 
         // 4. Chứng nhận
         h += '<div class="r-sec"><span class="r-num">4</span> GIẤY CHỨNG NHẬN — ĐIỀU KIỆN</div>';
-        h += '<div class="r-cond"><b>Điều kiện nhận (đồng thời):</b><br>① Hoàn thành <b>≥ 80% số màn</b> chơi (tức <b>≥ ' + need + '/' + nc + ' trạm</b>).<br>② Đạt <b>trên 8/10 điểm</b> ở Phiếu Về Đích.</div>';
+        h += '<div class="r-cond"><b>Điều kiện nhận (đồng thời):</b><br>① Hoàn thành <b>≥ 80% số màn</b> chơi (tức <b>≥ ' + need + '/' + nc + ' trạm</b>).<br>② Đạt <b>trên 8/10 điểm</b> ở Phiếu Về Đích.<br>③ Hoàn thành <b>Kiểm tra ĐẦU RA (8 câu)</b> để khảo sát kiến thức sau khi học.</div>';
         h += '<div class="r-p">Giấy chứng nhận in tên học sinh, danh hiệu &amp; lời khen theo thành tích, các số liệu (điểm · sao · điểm phiếu · <b>thời gian chơi</b>), dấu mộc đỏ và chữ ký giáo viên — khích lệ tinh thần học tập.</div>';
 
         // 5. Lợi ích
@@ -7700,6 +7945,9 @@
           '<tr><td><b>Thi đấu 2 người</b></td><td>Trả lời luân phiên trên cùng máy, có đồng hồ đếm ngược mỗi câu &amp; giọng đọc đề.</td></tr>' +
           '<tr><td><b>In nhiều mã đề (Kiểm tra)</b></td><td>Mỗi lần xuất tạo nhiều mã đề khác nhau hoàn toàn (nội dung + mã vạch định danh), trang đáp án gom về cuối để tiện in.</td></tr>' +
           '<tr><td><b>Giọng đọc đề (TTS)</b></td><td>Đọc to nhiệm vụ / câu hỏi bằng tiếng Việt; hỗ trợ học sinh khó đọc, học hoà nhập.</td></tr>' +
+          '<tr><td><b>Quà bất ngờ + củng cố</b></td><td>Sau mỗi màn: hộp quà thưởng điểm ngẫu nhiên tạo hứng thú, rồi câu hỏi củng cố có lời giải để khắc sâu kiến thức.</td></tr>' +
+          '<tr><td><b>Xuất PDF lời giải</b></td><td>In lời giải từng bước của mỗi màn (đề bài + các bước) để làm phiếu hướng dẫn hoặc chữa bài trên lớp.</td></tr>' +
+          '<tr><td><b>Nền động &amp; tối ưu điện thoại</b></td><td>Hiệu ứng sao nhấp nháy, sao băng tăng hấp dẫn; khung chơi phóng to trên điện thoại giúp thao tác kéo phi thuyền dễ dàng.</td></tr>' +
           '</tbody></table>';
 
         // 6. Lợi ích
@@ -7720,16 +7968,20 @@
         t += 'Hoc lieu so offline: ' + NUM_CANVAS + ' man choi kho dan Bloom + Phieu Ve Dich.\n';
         t += 'Kien thuc: tong/hieu 2 vecto, tich k.u, do doi AB, hinh binh hanh, do dai, tich vo huong, vuong goc, trong tam, bai toan 2 buoc. Moi man co cau hoi cung co (co loi giai).\n';
         t += 'Phieu Ve Dich (10d): I.12 TN(3d) II.2 Dung-Sai(2d) III.Noi cot 6 y(3d) IV.4 Tra loi ngan(2d). Bo sinh da de.\n';
-        t += 'Cong cu SKKN: KT dau vao/dau ra do tien bo; Lich su tham gia (thong ke + bieu do + CSV/PDF/QR); Xep hang lop/tuan + huy hieu; Che do Giao vien (PIN); Dau 2 nguoi; giong doc de; in nhieu ma de.\n';
-        t += 'Chung nhan: hoan thanh >=' + need + '/' + NUM_CANVAS + ' man VA >8/10 diem Phieu. GV: Luong Truong.';
+        t += 'Luong choi moi man: dung -> qua bat ngo (thuong diem) -> cau hoi cung co (co loi giai) -> Tiep tuc -> man sau.\n';
+        t += 'Cong cu SKKN: KT dau vao/dau ra do tien bo; Lich su tham gia (thong ke + bieu do + CSV/PDF/QR); Xep hang lop/tuan + huy hieu; Che do Giao vien (PIN); Dau 2 nguoi; giong doc de; in nhieu ma de; xuat PDF loi giai.\n';
+        t += 'Chung nhan: hoan thanh >=' + need + '/' + NUM_CANVAS + ' man VA >8/10 diem Phieu VA lam Kiem tra dau ra. GV: Luong Truong.';
         return t;
       }
       function printGameReport() {
         const host = $('wsPrint');
         host.innerHTML = buildGameReportHTML();
         typeset(host);
-        // báo cáo không dùng mã vạch header của phiếu
-        const st = document.getElementById('wsPageStyle'); if (st) st.textContent = '';
+        let st = document.getElementById('wsPageStyle');
+        if (!st) { st = document.createElement('style'); st.id = 'wsPageStyle'; document.head.appendChild(st); }
+        st.textContent = '@media print{ @page{ @bottom-left{ content: "Phi Thuyền Vectơ · Báo cáo nội dung game"; } } }';
+        const cleanup = () => { st.textContent = ''; window.removeEventListener('afterprint', cleanup); };
+        window.addEventListener('afterprint', cleanup);
         setTimeout(() => { window.print(); }, 160);
       }
       // Xuất một Phiếu Về Đích HOÀN TOÀN MỚI mỗi lần (bộ sinh đa đề)
@@ -7973,7 +8225,12 @@
       }
       function exportHistoryPDF(kind) {
         const host = $('wsPrint'); host.innerHTML = buildHistoryReportHTML(kind); typeset(host);
-        const st = document.getElementById('wsPageStyle'); if (st) st.textContent = '';
+        let st = document.getElementById('wsPageStyle');
+        if (!st) { st = document.createElement('style'); st.id = 'wsPageStyle'; document.head.appendChild(st); }
+        // Đổi footer trái thành "Lịch sử tham gia" cho bản in này
+        st.textContent = '@media print{ @page{ @bottom-left{ content: "Phi Thuyền Vectơ · Lịch sử tham gia"; } } }';
+        const cleanup = () => { st.textContent = ''; window.removeEventListener('afterprint', cleanup); };
+        window.addEventListener('afterprint', cleanup);
         setTimeout(() => { window.print(); }, 160);
       }
 
@@ -8842,7 +9099,7 @@
         window.__game = {
           LEVELS, state, generateWorksheet, gradeWorksheet: () => gradeWorksheet(),
           get curWS() { return curWS; }, get wsAns() { return wsAns; },
-          setLevel, openWorksheet, submitWorksheet, checkLevel, printWorksheet, buildWsPrintHTML, printGameReport, gameReportText, exportFreshWorksheet, openHistory, exportHistoryPDF, showHistoryQR, computeOverview, loadHistory, openTestChooser, startTest, openTeacher, openCertificate, loadTeacher, teacherScope, exportMultiCode, speak, speakTest, speakDuel, toggleDuelAuto, texToSpeech, openDuel, startDuel,
+          setLevel, openWorksheet, submitWorksheet, checkLevel, printWorksheet, buildWsPrintHTML, printGameReport, gameReportText, exportFreshWorksheet, openHistory, exportHistoryPDF, showHistoryQR, computeOverview, loadHistory, openTestChooser, startTest, openTeacher, openCertificate, loadTeacher, teacherScope, exportMultiCode, speak, speakTest, speakDuel, toggleDuelAuto, texToSpeech, openDuel, startDuel, showGift, openGift, openQuiz, exportSolutionPDF,
           setShipTest: (x, y) => { state.P = P(x, y); render(); },
           setSelTest: i => { state.selIdx = i; render(); },
           setDirTest: (x, y) => { state.dir = P(x, y); render(); },
