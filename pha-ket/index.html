@@ -297,9 +297,18 @@
       box-shadow: 0 10px 30px rgba(20, 30, 70, .10), inset 0 1px 0 rgba(255, 255, 255, .35);
     }
 
-    .topbar > .brand { flex: 0 1 auto; }
-    .topbar > .hud { flex: 1 1 auto; justify-content: space-evenly; }
-    .topbar > .qr-link { flex: 0 0 auto; }
+    .topbar>.brand {
+      flex: 0 1 auto;
+    }
+
+    .topbar>.hud {
+      flex: 1 1 auto;
+      justify-content: space-evenly;
+    }
+
+    .topbar>.qr-link {
+      flex: 0 0 auto;
+    }
 
     @media (max-width: 1040px) {
       .topbar {
@@ -307,7 +316,9 @@
         gap: 12px;
       }
 
-      .topbar > .hud { flex: 0 1 auto; }
+      .topbar>.hud {
+        flex: 0 1 auto;
+      }
 
       .brand {
         min-width: 0;
@@ -551,19 +562,19 @@
       align-items: stretch;
     }
 
-    .layout > .card {
+    .layout>.card {
       display: flex;
       flex-direction: column;
     }
 
-    .layout > .card > .stage {
+    .layout>.card>.stage {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .layout > .card > .stage > .canvas-box {
+    .layout>.card>.stage>.canvas-box {
       width: 100%;
     }
 
@@ -1815,7 +1826,7 @@
       gap: 14px;
     }
 
-    .layout > .side > .panel-sec {
+    .layout>.side>.panel-sec {
       flex: 1;
     }
 
@@ -5160,6 +5171,7 @@
         height: 10px;
       }
     }
+
     /* ===== Quà bất ngờ khi mở két ===== */
     .gift-head {
       font-family: "Baloo 2", Nunito, sans-serif;
@@ -5478,26 +5490,32 @@
             </g>
             <!-- CÁNH CỬA KÉT (bên phải) -->
             <g transform="translate(348,78)">
-              <rect x="-44" y="-44" width="88" height="88" rx="12" fill="url(#vaultDoorG)" stroke="url(#goldG)" stroke-width="3" />
+              <rect x="-44" y="-44" width="88" height="88" rx="12" fill="url(#vaultDoorG)" stroke="url(#goldG)"
+                stroke-width="3" />
               <rect x="-36" y="-36" width="72" height="72" rx="8" fill="none" stroke="#4b4570" stroke-width="1.5" />
               <!-- bu-lông góc -->
               <g fill="#c7cbe0" stroke="#d99e0b" stroke-width="1">
-                <circle cx="-32" cy="-32" r="3.5" /><circle cx="32" cy="-32" r="3.5" />
-                <circle cx="-32" cy="32" r="3.5" /><circle cx="32" cy="32" r="3.5" />
+                <circle cx="-32" cy="-32" r="3.5" />
+                <circle cx="32" cy="-32" r="3.5" />
+                <circle cx="-32" cy="32" r="3.5" />
+                <circle cx="32" cy="32" r="3.5" />
               </g>
               <!-- đĩa số -->
               <circle cx="0" cy="0" r="24" fill="url(#dialG)" stroke="url(#goldG)" stroke-width="3" />
               <circle cx="0" cy="0" r="16" fill="#2a2547" opacity=".55" />
               <g stroke="#d99e0b" stroke-width="1.6">
-                <line x1="0" y1="-24" x2="0" y2="-20" /><line x1="0" y1="20" x2="0" y2="24" />
-                <line x1="-24" y1="0" x2="-20" y2="0" /><line x1="20" y1="0" x2="24" y2="0" />
+                <line x1="0" y1="-24" x2="0" y2="-20" />
+                <line x1="0" y1="20" x2="0" y2="24" />
+                <line x1="-24" y1="0" x2="-20" y2="0" />
+                <line x1="20" y1="0" x2="24" y2="0" />
               </g>
               <!-- kim -->
               <line x1="0" y1="0" x2="11" y2="-8" stroke="#34d399" stroke-width="3" stroke-linecap="round" />
               <circle cx="0" cy="0" r="3.5" fill="url(#goldG)" />
               <!-- tay nắm -->
               <g stroke="url(#goldG)" stroke-width="3.5" fill="none" stroke-linecap="round">
-                <line x1="30" y1="0" x2="42" y2="-10" /><line x1="30" y1="0" x2="42" y2="10" />
+                <line x1="30" y1="0" x2="42" y2="-10" />
+                <line x1="30" y1="0" x2="42" y2="10" />
               </g>
             </g>
             <!-- CHÌA KHOÁ VÀNG (bên trái) -->
@@ -5873,7 +5891,8 @@
         <div id="testChoose">
           <p style="color:var(--ink);font-weight:700;margin:0 0 4px;">Chọn bài kiểm tra ngắn (8 câu):</p>
           <p style="color:var(--muted);font-size:13.5px;margin:0 0 14px;">Làm <b>Kiểm tra đầu vào</b> trước khi chơi và
-            <b>Kiểm tra đầu ra</b> sau khi chơi để đo độ tiến bộ.</p>
+            <b>Kiểm tra đầu ra</b> sau khi chơi để đo độ tiến bộ.
+          </p>
           <div class="test-choose-grid">
             <button class="test-choose-btn tc-pre" id="testStartPre"><span class="tc-ic">🎯</span><span
                 class="tc-t">Kiểm tra ĐẦU VÀO</span><span class="tc-s" id="tcPreScore"></span></button>
@@ -5905,7 +5924,8 @@
         <div style="font-size:44px;margin:4px 0 8px;">🔐</div>
         <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:22px;color:var(--primary-d);">Phá Két
           Mật Mã</div>
-        <div style="color:var(--muted);font-weight:700;margin-bottom:14px;">Toán 10 · Quy tắc đếm · Hoán vị · Chỉnh hợp ·
+        <div style="color:var(--muted);font-weight:700;margin-bottom:14px;">Toán 10 · Quy tắc đếm · Hoán vị · Chỉnh hợp
+          ·
           Tổ hợp</div>
         <div class="ver-grid">
           <div class="vr"><span>Phiên bản</span><b>v4.0</b></div>
@@ -6125,14 +6145,14 @@
       /* ===================== DATA: COMBINATORICS LEVELS (Phá Két Mật Mã) ===================== */
       // 10 két (khó dần NB→VDC) + 1 phiếu về đích (màn 11). Cơ chế: 'keypad' (nhập mã = đáp số đếm) | 'multi' (két 2 tầng).
       // Toán đã xác minh bằng máy trước khi code.
-      function _fact(n){ let r=1; for(let i=2;i<=n;i++) r*=i; return r; }
-      function _perm(n,k){ let r=1; for(let i=0;i<k;i++) r*=(n-i); return r; }
-      function _comb(n,k){ return _perm(n,k)/_fact(k); }
+      function _fact(n) { let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; }
+      function _perm(n, k) { let r = 1; for (let i = 0; i < k; i++) r *= (n - i); return r; }
+      function _comb(n, k) { return _perm(n, k) / _fact(k); }
       const LEVELS = [
         { // 1 — Quy tắc cộng (NB)
           name: 'Khoá Đĩa — Hai Ngăn', emoji: '➕', diff: 'Dễ', diffClass: 'diff-easy', bloom: 'NB',
           mode: 'keypad', concept: 'add', sol: 7,
-          given: [ ['Chìa vàng', '3 chiếc'], ['Chìa bạc', '4 chiếc'], ['Mở bằng', '1 chìa bất kỳ'] ],
+          given: [['Chìa vàng', '3 chiếc'], ['Chìa bạc', '4 chiếc'], ['Mở bằng', '1 chìa bất kỳ']],
           text: 'Khoá <b>đĩa số cơ</b> mở khi <b>xoay đĩa</b> đến đúng <b>số cách chọn 1 chìa</b>: có <b>3 chìa vàng</b> hoặc <b>4 chìa bạc</b>, mỗi lần chỉ dùng một chìa. ' +
             'Có bao nhiêu <b>cách chọn 1 chìa</b>? <b>Xoay đĩa</b> đến số đó.',
           solLines: [
@@ -6144,7 +6164,7 @@
         { // 2 — Quy tắc nhân (NB)
           name: 'Khoá Điện Tử — Mã PIN', emoji: '✖️', diff: 'Dễ', diffClass: 'diff-easy', bloom: 'NB',
           mode: 'keypad', concept: 'mul', sol: 12,
-          given: [ ['Vòng chữ cái', '3 chữ (A,B,C)'], ['Vòng chữ số', '4 số (1,2,3,4)'] ],
+          given: [['Vòng chữ cái', '3 chữ (A,B,C)'], ['Vòng chữ số', '4 số (1,2,3,4)']],
           text: 'Khoá <b>điện tử</b> cần <b>mã PIN</b> gồm <b>1 chữ cái</b> (trong 3) rồi <b>1 chữ số</b> (trong 4). ' +
             'Có bao nhiêu <b>mã PIN</b> khác nhau? <b>Nhập PIN</b> để mở.',
           solLines: [
@@ -6156,7 +6176,7 @@
         { // 3 — Quy tắc nhân nhiều giai đoạn, có lặp (NB→TH)
           name: 'Khoá Phím Cơ — Ba Vòng', emoji: '🔢', diff: 'Dễ', diffClass: 'diff-easy', bloom: 'NB',
           mode: 'keypad', concept: 'mulrep', sol: 125,
-          given: [ ['Số vòng', '3 vòng'], ['Mỗi vòng', '5 số (0–4)'], ['Cho phép', 'lặp lại số'] ],
+          given: [['Số vòng', '3 vòng'], ['Mỗi vòng', '5 số (0–4)'], ['Cho phép', 'lặp lại số']],
           text: 'Khoá <b>bàn phím cơ</b> có <b>3 vòng</b>, mỗi vòng <b>5 số</b> (0–4), các vòng <b>được trùng số</b>. ' +
             'Có bao nhiêu <b>mã 3 vòng</b> khác nhau? <b>Bấm phím</b> nhập tổng số mã.',
           solLines: [
@@ -6168,7 +6188,7 @@
         { // 4 — Hoán vị (TH)
           name: 'Khoá Vân Tay — Thứ Tự Quét', emoji: '🔀', diff: 'Trung bình', diffClass: 'diff-medium', bloom: 'TH',
           mode: 'keypad', concept: 'perm', sol: 24,
-          given: [ ['Số vân tay', '4 vân khác nhau'], ['Yêu cầu', 'quét đủ 4 theo 1 thứ tự'] ],
+          given: [['Số vân tay', '4 vân khác nhau'], ['Yêu cầu', 'quét đủ 4 theo 1 thứ tự']],
           text: 'Bộ quét <b>vân tay</b> lưu <b>4 vân</b> khác nhau, phải quét lần lượt cả 4 theo <b>một thứ tự</b> mới mở. ' +
             'Có bao nhiêu <b>thứ tự quét</b> khác nhau? Nhập số đó để xác nhận.',
           solLines: [
@@ -6180,7 +6200,7 @@
         { // 5 — Chỉnh hợp (TH)
           name: 'Khoá Ổ Chìa — Cắt Rãnh', emoji: '🎯', diff: 'Trung bình', diffClass: 'diff-medium', bloom: 'TH',
           mode: 'keypad', concept: 'arr', sol: 60,
-          given: [ ['Kho rãnh', '5 mức {1..5}'], ['Chọn', '3 rãnh khác nhau'], ['Vị trí', 'CÓ thứ tự'] ],
+          given: [['Kho rãnh', '5 mức {1..5}'], ['Chọn', '3 rãnh khác nhau'], ['Vị trí', 'CÓ thứ tự']],
           text: 'Khoá <b>ổ chìa</b>: chìa có <b>3 rãnh</b> ở 3 vị trí, mỗi rãnh chọn 1 mức khác nhau trong <b>5 mức</b> {1..5} (vị trí khác nhau nên <b>thứ tự có tính</b>). ' +
             'Có bao nhiêu <b>chìa</b> khác nhau? ($A^k_n$) <b>Tra chìa</b> bằng số đó.',
           solLines: [
@@ -6192,7 +6212,7 @@
         { // 6 — Tổ hợp (VD)
           name: 'Khoá Thẻ Từ — Chân Tiếp Xúc', emoji: '🎚️', diff: 'Khó', diffClass: 'diff-hard', bloom: 'VD',
           mode: 'keypad', concept: 'comb', sol: 20,
-          given: [ ['Số chân', '6 chân tiếp xúc'], ['Kích hoạt', '3 chân'], ['Thứ tự', 'KHÔNG tính'] ],
+          given: [['Số chân', '6 chân tiếp xúc'], ['Kích hoạt', '3 chân'], ['Thứ tự', 'KHÔNG tính']],
           text: 'Khoá <b>thẻ từ</b>: bảng có <b>6 chân tiếp xúc</b>, mỗi thẻ hợp lệ nối đúng <b>3 chân</b> (không kể thứ tự). ' +
             'Có bao nhiêu <b>thẻ</b> hợp lệ? ($C^k_n$) <b>Cắm thẻ</b> mang số đó.',
           solLines: [
@@ -6204,7 +6224,7 @@
         { // 7 — Phân biệt chỉnh hợp / tổ hợp (VD)
           name: 'Khoá Quét Mắt — Hai Vị Trí', emoji: '🧑‍🤝‍🧑', diff: 'Khó', diffClass: 'diff-hard', bloom: 'VD',
           mode: 'keypad', concept: 'arr2', sol: 20,
-          given: [ ['Số người', '5 người'], ['Chọn', '2 người'], ['Vị trí', 'MẮT-CHÍNH & MẮT-PHỤ (khác nhau)'] ],
+          given: [['Số người', '5 người'], ['Chọn', '2 người'], ['Vị trí', 'MẮT-CHÍNH & MẮT-PHỤ (khác nhau)']],
           text: 'Khoá <b>quét mắt</b> lưu mống mắt của <b>2 người</b> chọn từ <b>5</b>, vào <b>2 vị trí khác nhau</b> (Mắt-Chính, Mắt-Phụ) — ' +
             'nên <b>thứ tự có tính</b>. Có bao nhiêu <b>cấu hình</b>? <b>Quét mắt</b> nhập số đó.',
           solLines: [
@@ -6216,7 +6236,7 @@
         { // 8 — Bài toán có điều kiện (VDC)
           name: 'Khoá Tay Quay — Đầu Chẵn', emoji: '⚙️', diff: 'Rất khó', diffClass: 'diff-expert', bloom: 'VDC',
           mode: 'keypad', concept: 'cond', sol: 24,
-          given: [ ['Kho số', '5 số {1,2,3,4,5}'], ['Mã', '3 số khác nhau'], ['Ràng buộc', 'chữ số ĐẦU chẵn'] ],
+          given: [['Kho số', '5 số {1,2,3,4,5}'], ['Mã', '3 số khác nhau'], ['Ràng buộc', 'chữ số ĐẦU chẵn']],
           text: 'Khoá <b>tay quay</b>: đặt mã <b>3 chữ số khác nhau</b> từ {1,2,3,4,5} sao cho <b>chữ số đầu là số chẵn</b>. ' +
             'Có bao nhiêu mã? (Đếm theo giai đoạn) <b>Quay bánh xe</b> đến số đó.',
           solLines: [
@@ -6228,7 +6248,7 @@
         { // 9 — Tổ hợp có ràng buộc (VDC)
           name: 'Khoá Hẹn Giờ — Nút Đỏ', emoji: '🔴', diff: 'Rất khó', diffClass: 'diff-expert', bloom: 'VDC',
           mode: 'keypad', concept: 'combcond', sol: 15,
-          given: [ ['Số nút', '7 nút (có 1 nút đỏ)'], ['Cần chọn', '3 nút'], ['Ràng buộc', 'PHẢI có nút đỏ'] ],
+          given: [['Số nút', '7 nút (có 1 nút đỏ)'], ['Cần chọn', '3 nút'], ['Ràng buộc', 'PHẢI có nút đỏ']],
           text: 'Khoá <b>hẹn giờ</b>: có <b>7 nút</b> (1 nút đỏ), chọn <b>3 nút</b> để đặt giờ mở, <b>bắt buộc</b> có nút đỏ. ' +
             'Có bao nhiêu cách chọn? <b>Hẹn giờ</b> bằng số đó.',
           solLines: [
@@ -6240,7 +6260,7 @@
         { // 10 — BOSS 2 TẦNG (nối chuỗi: kết quả tầng 1 dùng cho tầng 2)
           name: 'SIÊU KÉT — Hắc Kim 2 Tầng', emoji: '👑', diff: 'BOSS', diffClass: 'diff-boss', bloom: 'VDC',
           mode: 'multi', concept: 'boss', chained: true,
-          given: [ ['Số nút', '6 nút khác nhau'], ['Chọn', '3 nút'] ],
+          given: [['Số nút', '6 nút khác nhau'], ['Chọn', '3 nút']],
           steps: [
             { sol: 20, title: 'Tầng 1 — Chọn 3 nút', hint: 'Tổ hợp $C^3_6$', text: '<b>Tầng 1:</b> Chọn <b>3 nút</b> trong <b>6</b> (chưa xếp thứ tự). Nhập số cách chọn $C^3_6$.' },
             { sol: 120, title: 'Tầng 2 — Xếp thứ tự × Tầng 1', hint: 'Nhân số cách xếp $3!$ với kết quả tầng 1', text: '<b>Tầng 2:</b> Mỗi bộ 3 nút ở tầng 1 xếp theo <b>thứ tự bấm</b> có $3!=6$ cách. Nhập <b>tổng số mã</b> $=C^3_6\\times3!$.' }
@@ -6640,11 +6660,11 @@
 
       /* ===== RENDER: két sắt + bàn phím mã (Phá Két Mật Mã) ===== */
       let padBtns = [];  // vùng nút bàn phím trên canvas (CSS px)
-      function safeColors(){
+      function safeColors() {
         return {
-          ink: css('--ink')||'#e8eefc', gold: css('--gold')||'#f5b301',
-          green: css('--green')||'#22c55e', red: css('--red')||'#ef4444',
-          line: css('--line')||'#33406b', key: css('--panel-soft')||'#1a2547'
+          ink: css('--ink') || '#e8eefc', gold: css('--gold') || '#f5b301',
+          green: css('--green') || '#22c55e', red: css('--red') || '#ef4444',
+          line: css('--line') || '#33406b', key: css('--panel-soft') || '#1a2547'
         };
       }
       function render() {
@@ -6684,7 +6704,7 @@
         }
       }
       document.addEventListener('visibilitychange', () => { if (!document.hidden) startLockAnim(); });
-      function rrp(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+      function rrp(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 
       // ==== Bu-lông thép 3D ====
       function drawBolt(x, y, r) {
@@ -6723,16 +6743,16 @@
       // Nhãn ô nhập / nút hành động / câu nhắc theo loại khoá
       function lockUI(lock) {
         const M = {
-          dial:        { label: 'SỐ ĐĨA',        action: 'XOAY MỞ KÉT',  prompt: 'Tính số cách rồi XOAY ĐĨA đến đúng số đó.' },
-          electronic:  { label: 'MÃ PIN',        action: 'NHẬP PIN',     prompt: 'Tính số mã rồi NHẬP MÃ PIN để mở.' },
-          keypad:      { label: 'SỐ MÃ',         action: 'BẤM MỞ KÉT',   prompt: 'Tính tổng số mã rồi BẤM PHÍM nhập số đó.' },
+          dial: { label: 'SỐ ĐĨA', action: 'XOAY MỞ KÉT', prompt: 'Tính số cách rồi XOAY ĐĨA đến đúng số đó.' },
+          electronic: { label: 'MÃ PIN', action: 'NHẬP PIN', prompt: 'Tính số mã rồi NHẬP MÃ PIN để mở.' },
+          keypad: { label: 'SỐ MÃ', action: 'BẤM MỞ KÉT', prompt: 'Tính tổng số mã rồi BẤM PHÍM nhập số đó.' },
           fingerprint: { label: 'SỐ THỨ TỰ VÂN', action: 'QUÉT VÂN TAY', prompt: 'Tính số thứ tự quét vân tay rồi XÁC NHẬN.' },
-          cylinder:    { label: 'SỐ CHÌA',       action: 'TRA CHÌA',     prompt: 'Tính số chìa khớp rồi TRA CHÌA để mở.' },
-          card:        { label: 'SỐ THẺ',        action: 'CẮM THẺ TỪ',   prompt: 'Tính số thẻ hợp lệ rồi CẮM THẺ TỪ.' },
-          eye:         { label: 'SỐ CẤU HÌNH',   action: 'QUÉT MẮT',     prompt: 'Tính số cấu hình mống mắt rồi QUÉT MẮT.' },
-          wheel:       { label: 'SỐ NẤC QUAY',   action: 'QUAY MỞ KÉT',  prompt: 'Tính số mã rồi QUAY BÁNH XE đến số đó.' },
-          time:        { label: 'SỐ HẸN GIỜ',    action: 'HẸN GIỜ MỞ',   prompt: 'Tính số cách rồi ĐẶT HẸN GIỜ mở két.' },
-          boss:        { label: 'MÃ TỔNG',       action: 'PHÁ SIÊU KÉT', prompt: 'Phá lần lượt 2 tầng để hạ SIÊU KÉT.' }
+          cylinder: { label: 'SỐ CHÌA', action: 'TRA CHÌA', prompt: 'Tính số chìa khớp rồi TRA CHÌA để mở.' },
+          card: { label: 'SỐ THẺ', action: 'CẮM THẺ TỪ', prompt: 'Tính số thẻ hợp lệ rồi CẮM THẺ TỪ.' },
+          eye: { label: 'SỐ CẤU HÌNH', action: 'QUÉT MẮT', prompt: 'Tính số cấu hình mống mắt rồi QUÉT MẮT.' },
+          wheel: { label: 'SỐ NẤC QUAY', action: 'QUAY MỞ KÉT', prompt: 'Tính số mã rồi QUAY BÁNH XE đến số đó.' },
+          time: { label: 'SỐ HẸN GIỜ', action: 'HẸN GIỜ MỞ', prompt: 'Tính số cách rồi ĐẶT HẸN GIỜ mở két.' },
+          boss: { label: 'MÃ TỔNG', action: 'PHÁ SIÊU KÉT', prompt: 'Phá lần lượt 2 tầng để hạ SIÊU KÉT.' }
         };
         return M[lock] || M.dial;
       }
@@ -6923,12 +6943,12 @@
         }
       }
 
-      function drawSafeScene(L){
+      function drawSafeScene(L) {
         const C = safeColors(), W = Wd, H = Hd;
         if (W < 60 || H < 60) return;   // canvas chưa định cỡ → bỏ vẽ (tránh bán kính âm)
         try { drawSafeSceneInner(L, C, W, H); } catch (e) { /* bỏ qua khung lỗi tạm thời khi chuyển cảnh */ }
       }
-      function drawSafeSceneInner(L, C, W, H){
+      function drawSafeSceneInner(L, C, W, H) {
         const SK = vaultSkin(state.lvl);
         // ===== KHUNG CỬA KÉT 3D (viền thép vát nổi) =====
         ctx.save();
@@ -6995,17 +7015,17 @@
         ctx.restore();
         drawKeypad(L, W * 0.46, H * 0.345, W * 0.48, H * 0.60, C, S);
       }
-      function drawKeypad(L, kx, ky, kw, kh, C, S){
+      function drawKeypad(L, kx, ky, kw, kh, C, S) {
         S = S || vaultSkin(state.lvl);
-        padBtns=[];
-        const keys=['1','2','3','4','5','6','7','8','9','C','0','\u232b'];
-        const cols=3, rows=4, gap=10;
-        const bw=(kw-gap*(cols-1))/cols, bh=(kh-gap*(rows-1))/rows;
-        const rad = Math.min(14, bh*0.28);
-        keys.forEach((k,idx)=>{
-          const r=Math.floor(idx/cols), c=idx%cols;
-          const x=kx+c*(bw+gap), y=ky+r*(bh+gap);
-          padBtns.push({k,x,y,w:bw,h:bh});
+        padBtns = [];
+        const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'C', '0', '\u232b'];
+        const cols = 3, rows = 4, gap = 10;
+        const bw = (kw - gap * (cols - 1)) / cols, bh = (kh - gap * (rows - 1)) / rows;
+        const rad = Math.min(14, bh * 0.28);
+        keys.forEach((k, idx) => {
+          const r = Math.floor(idx / cols), c = idx % cols;
+          const x = kx + c * (bw + gap), y = ky + r * (bh + gap);
+          padBtns.push({ k, x, y, w: bw, h: bh });
           ctx.save();
           // bóng đổ phím (khối nổi rõ)
           rrp(x, y + 5, bw, bh, rad); ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.fill();
@@ -7023,39 +7043,39 @@
           // viền accent theo skin (nét hiện đại)
           ctx.lineWidth = 1.6; ctx.strokeStyle = edge; ctx.stroke();
           // vệt sáng bóng đỉnh phím
-          rrp(x + 4, y + 3, bw - 8, bh * 0.42, rad*0.7); ctx.fillStyle = 'rgba(255,255,255,.4)'; ctx.fill();
+          rrp(x + 4, y + 3, bw - 8, bh * 0.42, rad * 0.7); ctx.fillStyle = 'rgba(255,255,255,.4)'; ctx.fill();
           // ký tự lớn, đậm
           ctx.fillStyle = txt; ctx.font = '800 ' + Math.round(bh * 0.46) + 'px "JetBrains Mono", Nunito'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.shadowColor = 'rgba(0,0,0,.15)'; ctx.shadowBlur = 1; ctx.shadowOffsetY = 1;
           ctx.fillText(k, x + bw / 2, y + bh / 2 + 1); ctx.restore();
         });
-        ctx.textBaseline='alphabetic';
+        ctx.textBaseline = 'alphabetic';
       }
 
       /* ===================== INPUT (bàn phím mã) ===================== */
-      function padHit(e){
-        const r=cv.getBoundingClientRect();
-        const px=(e.clientX-r.left), py=(e.clientY-r.top);
-        for(const b of padBtns){ if(px>=b.x&&px<=b.x+b.w&&py>=b.y&&py<=b.y+b.h) return b.k; }
+      function padHit(e) {
+        const r = cv.getBoundingClientRect();
+        const px = (e.clientX - r.left), py = (e.clientY - r.top);
+        for (const b of padBtns) { if (px >= b.x && px <= b.x + b.w && py >= b.y && py <= b.y + b.h) return b.k; }
         return null;
       }
-      cv.addEventListener('pointerdown', e=>{
-        const L=LEVELS[state.lvl]; if(!L||L.mode==='worksheet'||state.cleared) return;
-        const k=padHit(e); if(k==null) return;
+      cv.addEventListener('pointerdown', e => {
+        const L = LEVELS[state.lvl]; if (!L || L.mode === 'worksheet' || state.cleared) return;
+        const k = padHit(e); if (k == null) return;
         e.preventDefault(); pressKey(k);
       });
-      function pressKey(k){
-        if(k==='C'){ state.code=''; SFX.clear(); }
-        else if(k==='\u232b'){ state.code=(state.code||'').slice(0,-1); SFX.back(); }
-        else if(/^[0-9]$/.test(k)){ state.code=state.code||''; if(state.code.length<6){ state.code+=k; SFX.key(state.code.length); } else return; }
-        $('ctrlStatus').className='ctrl-status ok'; render();
+      function pressKey(k) {
+        if (k === 'C') { state.code = ''; SFX.clear(); }
+        else if (k === '\u232b') { state.code = (state.code || '').slice(0, -1); SFX.back(); }
+        else if (/^[0-9]$/.test(k)) { state.code = state.code || ''; if (state.code.length < 6) { state.code += k; SFX.key(state.code.length); } else return; }
+        $('ctrlStatus').className = 'ctrl-status ok'; render();
       }
-      document.addEventListener('keydown', e=>{
-        const L=LEVELS[state.lvl]; if(!L||L.mode==='worksheet'||state.cleared) return;
-        if(document.querySelector('.overlay.show')) return;
-        if(/^[0-9]$/.test(e.key)) pressKey(e.key);
-        else if(e.key==='Backspace'){ e.preventDefault(); pressKey('\u232b'); }
-        else if(e.key==='Enter'){ checkLevel(); }
+      document.addEventListener('keydown', e => {
+        const L = LEVELS[state.lvl]; if (!L || L.mode === 'worksheet' || state.cleared) return;
+        if (document.querySelector('.overlay.show')) return;
+        if (/^[0-9]$/.test(e.key)) pressKey(e.key);
+        else if (e.key === 'Backspace') { e.preventDefault(); pressKey('\u232b'); }
+        else if (e.key === 'Enter') { checkLevel(); }
       });
 
       /* ===================== LIVE PANEL ===================== */
@@ -7072,29 +7092,29 @@
       /* ===================== CHECK / CLEAR ===================== */
       function checkLevel() {
         const L = LEVELS[state.lvl]; if (!L || L.mode === 'worksheet' || state.cleared) return;
-        if(!state.code||state.code===''){ toast('\u2328\ufe0f Hãy nhập mã trước khi xác nhận!'); return; }
-        const val = parseInt(state.code,10);
-        if(L.mode==='multi'){
-          const step=L.steps[state.step];
-          if(val===step.sol){
-            if(state.step < L.steps.length-1){
-              state.step++; state.code='';
-              const nx=L.steps[state.step];
+        if (!state.code || state.code === '') { toast('\u2328\ufe0f Hãy nhập mã trước khi xác nhận!'); return; }
+        const val = parseInt(state.code, 10);
+        if (L.mode === 'multi') {
+          const step = L.steps[state.step];
+          if (val === step.sol) {
+            if (state.step < L.steps.length - 1) {
+              state.step++; state.code = '';
+              const nx = L.steps[state.step];
               SFX.good(); confetti(false); comboStreak++;
-              $('ctrlStatus').className='ctrl-status ok';
-              $('ctrlStatus').innerHTML='\u2714 Xong '+L.steps[state.step-1].title+'! Sang <b>'+nx.title+'</b>.';
-              $('missionText').innerHTML=L.text+' <b>'+nx.title+':</b> '+nx.text;
+              $('ctrlStatus').className = 'ctrl-status ok';
+              $('ctrlStatus').innerHTML = '\u2714 Xong ' + L.steps[state.step - 1].title + '! Sang <b>' + nx.title + '</b>.';
+              $('missionText').innerHTML = L.text + ' <b>' + nx.title + ':</b> ' + nx.text;
               typeset($('missionText'));
-              toast('\u2705 '+L.steps[state.step-1].title+' xong! Sang tầng sau.');
+              toast('\u2705 ' + L.steps[state.step - 1].title + ' xong! Sang tầng sau.');
               render(); return;
-            } else { $('ctrlStatus').className='ctrl-status ok'; $('ctrlStatus').textContent='\u2714 Chính xác! Đang tính điểm\u2026'; onClear(L); return; }
+            } else { $('ctrlStatus').className = 'ctrl-status ok'; $('ctrlStatus').textContent = '\u2714 Chính xác! Đang tính điểm\u2026'; onClear(L); return; }
           }
         } else {
-          if(val===L.sol){ $('ctrlStatus').className='ctrl-status ok'; $('ctrlStatus').textContent='\u2714 Chính xác! Đang tính điểm\u2026'; onClear(L); return; }
+          if (val === L.sol) { $('ctrlStatus').className = 'ctrl-status ok'; $('ctrlStatus').textContent = '\u2714 Chính xác! Đang tính điểm\u2026'; onClear(L); return; }
         }
-        SFX.bad(); comboStreak=0; sessionFails[state.lvl]=(sessionFails[state.lvl]||0)+1;
-        $('ctrlStatus').className='ctrl-status bad';
-        $('ctrlStatus').textContent='\u2717 Mã chưa đúng \u2014 kiểm tra lại phép đếm rồi thử lần nữa (\ud83d\udca1 Gợi ý / \ud83d\udcd6 Lời giải).';
+        SFX.bad(); comboStreak = 0; sessionFails[state.lvl] = (sessionFails[state.lvl] || 0) + 1;
+        $('ctrlStatus').className = 'ctrl-status bad';
+        $('ctrlStatus').textContent = '\u2717 Mã chưa đúng \u2014 kiểm tra lại phép đếm rồi thử lần nữa (\ud83d\udca1 Gợi ý / \ud83d\udcd6 Lời giải).';
         toast('\u274c Mã sai, thử lại nhé!');
       }
 
@@ -7116,23 +7136,23 @@
           if (finished) return;
           const p = Math.min((ts - start) / dur, 1); openProg = p;
           try {
-          ctx.clearRect(0, 0, Wd, Hd); drawStarfield(); drawSafeScene(L);
-          ctx.save();
-          ctx.globalAlpha = Math.min(p * 2, 1) * 0.9;
-          const rr = R * (0.5 + p * 1.15);
-          let g = ctx.createRadialGradient(vx, vy, 2, vx, vy, rr);
-          g.addColorStop(0, '#fff7d6'); g.addColorStop(0.5, hexA(S.accent, .8)); g.addColorStop(1, 'rgba(255,247,214,0)');
-          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(vx, vy, rr, 0, 7); ctx.fill();
-          ctx.globalAlpha = 0.6 * (1 - p * 0.35); ctx.strokeStyle = '#fff7d6'; ctx.lineWidth = 3;
-          for (let i = 0; i < 14; i++) { const a = i / 14 * 6.28 + p * 3; const r1 = R * 0.3, r2 = R * (0.7 + p * 0.9); ctx.beginPath(); ctx.moveTo(vx + Math.cos(a) * r1, vy + Math.sin(a) * r1); ctx.lineTo(vx + Math.cos(a) * r2, vy + Math.sin(a) * r2); ctx.stroke(); }
-          ctx.globalAlpha = 1;
-          const gy = vy + (1 - p) * 26;
-          ctx.font = '800 ' + Math.round(R * 0.85) + 'px Nunito'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.fillText('\ud83c\udf81', vx, gy);
-          ctx.textBaseline = 'alphabetic'; ctx.font = '900 ' + Math.round(Hd * 0.058) + 'px "Baloo 2", Nunito';
-          ctx.fillStyle = '#fff7d6'; ctx.globalAlpha = Math.min(p * 1.5, 1);
-          ctx.fillText('\ud83d\udd13 K\u00c9T \u0110\u00c3 M\u1ede!', Wd * 0.7, Hd * 0.52);
-          ctx.restore();
+            ctx.clearRect(0, 0, Wd, Hd); drawStarfield(); drawSafeScene(L);
+            ctx.save();
+            ctx.globalAlpha = Math.min(p * 2, 1) * 0.9;
+            const rr = R * (0.5 + p * 1.15);
+            let g = ctx.createRadialGradient(vx, vy, 2, vx, vy, rr);
+            g.addColorStop(0, '#fff7d6'); g.addColorStop(0.5, hexA(S.accent, .8)); g.addColorStop(1, 'rgba(255,247,214,0)');
+            ctx.fillStyle = g; ctx.beginPath(); ctx.arc(vx, vy, rr, 0, 7); ctx.fill();
+            ctx.globalAlpha = 0.6 * (1 - p * 0.35); ctx.strokeStyle = '#fff7d6'; ctx.lineWidth = 3;
+            for (let i = 0; i < 14; i++) { const a = i / 14 * 6.28 + p * 3; const r1 = R * 0.3, r2 = R * (0.7 + p * 0.9); ctx.beginPath(); ctx.moveTo(vx + Math.cos(a) * r1, vy + Math.sin(a) * r1); ctx.lineTo(vx + Math.cos(a) * r2, vy + Math.sin(a) * r2); ctx.stroke(); }
+            ctx.globalAlpha = 1;
+            const gy = vy + (1 - p) * 26;
+            ctx.font = '800 ' + Math.round(R * 0.85) + 'px Nunito'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('\ud83c\udf81', vx, gy);
+            ctx.textBaseline = 'alphabetic'; ctx.font = '900 ' + Math.round(Hd * 0.058) + 'px "Baloo 2", Nunito';
+            ctx.fillStyle = '#fff7d6'; ctx.globalAlpha = Math.min(p * 1.5, 1);
+            ctx.fillText('\ud83d\udd13 K\u00c9T \u0110\u00c3 M\u1ede!', Wd * 0.7, Hd * 0.52);
+            ctx.restore();
           } catch (e) { /* bỏ qua khung lỗi tạm thời khi chuyển cảnh */ }
           if (p < 1) requestAnimationFrame(step); else finish();
         }
@@ -7600,33 +7620,33 @@
       }
 
       /* ---------- Tổ hợp: tiện ích ---------- */
-      function fS(n){ return '$' + n + '$'; }
-      function cDist(n){ // nhiễu số đếm KHÁC NHAU RÕ RÀNG, không âm
-        const arr=[n+1,n-1,n+2,n-2,2*n,n+3,Math.max(1,n-3)];
-        return arr.filter(v=>v>0 && v!==n).map(v=>fS(v));
+      function fS(n) { return '$' + n + '$'; }
+      function cDist(n) { // nhiễu số đếm KHÁC NHAU RÕ RÀNG, không âm
+        const arr = [n + 1, n - 1, n + 2, n - 2, 2 * n, n + 3, Math.max(1, n - 3)];
+        return arr.filter(v => v > 0 && v !== n).map(v => fS(v));
       }
-      function comboFigSVG(n, cap){ // minh hoạ n ô/nút để đếm (khung tự vừa số nút)
-        const r=15, gap=10, x0=16, H=92, y=H/2;
-        const W = x0*2 + n*(2*r) + (n-1)*gap;   // đủ rộng cho mọi nút
-        let cells='';
-        for(let i=0;i<n;i++){ const cx=x0+i*(2*r+gap)+r; cells+=`<circle cx="${cx}" cy="${y}" r="${r}" fill="var(--panel)" stroke="var(--indigo,#2A3B8F)" stroke-width="2"/><text x="${cx}" y="${y+5}" font-size="14" font-weight="800" fill="var(--indigo,#2A3B8F)" text-anchor="middle">${i+1}</text>`; }
-        return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="max-width:100%;height:auto" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="${W-2}" height="${H-2}" rx="12" fill="var(--panel-soft)" stroke="var(--line)"/>${cells}${cap?`<text x="${W/2}" y="${H-8}" font-size="11" font-weight="700" fill="var(--muted)" text-anchor="middle">${cap}</text>`:''}</svg>`;
+      function comboFigSVG(n, cap) { // minh hoạ n ô/nút để đếm (khung tự vừa số nút)
+        const r = 15, gap = 10, x0 = 16, H = 92, y = H / 2;
+        const W = x0 * 2 + n * (2 * r) + (n - 1) * gap;   // đủ rộng cho mọi nút
+        let cells = '';
+        for (let i = 0; i < n; i++) { const cx = x0 + i * (2 * r + gap) + r; cells += `<circle cx="${cx}" cy="${y}" r="${r}" fill="var(--panel)" stroke="var(--indigo,#2A3B8F)" stroke-width="2"/><text x="${cx}" y="${y + 5}" font-size="14" font-weight="800" fill="var(--indigo,#2A3B8F)" text-anchor="middle">${i + 1}</text>`; }
+        return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="max-width:100%;height:auto" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="12" fill="var(--panel-soft)" stroke="var(--line)"/>${cells}${cap ? `<text x="${W / 2}" y="${H - 8}" font-size="11" font-weight="700" fill="var(--muted)" text-anchor="middle">${cap}</text>` : ''}</svg>`;
       }
 
       /* ---------- PHẦN I: 12 TN (8 NB + 4 TH) ---------- */
       function genPartI() {
         const items = [];
         const nbGens = [
-          () => { const a=rndInt(2,6), b=rndInt(2,6); const r=a+b; return mkMCQ('NB', `Có <b>${a}</b> bút xanh và <b>${b}</b> bút đỏ. Chọn <b>1</b> bút. Số cách chọn là`, fS(r), dedup4(fS(r), [fS(a*b),fS(a),fS(b),...cDist(r)]), `Hai loại rời nhau ⟹ quy tắc cộng: $${a}+${b}=${r}$.`); },
-          () => { const a=rndInt(2,5), b=rndInt(2,5); const r=a*b; return mkMCQ('NB', `Từ A đến B có <b>${a}</b> con đường, từ B đến C có <b>${b}</b> con đường. Số cách đi $A\\to B\\to C$ là`, fS(r), dedup4(fS(r), [fS(a+b),...cDist(r)]), `Hai giai đoạn liên tiếp ⟹ quy tắc nhân: $${a}\\times${b}=${r}$.`); },
-          () => { const base=rndInt(2,4), k=rndInt(2,3); const r=Math.pow(base,k); return mkMCQ('NB', `Mã gồm <b>${k}</b> vòng, mỗi vòng có <b>${base}</b> số và được lặp lại. Số mã là`, fS(r), dedup4(fS(r), [fS(base*k),fS(base+k),...cDist(r)]), `$${base}^${k}=${r}$ (quy tắc nhân, có lặp).`); },
-          () => { const n=rndInt(3,5); const r=_fact(n); return mkMCQ('NB', `Số cách xếp <b>${n}</b> bạn khác nhau thành một hàng là`, fS(r), dedup4(fS(r), [fS(n*n),fS(2*n),...cDist(r)]), `Hoán vị: $P_{${n}}=${n}!=${r}$.`); },
-          () => { const n=rndInt(4,6), k=rndInt(2,3); const r=_perm(n,k); return mkMCQ('NB', `Chọn <b>${k}</b> trong <b>${n}</b> bạn xếp vào ${k} ghế khác nhau (có thứ tự). Số cách là`, fS(r), dedup4(fS(r), [fS(_comb(n,k)),fS(_fact(n)),...cDist(r)]), `Chỉnh hợp: $A^{${k}}_{${n}}=${r}$.`); },
-          () => { const n=rndInt(4,7), k=rndInt(2,3); const r=_comb(n,k); return mkMCQ('NB', `Chọn <b>${k}</b> trong <b>${n}</b> bạn vào tổ trực (không kể thứ tự). Số cách là`, fS(r), dedup4(fS(r), [fS(_perm(n,k)),fS(_fact(n)),...cDist(r)]), `Tổ hợp: $C^{${k}}_{${n}}=${r}$.`); },
+          () => { const a = rndInt(2, 6), b = rndInt(2, 6); const r = a + b; return mkMCQ('NB', `Có <b>${a}</b> bút xanh và <b>${b}</b> bút đỏ. Chọn <b>1</b> bút. Số cách chọn là`, fS(r), dedup4(fS(r), [fS(a * b), fS(a), fS(b), ...cDist(r)]), `Hai loại rời nhau ⟹ quy tắc cộng: $${a}+${b}=${r}$.`); },
+          () => { const a = rndInt(2, 5), b = rndInt(2, 5); const r = a * b; return mkMCQ('NB', `Từ A đến B có <b>${a}</b> con đường, từ B đến C có <b>${b}</b> con đường. Số cách đi $A\\to B\\to C$ là`, fS(r), dedup4(fS(r), [fS(a + b), ...cDist(r)]), `Hai giai đoạn liên tiếp ⟹ quy tắc nhân: $${a}\\times${b}=${r}$.`); },
+          () => { const base = rndInt(2, 4), k = rndInt(2, 3); const r = Math.pow(base, k); return mkMCQ('NB', `Mã gồm <b>${k}</b> vòng, mỗi vòng có <b>${base}</b> số và được lặp lại. Số mã là`, fS(r), dedup4(fS(r), [fS(base * k), fS(base + k), ...cDist(r)]), `$${base}^${k}=${r}$ (quy tắc nhân, có lặp).`); },
+          () => { const n = rndInt(3, 5); const r = _fact(n); return mkMCQ('NB', `Số cách xếp <b>${n}</b> bạn khác nhau thành một hàng là`, fS(r), dedup4(fS(r), [fS(n * n), fS(2 * n), ...cDist(r)]), `Hoán vị: $P_{${n}}=${n}!=${r}$.`); },
+          () => { const n = rndInt(4, 6), k = rndInt(2, 3); const r = _perm(n, k); return mkMCQ('NB', `Chọn <b>${k}</b> trong <b>${n}</b> bạn xếp vào ${k} ghế khác nhau (có thứ tự). Số cách là`, fS(r), dedup4(fS(r), [fS(_comb(n, k)), fS(_fact(n)), ...cDist(r)]), `Chỉnh hợp: $A^{${k}}_{${n}}=${r}$.`); },
+          () => { const n = rndInt(4, 7), k = rndInt(2, 3); const r = _comb(n, k); return mkMCQ('NB', `Chọn <b>${k}</b> trong <b>${n}</b> bạn vào tổ trực (không kể thứ tự). Số cách là`, fS(r), dedup4(fS(r), [fS(_perm(n, k)), fS(_fact(n)), ...cDist(r)]), `Tổ hợp: $C^{${k}}_{${n}}=${r}$.`); },
           () => { return mkMCQ('NB', `Công thức chỉnh hợp $A^k_n$ bằng`, `$\\dfrac{n!}{(n-k)!}$`, dedup4(`$\\dfrac{n!}{(n-k)!}$`, [`$\\dfrac{n!}{k!\\,(n-k)!}$`, `$n!$`, `$k!\\,(n-k)!$`, `$\\dfrac{k!}{n!}$`]), `$A^k_n=\\dfrac{n!}{(n-k)!}$.`); },
           () => { return mkMCQ('NB', `Dùng <b>tổ hợp</b> (thay vì chỉnh hợp) khi`, `KHÔNG kể thứ tự`, dedup4(`KHÔNG kể thứ tự`, [`có kể thứ tự`, `được lặp lại`, `xếp thành hàng`, `chia giai đoạn`]), `Tổ hợp: chọn phần tử mà không phân biệt thứ tự.`); }
         ];
-        const nbTopics = ['add','mul','mulrep','perm','arr','comb','arr','comb'];
+        const nbTopics = ['add', 'mul', 'mulrep', 'perm', 'arr', 'comb', 'arr', 'comb'];
         nbGens.forEach((g, i) => g.topic = nbTopics[i]);
         const scope = (typeof teacherScope === 'function') ? teacherScope() : null;
         let nbPool = nbGens;
@@ -7637,10 +7657,10 @@
 
         // 4 TH (1 câu có HÌNH minh hoạ)
         const thGens = [
-          () => { const n=rndInt(4,6), k=2; const r=_perm(n,k); return mkMCQ('TH', `Từ <b>${n}</b> chữ số khác nhau, lập được bao nhiêu số gồm <b>2</b> chữ số khác nhau?`, fS(r), dedup4(fS(r), [fS(_comb(n,k)),fS(n*n),...cDist(r)]), `Có thứ tự, không lặp: $A^2_{${n}}=${n}\\times${n-1}=${r}$.`); },
-          () => { const n=rndInt(5,7); const r=_comb(n,2); return mkMCQ('TH', `Có <b>${n}</b> điểm, không có 3 điểm nào thẳng hàng. Số đoạn thẳng nối 2 điểm là`, fS(r), dedup4(fS(r), [fS(_perm(n,2)),fS(n*n),...cDist(r)]), `Đoạn thẳng không kể thứ tự: $C^2_{${n}}=${r}$.`); },
-          () => { const n=rndInt(4,6); const r=_fact(n); return mkMCQ('TH', `Số cách xếp <b>${n}</b> cuốn sách khác nhau lên một kệ là`, fS(r), dedup4(fS(r), [fS(n*n),fS(_comb(n,2)),...cDist(r)]), `Hoán vị: $${n}!=${r}$.`); },
-          () => { const n=rndInt(4,6), k=3; const r=_comb(n,k); const fig=comboFigSVG(n,`Chọn ${k} trong ${n} nút`); return mkMCQ('TH', `Quan sát ${n} nút. Chọn <b>${k}</b> nút để bật (không kể thứ tự). Số cách là`, fS(r), dedup4(fS(r), [fS(_perm(n,k)),fS(_fact(n)),...cDist(r)]), `Tổ hợp: $C^{${k}}_{${n}}=${r}$.`, fig); }
+          () => { const n = rndInt(4, 6), k = 2; const r = _perm(n, k); return mkMCQ('TH', `Từ <b>${n}</b> chữ số khác nhau, lập được bao nhiêu số gồm <b>2</b> chữ số khác nhau?`, fS(r), dedup4(fS(r), [fS(_comb(n, k)), fS(n * n), ...cDist(r)]), `Có thứ tự, không lặp: $A^2_{${n}}=${n}\\times${n - 1}=${r}$.`); },
+          () => { const n = rndInt(5, 7); const r = _comb(n, 2); return mkMCQ('TH', `Có <b>${n}</b> điểm, không có 3 điểm nào thẳng hàng. Số đoạn thẳng nối 2 điểm là`, fS(r), dedup4(fS(r), [fS(_perm(n, 2)), fS(n * n), ...cDist(r)]), `Đoạn thẳng không kể thứ tự: $C^2_{${n}}=${r}$.`); },
+          () => { const n = rndInt(4, 6); const r = _fact(n); return mkMCQ('TH', `Số cách xếp <b>${n}</b> cuốn sách khác nhau lên một kệ là`, fS(r), dedup4(fS(r), [fS(n * n), fS(_comb(n, 2)), ...cDist(r)]), `Hoán vị: $${n}!=${r}$.`); },
+          () => { const n = rndInt(4, 6), k = 3; const r = _comb(n, k); const fig = comboFigSVG(n, `Chọn ${k} trong ${n} nút`); return mkMCQ('TH', `Quan sát ${n} nút. Chọn <b>${k}</b> nút để bật (không kể thứ tự). Số cách là`, fS(r), dedup4(fS(r), [fS(_perm(n, k)), fS(_fact(n)), ...cDist(r)]), `Tổ hợp: $C^{${k}}_{${n}}=${r}$.`, fig); }
         ];
         const graphItem = thGens[thGens.length - 1]();
         const others = shuffle(thGens.slice(0, thGens.length - 1)).slice(0, 3).map(g => g());
@@ -7651,14 +7671,14 @@
 
       /* ---------- PHẦN II: 2 Đúng–Sai (mỗi câu 4 ý trên một tình huống) ---------- */
       function tfTemplates(n, k) {
-        const P=_fact(n), A=_perm(n,k), C=_comb(n,k);
+        const P = _fact(n), A = _perm(n, k), C = _comb(n, k);
         return [
-          { t: `Số hoán vị của $${n}$ phần tử là $${n}!=${P}$.`, f: `Số hoán vị của $${n}$ phần tử là $${n}^2=${n*n}$.`, eT: `Hoán vị $P_{${n}}=${n}!=${P}$.`, eF: `Sai. $P_{${n}}=${n}!=${P}$, không phải $${n}^2$.` },
+          { t: `Số hoán vị của $${n}$ phần tử là $${n}!=${P}$.`, f: `Số hoán vị của $${n}$ phần tử là $${n}^2=${n * n}$.`, eT: `Hoán vị $P_{${n}}=${n}!=${P}$.`, eF: `Sai. $P_{${n}}=${n}!=${P}$, không phải $${n}^2$.` },
           { t: `$A^{${k}}_{${n}}=${A}$.`, f: `$A^{${k}}_{${n}}=${C}$.`, eT: `$A^{${k}}_{${n}}=\\dfrac{${n}!}{(${n}-${k})!}=${A}$.`, eF: `Sai. $A^{${k}}_{${n}}=${A}$ (giá trị $${C}$ là của $C^{${k}}_{${n}}$).` },
           { t: `$C^{${k}}_{${n}}=${C}$.`, f: `$C^{${k}}_{${n}}=${A}$.`, eT: `$C^{${k}}_{${n}}=\\dfrac{${n}!}{${k}!(${n}-${k})!}=${C}$.`, eF: `Sai. $C^{${k}}_{${n}}=${C}$ (giá trị $${A}$ là của $A^{${k}}_{${n}}$).` },
           { t: `$A^{${k}}_{${n}}=C^{${k}}_{${n}}\\times ${k}!$.`, f: `$A^{${k}}_{${n}}=C^{${k}}_{${n}}+${k}!$.`, eT: `Liên hệ đúng: $A^k_n=C^k_n\\cdot k!$ (kiểm chứng $${C}\\times${_fact(k)}=${A}$).`, eF: `Sai. Liên hệ đúng là $A^k_n=C^k_n\\cdot k!$ (nhân, không cộng).` },
-          { t: `$C^{${k}}_{${n}}=C^{${n-k}}_{${n}}$.`, f: `$C^{${k}}_{${n}}=C^{${k}}_{${n-1}}$.`, eT: `Tính chất đối xứng: $C^k_n=C^{n-k}_n$.`, eF: `Sai. Tính chất đúng là $C^k_n=C^{n-k}_n$.` },
-          { t: `Xếp $${n}$ người vào $${n}$ ghế: có $${P}$ cách.`, f: `Xếp $${n}$ người vào $${n}$ ghế: có $${n*k}$ cách.`, eT: `Đây là hoán vị: $${n}!=${P}$ cách.`, eF: `Sai. Đây là hoán vị $${n}!=${P}$ cách.` }
+          { t: `$C^{${k}}_{${n}}=C^{${n - k}}_{${n}}$.`, f: `$C^{${k}}_{${n}}=C^{${k}}_{${n - 1}}$.`, eT: `Tính chất đối xứng: $C^k_n=C^{n-k}_n$.`, eF: `Sai. Tính chất đúng là $C^k_n=C^{n-k}_n$.` },
+          { t: `Xếp $${n}$ người vào $${n}$ ghế: có $${P}$ cách.`, f: `Xếp $${n}$ người vào $${n}$ ghế: có $${n * k}$ cách.`, eT: `Đây là hoán vị: $${n}!=${P}$ cách.`, eF: `Sai. Đây là hoán vị $${n}!=${P}$ cách.` }
         ];
       }
       function genTF(n, k, pat) {
@@ -7671,8 +7691,8 @@
         const P2 = ['1100', '1010', '1001', '0110', '0101', '0011'];
         const P1 = ['1000', '0100', '0010', '0001'];
         const groups = [P3, P2, P1];
-        let n1=rndInt(4,6), k1=rndInt(2,3), n2=rndInt(4,6), k2=rndInt(2,3), g=0;
-        while (n2===n1 && g++<20) n2=rndInt(4,6);
+        let n1 = rndInt(4, 6), k1 = rndInt(2, 3), n2 = rndInt(4, 6), k2 = rndInt(2, 3), g = 0;
+        while (n2 === n1 && g++ < 20) n2 = rndInt(4, 6);
         const gi = shuffle([0, 1, 2]);
         const p1 = rnd(groups[gi[0]]); const p2 = rnd(groups[gi[1]]);
         return [genTF(n1, k1, p1), genTF(n2, k2, p2)];
@@ -7680,45 +7700,45 @@
 
       /* ---------- PHẦN III: Nối cột 6 ý (trên MỘT bộ n phần tử) ---------- */
       function genPartIII() {
-        const n=rndInt(5,6), k=rndInt(2,3);
-        const P=_fact(n), A=_perm(n,k), C=_comb(n,k), MUL=Math.pow(2,n)>999? n*n : Math.pow(n,2);
+        const n = rndInt(5, 6), k = rndInt(2, 3);
+        const P = _fact(n), A = _perm(n, k), C = _comb(n, k), MUL = Math.pow(2, n) > 999 ? n * n : Math.pow(n, 2);
         const pairs = [
           { a: `Số hoán vị của $${n}$ phần tử ($P_{${n}}$)`, b: fS(P), lv: 'NB' },
           { a: `Chỉnh hợp $A^{${k}}_{${n}}$`, b: fS(A), lv: 'TH' },
           { a: `Tổ hợp $C^{${k}}_{${n}}$`, b: fS(C), lv: 'TH' },
           { a: `Số cách chọn 1 trong $${n}$ (quy tắc cộng)`, b: fS(n), lv: 'NB' },
-          { a: `Tổ hợp $C^{2}_{${n}}$ (số đoạn thẳng nối 2 điểm)`, b: fS(_comb(n,2)), lv: 'VD' },
-          { a: `Chỉnh hợp $A^{2}_{${n}}$`, b: fS(_perm(n,2)), lv: 'VD' }
+          { a: `Tổ hợp $C^{2}_{${n}}$ (số đoạn thẳng nối 2 điểm)`, b: fS(_comb(n, 2)), lv: 'VD' },
+          { a: `Chỉnh hợp $A^{2}_{${n}}$`, b: fS(_perm(n, 2)), lv: 'VD' }
         ];
         const bset = new Set(pairs.map(p => p.b));
-        let distractor = fS(n*n);
-        const candDist = [fS(n*n), fS(A+C), fS(_comb(n,1)+1), fS(P+1), fS(_perm(n,2)+3), fS(2*C)];
+        let distractor = fS(n * n);
+        const candDist = [fS(n * n), fS(A + C), fS(_comb(n, 1) + 1), fS(P + 1), fS(_perm(n, 2) + 3), fS(2 * C)];
         for (const cd of candDist) { if (!bset.has(cd)) { distractor = cd; break; } }
-        return { u:{n,k}, v:null, pairs, distractor };
+        return { u: { n, k }, v: null, pairs, distractor };
       }
 
       /* ---------- PHẦN IV: 4 Trả lời ngắn (2TH,1VD,1VDC) — thực tế có hình ---------- */
       function genPartIV() {
         const out = [];
         // TH1: hoán vị (xếp chỗ)
-        { const n=rndInt(4,5); const r=_fact(n); out.push({ lv: 'TH', q: `Có <b>${n}</b> học sinh xếp thành một hàng chụp ảnh. Số cách xếp là bao nhiêu?`, ans: [''+r], exp: `Hoán vị: $${n}!=${r}$.` }); }
+        { const n = rndInt(4, 5); const r = _fact(n); out.push({ lv: 'TH', q: `Có <b>${n}</b> học sinh xếp thành một hàng chụp ảnh. Số cách xếp là bao nhiêu?`, ans: ['' + r], exp: `Hoán vị: $${n}!=${r}$.` }); }
         // TH2: tổ hợp
-        { const n=rndInt(6,8); const r=_comb(n,2); out.push({ lv: 'TH', q: `Một lớp có <b>${n}</b> bạn, cần chọn <b>2</b> bạn đi trực nhật. Số cách chọn là bao nhiêu?`, ans: [''+r], exp: `Tổ hợp: $C^2_{${n}}=${r}$.` }); }
+        { const n = rndInt(6, 8); const r = _comb(n, 2); out.push({ lv: 'TH', q: `Một lớp có <b>${n}</b> bạn, cần chọn <b>2</b> bạn đi trực nhật. Số cách chọn là bao nhiêu?`, ans: ['' + r], exp: `Tổ hợp: $C^2_{${n}}=${r}$.` }); }
         // VD thực tế: chỉnh hợp (mã số) có hình
         {
-          const REAL=[ {emoji:'🔢', n:5, k:3}, {emoji:'🔐', n:6, k:3}, {emoji:'🎰', n:6, k:2} ];
-          const r0=rnd(REAL); const r=_perm(r0.n,r0.k);
-          out.push({ lv: 'VD', illus: r0.emoji, cap: 'Lập mã có thứ tự', q: `Từ <b>${r0.n}</b> chữ số khác nhau, lập mã gồm <b>${r0.k}</b> chữ số khác nhau (có thứ tự). Có bao nhiêu mã?`, ans: [''+r], exp: `Chỉnh hợp: $A^{${r0.k}}_{${r0.n}}=${r}$.` });
+          const REAL = [{ emoji: '🔢', n: 5, k: 3 }, { emoji: '🔐', n: 6, k: 3 }, { emoji: '🎰', n: 6, k: 2 }];
+          const r0 = rnd(REAL); const r = _perm(r0.n, r0.k);
+          out.push({ lv: 'VD', illus: r0.emoji, cap: 'Lập mã có thứ tự', q: `Từ <b>${r0.n}</b> chữ số khác nhau, lập mã gồm <b>${r0.k}</b> chữ số khác nhau (có thứ tự). Có bao nhiêu mã?`, ans: ['' + r], exp: `Chỉnh hợp: $A^{${r0.k}}_{${r0.n}}=${r}$.` });
         }
         // VDC thực tế: đếm có điều kiện
         {
-          const REAL=[
-            { emoji:'🚪', txt:'Chọn 3 nút trong 7 (có 1 nút đỏ), bắt buộc có nút đỏ', ans:_comb(6,2), exp:'Cố định nút đỏ, chọn thêm $2$ trong $6$: $C^2_6=15$.' },
-            { emoji:'🎟️', txt:'Chọn 3 người trong 8 (có 1 tổ trưởng), bắt buộc có tổ trưởng', ans:_comb(7,2), exp:'Cố định tổ trưởng, chọn thêm $2$ trong $7$: $C^2_7=21$.' },
-            { emoji:'🧩', txt:'Số mã 3 chữ số khác nhau từ {1,2,3,4,5}, chữ số đầu chẵn', ans:2*_perm(4,2), exp:'Đầu chẵn {2;4}: $2$ cách; hai chữ còn lại $A^2_4=12$; tổng $2\\times12=24$.' }
+          const REAL = [
+            { emoji: '🚪', txt: 'Chọn 3 nút trong 7 (có 1 nút đỏ), bắt buộc có nút đỏ', ans: _comb(6, 2), exp: 'Cố định nút đỏ, chọn thêm $2$ trong $6$: $C^2_6=15$.' },
+            { emoji: '🎟️', txt: 'Chọn 3 người trong 8 (có 1 tổ trưởng), bắt buộc có tổ trưởng', ans: _comb(7, 2), exp: 'Cố định tổ trưởng, chọn thêm $2$ trong $7$: $C^2_7=21$.' },
+            { emoji: '🧩', txt: 'Số mã 3 chữ số khác nhau từ {1,2,3,4,5}, chữ số đầu chẵn', ans: 2 * _perm(4, 2), exp: 'Đầu chẵn {2;4}: $2$ cách; hai chữ còn lại $A^2_4=12$; tổng $2\\times12=24$.' }
           ];
-          const r=rnd(REAL);
-          out.push({ lv: 'VDC', illus: r.emoji, cap: 'Đếm có điều kiện', q: `${r.txt}. Có bao nhiêu cách?`, ans: [''+r.ans], exp: r.exp });
+          const r = rnd(REAL);
+          out.push({ lv: 'VDC', illus: r.emoji, cap: 'Đếm có điều kiện', q: `${r.txt}. Có bao nhiêu cách?`, ans: ['' + r.ans], exp: r.exp });
         }
         return out;
       }
@@ -8771,8 +8791,8 @@
           `</div>` +
           (pass ? `<div style="color:var(--green-d);font-weight:900;font-size:15px;margin-top:4px;">🎉 Đủ điều kiện nhận Giấy chứng nhận!</div>`
             : (passWs && sessionPost == null
-                ? `<div style="color:var(--gold-d,#B97D08);font-weight:900;font-size:14px;margin-top:4px;">✅ Đã đạt Phiếu Về Đích! Hãy làm thêm <b>Kiểm tra ĐẦU RA (8 câu)</b> để được cấp Giấy chứng nhận.</div>`
-                : `<div style="color:var(--muted);font-weight:800;font-size:13.5px;margin-top:4px;">Cần hoàn thành ≥ ${Math.ceil(0.8 * NUM_CANVAS)}/${NUM_CANVAS} két, đạt <b>trên 8/10</b> điểm phiếu, và làm <b>Kiểm tra đầu ra</b> để nhận chứng nhận.</div>`)) +
+              ? `<div style="color:var(--gold-d,#B97D08);font-weight:900;font-size:14px;margin-top:4px;">✅ Đã đạt Phiếu Về Đích! Hãy làm thêm <b>Kiểm tra ĐẦU RA (8 câu)</b> để được cấp Giấy chứng nhận.</div>`
+              : `<div style="color:var(--muted);font-weight:800;font-size:13.5px;margin-top:4px;">Cần hoàn thành ≥ ${Math.ceil(0.8 * NUM_CANVAS)}/${NUM_CANVAS} két, đạt <b>trên 8/10</b> điểm phiếu, và làm <b>Kiểm tra đầu ra</b> để nhận chứng nhận.</div>`)) +
           `</div>`;
         const top = document.createElement('div'); top.innerHTML = html;
         $('wsBody').insertBefore(top, $('wsBody').firstChild);
@@ -9069,7 +9089,7 @@
         for (const ch of text) { c.strokeText(ch, x, y); x += c.measureText(ch).width + ls; }
         c.textAlign = 'center';
       }
-            function rrectPath(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+      function rrectPath(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
 
       function openCertificate() {
         // Điều kiện: đạt phiếu >8 & >=80% két & ĐÃ làm Kiểm tra đầu ra
@@ -9349,8 +9369,8 @@
           get curWS() { return curWS; }, get wsAns() { return wsAns; },
           setLevel, openWorksheet, submitWorksheet, checkLevel, printWorksheet, buildWsPrintHTML, printGameReport, printSolution, buildSolutionHTML, gameReportText, exportFreshWorksheet, openHistory, exportHistoryPDF, showHistoryQR, computeOverview, loadHistory, openTestChooser, startTest, openTeacher, openCertificate, loadTeacher, teacherScope, exportMultiCode, speak, speakTest, speakDuel, toggleDuelAuto, texToSpeech, openDuel, startDuel,
           setCodeTest: (v) => { state.code = String(v); render(); },
-          drawCertificate, set worksheetBest(v){ worksheetBest=v; }, openTestChooser,
-          pressKey, checkLevel, get code() { return state.code; }, openGift, revealGift, get giftPicked(){return giftPicked;},
+          drawCertificate, set worksheetBest(v) { worksheetBest = v; }, openTestChooser,
+          pressKey, checkLevel, get code() { return state.code; }, openGift, revealGift, get giftPicked() { return giftPicked; },
           NUM_CANVAS, get clearedCanvas() { return clearedCanvas; }, get worksheetBest() { return worksheetBest; },
           V, vecGraphSVG
         };
