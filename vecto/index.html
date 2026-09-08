@@ -3114,11 +3114,48 @@
       font-weight: 800;
     }
 
+    .ws-result .ws-msg {
+      font-weight: 900;
+      font-size: 14.5px;
+      margin: 6px auto 2px;
+      max-width: 620px;
+      line-height: 1.5;
+    }
+
+    .ws-result .ws-msg.ok {
+      color: var(--green-d);
+    }
+
+    .ws-result .ws-msg.warn {
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+
+    .ws-result .ws-doneparts {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
     .ws-stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns: repeat(6, 1fr);
       gap: 10px;
-      margin: 16px 0;
+      margin: 14px 0 4px;
+    }
+
+    @media (max-width: 720px) {
+      .ws-stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .ws-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     .ws-stat {
@@ -8572,30 +8609,33 @@
       function showWorksheetResult(r) {
         const pass = r.total > 8 && clearedCanvas.size >= Math.ceil(0.8 * NUM_CANVAS);
         const tenth = (Math.round(r.total * 4) / 4).toFixed(2).replace(/\.00$/, '').replace('.', ',');
+        const fmt = x => (Math.round(x * 4) / 4).toString().replace('.', ',');
+        const totC = r.cI + r.cII + r.cIII + r.cIV, totW = r.wI + r.wII + r.wIII + r.wIV, totAll = totC + totW;
+        const box = (big, lbl, col) => `<div class="ws-stat"><div class="n"${col ? ` style="color:${col}"` : ''}>${big}</div><div class="l">${lbl}</div></div>`;
+        const msg = pass
+          ? (sessionPost != null
+            ? `<div class="ws-msg ok">🎉 Đủ điều kiện nhận Giấy chứng nhận!</div>`
+            : `<div class="ws-msg ok">🎉 ĐẠT điểm phiếu! Chỉ còn <b>Kiểm tra ĐẦU RA (8 câu)</b> nữa là nhận được Giấy chứng nhận.</div>`)
+          : `<div class="ws-msg warn">Cần hoàn thành ≥ ${Math.ceil(0.8 * NUM_CANVAS)}/${NUM_CANVAS} trạm và đạt <b>trên 8/10</b> để nhận chứng nhận.</div>`;
         const html =
           `<div class="ws-result" id="wsResultTop">` +
-          `<div class="score-big">${tenth}<span style="font-size:24px;color:var(--muted);">/10</span></div>` +
-          `<div class="lbl">Điểm phiếu Về Đích</div>` +
+          `<div class="score-big">${tenth}<span style="font-size:24px;color:var(--muted);"> /10 điểm</span></div>` +
+          msg +
+          `<div class="ws-doneparts">Đã làm các phần: <b>${r.doneParts.join(', ') || '—'}</b></div>` +
           `<div class="ws-stats-grid">` +
-          `<div class="ws-stat"><div class="n">${r.I.toString().replace('.', ',')}</div><div class="l">Phần I /3</div></div>` +
-          `<div class="ws-stat"><div class="n">${r.II.toString().replace('.', ',')}</div><div class="l">Phần II /2</div></div>` +
-          `<div class="ws-stat"><div class="n">${r.III.toString().replace('.', ',')}</div><div class="l">Phần III /3</div></div>` +
-          `<div class="ws-stat"><div class="n">${r.IV.toString().replace('.', ',')}</div><div class="l">Phần IV /2</div></div>` +
-          `<div class="ws-stat"><div class="n" style="color:var(--green-d)">${r.cI + r.cII + r.cIII + r.cIV}</div><div class="l">Câu/ý ĐÚNG</div></div>` +
-          `<div class="ws-stat"><div class="n" style="color:var(--red)">${r.wI + r.wII + r.wIII + r.wIV}</div><div class="l">Câu/ý SAI</div></div>` +
-          `<div class="ws-stat"><div class="n">${r.doneParts.length}/4</div><div class="l">Phần đã làm</div></div>` +
-          `<div class="ws-stat"><div class="n">${clearedCanvas.size}/${NUM_CANVAS}</div><div class="l">Trạm đã qua</div></div>` +
+          box(`${fmt(r.I)}/3`, `PHẦN I (${r.cI}/12 câu)`) +
+          box(`${fmt(r.II)}/2`, `PHẦN II (${r.cII}/8 ý)`) +
+          box(`${fmt(r.III)}/3`, `PHẦN III (${r.cIII}/6 ý)`) +
+          box(`${fmt(r.IV)}/2`, `PHẦN IV (${r.cIV}/4 câu)`) +
+          box(`${totC}/${totAll}`, `SỐ Ý/CÂU ĐÚNG`, 'var(--green-d)') +
+          box(`${totW}/${totAll}`, `SỐ Ý/CÂU SAI`, 'var(--red)') +
           `</div>` +
-          (pass ? (sessionPost != null ? `<div style="color:var(--green-d);font-weight:900;font-size:15px;margin-top:4px;">🎉 Đủ điều kiện nhận Giấy chứng nhận!</div>`
-            : `<div style="color:var(--green-d);font-weight:900;font-size:14.5px;margin-top:4px;">✅ Đạt Phiếu Về Đích! Hãy làm <b>Kiểm tra ĐẦU RA (8 câu)</b> để khảo sát kiến thức &amp; nhận chứng nhận.</div>`)
-            : `<div style="color:var(--muted);font-weight:800;font-size:13.5px;margin-top:4px;">Cần hoàn thành ≥ ${Math.ceil(0.8 * NUM_CANVAS)}/${NUM_CANVAS} trạm và đạt <b>trên 8/10</b> để nhận chứng nhận.</div>`) +
           `</div>`;
         const top = document.createElement('div'); top.innerHTML = html;
         $('wsBody').insertBefore(top, $('wsBody').firstChild);
         $('wsBody').scrollTop = 0;
         typeset(top);
         renderWsSubmitBar(pass, r);
-        // save to leaderboard opportunity handled at certificate
         state.score += Math.round(r.total * 30); updateHUD();
       }
 
