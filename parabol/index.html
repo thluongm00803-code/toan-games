@@ -7037,7 +7037,8 @@
             let opened = false;
             box.onclick = () => {
                 if (opened) return; opened = true;
-                SFX.ding(); box.classList.add('opening');
+                SFX.ding(); if (SFX.win) SFX.win(); box.classList.add('opening');
+                for (let i = 0; i < 5; i++) setTimeout(confetti, i * 140);   // 🎆 pháo hoa ngay khi mở hộp
                 setTimeout(() => {
                     box.style.display = 'none'; sub.textContent = 'Phần quà của bạn là:';
                     if (g.bonus) { state.score += g.bonus; $('score').textContent = state.score; saveProgress(); }
@@ -7045,7 +7046,7 @@
                         (g.bonus ? '<div class="gr-bonus">+' + g.bonus + ' điểm</div>' : '');
                     rev.classList.add('show'); next.classList.add('show');
                     typesetMath(rev);
-                    confetti();
+                    for (let i = 0; i < 4; i++) setTimeout(confetti, i * 170);   // 🎆 thêm loạt khi hiện quà
                 }, 480);
             };
             $('giftOverlay').classList.add('show');
