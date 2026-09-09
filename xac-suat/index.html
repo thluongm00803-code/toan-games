@@ -520,6 +520,68 @@
             background: linear-gradient(rgba(120, 150, 220, .09) 1px, transparent 1px) 0 0/30px 30px, linear-gradient(90deg, rgba(120, 150, 220, .09) 1px, transparent 1px) 0 0/30px 30px
         }
 
+        .stage .stage-glow {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at 18% 14%, rgba(109, 94, 240, .20), transparent 42%), radial-gradient(circle at 86% 82%, rgba(22, 163, 107, .16), transparent 46%)
+        }
+
+        .stage .stage-icon {
+            position: absolute;
+            right: 16px;
+            bottom: 8px;
+            font-size: 128px;
+            line-height: 1;
+            opacity: .07;
+            pointer-events: none;
+            z-index: 0;
+            animation: floaty 6s ease-in-out infinite;
+            filter: drop-shadow(0 8px 14px rgba(0, 0, 0, .3))
+        }
+
+        @keyframes floaty {
+            50% {
+                transform: translateY(-14px) rotate(-4deg)
+            }
+        }
+
+        .stage .particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0
+        }
+
+        .stage .particles i {
+            position: absolute;
+            border-radius: 50%;
+            opacity: .5;
+            animation: rise linear infinite
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(20px);
+                opacity: 0
+            }
+
+            15% {
+                opacity: .55
+            }
+
+            100% {
+                transform: translateY(-460px);
+                opacity: 0
+            }
+        }
+
+        .stage .inner {
+            position: relative;
+            z-index: 1
+        }
+
         .stage .inner {
             position: relative;
             z-index: 1
@@ -533,23 +595,51 @@
         }
 
         .panel-r {
-            background: var(--panel);
+            background: linear-gradient(180deg, var(--panel), var(--soft));
             border: 1px solid var(--line);
+            border-top: 3px solid var(--indigo);
             border-radius: 16px;
             padding: 16px;
             display: flex;
-            flex-direction: column
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 44px -26px rgba(67, 56, 202, .55)
+        }
+
+        [data-theme="dark"] .panel-r {
+            box-shadow: 0 20px 44px -26px rgba(0, 0, 0, .7)
         }
 
         .panel-r h3 {
             font-family: "Baloo 2";
             font-size: 15px;
-            margin: 0 0 12px;
-            color: var(--indigo);
+            margin: -16px -16px 14px;
+            padding: 12px 16px;
+            color: #fff;
             font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 7px
+            gap: 8px;
+            background: linear-gradient(100deg, var(--indigo), var(--violet));
+            box-shadow: 0 6px 16px -10px rgba(67, 56, 202, .9)
+        }
+
+        .panel-r h3::after {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, .3);
+            margin-left: auto;
+            animation: livedot 1.6s ease-in-out infinite
+        }
+
+        @keyframes livedot {
+            50% {
+                opacity: .4
+            }
         }
 
         .infoline {
@@ -1174,6 +1264,24 @@
         .pill.red {
             color: var(--rose);
             border-color: #f2c4c4
+        }
+
+        .pill.time-pill {
+            cursor: default;
+            color: var(--indigo);
+            border-color: #cdd0ef;
+            background: linear-gradient(100deg, #eef1fb, #f6f2ff)
+        }
+
+        .pill.time-pill b {
+            font-family: "Baloo 2";
+            font-weight: 800;
+            letter-spacing: .3px
+        }
+
+        [data-theme="dark"] .pill.time-pill {
+            background: linear-gradient(100deg, #1a2338, #201a33);
+            color: #b7b0ff
         }
 
         .pill.gr {
@@ -3185,6 +3293,9 @@
         <div class="lab">
             <div class="stage">
                 <div class="grid-bg"></div>
+                <div class="stage-glow"></div>
+                <div class="stage-icon" id="stageIcon">🎲</div>
+                <div class="particles" id="stageParticles"></div>
                 <div class="inner">
                     <h3 id="stageTitle">🔬 Khu thí nghiệm</h3>
                     <div id="stageBody"></div>
@@ -3215,6 +3326,8 @@
             <button class="pill gr" onclick="openHistory()">📊 Lịch sử tham gia</button>
             <button class="pill" onclick="openLeaderboard()">🏆 Xếp hạng</button>
             <button class="pill" onclick="openVersion()">ℹ️ Phiên bản: v4.0</button>
+            <span class="pill time-pill" id="timePill" title="Thời gian đã chơi trong phiên">⏱️ Thời gian: <b
+                    id="timeVal">0:00</b></span>
         </div>
     </div>
 
@@ -6526,7 +6639,8 @@
             $('stLvl').textContent = 'Màn ' + (i + 1) + '/11';
             $('stMission').innerHTML = fmtMath(lv.mission(L.s));
             $('stConcepts').innerHTML = lv.concepts.map(c => '<span>' + esc(c) + '</span>').join('');
-            $('stageTitle').innerHTML = '🔬 ' + esc(lv.name.split('—')[1] ? lv.name.split('—')[1].trim() : 'Khu thí nghiệm');
+            try { if ($('stageIcon')) $('stageIcon').textContent = lv.icon || '🔬'; } catch (e) { }
+            $('stageTitle').innerHTML = (lv.icon || '🔬') + ' ' + esc(lv.name.split('—')[1] ? lv.name.split('—')[1].trim() : 'Khu thí nghiệm');
             $('stageBody').innerHTML = lv.stage(L.s);
             $('stageLegend').innerHTML = lv.legend ? lv.legend(L.s) : '';
             $('ctrlInfo').innerHTML = lv.info ? fmtMath(lv.info(L.s)) : '';
@@ -6642,7 +6756,12 @@
 
         /* ===== câu hỏi củng cố ===== */
         function openConsolidation(i) {
-            const lv = LEVELS[i]; const q = lv.quiz(L.s);
+            const lv = LEVELS[i];
+            // Sinh một tình huống MỚI, KHÁC với bài vừa chơi để câu củng cố không bị trùng
+            let sameQ = ''; try { sameQ = lv.quiz(L.s).q; } catch (e) { }
+            let q, qs, tries = 0;
+            do { try { qs = lv.build(); q = lv.quiz(qs); } catch (e) { q = lv.quiz(L.s); break; } tries++; }
+            while (tries < 20 && q && q.q === sameQ);
             const opts = q.opts.slice(); const correctText = String(q.c);
             $('quizIcon').textContent = '🧩'; $('quizTitle').textContent = 'Củng cố — Màn ' + (i + 1);
             $('quizSub').textContent = lv.name;
@@ -7124,7 +7243,7 @@
             h += pfBand('c1', 'I', 'PHẦN I. Trắc nghiệm', '12 câu × 0,25 = 3đ');
             ws.I.forEach(it => {
                 h += '<div class="wq"><div class="wq-q"><b>Câu ' + it.no + '.</b> ' + mtx(it.q) + ' ' + diffBadge(it.diff) + '</div><div class="wq-mc">'
-                    + it.opts.map((op, k) => '<label class="wq-opt"><input type="radio" name="wI' + it.no + '" value="' + k + '" onchange="wsMC(this)"><span class="lk">' + Lc[k] + '.</span> ' + mtx(op) + '</label>').join('') + '</div></div>';
+                + it.opts.map((op, k) => '<label class="wq-opt"><input type="radio" name="wI' + it.no + '" value="' + k + '" onchange="wsMC(this)"><span class="lk">' + Lc[k] + '.</span> ' + mtx(op) + '</label>').join('') + '</div></div>';
             });
             // Phần II — đúng/sai (nút Đúng/Sai đồng nhất cho cả 2 câu)
             h += pfBand('c2', 'II', 'PHẦN II. Đúng – Sai', '2 câu × 4 ý × 0,25 = 2đ');
@@ -7696,6 +7815,7 @@
         function init() {
             applyTheme();
             try { if ($('hudQR')) $('hudQR').innerHTML = qrSVG(GAME_URL, 58); } catch (e) { }
+            try { const P = $('stageParticles'); if (P) { const cols = ['#6D5EF0', '#16A36B', '#F59E0B', '#3B82F6', '#EC4899']; let ph = ''; for (let i = 0; i < 14; i++) { const sz = (3 + Math.random() * 5).toFixed(1); ph += '<i style="left:' + (Math.random() * 96 + 2).toFixed(1) + '%;bottom:-10px;width:' + sz + 'px;height:' + sz + 'px;background:' + cols[i % cols.length] + ';animation-duration:' + (6 + Math.random() * 6).toFixed(1) + 's;animation-delay:' + (Math.random() * 6).toFixed(1) + 's"></i>'; } P.innerHTML = ph; } } catch (e) { }
             // nạp voices cho TTS
             if ('speechSynthesis' in window) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); }
             restoreProgress();
@@ -7704,6 +7824,8 @@
             // welcome lần đầu
             setTimeout(() => { openM('welcome'); }, 300);
             updateHUD();
+            // ⏱️ Thời gian: cập nhật mỗi giây từ đồng hồ phiên (SCT_elapsed)
+            setInterval(() => { try { const el = $('timeVal'); if (el) { const t = (window.SCT_elapsed ? window.SCT_elapsed() : 0); el.textContent = fmtTime(t); } } catch (e) { } }, 1000);
         }
         // expose cho kiểm thử
         window.__game = {
