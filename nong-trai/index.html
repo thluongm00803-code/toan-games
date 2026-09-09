@@ -622,6 +622,9 @@
 
     .stage {
       position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(8px);
       border: 2px solid var(--line);
@@ -722,11 +725,110 @@
       touch-action: manipulation
     }
 
+    /* ===== Header: nút biểu tượng VUÔNG bo góc, icon TO, nền pastel (theo ảnh tham chiếu) ===== */
+    .hud {
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .hud button.chip {
+      width: 44px;
+      height: 44px;
+      min-height: 44px;
+      padding: 0;
+      border-radius: 14px;
+      font-size: 23px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid rgba(20, 30, 60, .07);
+      box-shadow: 0 4px 10px rgba(20, 30, 60, .12), inset 0 1px 0 rgba(255, 255, 255, .7);
+    }
+
+    .hud button.chip:hover {
+      transform: translateY(-2px) scale(1.04);
+    }
+
+    #lbBtn {
+      background: linear-gradient(135deg, #FFF0C7, #FFDE8F);
+    }
+
+    #statsBtn {
+      background: linear-gradient(135deg, #D6F5E6, #B3EBD1);
+    }
+
+    #bookBtn {
+      background: linear-gradient(135deg, #E1ECFF, #C5DAFF);
+    }
+
+    #sndBtn {
+      background: linear-gradient(135deg, #E4F7E1, #C9EEC5);
+    }
+
+    #themeBtn {
+      background: linear-gradient(135deg, #ECE3FC, #D7C6F6);
+    }
+
+    .hud button.chip.bgm-chip {
+      width: 44px;
+      padding: 0;
+      background: linear-gradient(135deg, #FCE0EF, #F7C7E0);
+    }
+
+    .hud .bgm-chip #bgmLabel {
+      display: none;
+    }
+
+    .hud .bgm-chip:hover,
+    .hud .bgm-chip:focus-within {
+      width: auto;
+      padding: 0 10px;
+      gap: 4px;
+    }
+
+    /* Viên "pill" thông tin: BEST · điểm · sao — cân với icon vuông */
+    .best-pill {
+      font-size: 12.5px;
+      padding: 0 12px;
+      height: 44px;
+    }
+
+    .hud span.chip {
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 12px;
+      font-size: 15px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 620px) {
+      .hud button.chip {
+        width: 42px;
+        height: 42px;
+        min-height: 42px;
+        font-size: 21px;
+        border-radius: 13px;
+      }
+
+      .hud button.chip.bgm-chip {
+        width: 42px;
+      }
+
+      .hud span.chip,
+      .best-pill {
+        height: 42px;
+      }
+    }
+
     .game-layout {
       display: grid;
       grid-template-columns: 1fr;
       gap: 24px;
-      align-items: start;
+      align-items: stretch;
     }
 
     @media(min-width: 900px) {
@@ -860,9 +962,44 @@
     }
 
     .actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
+      flex-direction: column;
       gap: 8px;
+    }
+
+    /* --- Kế hoạch canh tác: bố cục gộp mới --- */
+    .readout-3 .ro {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ro-profit {
+      background: linear-gradient(135deg, #0F1530, #1A2344);
+    }
+
+    .ro-profit .lab {
+      color: #AEB8E8;
+    }
+
+    .ro-profit .num {
+      color: #fff;
+    }
+
+    .ro-profit .num small {
+      color: #AEB8E8;
+    }
+
+    .actions-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .actions-row button {
+      width: 100%;
+      min-height: 40px;
+      font-size: 13px;
+      padding: 7px 4px;
     }
 
     .actions .harvest {
@@ -1050,6 +1187,262 @@
       backdrop-filter: blur(4px);
       z-index: 200;
       padding: 20px
+    }
+
+    /* ===== Pháo hoa ===== */
+    .fw {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1500;
+      overflow: hidden;
+    }
+
+    .fw i {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      box-shadow: 0 0 7px rgba(255, 255, 255, .55);
+      animation: fwburst var(--d, 1s) cubic-bezier(.15, .6, .3, 1) forwards;
+    }
+
+    @keyframes fwburst {
+      0% {
+        transform: translate(0, 0) scale(1.15);
+        opacity: 1;
+      }
+
+      70% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(var(--dx), var(--dy)) scale(.2);
+        opacity: 0;
+      }
+    }
+
+    /* ===== 🎁 Món quà bất ngờ ===== */
+    .gift-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 21, 48, .6);
+      backdrop-filter: blur(4px);
+      z-index: 300;
+      padding: 20px;
+    }
+
+    .gift-overlay.show {
+      display: flex;
+    }
+
+    .gift-modal {
+      position: relative;
+      background: #fff;
+      border-radius: 22px;
+      padding: 22px 22px 24px;
+      max-width: 560px;
+      width: 100%;
+      max-height: calc(100dvh - 40px);
+      overflow-y: auto;
+      box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .55);
+      animation: modalEnter .45s cubic-bezier(.175, .885, .32, 1.275);
+    }
+
+    .gift-x {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: #eef1f6;
+      color: #6b7280;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .gift-x:hover {
+      background: #e2e6ee;
+    }
+
+    .gift-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-right: 34px;
+    }
+
+    .gift-head-ic {
+      flex-shrink: 0;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #8B5CF6, #6d3ff0);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 6px 16px rgba(109, 63, 240, .35);
+    }
+
+    .gift-title {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 19px;
+      color: #5b3fd6;
+    }
+
+    .gift-sub {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .gift-body {
+      text-align: center;
+      padding: 14px 0 4px;
+    }
+
+    .gift-congrat {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: #5b3fd6;
+    }
+
+    .gift-hint {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 6px 0 8px;
+    }
+
+    .gift-box {
+      display: inline-block;
+      font-size: 84px;
+      line-height: 1;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .18));
+      animation: giftWiggle 1.1s ease-in-out infinite;
+      transition: transform .15s;
+    }
+
+    .gift-box:hover {
+      transform: scale(1.08);
+    }
+
+    .gift-box.opened {
+      animation: giftPop .5s ease forwards;
+    }
+
+    @keyframes giftWiggle {
+
+      0%,
+      100% {
+        transform: rotate(-6deg) translateY(0);
+      }
+
+      50% {
+        transform: rotate(6deg) translateY(-6px);
+      }
+    }
+
+    @keyframes giftPop {
+      0% {
+        transform: scale(1);
+      }
+
+      40% {
+        transform: scale(1.35) rotate(8deg);
+      }
+
+      100% {
+        transform: scale(0) rotate(20deg);
+        opacity: 0;
+      }
+    }
+
+    .gift-reveal {
+      margin-top: 10px;
+      border: 2px solid #B9C7FF;
+      background: linear-gradient(135deg, #F3F6FF, #EAF0FF);
+      border-radius: 16px;
+      padding: 18px 16px;
+      text-align: center;
+      animation: modalEnter .4s ease;
+    }
+
+    .gift-tip-ic {
+      font-size: 40px;
+      line-height: 1;
+    }
+
+    .gift-tip-title {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: #3b52c9;
+      margin: 4px 0 6px;
+    }
+
+    .gift-tip-text {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--ink);
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .gift-tip-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .gift-proceed {
+      display: block;
+      width: 100%;
+      margin-top: 16px;
+      min-height: 50px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #6d5efc, #22a7f0);
+      box-shadow: 0 8px 20px rgba(90, 100, 240, .35);
+      transition: transform .15s, box-shadow .15s;
+    }
+
+    .gift-proceed:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(90, 100, 240, .45);
+    }
+
+    body.theme-dark .gift-modal {
+      background: #16233b;
+      color: #e8eefc;
+    }
+
+    body.theme-dark .gift-reveal {
+      background: linear-gradient(135deg, #1b2b46, #17233c);
+      border-color: #3a4d80;
+    }
+
+    body.theme-dark .gift-x {
+      background: #24324e;
+      color: #9fb0d0;
     }
 
     .quiz-overlay.show {
@@ -2199,8 +2592,23 @@
     }
 
     .sct-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       flex-shrink: 0;
-      margin-left: 2px;
+      font-family: "Baloo 2", sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      color: #7a5b00;
+      background: linear-gradient(135deg, #FFF1CC, #FFE39B);
+      border: 1.5px solid #F0C64B;
+      border-radius: 999px;
+      padding: 8px 16px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, .12);
+    }
+
+    .sct-timer b {
+      color: #6a4a00;
     }
 
     /* Dưới 1240px: HUD chiếm trọn một hàng riêng, tách hẳn khỏi QR */
@@ -2320,9 +2728,9 @@
 
     /* Thanh đồng hồ ở dưới cùng (dời xuống dưới như Pháo Thủ) */
     .time-bar {
-      display: flex;
-      justify-content: center;
-      margin: 2px 0 10px;
+      display: inline-flex;
+      align-items: center;
+      margin: 0;
     }
 
     .time-bar:empty {
@@ -3978,6 +4386,60 @@
       margin-bottom: 12px;
     }
 
+    /* Bảng ô kết quả 6 ô kiểu mẫu tham chiếu */
+    .ws-stat-cells {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin: 12px auto 14px;
+      max-width: 720px;
+    }
+
+    .ws-stat {
+      background: var(--paper);
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 6px;
+      text-align: center;
+    }
+
+    .ws-stat .wsv {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 21px;
+      line-height: 1.05;
+      color: var(--emerald-d);
+    }
+
+    .ws-stat .wsl {
+      margin-top: 4px;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .ws-stat-ok .wsv {
+      color: #1FA36B;
+    }
+
+    .ws-stat-bad .wsv {
+      color: #E0662B;
+    }
+
+    @media (max-width: 700px) {
+      .ws-stat-cells {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .ws-stat-cells {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
     .ws-actions {
       display: flex;
       flex-wrap: wrap;
@@ -4168,8 +4630,8 @@
       justify-content: center;
       align-items: center;
       margin: 10px auto 4px;
-      max-width: 900px;
-      padding: 0 10px
+      max-width: 1140px;
+      padding: 0 6px
     }
 
     .skkn-bar button {
@@ -6488,6 +6950,7 @@
         <span class="chip">⭐ <b id="stars">0</b>/<span id="starsMax">30</span></span>
         <button class="chip" id="lbBtn" title="Bảng Vinh Danh">🏆</button>
         <button class="chip" id="statsBtn" title="Thống kê học tập">📊</button>
+        <button class="chip" id="bookBtn" title="Sổ tay công thức">📘</button>
         <button class="chip" id="sndBtn" title="Bật/tắt âm thanh">🔊</button>
         <button class="chip" id="themeBtn" title="Chế độ sáng / tối">🌙</button>
         <button class="chip bgm-chip" id="bgmBtn" title="Bật/tắt nhạc nền">
@@ -6560,7 +7023,7 @@
       <div class="panel">
         <div class="card">
           <h3>🚜 Kế hoạch canh tác</h3>
-          <div class="readout">
+          <div class="readout readout-3">
             <div class="ro">
               <div class="lab" id="lab1">Lúa</div>
               <div class="num"><span id="xVal">0</span> <small id="u1">ha</small></div>
@@ -6569,24 +7032,22 @@
               <div class="lab" id="lab2">Cá</div>
               <div class="num"><span id="yVal">0</span> <small id="u2">ha</small></div>
             </div>
+            <div class="ro ro-profit">
+              <div class="lab" id="fLab">Lợi nhuận F</div>
+              <div class="num"><span id="fVal">0</span> <small id="fUnit">triệu</small></div>
+            </div>
           </div>
-          <div class="profit">
-            <span class="lab" id="fLab">Lợi nhuận F</span>
-            <span class="val"><span id="fVal">0</span> <small id="fUnit">triệu</small></span>
-          </div>
-          <div class="status ok" id="status">Hợp lệ — kéo điểm trên đồng để tìm lãi cao nhất.</div>
-
-          <div class="best-row" id="bestRow">🥇 Kỷ lục vụ này: <b id="bestF">chưa có</b></div>
 
           <div class="res-head">📦 Sử dụng nguồn lực <span class="res-hint">(dùng / giới hạn)</span></div>
           <div class="res-list" id="resList"></div>
 
           <div class="actions">
             <button class="harvest" id="harvestBtn">Thu hoạch! 🌾</button>
-            <button class="ghint" id="hintBtn">Gợi ý 💡</button>
-            <button class="reset" id="resetBtn">Chơi lại 🔄</button>
-            <button class="btn-solve" id="solveBtn">Lời giải 📖</button>
-            <button class="btn-book" id="bookBtn">Sổ tay 📘</button>
+            <div class="actions-row">
+              <button class="ghint" id="hintBtn">Gợi ý 💡</button>
+              <button class="btn-solve" id="solveBtn">Lời giải 📖</button>
+              <button class="reset" id="resetBtn">Chơi lại 🔄</button>
+            </div>
           </div>
 
           <hr class="divider">
@@ -6608,9 +7069,8 @@
       <button class="sk-b-rank" id="btnRanking">🏆 Xếp hạng · Huy hiệu</button>
       <button class="sk-b-duel" id="btnDuel">⚔️ Đấu 2 người</button>
       <button class="sk-b-ver" id="btnVersion">🧰 Phiên bản</button>
+      <span class="time-bar" id="timeBar"></span>
     </div>
-
-    <div class="time-bar" id="timeBar"></div>
 
     <footer>Một hoạt động dạy học môn Toán · điều khiển trực tiếp miền nghiệm và hàm mục tiêu.</footer>
   </div>
@@ -6618,6 +7078,32 @@
   <!-- Quiz overlay -->
   <div class="quiz-overlay" id="quiz">
     <div class="qbox" id="quizBox"></div>
+  </div>
+
+  <!-- ===== 🎁 Món quà bất ngờ (mở trước câu hỏi củng cố) ===== -->
+  <div class="gift-overlay" id="giftOverlay">
+    <div class="gift-modal">
+      <button class="gift-x" id="giftClose" aria-label="Đóng">✕</button>
+      <div class="gift-head">
+        <span class="gift-head-ic">🎁</span>
+        <div>
+          <div class="gift-title">Món quà bất ngờ!</div>
+          <div class="gift-sub">Trả lời đúng rồi — mở quà trước, sau đó tới câu hỏi củng cố</div>
+        </div>
+      </div>
+      <div class="gift-body" id="giftBody">
+        <div class="gift-congrat" id="giftCongrat">🎉 Chúc mừng! Em đã vượt qua Vụ 1!</div>
+        <div class="gift-hint" id="giftHint">Bấm vào hộp quà để mở nhé…</div>
+        <button class="gift-box" id="giftBox" aria-label="Mở quà">🎁</button>
+      </div>
+      <div class="gift-reveal" id="giftReveal" style="display:none">
+        <div class="gift-tip-ic" id="giftTipIc">💡</div>
+        <div class="gift-tip-title" id="giftTipTitle">Mẹo hay</div>
+        <div class="gift-tip-text" id="giftTipText"></div>
+        <div class="gift-tip-note" id="giftTipNote"></div>
+      </div>
+      <button class="gift-proceed" id="giftProceed" style="display:none">Trả lời câu hỏi củng cố →</button>
+    </div>
   </div>
 
   <!-- ===== Bảng Vinh Danh (modal, mở từ nút 🏆 trên đầu) ===== -->
@@ -9836,6 +10322,38 @@
       setTimeout(() => box.remove(), full ? 3500 : 2400);
     }
 
+    /* ===== Pháo hoa (fireworks) — nhiều chùm nổ toả tròn ===== */
+    function fireworks(cx, cy, bursts) {
+      bursts = bursts || 4;
+      const layer = document.createElement('div'); layer.className = 'fw';
+      document.body.appendChild(layer);
+      const colors = ['#FF7A1A', '#FFC94D', '#1FA36B', '#00A3E0', '#8B5CF6', '#E85D5D', '#FF5CA8', '#39D0C6'];
+      const bx = (cx == null ? window.innerWidth / 2 : cx);
+      const by = (cy == null ? window.innerHeight * 0.4 : cy);
+      let seed = 0;
+      function burst(ox, oy) {
+        const n = 22 + Math.floor(Math.random() * 12);
+        for (let i = 0; i < n; i++) {
+          const p = document.createElement('i');
+          const ang = (Math.PI * 2) * i / n + Math.random() * 0.35;
+          const dist = 55 + Math.random() * 95;
+          p.style.left = ox + 'px'; p.style.top = oy + 'px';
+          p.style.background = colors[(i + seed) % colors.length];
+          p.style.setProperty('--dx', (Math.cos(ang) * dist).toFixed(1) + 'px');
+          p.style.setProperty('--dy', (Math.sin(ang) * dist).toFixed(1) + 'px');
+          p.style.setProperty('--d', (0.7 + Math.random() * 0.6).toFixed(2) + 's');
+          layer.appendChild(p);
+        }
+        seed += 3;
+      }
+      for (let b = 0; b < bursts; b++) {
+        setTimeout(() => {
+          burst(bx + (Math.random() - 0.5) * 240, by + (Math.random() - 0.5) * 150);
+        }, b * 240);
+      }
+      setTimeout(() => layer.remove(), bursts * 240 + 1700);
+    }
+
     /* ===== Score Popup ===== */
     function showScorePopup(text, color, x, y) {
       const el = document.createElement('div');
@@ -10584,7 +11102,8 @@
 
     function updateBestRow() {
       const L = LEVELS[lvlIdx], b = levelBestF[lvlIdx];
-      $('bestF').textContent = (b === undefined || b === null) ? 'chưa có' : fmtN(b) + ' ' + L.fUnit;
+      const el = $('bestF');
+      if (el) el.textContent = (b === undefined || b === null) ? 'chưa có' : fmtN(b) + ' ' + L.fUnit;
     }
 
     function updatePanel() {
@@ -10594,14 +11113,16 @@
       $('fVal').textContent = fmtN(Fval(P, cur));
 
       const v = feasible(P, cur), st = $('status');
-      if (v === false) {
-        st.className = 'status ok';
-        st.textContent = lv.min ? '✓ Hợp lệ — đủ dinh dưỡng, hãy hạ chi phí xuống thấp nhất.'
-          : '✓ Hợp lệ — đang trong vùng nguồn lực cho phép.';
-      } else {
-        st.className = 'status bad';
-        st.textContent = v.op === '>=' ? '✗ Chưa đạt mức tối thiểu ' + v.tag + ' — hãy tăng x hoặc y.'
-          : '✗ Vượt quá ' + v.tag + ' — hãy đưa máy cày về miền nghiệm.';
+      if (st) {
+        if (v === false) {
+          st.className = 'status ok';
+          st.textContent = lv.min ? '✓ Hợp lệ — đủ dinh dưỡng, hãy hạ chi phí xuống thấp nhất.'
+            : '✓ Hợp lệ — đang trong vùng nguồn lực cho phép.';
+        } else {
+          st.className = 'status bad';
+          st.textContent = v.op === '>=' ? '✗ Chưa đạt mức tối thiểu ' + v.tag + ' — hãy tăng x hoặc y.'
+            : '✗ Vượt quá ' + v.tag + ' — hãy đưa máy cày về miền nghiệm.';
+        }
       }
 
       lv.cons.forEach((c, i) => {
@@ -11774,6 +12295,83 @@
       );
     }
 
+    /* ===== 🎁 Món quà bất ngờ: mở quà (pháo hoa) → phần thưởng ĐA DẠNG → câu hỏi củng cố ===== */
+    /* Kho quà nhiều LOẠI khác nhau (mẹo, sự thật, lời khen, câu nói, điểm thưởng, danh hiệu, may mắn, bí kíp…) */
+    const GIFT_SURPRISES = [
+      { ic: '💡', title: 'Mẹo hay', color: '#3b52c9', text: 'Giá trị lớn nhất / nhỏ nhất của F = ax + by trên miền đa giác lồi luôn đạt tại một ĐỈNH của miền.' },
+      { ic: '🧠', title: 'Sự thật thú vị', color: '#0e9488', text: 'Chính "quy hoạch tuyến tính" mà em đang học được dùng để tối ưu chi phí cho hàng không, logistics và cả… thực đơn dinh dưỡng!' },
+      { ic: '🌟', title: 'Lời khen tặng em', color: '#e0a500', text: 'Tư duy tối ưu của em đang tiến bộ rõ rệt. Cứ giữ phong độ này nhé, nhà nông thông thái!' },
+      { ic: '🔮', title: 'Câu nói hay', color: '#7c3aed', text: '“Toán học là ngôn ngữ mà cả vũ trụ được viết nên.” — Galileo Galilei' },
+      { ic: '🎁', title: 'Điểm thưởng bất ngờ!', color: '#e0662b', text: 'Em vừa nhận thêm điểm thưởng vì chinh phục vụ này. Tuyệt vời!', bonus: 50 },
+      { ic: '🏅', title: 'Danh hiệu mới', color: '#c026a3', text: 'Em được phong tặng danh hiệu "Kỹ sư miền nghiệm" — người luôn tìm đúng vùng đất vàng!' },
+      { ic: '🎯', title: 'Đố vui', color: '#2563eb', text: 'Biết không? Chỉ cần thử điểm O(0; 0) là biết ngay một bất phương trình lấy nửa mặt phẳng nào. Thử xem!' },
+      { ic: '🍀', title: 'Lời chúc may mắn', color: '#1FA36B', text: 'Chúc em vụ sau bội thu, tìm trúng đỉnh tối ưu ngay từ lần kéo đầu tiên!' },
+      { ic: '🎮', title: 'Bí kíp chơi', color: '#4f46e5', text: 'Mẹo ăn 3⭐: hãy kéo máy cày tới đúng một ĐỈNH của vùng xanh — đừng dừng ở giữa miền nhé!' },
+      { ic: '🌈', title: 'Cổ vũ', color: '#db2777', text: '👏 🎉 🌟 Xuất sắc! Mỗi vụ vượt qua là một bước em giỏi Toán hơn hôm qua.' },
+      { ic: '🔎', title: 'Bạn có biết?', color: '#0891b2', text: 'Mỗi cạnh của miền nghiệm là một đường bờ ax + by = c. Giao của hai cạnh cho ta một đỉnh để so sánh F.' },
+      { ic: '💰', title: 'Quà điểm thưởng!', color: '#d97706', text: 'Bàn tay vàng trong làng canh tác! Nhận ngay điểm thưởng khích lệ nhé.', bonus: 30 },
+      { ic: '🚜', title: 'Mẹo nhà nông', color: '#16a34a', text: 'Điều kiện x ≥ 0, y ≥ 0 nghĩa là diện tích trồng không âm — miền nghiệm luôn ở góc phần tư thứ nhất.' },
+      { ic: '💎', title: 'Danh hiệu hiếm', color: '#0ea5e9', text: 'Em nhận huy hiệu "Thợ săn đỉnh" 💎 — bậc thầy tìm giá trị tối ưu!' },
+      { ic: '⚡', title: 'Tia chớp tri thức', color: '#f59e0b', text: 'Nếu miền nghiệm không bị chặn, hàm F có thể KHÔNG đạt được giá trị lớn nhất. Nhớ để ý điều này nhé!' },
+      { ic: '🎊', title: 'Bùng nổ!', color: '#e11d48', text: 'Một tràng pháo tay cho nhà nông tối ưu! Em đang trên đà chinh phục cả nông trại đấy.' }
+    ];
+    let giftQueue = [];
+    function nextGiftSurprise() {
+      if (giftQueue.length === 0) {              // trộn lại khi hết → 10 màn đầu chắc chắn KHÔNG trùng
+        giftQueue = GIFT_SURPRISES.map((_, i) => i);
+        for (let i = giftQueue.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[giftQueue[i], giftQueue[j]] = [giftQueue[j], giftQueue[i]]; }
+      }
+      return GIFT_SURPRISES[giftQueue.shift()];
+    }
+    function showGift(levelIdx, onProceed, isReplay) {
+      const ov = $('giftOverlay');
+      const sp = nextGiftSurprise();             // chọn phần quà (đa dạng, không đoán trước được)
+      $('giftCongrat').textContent = '🎉 Chúc mừng! Em đã vượt qua Vụ ' + (levelIdx + 1) + '!';
+      $('giftCongrat').style.display = '';
+      $('giftHint').style.display = '';
+      $('giftBox').style.display = '';
+      $('giftBox').classList.remove('opened');
+      $('giftReveal').style.display = 'none';
+      $('giftProceed').style.display = 'none';
+      ov.classList.add('show');
+      let opened = false;
+      const proceed = () => { ov.classList.remove('show'); if (typeof onProceed === 'function') onProceed(); };
+      function openGift() {
+        if (opened) return; opened = true;
+        try { SFX.celebrate(); } catch (e) { }
+        const r = $('giftBox').getBoundingClientRect();
+        fireworks(r.left + r.width / 2, r.top + r.height / 2, 5);
+        confetti(true);
+        // điểm thưởng bất ngờ (chỉ lần đầu qua vụ)
+        let bonusMsg = '';
+        if (sp.bonus && !isReplay) {
+          score += sp.bonus; const sc = $('score'); if (sc) sc.textContent = score;
+          try { saveProgress(); } catch (e) { }
+          bonusMsg = ' (+' + sp.bonus + ' điểm 🎉)';
+        }
+        $('giftBox').classList.add('opened');
+        setTimeout(() => {
+          $('giftCongrat').style.display = 'none';
+          $('giftHint').style.display = 'none';
+          $('giftBox').style.display = 'none';
+          $('giftTipIc').textContent = sp.ic;
+          $('giftTipTitle').textContent = sp.title;
+          $('giftTipText').textContent = sp.text + bonusMsg;
+          const rev = $('giftReveal');
+          rev.style.borderColor = sp.color || '';
+          $('giftTipTitle').style.color = sp.color || '';
+          $('giftTipNote').textContent = isReplay
+            ? '(Chơi lại — quà chỉ để vui, điểm thưởng đã nhận ở lần đầu.)'
+            : 'Bấm nút bên dưới để tới câu hỏi củng cố nhé!';
+          rev.style.display = 'block';
+          $('giftProceed').style.display = 'block';
+        }, 480);
+      }
+      $('giftBox').onclick = openGift;
+      $('giftProceed').onclick = proceed;
+      $('giftClose').onclick = proceed;   // đóng cũng dẫn sang câu hỏi củng cố để giữ đúng luồng
+    }
+
     function harvest() {
       const L = LEVELS[lvlIdx];
       const v = feasible(P, cur);
@@ -11801,6 +12399,7 @@
       if (solveUsed) s = Math.min(s, 1);
       else if (hintUsed) s = Math.min(s, 2);
       if (!hintUsed && !solveUsed) noHintLevels.add(lvlIdx);
+      const wasCleared = clearedOnce.has(lvlIdx);   // đã từng qua vụ này chưa (để ghi chú quà)
       // Kỷ lục cá nhân của vụ
       const prevBest = levelBestF[lvlIdx];
       if (prevBest === undefined || (L.min ? f < prevBest : f > prevBest)) levelBestF[lvlIdx] = f;
@@ -11823,9 +12422,10 @@
 
       const last = lvlIdx === LEVELS.length - 1;
       const goNext = () => { last ? finalToast() : setLevel(lvlIdx + 1); };
-      const mainLabel = quizDone.has(lvlIdx) ? (last ? 'Xem tổng kết \u{1F3C6}' : 'Vụ tiếp theo') : 'Câu hỏi củng cố \u270F\uFE0F';
+      const nextLbl = last ? 'Xem tổng kết \u{1F3C6}' : 'Vụ tiếp theo';
+      const mainLabel = quizDone.has(lvlIdx) ? nextLbl : 'Nhận quà \u{1F381}';
       const mainAction = quizDone.has(lvlIdx) ? goNext
-        : () => { quizDone.add(lvlIdx); showQuiz(goNext, last ? 'Xem tổng kết \u{1F3C6}' : 'Vụ tiếp theo'); };
+        : () => { quizDone.add(lvlIdx); showGift(lvlIdx, () => showQuiz(goNext, nextLbl), wasCleared); };
       const optTxt = s < 3
         ? (L.min ? `Mức thấp nhất là ${cur.optF.toFixed(0)} ${L.fUnit} — thử lại để đạt \u2605\u2605\u2605.`
           : `Vẫn còn cách mức tối đa — thử lại để đạt \u2605\u2605\u2605.`)
@@ -12617,30 +13217,34 @@
       if (pass) { try { checkAchievement('all'); } catch (e) { } }
       renderProgress(); saveProgress();
       SCTreport();
-      // banner kết quả
-      const partsDone = ['I', 'II', 'III', 'IV'].filter(k => g.done[k]).map(k => 'Phần ' + k).join(', ') || 'chưa làm phần nào';
+      // banner kết quả (bố cục theo mẫu tham chiếu)
+      const partsDone = ['I', 'II', 'III', 'IV'].filter(k => g.done[k]).join(', ') || 'chưa làm phần nào';
       let cls = g.total >= 8 ? 'ws-pass' : (g.total >= 5 ? 'ws-mid' : 'ws-low');
+      const d2 = n => (Math.round(n * 100) / 100).toFixed(2).replace(/\.?0+$/, '').replace('.', ',');
+      const correct = g.cI + g.cII + g.cIII + g.cIV, wrong = 30 - correct;
       let msg;
-      if (pass) msg = '🎉 Đạt yêu cầu! Bạn đủ điều kiện nhận Giấy Chứng Nhận.';
-      else if (g.total > 8) msg = 'Điểm phiếu đạt yêu cầu, nhưng cần hoàn thành ít nhất 8/' + LEVELS.length + ' vụ canh tác để nhận Giấy Chứng Nhận (hiện ' + clearedCanvas() + '/' + LEVELS.length + ').';
-      else msg = 'Cần đạt <b>trên 8/10 điểm</b> phiếu Về đích để nhận Giấy Chứng Nhận. Hãy xem lại lời giải rồi thử một phiếu khác nhé!';
+      if (pass) msg = '🎊 <b>ĐẠT điểm phiếu!</b> Bạn đủ điều kiện — hãy bấm <b>Nhận Giấy Chứng Nhận</b>.';
+      else if (g.total > 8) msg = '🎊 <b>ĐẠT điểm phiếu!</b> Chỉ còn hoàn thành <b>≥ 8 vụ canh tác</b> (hiện ' + clearedCanvas() + '/' + LEVELS.length + ') nữa là nhận được Giấy chứng nhận.';
+      else msg = 'Cần đạt <b>trên 8/10 điểm</b> phiếu Về đích để nhận Giấy chứng nhận. Hãy xem lại lời giải rồi thử một phiếu khác nhé!';
       const res = $('wsResult');
       res.className = 'ws-result ' + cls;
       res.style.display = 'block';
       res.innerHTML =
-        '<div class="ws-score-big">' + g.total.toFixed(2).replace(/\.00$/, '') + '<span>/10</span></div>' +
+        '<div class="ws-score-big">' + d2(g.total) + '<span>/10 điểm</span></div>' +
         '<div class="ws-score-sub">' + msg + '</div>' +
-        '<div class="ws-score-grid">' +
-        '<div><b>Phần I</b><br>' + g.pI.toFixed(2).replace(/\.00$/, '') + ' đ · đúng ' + g.cI + '/12</div>' +
-        '<div><b>Phần II</b><br>' + g.pII.toFixed(2).replace(/\.00$/, '') + ' đ · đúng ' + g.cII + '/8</div>' +
-        '<div><b>Phần III</b><br>' + g.pIII.toFixed(2).replace(/\.00$/, '') + ' đ · đúng ' + g.cIII + '/6</div>' +
-        '<div><b>Phần IV</b><br>' + g.pIV.toFixed(2).replace(/\.00$/, '') + ' đ · đúng ' + g.cIV + '/4</div>' +
+        '<div class="ws-score-sub2">Đã làm các phần: <b>' + partsDone + '</b></div>' +
+        '<div class="ws-stat-cells">' +
+        '<div class="ws-stat"><div class="wsv">' + d2(g.pI) + '/3</div><div class="wsl">PHẦN I (' + g.cI + '/12 CÂU)</div></div>' +
+        '<div class="ws-stat"><div class="wsv">' + d2(g.pII) + '/2</div><div class="wsl">PHẦN II (' + g.cII + '/8 Ý)</div></div>' +
+        '<div class="ws-stat"><div class="wsv">' + d2(g.pIII) + '/3</div><div class="wsl">PHẦN III (' + g.cIII + '/6 Ý)</div></div>' +
+        '<div class="ws-stat"><div class="wsv">' + d2(g.pIV) + '/2</div><div class="wsl">PHẦN IV (' + g.cIV + '/4 CÂU)</div></div>' +
+        '<div class="ws-stat ws-stat-ok"><div class="wsv">' + correct + '/30</div><div class="wsl">SỐ Ý/CÂU ĐÚNG</div></div>' +
+        '<div class="ws-stat ws-stat-bad"><div class="wsv">' + wrong + '/30</div><div class="wsl">SỐ Ý/CÂU SAI</div></div>' +
         '</div>' +
-        '<div class="ws-score-sub2">Đã làm: ' + partsDone + ' · Tổng đúng ' + (g.cI + g.cII + g.cIII + g.cIV) + '/30 ý.</div>' +
         '<div class="ws-actions">' +
         (pass ? '<button class="ws-btn ws-btn-cert" id="wsCertBtn">🏆 Nhận Giấy Chứng Nhận</button>' : '') +
-        '<button class="ws-btn ws-btn-again" id="wsAgainBtn">🔄 Làm phiếu khác</button>' +
-        '<button class="ws-btn ws-btn-close" id="wsReviewClose">Đóng xem lại bài</button>' +
+        '<button class="ws-btn ws-btn-again" id="wsAgainBtn">📝 Làm phiếu khác</button>' +
+        '<button class="ws-btn ws-btn-close" id="wsReviewClose">Đóng, xem lại bài</button>' +
         '</div>';
       $('wsSubmit').style.display = 'none';
       $('wsFoot').style.display = 'none';
@@ -13246,19 +13850,21 @@
          ================================================================ */
       function buildGameReportHTML() {
         const school = teacherSchool(); const today = fmtDate(Date.now());
-        const qrTxt = 'NONG TRAI TOI UU - Toan 10 - He BPT bac nhat hai an & bai toan toi uu. 10 man choi (kho dan Bloom) + Phieu Ve Dich 10d. Cong cu SKKN: KT dau vao/ra, lich su, xep hang, GV-PIN, dau 2 nguoi, in nhieu ma de. GV: Luong Truong.';
+        const qrTxt = 'NONG TRAI TOI UU - Toan 10 - He BPT bac nhat hai an & bai toan toi uu. 10 man choi (kho dan Bloom) + Phieu Ve Dich 10d. Luong hoc khep kin: tra loi dung -> qua bat ngo -> cau hoi cung co -> man sau. Cong cu SKKN: KT dau vao/ra, lich su, xep hang, GV-PIN, dau 2 nguoi, in nhieu ma de. GV: Luong Truong.';
         let h = '<div class="p-doc">';
-        h += '<div class="p-hdr rep"><div class="p-hdr-top">🚜 SÁNG KIẾN KINH NGHIỆM · BÁO CÁO HỌC LIỆU SỐ</div><div class="p-hdr-title">BÁO CÁO NỘI DUNG GAME — Nông Trại Tối Ưu</div><div class="p-hdr-sub">Toán 10 · Hệ BPT bậc nhất hai ẩn &amp; bài toán tối ưu</div></div>';
+        h += '<div class="p-hdr rep"><div class="p-hdr-top">🚜 SÁNG KIẾN KINH NGHIỆM · BÁO CÁO HỌC LIỆU SỐ</div><div class="p-hdr-title">BÁO CÁO NỘI DUNG GAME — Nông Trại Tối Ưu</div><div class="p-hdr-sub">Toán 10 · Hệ BPT bậc nhất hai ẩn &amp; bài toán tối ưu · Phiên bản v4.0</div></div>';
         h += '<div class="p-rep-by">Học liệu số dạy học chủ đề Tối ưu · Giáo viên: LUÔNG TRƯƠNG · Ngày lập: ' + today + (school ? ' · ' + esc(school) : '') + '</div>';
-        h += '<div class="p-sec-h"><span class="p-num">1</span> TỔNG QUAN</div><p class="p-p">Game <b>“Nông Trại Tối Ưu”</b> là học liệu số tương tác chạy <b>hoàn toàn ngoại tuyến</b>, giúp học sinh lớp 10 khám phá và luyện tập chủ đề <b>hệ bất phương trình bậc nhất hai ẩn và bài toán tối ưu</b> qua <b>10 màn chơi</b> (kéo trực tiếp điểm trên miền nghiệm, chọn đỉnh tối ưu), khó dần theo thang Bloom, cùng <b>Phiếu bài tập Về đích</b> đánh giá tổng hợp thang điểm 10. Hoàn thành đủ điều kiện, học sinh nhận <b>Giấy chứng nhận</b>.</p>';
+        h += '<div class="p-sec-h"><span class="p-num">1</span> TỔNG QUAN</div><p class="p-p">Game <b>“Nông Trại Tối Ưu”</b> là học liệu số tương tác chạy <b>hoàn toàn ngoại tuyến</b>, giúp học sinh lớp 10 khám phá và luyện tập chủ đề <b>hệ bất phương trình bậc nhất hai ẩn và bài toán tối ưu</b> qua <b>10 màn chơi</b> (kéo trực tiếp điểm trên miền nghiệm, chọn đỉnh tối ưu), khó dần theo thang Bloom, cùng <b>Phiếu bài tập Về đích</b> đánh giá tổng hợp thang điểm 10. Mỗi màn theo <b>luồng học tập khép kín</b>: trả lời đúng → 🎁 <b>quà bất ngờ</b> → <b>câu hỏi củng cố</b> → sang màn tiếp theo. Hoàn thành đủ điều kiện, học sinh được dẫn thẳng tới <b>Giấy chứng nhận</b> ngay sau khi làm kiểm tra đầu ra.</p>';
         h += '<div class="p-grid2">' + [
           '🎮 10 màn chơi · kéo miền nghiệm', '🧮 Công thức toán hiển thị offline',
-          '❓ Câu hỏi củng cố mỗi màn (có lời giải)', '📝 Phiếu Về Đích (bộ sinh đa đề)',
+          '🎁 Quà bất ngờ + câu hỏi củng cố mỗi màn', '📝 Phiếu Về Đích (bộ sinh đa đề)',
           '📄 Xuất PDF đề + đáp án (QR/mã vạch)', '🎖 Giấy chứng nhận (lớp · trường · sao)',
           '🎯 Kiểm tra đầu vào/đầu ra (đo tiến bộ)', '🏆 Xếp hạng lớp/tuần · 🏅 huy hiệu cột mốc',
           '👩‍🏫 Chế độ Giáo viên (PIN) · khoá xoá dữ liệu', '⚔️ Đấu 2 người · ⏱️ đếm ngược mỗi câu',
-          '🔊 Giọng đọc đề (TTS) · 🎵 Nhạc nền', '🅰🅱 In nhiều mã đề (Kiểm tra) · 💾 lưu tiến trình'
+          '🔊 Giọng đọc đề (TTS) · 🎵 Nhạc nền', '🅰🅱 In nhiều mã đề (Kiểm tra) · 💾 lưu tiến trình',
+          '🎉 Hiệu ứng nhận quà · pháo hoa', '🌗 Giao diện sáng/tối · điện thoại'
         ].map(x => '<div class="p-cell">' + x + '</div>').join('') + '</div>';
+        h += '<p class="p-p"><b>Luồng học tập khép kín mỗi màn:</b> trả lời đúng → <b>🎁 Quà bất ngờ</b> (kho <b>16 phần quà đa dạng</b>: mẹo Toán, sự thật thú vị, lời khen, danh hiệu, điểm thưởng, câu nói hay… <b>không trùng nhau ở 10 màn</b> và không đoán trước được, kèm hiệu ứng <b>pháo hoa</b> khi mở) → <b>Câu hỏi củng cố</b> (có lời giải) → bấm <b>Tiếp tục</b> sang màn sau. Cách này duy trì hứng thú và củng cố kiến thức ngay sau mỗi thử thách.</p>';
         h += '<div class="p-sec-h"><span class="p-num">2</span> HỆ THỐNG 10 MÀN CHƠI (KHÓ DẦN THEO BLOOM)</div>';
         LEVELS.forEach((L, i) => {
           const bank = mathFacts(L);
@@ -13270,6 +13876,7 @@
         h += '<div class="p-sec-h"><span class="p-num">4</span> ĐIỀU KIỆN GIẤY CHỨNG NHẬN</div><p class="p-p">Đồng thời: ① Hoàn thành <b>≥ 80% số màn</b> (≥ 8/10 vụ); ② Đạt <b>trên 8/10 điểm</b> Phiếu Về Đích; ③ Hoàn thành <b>Kiểm tra đầu ra (8 câu)</b> để khảo sát mức tiếp thu.</p>';
         h += '<div class="p-sec-h"><span class="p-num">5</span> CÔNG CỤ HỖ TRỢ DẠY HỌC &amp; MINH CHỨNG SKKN</div>';
         h += '<table class="p-tbl2">' + [
+          ['Quà bất ngờ + Câu hỏi củng cố', 'Sau mỗi màn: mở 🎁 quà (kho 16 phần đa dạng, không trùng ở 10 màn, có pháo hoa) rồi trả lời câu hỏi củng cố có lời giải — vừa khích lệ vừa ôn ngay kiến thức.'],
           ['Kiểm tra đầu vào / đầu ra', 'Bài 8 câu trước &amp; sau khi chơi; tự tính độ tiến bộ từng em → minh chứng game giúp tiếp thu kiến thức.'],
           ['Lịch sử tham gia', 'Thống kê chi tiết (phân trang, lọc ngày, tìm, CSV) &amp; tổng quát (biểu đồ tròn/cột/đường); xuất PDF + QR minh chứng.'],
           ['Xếp hạng &amp; huy hiệu', 'Xếp hạng lọc theo lớp/tuần/tháng; 12 huy hiệu cột mốc tạo động lực.'],
@@ -13292,7 +13899,7 @@
         const fN = v => { v = Math.round(v * 10) / 10; return v % 1 === 0 ? v.toFixed(0) : v.toFixed(1); };
         return { F: tT(L.obj.a, L.obj.b), cons, opt: best.p ? '(' + fN(best.p.x) + ';\\ ' + fN(best.p.y) + ')' : '—', optF: best.p ? fN(best.f) : '—' };
       }
-      function exportGameReport() { doPrint(buildGameReportHTML(), { noBarcode: true, footer: 'Nông Trại Tối Ưu · Báo cáo nội dung game (SKKN)' }); }
+      function exportGameReport() { doPrint(buildGameReportHTML(), { code: makeCode('BC'), footer: 'Nông Trại Tối Ưu · Báo cáo nội dung game (SKKN)' }); }
 
       // Xuất "Lời giải từng bước" ra PDF theo đúng định dạng phiếu/báo cáo trong game
       function printSolutionPDF(bodyHTML, sub) {
