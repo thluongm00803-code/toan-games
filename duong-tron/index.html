@@ -4964,6 +4964,7 @@ table.grid th{background:#EEF2FB;font-weight:700;color:#2A3B8F;}
 .feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px;}
 .feat-i{font-size:10.5px;color:#334155;background:#F6F7FB;border:1px solid #EDEFF5;border-radius:8px;padding:7px 10px;}
 .lv-block{border:1px solid #E2E8F0;border-left:4px solid #6366F1;border-radius:9px;padding:8px 12px;margin:7px 0;background:#FCFCFF;break-inside:avoid;page-break-inside:avoid;}
+.rpt .sec{border-left:none !important;padding-left:0 !important;}
 .lv-t{font-weight:700;color:#312e81;font-size:12.5px;margin-bottom:2px;}
 .lv-t .lv-dif{background:#EEF2FF;color:#4f46e5;border-radius:999px;padding:2px 9px;font-size:9.5px;font-weight:700;margin-left:4px;}
 .lv-r{font-size:10.8px;margin-top:2px;color:#334155;}.lv-r b{color:#4338ca;}
@@ -6266,7 +6267,7 @@ table.grid th{background:#EEF2FB;font-weight:700;color:#2A3B8F;}
             function buildGameReport() {
                 const today = new Date(); const dstr = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
                 const feat = ['🎮 10 màn chơi · 4 cơ chế tương tác', '🧮 Công thức toán chuẩn LaTeX (online/offline)', '🎁 Quà bất ngờ + câu hỏi củng cố mỗi màn', '📝 Phiếu Về Đích (bộ sinh đa đề)', '📄 Xuất PDF đề + đáp án (QR/mã vạch)', '🎖 Giấy chứng nhận (lớp · trường · sao)', '📊 Kiểm tra đầu vào/đầu ra (đo tiến bộ)', '🏆 Xếp hạng lớp/tuần · 🏅 huy hiệu cột mốc', '👩‍🏫 Chế độ Giáo viên (PIN) · khoá xoá dữ liệu', '⚔️ Đấu 2 người · ⏱️ đếm ngược mỗi câu', '🎯 Huy hiệu icon + hiệu ứng theo từng màn', '🅰🅱 In nhiều mã đề · 🎵 Nhạc nền · 🔊 đọc đề'];
-                let h = '<div class="p-doc">';
+                let h = '<div class="p-doc rpt">';
                 h += '<div class="ws-banner"><div class="brib">🚀 SÁNG KIẾN KINH NGHIỆM · BÁO CÁO HỌC LIỆU SỐ</div><h1>BÁO CÁO NỘI DUNG GAME — ' + GAME_TITLE + '</h1><div class="bsub">Toán 10 · Đường tròn & elip trong mặt phẳng toạ độ · Phiên bản v4.0</div></div>';
                 h += '<div class="rpt-meta">Học liệu số dạy học chủ đề <b>Đường tròn & Elip</b> · Giáo viên: <b>' + esc((typeof TEACHER_NAME !== 'undefined') ? TEACHER_NAME : 'LUÔNG TRƯƠNG') + '</b> · Ngày lập: ' + dstr + '</div>';
                 // 1 TỔNG QUAN
@@ -6431,24 +6432,41 @@ table.grid th{background:#EEF2FB;font-weight:700;color:#2A3B8F;}
                 let piv = 0; w.short.forEach((s, i) => { const el = $('pwBody').querySelector('input[name="piv' + i + '"]'); const v = (el ? el.value : '').replace(',', '.').trim(); if (v !== '' && Math.abs(parseFloat(v) - parseFloat(s.ans)) < 0.02) { pts += 0.5; piv++; } });
                 pts = Math.round(pts * 100) / 100;
                 bestWs = Math.max(bestWs, Math.round(pts));
-                // hiển thị kết quả + lời giải
-                let h = '<div class="pw-result"><div style="font-size:46px">' + (pts >= 8 ? '🎉' : pts >= 5 ? '👍' : '💪') + '</div><h2 style="color:var(--indigo);margin:6px 0">Điểm của em: ' + pts + '/10</h2>' +
-                    '<div class="pw-break">Phần I: ' + pi + '/12 · Phần II: ' + pii + '/8 · Phần III: ' + piii + '/6 · Phần IV: ' + piv + '/4</div>' +
-                    (pts > 8 ? '<div class="pw-pass">✅ Đạt yêu cầu Phiếu Về Đích! Hãy làm Kiểm tra đầu ra để nhận Giấy chứng nhận.</div>' : '<div class="pw-fail">Cần > 8/10 để đạt điều kiện chứng nhận. Xem lời giải rồi thử đề mới nhé!</div>') + '</div>';
+                const passed = pts > 8;
+                const fmt = x => (Math.round(x * 100) / 100).toString().replace('.', ',');
+                const ptI = pi * 0.25, ptII = pii * 0.25, ptIII = piii * 0.5, ptIV = piv * 0.5;
+                const totItems = 30, corr = pi + pii + piii + piv, wrong = totItems - corr;
+                const card = (big, label, sub) => '<div class="pw-card"><div class="pw-card-b">' + big + '</div><div class="pw-card-l">' + label + '</div>' + (sub ? '<div class="pw-card-s">' + sub + '</div>' : '') + '</div>';
+                let h = '<div class="pw-btns">' +
+                    (passed ? '<button class="pwb pwb-cert" id="pwDone">🏆 Nhận Giấy chứng nhận</button>' : '') +
+                    '<button class="pwb pwb-alt" id="pwAgain">📄 Làm phiếu khác</button>' +
+                    '<button class="pwb pwb-alt" id="pwClose">Đóng, xem lại bài</button></div>';
+                h += '<div class="pw-box">' +
+                    '<div class="pw-score"><span class="pw-num">' + fmt(pts) + '</span><span class="pw-den">/10 điểm</span></div>' +
+                    '<div class="pw-msg ' + (passed ? 'ok' : 'no') + '">' + (passed ? '🎉 ĐẠT điểm phiếu! Chỉ còn Kiểm tra ĐẦU RA (8 câu) nữa là nhận được Giấy chứng nhận.' : 'Chưa đạt (cần > 8/10). Xem lời giải rồi làm phiếu khác nhé!') + '</div>' +
+                    '<div class="pw-partsdone">Đã làm các phần: I, II, III, IV</div>' +
+                    '<div class="pw-cards">' +
+                    card(fmt(ptI) + '/3', 'PHẦN I', '(' + pi + '/12 CÂU)') +
+                    card(fmt(ptII) + '/2', 'PHẦN II', '(' + pii + '/8 Ý)') +
+                    card(fmt(ptIII) + '/3', 'PHẦN III', '(' + piii + '/6 Ý)') +
+                    card(fmt(ptIV) + '/2', 'PHẦN IV', '(' + piv + '/4 CÂU)') +
+                    card(corr + '/' + totItems, 'SỐ Ý/CÂU ĐÚNG', '') +
+                    card(wrong + '/' + totItems, 'SỐ Ý/CÂU SAI', '') +
+                    '</div></div>';
                 h += '<div class="pw-sol"><b>💡 Đáp án Phần I:</b> ' + w.partI.map((it, i) => (i + 1) + ABC[it.ci]).join(' · ') + '</div>';
                 h += '<div class="pw-sol"><b>Phần IV — lời giải:</b><ul>' + w.short.map(s => '<li>Câu ' + s.no + ' (' + s.ans + '): ' + s.sol + '</li>').join('') + '</ul></div>';
-                h += '<div style="display:flex;gap:8px;margin-top:10px"><button class="t-go" id="pwAgain" style="flex:1">🔁 Đề mới</button><button class="t-go" id="pwDone" style="flex:1;background:#1FA36B">' + (pts > 8 ? '🏆 Làm Kiểm tra đầu ra →' : 'Xong') + '</button></div>';
                 $('pwBody').innerHTML = h; window.SCT_typeset && window.SCT_typeset($('pwBody'));
                 $('pwAgain').onclick = () => { curWS = C.generateWorksheet(window.SCT_teacherScope ? window.SCT_teacherScope() : null); renderForm(); };
-                $('pwDone').onclick = () => {
+                $('pwClose').onclick = () => { C.hideModal('mPlayWS'); if (window.SCT_updateBadges) window.SCT_updateBadges(); };
+                const pd = $('pwDone'); if (pd) pd.onclick = () => {
                     C.hideModal('mPlayWS'); if (window.SCT_updateBadges) window.SCT_updateBadges();
                     // Đạt Phiếu Về Đích → dẫn thẳng tới 8 câu Kiểm tra đầu ra
-                    if (pts > 8 && window.__sctpp && window.__sctpp.openTest && window.__sctpp.startTest) {
+                    if (passed && window.__sctpp && window.__sctpp.openTest && window.__sctpp.startTest) {
                         window.__sctpp.openTest();
                         window.__sctpp.startTest('post');
                     }
                 };
-                if (pts > 8) toast('Đạt Phiếu Về Đích ' + Math.round(pts) + '/10!');
+                if (passed) toast('Đạt Phiếu Về Đích ' + Math.round(pts) + '/10!');
             }
             window.__sctplayws = { openPlayWS };
         })();
@@ -6648,6 +6666,25 @@ body.dark .g-footbar .sct-timer{background:var(--panel);}
 .pw-result{text-align:center}.pw-break{color:var(--muted);font-size:13px;margin:6px 0}
 .pw-pass{background:#DFF6EC;color:#0F7A50;border-radius:10px;padding:10px;font-weight:700;margin-top:8px}
 .pw-fail{background:#FFF4E0;color:#B45309;border-radius:10px;padding:10px;margin-top:8px}
+/* ==== Bảng kết quả Phiếu Về Đích (như ảnh tham chiếu) ==== */
+.pw-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
+.pw-btns .pwb{border:none;border-radius:12px;padding:12px 20px;font:700 14px 'Baloo 2','Be Vietnam Pro',sans-serif;cursor:pointer}
+.pw-btns .pwb-cert{background:linear-gradient(120deg,#15a05f,#1FA36B);color:#fff;box-shadow:0 8px 18px -8px rgba(31,163,107,.6)}
+.pw-btns .pwb-alt{background:#fff;color:#334155;border:1.5px solid #E2E8F0}
+.pw-box{border:2px solid #E7D9A8;background:linear-gradient(180deg,#fffdf6,#fdfbf0);border-radius:18px;padding:18px 16px 16px;text-align:center}
+.pw-score{margin:2px 0 6px}
+.pw-num{font:800 46px 'Baloo 2',sans-serif;color:#B7860B}
+.pw-den{font:700 16px 'Baloo 2',sans-serif;color:#9a8a55;margin-left:2px}
+.pw-msg{font-weight:700;font-size:13.5px;margin:4px auto 6px;max-width:620px;line-height:1.45}
+.pw-msg.ok{color:#0F7A50} .pw-msg.no{color:#B45309}
+.pw-partsdone{font-size:12.5px;color:#94886a;margin-bottom:12px}
+.pw-cards{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
+.pw-card{flex:1 1 130px;min-width:105px;border:1.5px solid #EDE3C4;border-radius:12px;padding:11px 8px;background:#fffef9}
+.pw-card-b{font:800 19px 'Baloo 2',sans-serif;color:#B7860B}
+.pw-card-l{font-size:11px;font-weight:800;color:#7c6f45;margin-top:3px;letter-spacing:.3px}
+.pw-card-s{font-size:10.5px;color:#a99a6a;margin-top:1px}
+body.dark .pw-box{background:#211d10;border-color:#4a4020} body.dark .pw-card{background:#26210f;border-color:#4a4020}
+body.dark .pw-btns .pwb-alt{background:var(--panel);color:var(--ink);border-color:#333}
 .pw-sol{background:#F6F7FB;border-radius:10px;padding:10px 12px;font-size:12.5px;margin-top:10px;line-height:1.5}
 .pw-sol ul{margin:6px 0 0;padding-left:18px}
 /* QR modal */
