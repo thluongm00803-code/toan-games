@@ -11315,9 +11315,10 @@
                 return out;
             }
             window.__nunitoFaces = nunitoFaces;
-            function runPage(footLeft) {
+            function runPage(footLeft, bc) {
                 return '@page{size:A4;margin:15mm 13mm 16mm 13mm;' +
                     '@top-left{content:"Toán 10 · KNTT";font-family:Nunito,Arial,sans-serif;font-size:9px;font-weight:700;color:#9aa4ad}' +
+                    (bc ? '@top-right{content:url(' + bc + ');}' : '') +
                     '@bottom-left{content:"' + footLeft + '";font-family:Nunito,Arial,sans-serif;font-size:9px;color:#9aa4ad}' +
                     '@bottom-right{content:"Trang " counter(page) " / " counter(pages);font-family:Nunito,Arial,sans-serif;font-size:9px;color:#9aa4ad}}';
             }
@@ -11575,13 +11576,14 @@
                 const G = window.__game || {};
                 const feats = [
                     '🎮 10 màn chơi · 5 cơ chế tương tác', '🧮 Công thức Toán chuẩn LaTeX (offline)',
-                    '❓ Câu hỏi củng cố mỗi màn (có lời giải)', '🎁 Quà bất ngờ sau mỗi màn (điểm/mẹo hay)',
+                    '❓ Câu hỏi củng cố mỗi màn (có lời giải)', '🎁 Quà bất ngờ + 🎆 pháo hoa khi mở quà',
                     '📖 Lời giải từng bước · 📄 xuất PDF lời giải', '📝 Phiếu Về Đích (bộ sinh đa đề)',
                     '📄 Xuất PDF đề + đáp án (QR/mã vạch)', '🎖️ Giấy chứng nhận (lớp · trường · sao)',
-                    '📊 Kiểm tra đầu vào/đầu ra (đo tiến bộ)', '🏆 Xếp hạng · 🏅 huy hiệu cột mốc',
+                    '📊 Kiểm tra đầu vào/đầu ra (đo tiến bộ)', '🏆 Xếp hạng lớp/tuần · 🏅 huy hiệu cột mốc',
                     '👩‍🏫 Chế độ Giáo viên (PIN) · khoá xoá dữ liệu', '⚔️ Đấu 2 người · ⏱️ đếm ngược mỗi câu',
-                    '🤏 Cảm ứng: chụm 2 ngón đổi độ mở parabol', '📱 Giao diện điện thoại gọn trong 1 màn hình',
-                    '🔊 Giọng đọc đề (tự động) · 🎵 Nhạc nền', '🅰️🅱️ In nhiều mã đề (Kiểm tra) · 💾 lưu tiến trình'
+                    '🖱️ Điều khiển parabol bằng chuột (laptop)', '👆 Kéo thả · chụm 2 ngón (điện thoại)',
+                    '📱 Giao diện điện thoại gọn trong 1 màn hình', '🔊 Giọng đọc đề (tự động) · 🎵 Nhạc nền',
+                    '🅰️🅱️ In nhiều mã đề (Kiểm tra)', '💾 Lưu tiến trình · 📋 Lịch sử tham gia'
                 ];
                 const featGrid = '<div class="rg">' + feats.map(f => '<div class="rc">' + f + '</div>').join('') + '</div>';
                 const levels = LV_META.map((L, i) => {
@@ -11596,14 +11598,14 @@
                 }).join('');
                 const tools = [
                     ['Công thức Toán chuẩn LaTeX', 'Toàn bộ công thức (phân số, luỹ thừa, căn, Δ, dấu ≠…) hiển thị đẹp và chính xác bằng KaTeX nhúng offline — không lệ thuộc Internet.'],
-                    ['Quà bất ngờ + Lời giải từng bước', 'Sau mỗi màn: nhận quà (điểm thưởng / mẹo hay / kiến thức thực tế) rồi làm câu hỏi củng cố. Lời giải trình bày 4 bước, có nút xuất PDF để in/giao bài.'],
+                    ['Quà bất ngờ + Lời giải từng bước', 'Sau mỗi màn: mở hộp quà (kèm 🎆 pháo hoa) nhận điểm thưởng / mẹo hay / kiến thức thực tế, rồi làm câu hỏi củng cố. Lời giải trình bày 4 bước, có nút xuất PDF để in/giao bài.'],
                     ['Kiểm tra đầu vào / đầu ra', 'Bài trắc nghiệm 8 câu trước & sau khi chơi; tự tính độ tiến bộ từng em → minh chứng game giúp tiếp thu kiến thức.'],
                     ['Lịch sử tham gia', 'Thống kê chi tiết (hiển thị đầy đủ mọi lượt, phân trang khi in, lọc theo ngày, tìm kiếm, xuất CSV) & tổng quát (biểu đồ tròn/cột/đường); xuất PDF + QR minh chứng.'],
                     ['Xếp hạng & huy hiệu', 'Bảng xếp hạng lọc theo lớp/tuần/tháng; huy hiệu cột mốc tạo động lực.'],
                     ['Chế độ Giáo viên (PIN)', 'Khoá xoá dữ liệu với học sinh; đặt tên trường mặc định; chọn phạm vi kiến thức cho phiếu.'],
                     ['Thi đấu 2 người', 'Trả lời luân phiên trên cùng máy, có đồng hồ đếm ngược mỗi câu & giọng đọc đề.'],
                     ['In nhiều mã đề (Kiểm tra)', 'Mỗi lần xuất tạo nhiều mã đề khác nhau hoàn toàn (nội dung + mã vạch định danh), trang đáp án gom về cuối để tiện in.'],
-                    ['Tối ưu cho điện thoại', 'Chụm/xoè 2 ngón ngay trên parabol để đổi độ mở (thay việc gõ hệ số); Khung chơi + Bảng điều khiển + nút Khai hoả gọn trong một màn hình.'],
+                    ['Điều khiển parabol trực quan', 'Ngoài kéo thanh trượt a·b·c, người chơi còn điều khiển trực tiếp parabol trên mọi màn: laptop dùng chuột (giữ & rê để di chuyển, lăn để đổi độ mở); điện thoại dùng ngón tay (kéo 1 ngón để di chuyển, chụm 2 ngón để đổi độ mở). Khung chơi + Bảng điều khiển + nút Khai hoả gọn trong một màn hình điện thoại.'],
                     ['Giọng đọc đề (TTS)', 'Đọc to nhiệm vụ / câu hỏi bằng tiếng Việt; hỗ trợ học sinh khó đọc, học hoà nhập.']
                 ];
                 const toolTable = '<table class="rt">' + tools.map(t => '<tr><td class="k">' + esc(t[0]) + '</td><td>' + esc(t[1]) + '</td></tr>').join('') + '</table>';
@@ -11612,9 +11614,10 @@
                     '<tr><td>II</td><td>Đúng – Sai (4 ý/câu)</td><td>2 câu × 4 ý</td><td>2đ</td><td>Hai hàm khác nhau (a>0 và a<0); mỗi ý có lời giải.</td></tr>' +
                     '<tr><td>III</td><td>Nối cột (A ↔ B)</td><td>6 ý</td><td>3đ</td><td>Cùng một parabol (P); cột B dư 1 ý nhiễu; 3 NB : 2 TH : 1 VD.</td></tr>' +
                     '<tr><td>IV</td><td>Trả lời ngắn (điền)</td><td>4 câu</td><td>2đ</td><td>2 TH : 1 VD : 1 VDC; câu VD/VDC là bài toán thực tế (độ cao, tầm xa, lợi nhuận…).</td></tr></table>';
+                const RPT_CODE = wsCodeGen();
                 const html = '<html><head><meta charset="utf-8"><title>Báo cáo nội dung game — Pháo Thủ Parabol</title><style>' +
                     '*{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}' +
-                    nunitoFaces() + runPage('Pháo Thủ Parabol · Báo cáo nội dung game') +
+                    nunitoFaces() + runPage('Pháo Thủ Parabol · Báo cáo nội dung game (SKKN)', bcDataURL(RPT_CODE)) +
                     'body{font-family:Nunito,Arial,sans-serif;color:#26312B;margin:0;padding:0}' +
                     '.hd{background:linear-gradient(120deg,#5B54E6 0%,#4F6FE0 46%,#22B2D8 100%);border-radius:16px;color:#fff;text-align:center;padding:18px 22px}' +
                     '.hd .eb{font-size:11px;letter-spacing:2px;font-weight:800;opacity:.92}.hd h1{font-size:23px;margin:6px 0 3px;font-weight:900;letter-spacing:.3px}.hd .sb{font-size:12.5px;opacity:.95}' +
