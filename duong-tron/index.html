@@ -2188,19 +2188,32 @@
 
         /* ---------- 🎁 quà bất ngờ (thiết kế như ảnh tham chiếu) ---------- */
         const giftGiven = new Set();
+        const giftUsed = new Set();
+        const GIFTS = [
+            { t: 'Mẹo hay', ico: '💡', d: 'Đường tròn tâm I(a;b): (x−a)² + (y−b)² = R² — nhớ dấu TRỪ trong ngoặc.' },
+            { t: 'Mẹo hay', ico: '💡', d: 'Tâm đường tròn khai triển x²+y²+Dx+Ey+F=0 là I(−D/2; −E/2).' },
+            { t: 'Mẹo hay', ico: '💡', d: 'Đường tròn tiếp xúc trục Ox ⇔ R = |b| (giá trị tuyệt đối tung độ tâm).' },
+            { t: 'Mẹo hay', ico: '💡', d: 'Elip: a² = b² + c² — a lớn nhất, rồi mới tới b và c.' },
+            { t: 'Mẹo hay', ico: '💡', d: 'Tiêu điểm elip cách tâm c = √(a²−b²), luôn nằm trên trục lớn.' },
+            { t: 'Mẹo hay', ico: '💡', d: 'Đường kính AB ⇒ tâm là trung điểm AB, bán kính R = AB/2.' },
+            { t: 'Sự thật thú vị', ico: '🔭', d: 'Quỹ đạo các hành tinh quanh Mặt Trời là hình ELIP (định luật Kepler)!' },
+            { t: 'Sự thật thú vị', ico: '📡', d: 'Chảo ăng-ten & vệ tinh dùng hình học đường tròn/parabol để bắt sóng.' },
+            { t: 'Sự thật thú vị', ico: '☄️', d: 'Sao chổi Halley bay theo quỹ đạo elip, 76 năm mới ghé Trái Đất một lần.' },
+            { t: 'Sự thật thú vị', ico: '🛰️', d: 'Vệ tinh địa tĩnh bay ở quỹ đạo tròn cao ~35.786 km để "đứng yên" trên bầu trời.' },
+            { t: 'Lời khen', ico: '🎉', d: 'Tuyệt vời! Em có tư duy hình học rất tốt! 🌟' },
+            { t: 'Lời khen', ico: '🚀', d: 'Xuất sắc! Em giải nhanh như vệ tinh vượt quỹ đạo!' },
+            { t: 'Danh hiệu', ico: '🏅', d: 'Em nhận danh hiệu: 🛰️ Kỹ sư Vệ tinh Tập sự!' },
+            { t: 'Danh hiệu', ico: '🌟', d: 'Em nhận danh hiệu: 🌌 Nhà Thám hiểm Quỹ đạo!' },
+            { t: 'Câu nói hay', ico: '💬', d: '"Toán học là ngôn ngữ mà vũ trụ được viết ra." — Galileo Galilei' },
+            { t: 'Câu nói hay', ico: '💬', d: '"Thành công là tổng của những nỗ lực nhỏ được lặp lại mỗi ngày."' }
+        ];
         function showGift() {
             const SM = window.SCT_solMath || (s => s);
-            const tips = [
-                'Đường tròn tâm I(a;b): (x−a)² + (y−b)² = R² — nhớ dấu TRỪ trong ngoặc.',
-                'Tâm đường tròn khai triển x²+y²+Dx+Ey+F=0 là I(−D/2; −E/2).',
-                'Đường tròn tiếp xúc trục Ox ⇔ R = |b| (giá trị tuyệt đối tung độ tâm).',
-                'Bán kính phải dương: từ x²+y²+Dx+Ey+F=0 cần a²+b²−F > 0 mới có đường tròn.',
-                'Elip x²/a² + y²/b² = 1 với a > b > 0; trục lớn 2a nằm trên trục Ox.',
-                'Trong elip: a² = b² + c² — a lớn nhất, rồi mới tới b và c.',
-                'Tiêu điểm elip nằm trên trục lớn, cách tâm một khoảng c = √(a²−b²).',
-                'Đường kính AB ⇒ tâm là TRUNG ĐIỂM của AB, bán kính R = AB/2.'
-            ];
-            const tip = tips[Math.floor(Math.random() * tips.length)];
+            // chọn 1 phần quà CHƯA dùng trong phiên (16 phần → 10 màn không trùng)
+            let pool = []; for (let i = 0; i < GIFTS.length; i++) if (!giftUsed.has(i)) pool.push(i);
+            if (!pool.length) { giftUsed.clear(); for (let i = 0; i < GIFTS.length; i++) pool.push(i); }
+            const gi = pool[Math.floor(Math.random() * pool.length)]; giftUsed.add(gi);
+            const gift = GIFTS[gi];
             const firstTime = !giftGiven.has(li);
             const bonus = 30;
             let h = '' +
@@ -2212,7 +2225,7 @@
                 '<div class="gift-box3d" id="giftBox"><i class="spk spk1">✨</i><i class="spk spk2">✨</i><i class="spk spk3">✨</i><span class="gbx">🎁</span></div>' +
                 '</div>' +
                 '<div class="gift-open" id="giftOpen" style="display:none">' +
-                '<div class="gift-tip"><div class="gift-tip-ico">💡</div><div class="gift-tip-t">Mẹo hay</div>' +
+                '<div class="gift-tip"><div class="gift-tip-ico" id="giftTipIco">💡</div><div class="gift-tip-t" id="giftTipT">Mẹo hay</div>' +
                 '<div class="gift-tip-d" id="giftTipD"></div>' +
                 '<div class="gift-tip-note" id="giftNote"></div></div>' +
                 '<button class="quiz-next" id="giftNext">Trả lời câu hỏi củng cố →</button>' +
@@ -2224,7 +2237,9 @@
                 if (firstTime) { giftGiven.add(li); score += bonus; updateHUD(); SCTreport(); saveProgress(); }
                 fx('win'); confetti(); giftBurst();
                 $('giftPre').style.display = 'none';
-                $('giftTipD').innerHTML = SM(tip);
+                $('giftTipIco').textContent = gift.ico;
+                $('giftTipT').textContent = gift.t;
+                $('giftTipD').innerHTML = SM(gift.d);
                 $('giftNote').textContent = firstTime ? ('🎁 +' + bonus + ' điểm thưởng đã cộng vào tài khoản của em!') : '(Chơi lại — quà chỉ để vui, điểm thưởng đã nhận ở lần đầu.)';
                 $('giftOpen').style.display = 'block';
                 window.SCT_typeset && window.SCT_typeset($('giftOpen'));
@@ -6266,14 +6281,15 @@ table.grid th{background:#EEF2FB;font-weight:700;color:#2A3B8F;}
 
             function buildGameReport() {
                 const today = new Date(); const dstr = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-                const feat = ['🎮 10 màn chơi · 4 cơ chế tương tác', '🧮 Công thức toán chuẩn LaTeX (online/offline)', '🎁 Quà bất ngờ + câu hỏi củng cố mỗi màn', '📝 Phiếu Về Đích (bộ sinh đa đề)', '📄 Xuất PDF đề + đáp án (QR/mã vạch)', '🎖 Giấy chứng nhận (lớp · trường · sao)', '📊 Kiểm tra đầu vào/đầu ra (đo tiến bộ)', '🏆 Xếp hạng lớp/tuần · 🏅 huy hiệu cột mốc', '👩‍🏫 Chế độ Giáo viên (PIN) · khoá xoá dữ liệu', '⚔️ Đấu 2 người · ⏱️ đếm ngược mỗi câu', '🎯 Huy hiệu icon + hiệu ứng theo từng màn', '🅰🅱 In nhiều mã đề · 🎵 Nhạc nền · 🔊 đọc đề'];
+                const feat = ['🎮 10 màn chơi · kéo trực tiếp trên toạ độ', '🧮 Công thức toán hiển thị offline', '🎁 Quà bất ngờ + câu hỏi củng cố mỗi màn', '📝 Phiếu Về Đích (bộ sinh đa đề)', '📄 Xuất PDF đề + đáp án (QR/mã vạch)', '🎖 Giấy chứng nhận (lớp · trường · sao)', '🎯 Kiểm tra đầu vào/đầu ra (đo tiến bộ)', '🏆 Xếp hạng lớp/tuần · 🏅 huy hiệu cột mốc', '👩‍🏫 Chế độ Giáo viên (PIN) · khoá xoá dữ liệu', '⚔️ Đấu 2 người · ⏱️ đếm ngược mỗi câu', '🔊 Giọng đọc đề (TTS) · 🎵 Nhạc nền', '🅰🅱 In nhiều mã đề (Kiểm tra) · 💾 lưu tiến trình', '🎉 Hiệu ứng nhận quà · pháo hoa', '🌗 Giao diện sáng/tối · điện thoại'];
                 let h = '<div class="p-doc rpt">';
                 h += '<div class="ws-banner"><div class="brib">🚀 SÁNG KIẾN KINH NGHIỆM · BÁO CÁO HỌC LIỆU SỐ</div><h1>BÁO CÁO NỘI DUNG GAME — ' + GAME_TITLE + '</h1><div class="bsub">Toán 10 · Đường tròn & elip trong mặt phẳng toạ độ · Phiên bản v4.0</div></div>';
                 h += '<div class="rpt-meta">Học liệu số dạy học chủ đề <b>Đường tròn & Elip</b> · Giáo viên: <b>' + esc((typeof TEACHER_NAME !== 'undefined') ? TEACHER_NAME : 'LUÔNG TRƯƠNG') + '</b> · Ngày lập: ' + dstr + '</div>';
                 // 1 TỔNG QUAN
                 h += '<div class="sec sec1"><div class="sec-h"><span class="num">1</span><span>TỔNG QUAN</span></div>';
                 h += '<p class="q">Game <b>"' + GAME_TITLE + '"</b> là học liệu số tương tác chạy <b>hoàn toàn ngoại tuyến (offline)</b>, giúp học sinh lớp 10 khám phá và luyện tập chủ đề <b>đường tròn và elip trong mặt phẳng toạ độ</b> thông qua <b>10 màn chơi</b> khó dần theo thang Bloom (Nhận biết → Thông hiểu → Vận dụng → Vận dụng cao), cùng một <b>Phiếu bài tập Về đích</b> đánh giá tổng hợp thang điểm 10. Mỗi màn theo <b>luồng học tập khép kín</b>: trả lời đúng → <b>🎁 quà bất ngờ</b> → <b>câu hỏi củng cố</b> → sang màn tiếp theo. Hoàn thành đủ điều kiện, học sinh được <b>dẫn thẳng tới Giấy chứng nhận</b> ngay sau bài kiểm tra đầu ra.</p>';
-                h += '<div class="feat-grid">' + feat.map(f => '<div class="feat-i">' + f + '</div>').join('') + '</div></div>';
+                h += '<div class="feat-grid">' + feat.map(f => '<div class="feat-i">' + f + '</div>').join('') + '</div>';
+                h += '<p class="q"><b>Luồng học tập khép kín mỗi màn:</b> trả lời đúng → <b>🎁 Quà bất ngờ</b> (kho <b>16 phần quà đa dạng</b>: mẹo Toán, sự thật thú vị, lời khen, danh hiệu, điểm thưởng, câu nói hay… <b>không trùng nhau ở 10 màn</b> và không đoán trước được, kèm hiệu ứng <b>pháo hoa</b> khi mở) → <b>Câu hỏi củng cố</b> (có lời giải) → bấm <b>Tiếp tục</b> sang màn sau. Cách này duy trì hứng thú và củng cố kiến thức ngay sau mỗi thử thách.</p></div>';
                 // 2 HỆ THỐNG 10 MÀN CHƠI
                 h += '<div class="sec sec2"><div class="sec-h"><span class="num">2</span><span>HỆ THỐNG 10 MÀN CHƠI (KHÓ DẦN THEO BLOOM)</span></div>';
                 LV.forEach((l, i) => {
@@ -6284,19 +6300,20 @@ table.grid th{background:#EEF2FB;font-weight:700;color:#2A3B8F;}
                 h += '</div>';
                 // 3 PHIẾU BÀI TẬP VỀ ĐÍCH
                 h += '<div class="sec sec3"><div class="sec-h"><span class="num">3</span><span>PHIẾU BÀI TẬP VỀ ĐÍCH — THANG ĐIỂM 10</span></div>';
-                h += '<table class="rpt-tbl"><tr><th>Phần</th><th>Dạng câu hỏi</th><th>Số lượng</th><th>Điểm</th><th>Thiết kế</th></tr>' +
-                    '<tr><td><b>I</b></td><td>Trắc nghiệm A/B/C/D</td><td>12 câu</td><td>3đ</td><td style="text-align:left">8 Nhận biết + 4 Thông hiểu; đáp án đúng phân bố ngẫu nhiên A/B/C/D; có câu kèm hình.</td></tr>' +
-                    '<tr><td><b>II</b></td><td>Đúng – Sai (4 ý/câu)</td><td>2 câu × 4 ý</td><td>2đ</td><td style="text-align:left">Hai đối tượng khác nhau; đủ mẫu 3Đ1S · 2Đ2S · 1Đ3S và hoán vị.</td></tr>' +
-                    '<tr><td><b>III</b></td><td>Nối cột (A ↔ B)</td><td>6 ý</td><td>3đ</td><td style="text-align:left">Cùng một elip; cột B dư 1 ý nhiễu; khai thác 3 NB : 2 TH : 1 VD.</td></tr>' +
-                    '<tr><td><b>IV</b></td><td>Trả lời ngắn (điền)</td><td>4 câu</td><td>2đ</td><td style="text-align:left">2 TH : 1 VD : 1 VDC; câu VD/VDC là bài toán thực tế (tiếp xúc, quỹ đạo, kiến trúc…) có hình.</td></tr></table>';
-                h += '<p class="q"><b>Bộ sinh đa đề:</b> mỗi lần mở là một đề khác (tính từ ngân hàng đã kiểm chứng nên toán luôn đúng); nộp bài mới hiện lời giải từng câu; xuất PDF chuyên nghiệp kèm trang đáp án riêng, mã QR đáp án và mã vạch định danh phiếu.</p></div>';
+                h += '<table class="rpt-tbl"><tr><th>Phần</th><th>Dạng</th><th>SL</th><th>Điểm</th></tr>' +
+                    '<tr><td><b>I</b></td><td>Trắc nghiệm A/B/C/D</td><td>12</td><td>3đ</td></tr>' +
+                    '<tr><td><b>II</b></td><td>Đúng – Sai (4 ý/câu)</td><td>2×4</td><td>2đ</td></tr>' +
+                    '<tr><td><b>III</b></td><td>Nối cột (A ↔ B)</td><td>6 ý</td><td>3đ</td></tr>' +
+                    '<tr><td><b>IV</b></td><td>Trả lời ngắn (thực tế)</td><td>4</td><td>2đ</td></tr></table>';
+                h += '<p class="q"><b>Bộ sinh đa đề:</b> mỗi lần mở là một đề khác (tính từ ngân hàng đã kiểm chứng nên toán luôn đúng); có phiếu trả lời &amp; trang đáp án riêng, mã QR &amp; mã vạch định danh.</p></div>';
                 // 4 GIẤY CHỨNG NHẬN
-                h += '<div class="sec sec4"><div class="sec-h"><span class="num">4</span><span>GIẤY CHỨNG NHẬN — ĐIỀU KIỆN</span></div>';
-                h += '<p class="q"><b>Điều kiện nhận (đồng thời):</b><br>① Hoàn thành ≥ 80% số màn chơi (tức ≥ 8/10 trạm).<br>② Đạt trên 8/10 điểm ở Phiếu Về Đích.</p>';
+                h += '<div class="sec sec4"><div class="sec-h"><span class="num">4</span><span>ĐIỀU KIỆN GIẤY CHỨNG NHẬN</span></div>';
+                h += '<p class="q"><b>Đồng thời:</b> ① Hoàn thành ≥ 80% số màn (≥ 8/10 trạm); ② Đạt trên 8/10 điểm Phiếu Về Đích; ③ Hoàn thành Kiểm tra đầu ra (8 câu) để khảo sát mức tiếp thu.</p>';
                 h += '<p class="q">Giấy chứng nhận in tên học sinh, danh hiệu &amp; lời khen theo thành tích, các số liệu (điểm · sao · điểm phiếu · thời gian chơi), dấu mộc đỏ và chữ ký giáo viên — khích lệ tinh thần học tập.</p></div>';
                 // 5 CÔNG CỤ HỖ TRỢ
                 h += '<div class="sec sec1"><div class="sec-h"><span class="num">5</span><span>CÔNG CỤ HỖ TRỢ DẠY HỌC &amp; MINH CHỨNG SKKN</span></div>';
-                const tools = [['Kiểm tra đầu vào / đầu ra', 'Bài trắc nghiệm 8 câu trước &amp; sau khi chơi; tự tính độ tiến bộ từng em → minh chứng game giúp tiếp thu kiến thức.'],
+                const tools = [['Quà bất ngờ + Câu hỏi củng cố', 'Sau mỗi màn: mở 🎁 quà (kho 16 phần đa dạng, không trùng ở 10 màn, có pháo hoa) rồi trả lời câu hỏi củng cố có lời giải — vừa khích lệ vừa ôn ngay kiến thức.'],
+                ['Kiểm tra đầu vào / đầu ra', 'Bài trắc nghiệm 8 câu trước &amp; sau khi chơi; tự tính độ tiến bộ từng em → minh chứng game giúp tiếp thu kiến thức.'],
                 ['Lịch sử tham gia', 'Thống kê chi tiết (phân trang, lọc theo ngày, tìm kiếm, xuất CSV) &amp; tổng quát (biểu đồ tròn/cột/đường: quy mô, phổ điểm, tỷ lệ hoàn thành, tiến bộ, nhiệm vụ sai nhiều); xuất PDF + QR minh chứng.'],
                 ['Xếp hạng &amp; huy hiệu', 'Bảng xếp hạng lọc theo lớp/tuần/tháng; 12 huy hiệu cột mốc tạo động lực.'],
                 ['Chế độ Giáo viên (PIN)', 'Khoá xoá dữ liệu với học sinh; đặt tên trường mặc định; chọn phạm vi kiến thức cho phiếu.'],
