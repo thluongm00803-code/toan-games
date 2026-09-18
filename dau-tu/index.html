@@ -8222,8 +8222,8 @@
       if (!slice.length) h += '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px">Chưa có dữ liệu. Hãy hoàn thành game &amp; nhận Giấy Chứng Nhận để ghi lượt.</td></tr>';
       slice.forEach((r, i) => {
         h += '<tr><td>' + (histPage * per + i + 1) + '</td><td><b>' + (r.name || '—') + '</b></td><td>' + (r.cls || '') + '</td><td>' + (r.school || '') + '</td>' +
-        '<td class="n">' + (r.score || 0) + '</td><td class="n">' + (r.stars || 0) + '/' + (r.maxStars || NLEVELS * 3) + '</td><td class="n">' + vnum(r.ws || 0) + '/10</td>' +
-        '<td>' + fmtT(r.timeSec || 0) + '</td><td>' + (r.date || '') + '</td></tr>';
+          '<td class="n">' + (r.score || 0) + '</td><td class="n">' + (r.stars || 0) + '/' + (r.maxStars || NLEVELS * 3) + '</td><td class="n">' + vnum(r.ws || 0) + '/10</td>' +
+          '<td>' + fmtT(r.timeSec || 0) + '</td><td>' + (r.date || '') + '</td></tr>';
       });
       h += '</table>';
       h += '<div class="pager"><button onclick="histPage=Math.max(0,histPage-1);renderHistContent()">‹ Trước</button>' +
@@ -8312,8 +8312,8 @@
         body += '<table class="det"><tr><th>#</th><th>Họ và tên</th><th>Lớp</th><th>Trường</th><th>Điểm</th><th>Sao</th><th>Phiếu</th><th>KT vào</th><th>KT ra</th><th>Thời gian</th><th>Ngày</th></tr>';
         a.slice().reverse().forEach((r, i) => {
           body += '<tr><td>' + (i + 1) + '</td><td class="nm">' + (r.name || '') + '</td><td>' + (r.cls || '') + '</td><td class="nm">' + (r.school || '') + '</td>' +
-          '<td><b>' + (r.score || 0) + '</b></td><td>' + (r.stars || 0) + '/' + (r.maxStars || 30) + '</td><td><b>' + vnum(r.ws || 0) + '/10</b></td>' +
-          '<td>' + (r.pre != null ? r.pre + '/8' : '—') + '</td><td>' + (r.post != null ? r.post + '/8' : '—') + '</td><td>' + fmtT(r.timeSec || 0) + '</td><td>' + (r.date || '') + '</td></tr>';
+            '<td><b>' + (r.score || 0) + '</b></td><td>' + (r.stars || 0) + '/' + (r.maxStars || 30) + '</td><td><b>' + vnum(r.ws || 0) + '/10</b></td>' +
+            '<td>' + (r.pre != null ? r.pre + '/8' : '—') + '</td><td>' + (r.post != null ? r.post + '/8' : '—') + '</td><td>' + fmtT(r.timeSec || 0) + '</td><td>' + (r.date || '') + '</td></tr>';
         });
         body += '</table>';
         body += qrEvidenceBox('detail', a.length, avgWs);
@@ -8704,7 +8704,7 @@
       });
       saveLeaderboard({ name, cls, score, t: ts });
       // Nạp font kèm CHÍNH văn bản tiếng Việt để glyph có dấu sẵn sàng trước khi vẽ (chạy offline).
-      const vtext = (name + ' ' + TEACHER_DEFAULT_NAME + ' GIẤY CHỨNG NHẬN Trân trọng đầu tư ăâđêôơư').toUpperCase();
+      const vtext = (name + ' ' + TEACHER_DEFAULT_NAME + ' GIẤY CHỨNG NHẬN Trân trọng đầu tư TEM CHÍNH HÃNG CHỐNG HÀNG GIẢ ĐTTM ăâđêôơư').toUpperCase();
       const loads = [
         document.fonts.load('800 46px "Be Vietnam Pro"', vtext),
         document.fonts.load('600 16px "Be Vietnam Pro"', vtext),
@@ -8719,6 +8719,8 @@
       g.clearRect(0, 0, W, H); g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
       // bg tint
       const bg = g.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#F5F8FF'); bg.addColorStop(1, '#EEF2FF'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+      // hoa văn guilloche chìm (rosette vòng tròn chồng, nền trang trí, không cản chữ)
+      drawSpiroBg(g, W / 2, 366, 300);
       // outer border
       g.strokeStyle = '#4F46E5'; g.lineWidth = 8; g.strokeRect(24, 24, W - 48, H - 48);
       g.strokeStyle = '#F59E0B'; g.lineWidth = 2; g.strokeRect(38, 38, W - 76, H - 76);
@@ -8727,6 +8729,8 @@
       g.beginPath(); g.moveTo(W - 24, H - 24); g.lineTo(W - 180, H - 24); g.lineTo(W - 24, H - 180); g.fill();
       // Huy hiệu ruy-băng (rosette) — góc trên bên trái, tông vàng/chàm khớp mẫu chứng nhận
       drawAwardBadge(g, 92, 90, 32);
+      // Tem chống hàng giả (hologram) — góc trên bên phải
+      drawSecuritySeal(g, W - 84, 86, 28);
       g.textAlign = 'center';
       g.fillStyle = '#3730A3'; g.font = '800 52px "Baloo 2"'; g.fillText('GIẤY CHỨNG NHẬN', W / 2, 110);
       g.fillStyle = '#6A7184'; g.font = '600 16px "Be Vietnam Pro"';
@@ -8757,10 +8761,24 @@
       g.fillStyle = '#6A7184'; g.font = '500 14px "Be Vietnam Pro"';
       g.fillText('"Xuất sắc! Em đã hiểu sức mạnh của lãi kép và tư duy đầu tư dài hạn.', W / 2, 560);
       g.fillText('Hãy giữ ngọn lửa đam mê Toán học — bầu trời tài chính đang chờ em chinh phục!"', W / 2, 582);
-      // date bottom-left
-      g.textAlign = 'left'; g.fillStyle = '#374151'; g.font = '600 14px "Be Vietnam Pro"';
-      const dt = new Date(); g.fillText('Ngày ' + dt.getDate() + ' tháng ' + (dt.getMonth() + 1) + ' năm ' + dt.getFullYear(), 90, 636);
-      g.fillStyle = '#9098AC'; g.font = '500 11px "Be Vietnam Pro"'; g.fillText('Ngày trao tặng', 90, 654);
+      // === Góc dưới trái: NGÀY (trên) -> SỐ CHỨNG NHẬN -> MÃ VẠCH (bỏ dòng 'Ngày trao tặng') ===
+      g.textAlign = 'left';
+      const dt = new Date();
+      // 1) Ngày tháng năm — đặt trên cùng
+      g.fillStyle = '#374151'; g.font = '600 14px "Be Vietnam Pro"';
+      g.fillText('Ngày ' + dt.getDate() + ' tháng ' + (dt.getMonth() + 1) + ' năm ' + dt.getFullYear(), 90, 602);
+      // 2) Số chứng nhận
+      const _cy = dt.getFullYear();
+      const _serial = certSerial(d);
+      const _digits = String(_cy) + _serial;               // 10 chữ số -> Code128-C
+      g.fillStyle = '#6A7184'; g.font = '700 10px "Be Vietnam Pro"';
+      const _clbl = 'Số: ';
+      g.fillText(_clbl, 90, 620);
+      const _clw = g.measureText(_clbl).width;
+      g.fillStyle = '#3730A3'; g.font = '800 12px "Be Vietnam Pro"';
+      g.fillText('DTTM-' + _cy + '-' + _serial, 90 + _clw, 620);
+      // 3) Mã vạch
+      drawBarcode(g, 90, 626, 168, 18, _digits);
       // seal (scallop)
       drawSeal(g, W / 2, 630, 40);
       // signature bottom-right — chữ ký viết tay (thu nhỏ để KHÔNG đè lên dòng trích dẫn phía trên)
@@ -8823,41 +8841,195 @@
     function roundRect(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
     function drawAwardBadge(g, cx, cy, R) {
       g.save(); g.translate(cx, cy);
-      // hai dải ruy-băng (vẽ trước, nằm dưới)
-      function tail(rot) {
-        g.save(); g.translate(0, R * 0.35); g.rotate(rot);
-        const w = R * 0.62, len = R * 1.7;
-        const gr = g.createLinearGradient(-w / 2, 0, w / 2, 0);
-        gr.addColorStop(0, '#B7791F'); gr.addColorStop(0.5, '#FBBF24'); gr.addColorStop(1, '#B7791F');
-        g.fillStyle = gr;
-        g.beginPath(); g.moveTo(-w / 2, 0); g.lineTo(w / 2, 0); g.lineTo(w / 2, len);
-        g.lineTo(0, len - w * 0.55); g.lineTo(-w / 2, len); g.closePath(); g.fill();
+      const bumps = 14, ringR = R * 0.84, bumpR = R * 0.19;
+      function starShape(x, y, rad, sp) {
+        g.beginPath();
+        for (let i = 0; i < sp * 2; i++) {
+          const rr = (i % 2) ? rad * 0.45 : rad;
+          const a = -Math.PI / 2 + i * Math.PI / sp;
+          const px = x + Math.cos(a) * rr, py = y + Math.sin(a) * rr;
+          i ? g.lineTo(px, py) : g.moveTo(px, py);
+        }
+        g.closePath(); g.fill();
+      }
+      function ribbon(dir) {
+        g.save(); g.rotate(dir * 0.26);
+        const w = R * 0.5, top = R * 0.25, len = R * 1.7;
+        g.fillStyle = '#B5810F';
+        g.beginPath(); g.moveTo(-w / 2 - 2.2, top); g.lineTo(w / 2 + 2.2, top);
+        g.lineTo(w / 2 + 2.2, len); g.lineTo(0, len - w * 0.55); g.lineTo(-w / 2 - 2.2, len);
+        g.closePath(); g.fill();
+        const rg = g.createLinearGradient(-w / 2, 0, w / 2, 0);
+        rg.addColorStop(0, '#C81212'); rg.addColorStop(0.5, '#FF2E2E'); rg.addColorStop(1, '#C81212');
+        g.fillStyle = rg;
+        g.beginPath(); g.moveTo(-w / 2, top); g.lineTo(w / 2, top);
+        g.lineTo(w / 2, len - 3); g.lineTo(0, len - w * 0.55 - 3); g.lineTo(-w / 2, len - 3);
+        g.closePath(); g.fill();
+        g.strokeStyle = '#8E0F0F'; g.lineWidth = 1; g.stroke();
         g.restore();
       }
-      tail(-0.30); tail(0.30);
-      // cánh hoa xếp nếp (rosette)
-      const petals = 22, inner = R * 0.9, outer = R * 1.32;
-      for (let i = 0; i < petals; i++) {
-        g.save(); g.rotate(i / petals * Math.PI * 2);
-        g.beginPath(); g.moveTo(-R * 0.145, -inner); g.lineTo(0, -outer); g.lineTo(R * 0.145, -inner); g.closePath();
-        g.fillStyle = (i % 2 === 0) ? '#F6C34B' : '#DDA019'; g.fill(); g.restore();
+      ribbon(-1); ribbon(1);
+      g.fillStyle = '#8C6210';
+      for (let i = 0; i < bumps; i++) { const a = i / bumps * Math.PI * 2; g.beginPath(); g.arc(Math.cos(a) * ringR, Math.sin(a) * ringR, bumpR + 1.4, 0, 7); g.fill(); }
+      g.beginPath(); g.arc(0, 0, ringR + 1.4, 0, 7); g.fill();
+      const gg = g.createRadialGradient(-R * 0.35, -R * 0.4, R * 0.1, 0, 0, R * 1.1);
+      gg.addColorStop(0, '#FFFBD0'); gg.addColorStop(0.4, '#FFDC12'); gg.addColorStop(0.78, '#FFB300'); gg.addColorStop(1, '#F58A00');
+      g.fillStyle = gg;
+      for (let i = 0; i < bumps; i++) { const a = i / bumps * Math.PI * 2; g.beginPath(); g.arc(Math.cos(a) * ringR, Math.sin(a) * ringR, bumpR, 0, 7); g.fill(); }
+      g.beginPath(); g.arc(0, 0, ringR, 0, 7); g.fill();
+      // viền nét cho sắc gọn
+      g.strokeStyle = '#B26A06'; g.lineWidth = 1.2;
+      g.beginPath(); g.arc(0, 0, ringR, 0, 7); g.stroke();
+      g.strokeStyle = '#C9860E'; g.lineWidth = R * 0.05;
+      g.beginPath(); g.arc(0, 0, R * 0.66, 0, 7); g.stroke();
+      const cgrad = g.createRadialGradient(-R * 0.2, -R * 0.25, R * 0.05, 0, 0, R * 0.7);
+      cgrad.addColorStop(0, '#FFFEF0'); cgrad.addColorStop(0.5, '#FFE23A'); cgrad.addColorStop(1, '#FBA000');
+      g.fillStyle = cgrad;
+      g.beginPath(); g.arc(0, 0, R * 0.62, 0, 7); g.fill();
+      g.strokeStyle = '#E08A08'; g.lineWidth = 1; g.beginPath(); g.arc(0, 0, R * 0.62, 0, 7); g.stroke();
+      // hạt đỏ tươi trên vành huy chương (tông vàng–đỏ)
+      for (let i = 0; i < bumps; i++) {
+        const a = (i + 0.5) / bumps * Math.PI * 2;
+        const gx = Math.cos(a) * R * 0.66, gy = Math.sin(a) * R * 0.66;
+        g.beginPath(); g.arc(gx, gy, R * 0.05, 0, 7);
+        g.fillStyle = '#FF1F1F'; g.fill();
+        g.strokeStyle = '#B00000'; g.lineWidth = 0.7; g.stroke();
+        g.beginPath(); g.arc(gx - R * 0.017, gy - R * 0.017, R * 0.017, 0, 7);
+        g.fillStyle = 'rgba(255,255,255,.85)'; g.fill();
       }
-      // đĩa vàng nền
-      const gd = g.createRadialGradient(-R * 0.3, -R * 0.3, R * 0.2, 0, 0, R);
-      gd.addColorStop(0, '#FCD776'); gd.addColorStop(1, '#D9971A');
-      g.beginPath(); g.arc(0, 0, R * 0.95, 0, 7); g.fillStyle = gd; g.fill();
-      // huân chương: vành ngoài màu chàm
-      g.beginPath(); g.arc(0, 0, R * 0.8, 0, 7); g.fillStyle = '#3730A3'; g.fill();
-      // vòng vàng mảnh
-      g.lineWidth = R * 0.07; g.strokeStyle = '#FBBF24'; g.beginPath(); g.arc(0, 0, R * 0.66, 0, 7); g.stroke();
-      // đĩa trong màu tím-chàm
-      g.beginPath(); g.arc(0, 0, R * 0.6, 0, 7); g.fillStyle = '#4F46E5'; g.fill();
-      // vòng chấm vàng
-      g.fillStyle = '#FBBF24';
-      for (let k = 0; k < 24; k++) { const a = k / 24 * Math.PI * 2; g.beginPath(); g.arc(Math.cos(a) * R * 0.5, Math.sin(a) * R * 0.5, R * 0.03, 0, 7); g.fill(); }
-      // dấu tick vàng
-      g.strokeStyle = '#FBBF24'; g.lineWidth = R * 0.13; g.lineCap = 'round'; g.lineJoin = 'round';
-      g.beginPath(); g.moveTo(-R * 0.24, R * 0.02); g.lineTo(-R * 0.05, R * 0.22); g.lineTo(R * 0.28, -R * 0.2); g.stroke();
+      // vòng sao lấp lánh vàng sáng
+      const stars = 16, sr = R * 0.5;
+      for (let i = 0; i < stars; i++) { const a = -Math.PI / 2 + i / stars * Math.PI * 2; g.fillStyle = (i % 2) ? '#FFC400' : '#FFA000'; starShape(Math.cos(a) * sr, Math.sin(a) * sr, R * 0.06, 5); }
+      // ngôi sao trung tâm đỏ tươi viền nét
+      g.fillStyle = '#FF2020'; starShape(0, 0, R * 0.22, 5);
+      g.strokeStyle = '#B00000'; g.lineWidth = 1; g.stroke();
+      g.fillStyle = '#FFE83D'; starShape(0, 0, R * 0.12, 5);
+      // ánh sáng bóng loáng
+      g.fillStyle = 'rgba(255,255,255,.5)';
+      g.beginPath(); g.ellipse(-R * 0.15, -R * 0.28, R * 0.34, R * 0.17, -0.5, 0, 7); g.fill();
+      g.restore();
+    }
+    // ---- Nền chìm: rosette các vòng tròn chồng nhau (spirograph) ----
+    function drawSpiroBg(g, cx, cy, R) {
+      g.save(); g.translate(cx, cy); g.lineWidth = 0.7; g.lineJoin = 'round';
+      const pal = ['#4E9E8E', '#D98A5E', '#6E7FC0'];       // xanh ngọc · cam · lam (đậm hơn cho rõ nét)
+      const n = 40, rc = R * 0.53, cr = rc * 0.88;         // tâm trên vòng rc, bán kính cr → chừa lỗ nhỏ giữa
+      for (let i = 0; i < n; i++) {
+        const a = i / n * Math.PI * 2;
+        const x = Math.cos(a) * rc, y = Math.sin(a) * rc;
+        g.globalAlpha = 0.20; g.strokeStyle = pal[i % pal.length];
+        g.beginPath(); g.arc(x, y, cr, 0, 7); g.stroke();
+      }
+      // vòng nhỏ bên trong tạo lớp thứ hai (moiré tinh tế)
+      const n2 = 28, rc2 = R * 0.30, cr2 = rc2 * 0.9;
+      for (let i = 0; i < n2; i++) {
+        const a = i / n2 * Math.PI * 2 + 0.1;
+        g.globalAlpha = 0.17; g.strokeStyle = pal[(i + 1) % pal.length];
+        g.beginPath(); g.arc(Math.cos(a) * rc2, Math.sin(a) * rc2, cr2, 0, 7); g.stroke();
+      }
+      // đường bao ngoài mảnh
+      g.globalAlpha = 0.26; g.strokeStyle = '#6E7FC0'; g.lineWidth = 0.9;
+      g.beginPath(); g.arc(0, 0, rc + cr, 0, 7); g.stroke();
+      g.restore();
+    }
+    // ---- Chữ chạy theo cung tròn (cho tem) ----
+    function arcText(g, str, radius, base, spread, font, color, bottom) {
+      g.save(); g.font = font; g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'middle';
+      for (let i = 0; i < str.length; i++) {
+        const off = (i - (str.length - 1) / 2) * spread;
+        g.save();
+        if (bottom) { g.rotate(-off); g.translate(0, radius); g.rotate(Math.PI); }
+        else { g.rotate(off); g.translate(0, -radius); }
+        g.fillText(str[i], 0, 0); g.restore();
+      }
+      g.restore();
+    }
+    // ---- Tem chống hàng giả (guilloche rosette, tông xanh ngọc + vàng) ----
+    function drawSecuritySeal(g, cx, cy, R) {
+      g.save(); g.translate(cx, cy); g.rotate(-0.04);
+      g.lineJoin = 'round'; g.lineCap = 'round';
+      const teal = '#2F6E7E', teal2 = '#5AA0A8', gold = '#B8862F', gold2 = '#D8B25A';
+      // nền đĩa rất nhạt để hoa văn nổi
+      g.fillStyle = 'rgba(245,250,251,0.72)'; g.beginPath(); g.arc(0, 0, R, 0, 7); g.fill();
+      // đường bao ngoài
+      g.lineWidth = 1; g.strokeStyle = teal; g.globalAlpha = 0.9;
+      g.beginPath(); g.arc(0, 0, R * 0.98, 0, 7); g.stroke();
+      g.beginPath(); g.arc(0, 0, R * 0.93, 0, 7); g.stroke();
+      // vành cánh hoa guilloche (nhiều lớp lồng nhau)
+      const petals = 18;
+      g.lineWidth = 0.6;
+      for (let k = 0; k < 11; k++) {
+        const rad = R * (0.55 + k * 0.033), amp = 0.12;
+        g.strokeStyle = (k % 2) ? teal2 : teal; g.globalAlpha = 0.55;
+        g.beginPath();
+        for (let t = 0; t <= Math.PI * 2 + 0.02; t += 0.03) {
+          const rr = rad * (1 + amp * Math.cos(petals * t));
+          const x = Math.cos(t) * rr, y = Math.sin(t) * rr;
+          t ? g.lineTo(x, y) : g.moveTo(x, y);
+        }
+        g.closePath(); g.stroke();
+      }
+      // hoa sao ở giữa (nhiều lớp sao lồng nhau)
+      for (let k = 0; k < 6; k++) {
+        const outer = R * (0.30 + k * 0.028), inner = outer * 0.60;
+        g.strokeStyle = (k % 2) ? gold : teal2; g.globalAlpha = 0.5;
+        g.beginPath();
+        for (let i = 0; i <= petals * 2; i++) {
+          const rr = (i % 2) ? inner : outer;
+          const a = -Math.PI / 2 + i * Math.PI / petals;
+          const x = Math.cos(a) * rr, y = Math.sin(a) * rr;
+          i ? g.lineTo(x, y) : g.moveTo(x, y);
+        }
+        g.closePath(); g.stroke();
+      }
+      // tâm hoa văn (chỉ họa tiết, không chữ)
+      g.globalAlpha = 1;
+      const cg = g.createRadialGradient(-R * 0.06, -R * 0.08, R * 0.02, 0, 0, R * 0.2);
+      cg.addColorStop(0, '#FFFDF3'); cg.addColorStop(0.6, gold2); cg.addColorStop(1, gold);
+      g.beginPath(); g.arc(0, 0, R * 0.18, 0, 7); g.fillStyle = cg; g.fill();
+      g.lineWidth = 1; g.strokeStyle = teal; g.beginPath(); g.arc(0, 0, R * 0.18, 0, 7); g.stroke();
+      // ngôi sao nhỏ ở tâm
+      g.fillStyle = teal;
+      g.beginPath();
+      for (let i = 0; i < 10; i++) {
+        const rr = (i % 2) ? R * 0.05 : R * 0.11;
+        const a = -Math.PI / 2 + i * Math.PI / 5;
+        const x = Math.cos(a) * rr, y = Math.sin(a) * rr;
+        i ? g.lineTo(x, y) : g.moveTo(x, y);
+      }
+      g.closePath(); g.fill();
+      g.beginPath(); g.arc(0, 0, R * 0.03, 0, 7); g.fillStyle = gold; g.fill();
+      g.restore();
+    }
+    // ---- Mã vạch Code128-C (chỉ số) + số chứng nhận ----
+    const BC128 = ["212222", "222122", "222221", "121223", "121322", "131222", "122213", "122312", "132212", "221213", "221312", "231212", "112232", "122132", "122231", "113222", "123122", "123221", "223211", "221132", "221231", "213212", "223112", "312131", "311222", "321122", "321221", "312212", "322112", "322211", "212123", "212321", "232121", "111323", "131123", "131321", "112313", "132113", "132311", "211313", "231113", "231311", "112133", "112331", "132131", "113123", "113321", "133121", "313121", "211331", "231131", "213113", "213311", "213131", "311123", "311321", "331121", "312113", "312311", "332111", "314111", "221411", "431111", "111224", "111422", "121124", "121421", "141122", "141221", "112214", "112412", "122114", "122411", "142112", "142211", "241211", "221114", "413111", "241112", "134111", "111242", "121142", "121241", "114212", "124112", "124211", "411212", "421112", "421211", "212141", "214121", "412121", "111143", "111341", "131141", "114113", "114311", "411113", "411311", "113141", "114131", "311141", "411131", "211412", "211214", "211232", "2331112"];
+    function code128C(digits) {
+      if (digits.length % 2) digits = '0' + digits;
+      const codes = [105];
+      for (let i = 0; i < digits.length; i += 2) codes.push(parseInt(digits.substr(i, 2), 10));
+      let sum = 105;
+      for (let i = 1; i < codes.length; i++) sum += codes[i] * i;
+      codes.push(sum % 103); codes.push(106);
+      let mods = ''; for (let i = 0; i < codes.length; i++) mods += BC128[codes[i]];
+      return mods;
+    }
+    function certSerial(d) {
+      const s = (d.name || '') + '|' + (d.cls || '') + '|' + (d.school || '') + '|' + (d.score || 0) + '|' + (d.stars || 0) + '|' + (d.ws || 0) + '|' + (d.time || 0);
+      let h = 2166136261 >>> 0;
+      for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+      return ('000000' + (h % 1000000)).slice(-6);
+    }
+    function drawBarcode(g, x, y, totalW, h, digits) {
+      const mods = code128C(digits);
+      let tot = 0; for (let i = 0; i < mods.length; i++) tot += (mods.charCodeAt(i) - 48);
+      const u = totalW / tot;
+      g.save(); g.fillStyle = '#12193A';
+      let cx = x, bar = true;
+      for (let i = 0; i < mods.length; i++) {
+        const w = (mods.charCodeAt(i) - 48) * u;
+        if (bar) g.fillRect(cx, y, Math.ceil(w * 100) / 100, h);
+        cx += w; bar = !bar;
+      }
       g.restore();
     }
     function drawSeal(g, cx, cy, r) {
