@@ -1992,6 +1992,102 @@
             color: #FFE07A
         }
 
+        /* ===== Custom dropdown cho Phần III (Nối cột) — hiển thị công thức toán chuẩn LaTeX ===== */
+        .msel {
+            position: relative;
+            flex: none;
+            min-width: 130px;
+            max-width: 56%
+        }
+
+        .msel-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            padding: 8px 11px;
+            border-radius: 9px;
+            border: 1.4px solid var(--line);
+            background: var(--card);
+            color: var(--ink);
+            cursor: pointer;
+            font: 600 13.5px "Be Vietnam Pro";
+            transition: .12s
+        }
+
+        .msel-btn:hover,
+        .msel.open .msel-btn {
+            border-color: var(--indigo)
+        }
+
+        .msel-val {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            min-width: 0
+        }
+
+        .msel-val.muted {
+            color: var(--muted)
+        }
+
+        .msel-cv {
+            color: var(--muted);
+            font-size: 12px;
+            flex: none;
+            transition: transform .2s
+        }
+
+        .msel.open .msel-cv {
+            transform: rotate(180deg);
+            color: var(--indigo)
+        }
+
+        .msel-pop {
+            position: absolute;
+            top: calc(100% + 5px);
+            right: 0;
+            left: auto;
+            min-width: 100%;
+            width: max-content;
+            max-width: min(80vw, 340px);
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            box-shadow: 0 22px 48px -18px rgba(15, 9, 40, .5);
+            padding: 6px;
+            z-index: 70;
+            display: none;
+            max-height: min(58vh, 380px);
+            overflow-y: auto
+        }
+
+        .msel.open .msel-pop {
+            display: block
+        }
+
+        .msel-opt {
+            padding: 11px 12px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            transition: .1s
+        }
+
+        .msel-opt:hover,
+        .msel-opt:active {
+            background: color-mix(in srgb, var(--indigo) 9%, var(--card))
+        }
+
+        .msel-opt.sel {
+            background: color-mix(in srgb, var(--indigo) 15%, var(--card))
+        }
+
         /* ===== Resume bar ===== */
         .resumebar {
             display: flex;
@@ -8218,8 +8314,23 @@ var qrcode = function () {
             $('wII').innerHTML = ws.partII.map((ds, i) => `<div style="margin:8px 0;font-size:13px"><b>Câu ${13 + i}.</b> ${M(ds.header)}${ds.stmts.map((st, j) => `<div style="margin:5px 0 5px 8px;display:flex;gap:8px;align-items:center"><span style="flex:1"><b>${'abcd'[j]})</b> ${M(st.t)}</span><span data-i="${i}" data-j="${j}"><button class="miniact" data-v="1">Đ</button> <button class="miniact" data-v="0">S</button></span></div>`).join('')}</div>`).join('');
             $('wII').querySelectorAll('span[data-i]').forEach(sp => { const i = +sp.dataset.i, j = +sp.dataset.j; sp.querySelectorAll('button').forEach(b => b.onclick = () => { ans.II[i][j] = b.dataset.v === '1'; sp.querySelectorAll('button').forEach(x => x.style.background = ''); b.style.background = 'var(--indigo)'; b.style.color = '#fff'; }); });
             // III
-            $('wIII').innerHTML = `<div style="font-size:13px">${M(ws.partIII.header)}</div>` + ws.partIII.left.map((l, i) => `<div style="margin:6px 0;display:flex;gap:8px;align-items:center;font-size:13px"><span style="flex:1"><b>A${i + 1}.</b> ${M(l)}</span><select data-i="${i}" style="padding:6px;border-radius:8px;border:1px solid var(--line);max-width:52%"><option value="">— Chọn —</option>${ws.partIII.right.map(r => `<option value="${r.label}">${r.label} = ${texPlain(r.text)}</option>`).join('')}</select></div>`).join('') + `<div style="font-size:11px;color:var(--muted);margin-top:6px">Cột B: ${ws.partIII.right.map(r => r.label + ' = ' + M(r.text)).join(' &nbsp; ')}</div>`;
-            $('wIII').querySelectorAll('select').forEach(sel => sel.onchange = () => ans.III[+sel.dataset.i] = sel.value);
+            $('wIII').innerHTML = `<div style="font-size:13px">${M(ws.partIII.header)}</div>` + ws.partIII.left.map((l, i) => `<div style="margin:8px 0;display:flex;gap:8px;align-items:center;font-size:13px"><span style="flex:1"><b>A${i + 1}.</b> ${M(l)}</span><div class="msel" data-i="${i}"><button type="button" class="msel-btn"><span class="msel-val muted">— Chọn —</span><span class="msel-cv">▾</span></button><div class="msel-pop"><div class="msel-opt" data-v=""><span class="muted">— Chọn —</span></div>${ws.partIII.right.map(r => `<div class="msel-opt" data-v="${r.label}"><b>${r.label}</b>&nbsp;=&nbsp;${M(r.text)}</div>`).join('')}</div></div></div>`).join('') + `<div style="font-size:11px;color:var(--muted);margin-top:6px">Cột B: ${ws.partIII.right.map(r => r.label + ' = ' + M(r.text)).join(' &nbsp; ')}</div>`;
+            $('wIII').querySelectorAll('.msel').forEach(ms => {
+                const i = +ms.dataset.i, btn = ms.querySelector('.msel-btn'), valEl = ms.querySelector('.msel-val');
+                btn.onclick = (e) => { e.stopPropagation(); const willOpen = !ms.classList.contains('open'); $('wIII').querySelectorAll('.msel.open').forEach(o => o.classList.remove('open')); ms.classList.toggle('open', willOpen); };
+                ms.querySelectorAll('.msel-opt').forEach(opt => {
+                    opt.onclick = (e) => {
+                        e.stopPropagation();
+                        const v = opt.dataset.v; ans.III[i] = v;
+                        valEl.innerHTML = v ? opt.innerHTML : '<span class="muted">— Chọn —</span>';
+                        valEl.classList.toggle('muted', !v);
+                        ms.querySelectorAll('.msel-opt').forEach(o => o.classList.remove('sel'));
+                        if (v) opt.classList.add('sel');
+                        ms.classList.remove('open');
+                    };
+                });
+            });
+            if (!A._mselDocWired) { A._mselDocWired = true; document.addEventListener('click', (e) => { if (e.target.closest('.msel')) return; document.querySelectorAll('.msel.open').forEach(o => o.classList.remove('open')); }); }
             // IV
             $('wIV').innerHTML = ws.partIV.map((it, i) => `<div style="margin:8px 0;font-size:13px"><b style="color:${A.PART_COL.IV}">Câu ${16 + i}.</b> ${M(it.q)} ${figSVG(it.fig)}<div style="margin-top:4px">Trả lời: <input data-i="${i}" style="width:120px;padding:7px;border-radius:8px;border:1.4px solid ${A.PART_COL.IV}" placeholder="đáp số"></div></div>`).join('');
             $('wIV').querySelectorAll('input').forEach(inp => inp.oninput = () => ans.IV[+inp.dataset.i] = inp.value);
