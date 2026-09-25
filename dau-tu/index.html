@@ -2982,12 +2982,42 @@
         display: none
       }
 
-      .menu-btn .mtxt {
-        display: none
+      .topbar {
+        gap: 10px
+      }
+
+      /* Hàng công cụ chiếm trọn chiều ngang, xếp thành các hàng gọn gàng */
+      .tb-tools {
+        width: 100%;
+        margin-left: 0;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px
+      }
+
+      /* Hàng 1: các pill thông tin chính (điểm · sao · thời gian) */
+      .tb-primary {
+        flex-basis: 100%;
+        justify-content: center;
+        gap: 8px
+      }
+
+      /* Hàng 2: 3 nút menu chia đều, luôn nằm cùng một hàng — không bị rớt */
+      .menu-wrap {
+        flex: 1 1 0;
+        min-width: 0
       }
 
       .menu-btn {
-        padding: 9px 11px
+        width: 100%;
+        justify-content: center;
+        padding: 11px 6px;
+        gap: 6px;
+        font-size: 12.5px
+      }
+
+      .menu-btn .mtxt {
+        display: inline
       }
 
       .menu-panel {
@@ -3008,6 +3038,17 @@
       .pill {
         font-size: 12px;
         padding: 7px 10px
+      }
+    }
+
+    @media(max-width:380px) {
+      .menu-btn .mtxt {
+        display: none
+      }
+
+      .menu-btn {
+        padding: 12px 6px;
+        font-size: 16px
       }
     }
 
@@ -8600,8 +8641,8 @@
       if (!slice.length) h += '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px">Chưa có dữ liệu. Hãy hoàn thành game &amp; nhận Giấy Chứng Nhận để ghi lượt.</td></tr>';
       slice.forEach((r, i) => {
         h += '<tr><td>' + (histPage * per + i + 1) + '</td><td><b>' + (r.name || '—') + '</b></td><td>' + (r.cls || '') + '</td><td>' + (r.school || '') + '</td>' +
-          '<td class="n">' + (r.score || 0) + '</td><td class="n">' + (r.stars || 0) + '/' + (r.maxStars || NLEVELS * 3) + '</td><td class="n">' + vnum(r.ws || 0) + '/10</td>' +
-          '<td>' + fmtT(r.timeSec || 0) + '</td><td>' + (r.date || '') + '</td></tr>';
+        '<td class="n">' + (r.score || 0) + '</td><td class="n">' + (r.stars || 0) + '/' + (r.maxStars || NLEVELS * 3) + '</td><td class="n">' + vnum(r.ws || 0) + '/10</td>' +
+        '<td>' + fmtT(r.timeSec || 0) + '</td><td>' + (r.date || '') + '</td></tr>';
       });
       h += '</table>';
       h += '<div class="pager"><button onclick="histPage=Math.max(0,histPage-1);renderHistContent()">‹ Trước</button>' +
@@ -8690,8 +8731,8 @@
         body += '<table class="det"><tr><th>#</th><th>Họ và tên</th><th>Lớp</th><th>Trường</th><th>Điểm</th><th>Sao</th><th>Phiếu</th><th>KT vào</th><th>KT ra</th><th>Thời gian</th><th>Ngày</th></tr>';
         a.slice().reverse().forEach((r, i) => {
           body += '<tr><td>' + (i + 1) + '</td><td class="nm">' + (r.name || '') + '</td><td>' + (r.cls || '') + '</td><td class="nm">' + (r.school || '') + '</td>' +
-            '<td><b>' + (r.score || 0) + '</b></td><td>' + (r.stars || 0) + '/' + (r.maxStars || 30) + '</td><td><b>' + vnum(r.ws || 0) + '/10</b></td>' +
-            '<td>' + (r.pre != null ? r.pre + '/8' : '—') + '</td><td>' + (r.post != null ? r.post + '/8' : '—') + '</td><td>' + fmtT(r.timeSec || 0) + '</td><td>' + (r.date || '') + '</td></tr>';
+          '<td><b>' + (r.score || 0) + '</b></td><td>' + (r.stars || 0) + '/' + (r.maxStars || 30) + '</td><td><b>' + vnum(r.ws || 0) + '/10</b></td>' +
+          '<td>' + (r.pre != null ? r.pre + '/8' : '—') + '</td><td>' + (r.post != null ? r.post + '/8' : '—') + '</td><td>' + fmtT(r.timeSec || 0) + '</td><td>' + (r.date || '') + '</td></tr>';
         });
         body += '</table>';
         body += qrEvidenceBox('detail', a.length, avgWs);
@@ -9252,14 +9293,14 @@
 
       /* 1 TỔNG QUAN */
       h += '<div class="sec"><div class="n">1</div><h2>TỔNG QUAN</h2></div>';
-      h += '<p>Game <b>“Đầu Tư Thông Minh”</b> là học liệu số tương tác chạy <b>hoàn toàn ngoại tuyến</b>, giúp học sinh lớp 11 khám phá và luyện tập chủ đề <b>cấp số nhân và lãi kép (toán tài chính)</b> qua <b>10 màn chơi</b> (điều chỉnh trực tiếp số kỳ / công bội, chọn phương án), khó dần theo thang Bloom, cùng <b>Phiếu bài tập Về Đích</b> đánh giá tổng hợp thang điểm 10. Mỗi màn theo luồng học tập khép kín: trả lời đúng → 🎁 <b>quà bất ngờ</b> → câu hỏi củng cố → bấm Tiếp tục → sang màn tiếp theo. Hoàn thành đủ điều kiện, học sinh được dẫn thẳng tới <b>Giấy chứng nhận</b> ngay sau khi làm kiểm tra đầu ra.</p>';
+      h += '<p>Game <b>“Đầu Tư Thông Minh”</b> là học liệu số tương tác chạy <b>hoàn toàn ngoại tuyến</b>, giúp học sinh lớp 11 khám phá và luyện tập chủ đề <b>cấp số nhân và lãi kép (toán tài chính)</b> qua <b>10 màn chơi</b> (điều chỉnh trực tiếp số kỳ / công bội, chọn phương án), khó dần theo thang Bloom, cùng <b>Phiếu bài tập Về Đích</b> đánh giá tổng hợp thang điểm 10. Mỗi màn theo luồng học tập khép kín: trả lời đúng → 🎁 <b>quà bất ngờ</b> → câu hỏi củng cố → bấm Tiếp tục → sang màn tiếp theo. Nộp Phiếu Về Đích hiện <b>bảng kết quả chi tiết</b> (điểm từng phần I–IV · số ý đúng/sai); hoàn thành đủ điều kiện, học sinh được dẫn thẳng tới <b>Giấy chứng nhận</b> ngay sau khi làm kiểm tra đầu ra. Giao diện <b>tối giản, mobile-first</b>: chỉ hiển thị thông tin chính, các chức năng phụ gom gọn vào <b>menu thả xuống</b> nên dễ dùng trên điện thoại.</p>';
       const feats = ['🎮 10 màn chơi · điều chỉnh trực quan', '🧮 Công thức toán LaTeX hiển thị offline',
         '🎁 Quà bất ngờ + câu hỏi củng cố mỗi màn', '📝 Phiếu Về Đích (bộ sinh đa đề)',
         '📄 Xuất PDF đề + đáp án (QR/mã vạch)', '🎖 Giấy chứng nhận (lớp · trường · sao)',
         '🎯 Kiểm tra đầu vào/đầu ra (đo tiến bộ)', '🏆 Xếp hạng lớp/tuần · 🏅 huy hiệu cột mốc',
         '👩‍🏫 Chế độ Giáo viên (PIN) · khoá xoá dữ liệu', '⚔️ Đấu 2 người · ⏱️ đếm ngược mỗi câu',
         '🔊 Giọng đọc đề (TTS) · 🎵 Nhạc nền', '🅰🅱 In nhiều mã đề (Kiểm tra) · 💾 lưu tiến trình',
-        '📊 Lịch sử tham gia · biểu đồ minh chứng', '🌗 Giao diện sáng/tối · điện thoại'];
+        '📊 Lịch sử tham gia · biểu đồ minh chứng', '📱 Giao diện mobile-first · menu thả xuống · sáng/tối'];
       h += '<div class="fgrid">' + feats.map(f => '<div class="fi">' + f + '</div>').join('') + '</div>';
       h += '<div class="loop"><b>Luồng học tập khép kín mỗi màn:</b> trả lời đúng → 🎁 <b>Quà bất ngờ</b> (kho <b>16 phần quà đa dạng</b>: mẹo Toán, sự thật thú vị, lời khen, danh hiệu, điểm thưởng, câu nói hay… không trùng nhau ở 10 màn và không đoán trước được, kèm <b>pháo hoa</b> khi mở) → <b>Câu hỏi củng cố</b> (có lời giải, hiện mức độ &amp; sao của màn) → bấm <b>Tiếp tục</b> sang màn sau. Cách này duy trì hứng thú và củng cố kiến thức ngay sau mỗi thử thách.</div>';
 
@@ -9282,7 +9323,7 @@
         '<tr><td>II</td><td>Đúng – Sai (4 ý/câu)</td><td>2×4</td><td>2đ</td></tr>' +
         '<tr><td>III</td><td>Nối cột (A ↔ B) 6 ý</td><td>6</td><td>3đ</td></tr>' +
         '<tr><td>IV</td><td>Trả lời ngắn (thực tế)</td><td>4</td><td>2đ</td></tr></tbody></table>';
-      h += '<p class="note"><b>Bộ sinh đa đề:</b> mỗi lần mở là một đề khác (tính từ ngân hàng bài toán đã kiểm chứng nên toán luôn đúng); có phiếu trả lời &amp; trang đáp án riêng, mã QR &amp; mã vạch định danh.</p>';
+      h += '<p class="note"><b>Bộ sinh đa đề:</b> mỗi lần mở là một đề khác (tính từ ngân hàng bài toán đã kiểm chứng nên toán luôn đúng); có phiếu trả lời &amp; trang đáp án riêng, mã QR &amp; mã vạch định danh. Nộp bài hiện ngay <b>bảng kết quả chi tiết</b>: điểm từng phần, số ý đúng/sai, kèm nút xem lời giải.</p>';
 
       /* 4 ĐIỀU KIỆN */
       h += '<div class="sec a"><div class="n">4</div><h2>ĐIỀU KIỆN GIẤY CHỨNG NHẬN</h2></div>';
@@ -9298,7 +9339,8 @@
         ['Chế độ Giáo viên (PIN)', 'Khoá xoá dữ liệu; đặt tên trường mặc định; chọn phạm vi kiến thức cho phiếu.'],
         ['Thi đấu 2 người', 'Trả lời luân phiên trên cùng máy, có đồng hồ đếm ngược mỗi câu &amp; giọng đọc đề.'],
         ['In nhiều mã đề (Kiểm tra)', 'Mỗi lần tạo nhiều mã đề khác nhau hoàn toàn (nội dung + mã vạch định danh), trang đáp án gom về cuối.'],
-        ['Giọng đọc đề (TTS)', 'Đọc to nhiệm vụ / câu hỏi bằng tiếng Việt; hỗ trợ học sinh khó đọc, học hoà nhập.']];
+        ['Giọng đọc đề (TTS)', 'Đọc to nhiệm vụ / câu hỏi bằng tiếng Việt; hỗ trợ học sinh khó đọc, học hoà nhập.'],
+        ['Giao diện tối giản (mobile-first)', 'Chỉ giữ thông tin chính trên màn (điểm · sao · thời gian · thanh màn chơi · câu hỏi); chức năng phụ gom vào 3 menu thả xuống (Thành tích · Chế độ chơi · Cài đặt) + mã QR phóng to dạng popup — dễ chạm, gọn gàng cho học sinh.']];
       h += '<table class="tbl-c"><tbody>' + tools.map(t => '<tr><td>' + t[0] + '</td><td>' + t[1] + '</td></tr>').join('') + '</tbody></table>';
 
       /* 6 GIÁ TRỊ */
