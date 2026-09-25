@@ -7842,6 +7842,24 @@ var qrcode = function () {
         'use strict';
         const A = window.__APP, C = A.C, T = A.T, M = A.mathHTML, $ = A.$, el = A.el, S = A.S, SFX = A.SFX, fmt = A.fmt;
 
+        // Chuyển LaTeX → chữ thường gọn (dùng cho <option> vì option không render được MathJax)
+        const SUP = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻', 'n': 'ⁿ', 'x': 'ˣ' };
+        function texPlain(t) {
+            return String(t)
+                .replace(/\\dfrac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, '($1)/($2)')
+                .replace(/\\frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, '($1)/($2)')
+                .replace(/\\sqrt\s*\{([^{}]*)\}/g, '√($1)')
+                .replace(/\\mathbb\s*\{([^{}]*)\}/g, '$1')
+                .replace(/\^\{([^{}]+)\}/g, (m, g) => g.split('').map(c => SUP[c] || ('^' + c)).join(''))
+                .replace(/\^(-?[0-9a-z])/g, (m, c) => SUP[c] || ('^' + c))
+                .replace(/\\setminus/g, '∖').replace(/\\cdot/g, '·').replace(/\\times/g, '×').replace(/\\pm/g, '±')
+                .replace(/\\left|\\right/g, '').replace(/\\,|\\;|\\!/g, ' ')
+                .replace(/\\\{/g, '{').replace(/\\\}/g, '}')
+                .replace(/\\[a-zA-Z]+/g, '').replace(/\$/g, '')
+                .replace(/\s+/g, ' ').trim();
+        }
+        A.texPlain = texPlain;
+
         /* ============================ PRE / POST TEST ============================ */
         function startTest(kind) {
             A.closeOv('ovTest');
@@ -8200,7 +8218,7 @@ var qrcode = function () {
             $('wII').innerHTML = ws.partII.map((ds, i) => `<div style="margin:8px 0;font-size:13px"><b>Câu ${13 + i}.</b> ${M(ds.header)}${ds.stmts.map((st, j) => `<div style="margin:5px 0 5px 8px;display:flex;gap:8px;align-items:center"><span style="flex:1"><b>${'abcd'[j]})</b> ${M(st.t)}</span><span data-i="${i}" data-j="${j}"><button class="miniact" data-v="1">Đ</button> <button class="miniact" data-v="0">S</button></span></div>`).join('')}</div>`).join('');
             $('wII').querySelectorAll('span[data-i]').forEach(sp => { const i = +sp.dataset.i, j = +sp.dataset.j; sp.querySelectorAll('button').forEach(b => b.onclick = () => { ans.II[i][j] = b.dataset.v === '1'; sp.querySelectorAll('button').forEach(x => x.style.background = ''); b.style.background = 'var(--indigo)'; b.style.color = '#fff'; }); });
             // III
-            $('wIII').innerHTML = `<div style="font-size:13px">${M(ws.partIII.header)}</div>` + ws.partIII.left.map((l, i) => `<div style="margin:6px 0;display:flex;gap:8px;align-items:center;font-size:13px"><span style="flex:1"><b>A${i + 1}.</b> ${M(l)}</span><select data-i="${i}" style="padding:6px;border-radius:8px;border:1px solid var(--line)"><option value="">—</option>${ws.partIII.right.map(r => `<option value="${r.label}">${r.label}</option>`).join('')}</select></div>`).join('') + `<div style="font-size:11px;color:var(--muted);margin-top:6px">Cột B: ${ws.partIII.right.map(r => r.label + ' = ' + M(r.text)).join(' &nbsp; ')}</div>`;
+            $('wIII').innerHTML = `<div style="font-size:13px">${M(ws.partIII.header)}</div>` + ws.partIII.left.map((l, i) => `<div style="margin:6px 0;display:flex;gap:8px;align-items:center;font-size:13px"><span style="flex:1"><b>A${i + 1}.</b> ${M(l)}</span><select data-i="${i}" style="padding:6px;border-radius:8px;border:1px solid var(--line);max-width:52%"><option value="">— Chọn —</option>${ws.partIII.right.map(r => `<option value="${r.label}">${r.label} = ${texPlain(r.text)}</option>`).join('')}</select></div>`).join('') + `<div style="font-size:11px;color:var(--muted);margin-top:6px">Cột B: ${ws.partIII.right.map(r => r.label + ' = ' + M(r.text)).join(' &nbsp; ')}</div>`;
             $('wIII').querySelectorAll('select').forEach(sel => sel.onchange = () => ans.III[+sel.dataset.i] = sel.value);
             // IV
             $('wIV').innerHTML = ws.partIV.map((it, i) => `<div style="margin:8px 0;font-size:13px"><b style="color:${A.PART_COL.IV}">Câu ${16 + i}.</b> ${M(it.q)} ${figSVG(it.fig)}<div style="margin-top:4px">Trả lời: <input data-i="${i}" style="width:120px;padding:7px;border-radius:8px;border:1.4px solid ${A.PART_COL.IV}" placeholder="đáp số"></div></div>`).join('');
