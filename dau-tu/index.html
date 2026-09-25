@@ -893,10 +893,53 @@
     }
 
     footer {
-      text-align: center;
       color: var(--muted);
       font-size: 11.5px;
       margin-top: 18px
+    }
+
+    .marquee {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 100%
+    }
+
+    .marquee .mq-txt {
+      display: inline-block;
+      padding-left: 100%;
+      font-weight: 700;
+      background: linear-gradient(90deg, #F59E0B, #EC4899, #8B5CF6, #0EA5E9, #10B981, #F59E0B);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      animation: mqScroll 22s linear infinite, mqShimmer 6s linear infinite
+    }
+
+    .marquee:hover .mq-txt {
+      animation-play-state: paused
+    }
+
+    @keyframes mqScroll {
+      from {
+        transform: translateX(0)
+      }
+
+      to {
+        transform: translateX(-100%)
+      }
+    }
+
+    @keyframes mqShimmer {
+      from {
+        background-position: 0% 50%
+      }
+
+      to {
+        background-position: 300% 50%
+      }
     }
 
     /* ===== MODAL / TOAST ===== */
@@ -2686,6 +2729,291 @@
       font-weight: 700;
       margin-left: 5px
     }
+
+    /* ===== MOBILE-FIRST: MENU DROPDOWNS · QR POPUP · TOUCH-FRIENDLY ===== */
+    .tb-tools {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      margin-left: auto;
+      flex-wrap: wrap
+    }
+
+    .tb-primary {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .menu-wrap {
+      position: relative
+    }
+
+    .menu-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, .16);
+      border: none;
+      color: #fff;
+      border-radius: 12px;
+      padding: 9px 12px;
+      font: 700 13px "Baloo 2";
+      cursor: pointer;
+      transition: .15s;
+      white-space: nowrap;
+      min-height: 40px
+    }
+
+    .menu-btn:hover {
+      background: rgba(255, 255, 255, .30)
+    }
+
+    .menu-btn:active {
+      transform: scale(.96)
+    }
+
+    .menu-btn .caret {
+      font-size: 9px;
+      opacity: .85;
+      transition: transform .25s
+    }
+
+    .menu-wrap.open .menu-btn {
+      background: rgba(255, 255, 255, .34)
+    }
+
+    .menu-wrap.open .menu-btn .caret {
+      transform: rotate(180deg)
+    }
+
+    .menu-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      z-index: 120;
+      min-width: 230px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 8px;
+      box-shadow: 0 22px 50px -14px rgba(0, 0, 0, .42);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(.98);
+      transform-origin: top right;
+      transition: opacity .2s ease, transform .2s ease, visibility .2s
+    }
+
+    .menu-wrap.open .menu-panel {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1)
+    }
+
+    .menu-panel .mhd {
+      font: 700 11px "Baloo 2";
+      color: var(--muted);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 6px 10px 4px
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--ink);
+      border-radius: 11px;
+      padding: 12px 12px;
+      font: 600 14px "Be Vietnam Pro";
+      cursor: pointer;
+      text-align: left;
+      min-height: 48px;
+      transition: .12s
+    }
+
+    .menu-item:hover {
+      background: var(--soft)
+    }
+
+    .menu-item:active {
+      transform: scale(.98)
+    }
+
+    .menu-item .ic {
+      font-size: 19px;
+      width: 26px;
+      text-align: center;
+      flex: none
+    }
+
+    .menu-item .lb {
+      flex: 1;
+      line-height: 1.25
+    }
+
+    .menu-item .sub {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500
+    }
+
+    .menu-item .st {
+      font: 700 12px "Baloo 2";
+      color: var(--indigo);
+      flex: none
+    }
+
+    .menu-item.best-row {
+      background: linear-gradient(180deg, #FFF7E6, #FFEFC7);
+      color: #6b4a00
+    }
+
+    [data-theme="dark"] .menu-item.best-row {
+      background: linear-gradient(180deg, #3a2c07, #2a2205);
+      color: #FCD34D
+    }
+
+    .menu-item.best-row .st {
+      color: #B45309
+    }
+
+    [data-theme="dark"] .menu-item.best-row .st {
+      color: #FCD34D
+    }
+
+    .menu-sep {
+      height: 1px;
+      background: var(--line);
+      margin: 5px 8px
+    }
+
+    /* QR popup */
+    .qr-pop {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8, 12, 24, .62);
+      backdrop-filter: blur(3px);
+      padding: 18px
+    }
+
+    .qr-pop.show {
+      display: flex
+    }
+
+    .qr-pop .box {
+      background: #fff;
+      border-radius: 22px;
+      padding: 22px;
+      text-align: center;
+      max-width: 340px;
+      width: 100%;
+      box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .6);
+      animation: pop .28s ease
+    }
+
+    .qr-pop .box h3 {
+      margin: 0 0 4px;
+      font: 800 18px "Baloo 2";
+      color: var(--indigo-d)
+    }
+
+    .qr-pop .box .qsub {
+      font-size: 12px;
+      color: #6A7184;
+      margin-bottom: 14px
+    }
+
+    .qr-pop .box .qimg {
+      background: #fff;
+      border: 1px solid #E6E9F2;
+      border-radius: 14px;
+      padding: 12px;
+      display: inline-block
+    }
+
+    .qr-pop .box .qurl {
+      font-size: 10.5px;
+      color: #8A90A2;
+      margin-top: 12px;
+      word-break: break-all
+    }
+
+    .qr-pop .box .qclose {
+      margin-top: 16px;
+      width: 100%;
+      border: none;
+      background: linear-gradient(90deg, var(--indigo), var(--violet));
+      color: #fff;
+      border-radius: 12px;
+      padding: 13px;
+      font: 800 14px "Baloo 2";
+      cursor: pointer
+    }
+
+    /* backdrop that closes any open menu on outside tap (mobile) */
+    .menu-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 110;
+      display: none
+    }
+
+    .menu-scrim.show {
+      display: block
+    }
+
+    @media(max-width:620px) {
+      .brand h1 {
+        font-size: 17px
+      }
+
+      .brand .sub {
+        display: none
+      }
+
+      .menu-btn .mtxt {
+        display: none
+      }
+
+      .menu-btn {
+        padding: 9px 11px
+      }
+
+      .menu-panel {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        top: auto;
+        bottom: 12px;
+        min-width: 0;
+        transform-origin: bottom center;
+        transform: translateY(10px) scale(.98)
+      }
+
+      .menu-wrap.open .menu-panel {
+        transform: translateY(0) scale(1)
+      }
+
+      .pill {
+        font-size: 12px;
+        padding: 7px 10px
+      }
+    }
+
+    .badgestrip {
+      display: none !important
+    }
   </style>
   <style>
     @font-face {
@@ -4057,25 +4385,84 @@
           <div class="sub">Toán 11 · Cấp số nhân &amp; lãi kép · giáo dục tài chính</div>
         </div>
       </div>
-      <div class="tb-pills">
-        <span class="pill best">🏅 BEST: <b id="pBest">0</b></span>
-        <span class="pill score">💰 <b id="pScore">0</b> điểm</span>
-        <span class="pill star">⭐ <b id="pStar">0</b>/<span id="pStarMax">30</span></span>
-        <button class="pill icon" id="btnBadges" title="Huy hiệu">🎖️</button>
-        <button class="pill icon" id="btnTeacher" title="Chế độ Giáo viên">🧑‍🏫</button>
-        <button class="pill icon" id="btnSound" title="Âm thanh">🔊</button>
-        <button class="pill icon" id="btnTheme" title="Sáng/Tối">🌙</button>
-        <button class="pill icon" id="btnMusic" title="Nhạc nền">🎵</button>
-        <div class="qrbox">
-          <div id="topQR"></div>
-          <div class="cap">📷 Quét chơi</div>
+      <div class="tb-tools">
+        <div class="tb-primary">
+          <span class="pill score">💰 <b id="pScore">0</b> điểm</span>
+          <span class="pill star">⭐ <b id="pStar">0</b>/<span id="pStarMax">30</span></span>
+          <span class="pill" style="background:rgba(255,255,255,.16)">⏱ <b id="clock2">0:00</b></span>
         </div>
+
+        <!-- MENU 1 · Thành tích / Tiện ích -->
+        <div class="menu-wrap" id="menu1">
+          <button class="menu-btn" data-menu="menu1" aria-haspopup="true"><span>🏆</span><span class="mtxt">Thành
+              tích</span><span class="caret">▼</span></button>
+          <div class="menu-panel" role="menu">
+            <div class="mhd">Thành tích &amp; tiện ích</div>
+            <div class="menu-item best-row"><span class="ic">🏅</span><span class="lb">Điểm cao nhất (BEST)</span><span
+                class="st" id="pBest">0</span></div>
+            <button class="menu-item" id="btnQR"><span class="ic">📷</span><span class="lb">Mã QR vào game<span
+                  class="sub">Bấm để phóng to &amp; quét</span></span></button>
+            <div class="menu-sep"></div>
+            <button class="menu-item" id="btnRestart"><span class="ic">↺</span><span class="lb">Chơi lại từ đầu<span
+                  class="sub">Đặt lại toàn bộ tiến trình</span></span></button>
+          </div>
+        </div>
+
+        <!-- MENU 2 · Chế độ chơi / Phiên bản -->
+        <div class="menu-wrap" id="menu2">
+          <button class="menu-btn" data-menu="menu2" aria-haspopup="true"><span>🎮</span><span class="mtxt">Chế
+              độ</span><span class="caret">▼</span></button>
+          <div class="menu-panel" role="menu">
+            <div class="mhd">Chế độ chơi &amp; thông tin</div>
+            <button class="menu-item" id="btnDuel"><span class="ic">⚔️</span><span class="lb">Đấu 2 người<span
+                  class="sub">Thi tài trên cùng máy</span></span></button>
+            <button class="menu-item" id="btnTest"><span class="ic">📝</span><span class="lb">Kiểm tra kiến thức<span
+                  class="sub">Đầu vào / đầu ra</span></span></button>
+            <div class="menu-sep"></div>
+            <button class="menu-item" id="btnHowto"><span class="ic">📖</span><span class="lb">Hướng dẫn cách
+                chơi</span></button>
+            <button class="menu-item" id="btnVersion"><span class="ic">ℹ️</span><span class="lb">Thông tin phiên
+                bản<span class="sub">v4.0</span></span></button>
+          </div>
+        </div>
+
+        <!-- MENU 3 · Cài đặt -->
+        <div class="menu-wrap" id="menu3">
+          <button class="menu-btn" data-menu="menu3" aria-haspopup="true"><span>⚙️</span><span class="mtxt">Cài
+              đặt</span><span class="caret">▼</span></button>
+          <div class="menu-panel" role="menu">
+            <div class="mhd">Hiển thị &amp; âm thanh</div>
+            <button class="menu-item" id="btnTheme"><span class="ic" id="icTheme">🌙</span><span class="lb">Chế độ Sáng
+                / Tối</span></button>
+            <button class="menu-item" id="btnMusic"><span class="ic" id="icMusic">🎵</span><span class="lb">Nhạc
+                nền</span></button>
+            <button class="menu-item" id="btnSound"><span class="ic" id="icSound">🔊</span><span class="lb">Âm thanh
+                hiệu ứng</span></button>
+            <div class="menu-sep"></div>
+            <div class="mhd">Thống kê &amp; quản trị</div>
+            <button class="menu-item" id="btnHistory"><span class="ic">📊</span><span class="lb">Thống kê / Lịch sử tham
+                gia</span></button>
+            <button class="menu-item" id="btnBadges"><span class="ic">🏆</span><span class="lb">Cúp &amp; huy hiệu thành
+                tích</span></button>
+            <button class="menu-item" id="btnTeacher"><span class="ic">🧑‍🏫</span><span class="lb">Chế độ Giáo
+                viên<span class="sub">Cần mã PIN</span></span></button>
+          </div>
+        </div>
+
+        <div id="topQR" style="display:none"></div>
       </div>
     </div>
+    <div class="menu-scrim" id="menuScrim"></div>
 
-    <div class="restorebar" id="restoreBar" style="display:none">
-      <span id="restoreText"></span>
-      <button class="rb-btn" id="btnRestart">↺ Chơi lại từ Trạm 1</button>
+    <!-- Popup Mã QR -->
+    <div class="qr-pop" id="qrPop">
+      <div class="box">
+        <h3>📷 Mã QR vào game</h3>
+        <div class="qsub">Dùng camera điện thoại quét để mở game</div>
+        <div class="qimg" id="qrPopImg"></div>
+        <div class="qurl" id="qrPopUrl"></div>
+        <button class="qclose" id="qrPopClose">Đóng</button>
+      </div>
     </div>
 
     <div class="track" id="track"></div>
@@ -4145,14 +4532,8 @@
       </div>
     </div>
 
-    <div class="bottombar">
-      <button class="bb duel" id="btnDuel">⚔️ Đấu 2 người</button>
-      <button class="bb test" id="btnTest">📝 Kiểm tra</button>
-      <button class="bb hist" id="btnHistory">📊 Lịch sử tham gia</button>
-      <span class="bb" style="cursor:default">⏱ Thời gian: <b id="clock2" style="margin-left:4px">0:00</b></span>
-      <button class="bb" id="btnVersion">ℹ️ Phiên bản v4.0</button>
-    </div>
-    <footer>Một hoạt động dạy học môn Toán · cấp số nhân hiện hình trong tiền bạc thật · offline.</footer>
+    <footer><span class="marquee"><span class="mq-txt">Nhà Đầu Tư Thông Minh · Toán 11 — Cấp số nhân &amp; lãi kép ·
+          Game học tập chạy offline · Giáo viên: LUÔNG TRƯƠNG</span></span></footer>
   </div>
 
   <!-- OVERLAYS -->
@@ -6569,7 +6950,6 @@
         buzz() { tone(160, .25, 'square', 0, .08); },
         coin() { tone(988, .09, 'square', 0, .09); tone(1319, .14, 'square', .07, .09); },
         tick() { tone(660, .05, 'square', 0, .05); },
-        click() { tone(2000, .028, 'square', 0, .05); tone(1200, .04, 'sine', .006, .035); },
         isMuted() { return muted; },
         toggle() { muted = !muted; return muted; }
       };
@@ -6578,7 +6958,7 @@
     /* =================== THEME =================== */
     function applyTheme(t) {
       document.documentElement.setAttribute('data-theme', t);
-      $('btnTheme').textContent = t === 'dark' ? '☀️' : '🌙';
+      { const _i = $('icTheme'); if (_i) _i.textContent = t === 'dark' ? '☀️' : '🌙'; }
       LS_set('dautu_theme', t);
       if (window.__redraw) window.__redraw();
     }
@@ -6588,15 +6968,15 @@
     let musicOn = false;
     function toggleMusic() {
       const a = $('bgm');
-      if (musicOn) { a.pause(); musicOn = false; $('btnMusic').textContent = '🎵'; }
+      if (musicOn) { a.pause(); musicOn = false; { const _i = $('icMusic'); if (_i) _i.textContent = '🎵'; } }
       else {
-        a.volume = .4; a.play().then(() => { musicOn = true; $('btnMusic').textContent = '🎶'; })
+        a.volume = .4; a.play().then(() => { musicOn = true; { const _i = $('icMusic'); if (_i) _i.textContent = '🎶'; } })
           .catch(() => toast('🎵 Chưa tìm thấy file nhạc (nhac.mp3) — đặt cạnh index.html để bật.'));
       }
     }
     function autoMusicOnce() {
       const a = $('bgm'); if (musicOn) return;
-      a.volume = .4; a.play().then(() => { musicOn = true; $('btnMusic').textContent = '🎶'; }).catch(() => { });
+      a.volume = .4; a.play().then(() => { musicOn = true; { const _i = $('icMusic'); if (_i) _i.textContent = '🎶'; } }).catch(() => { });
     }
 
     /* =================== TTS (vi-VN) =================== */
@@ -7433,13 +7813,11 @@
     function loadProgress() { const s = LS_get(SAVE_KEY, null); if (s) { bestScore = s.best || 0; score = s.score || 0; (s.done || []).forEach(d => doneSet.add(d)); levelStars = s.stars || {}; starsTotal = Object.values(levelStars).reduce((a, b) => a + b, 0); (s.done || []).forEach(d => clearedOnce.add(d)); } }
     function resumeLevel() { for (let i = 0; i < NLEVELS; i++) { if (!doneSet.has(i)) return i; } return NLEVELS; }
     function showRestoreBanner() {
-      const bar = $('restoreBar'); if (!bar) return;
       const cleared = [...doneSet].filter(x => x < NLEVELS).length;
       if (cleared > 0) {
         const rl = resumeLevel(); const nm = rl >= NLEVELS ? 'Phiếu Về Đích' : ('Trạm ' + (rl + 1));
-        $('restoreText').innerHTML = '💾 Đã khôi phục tiến trình: <b>' + nm + '</b> · <b>' + score + '</b> điểm · <b>' + starsTotal + '</b> ⭐';
-        bar.style.display = 'flex';
-      } else bar.style.display = 'none';
+        setTimeout(() => toast('💾 Đã khôi phục tiến trình: <b>' + nm + '</b> · <b>' + score + '</b> điểm · <b>' + starsTotal + '</b> ⭐'), 700);
+      }
     }
     function restartGame() {
       doneSet.clear(); clearedOnce.clear(); quizDone.clear();
@@ -8703,15 +9081,8 @@
         fails: sessionFails, pre: sessionPre, post: sessionPost, testN: sessionTestN
       });
       saveLeaderboard({ name, cls, score, t: ts });
-      // Nạp font kèm CHÍNH văn bản tiếng Việt để glyph có dấu sẵn sàng trước khi vẽ (chạy offline).
-      const vtext = (name + ' ' + TEACHER_DEFAULT_NAME + ' GIẤY CHỨNG NHẬN Trân trọng đầu tư TEM CHÍNH HÃNG CHỐNG HÀNG GIẢ ĐTTM ăâđêôơư').toUpperCase();
-      const loads = [
-        document.fonts.load('800 46px "Be Vietnam Pro"', vtext),
-        document.fonts.load('600 16px "Be Vietnam Pro"', vtext),
-        document.fonts.load('700 40px "Baloo 2"', 'GIẤY CHỨNG NHẬN ĐẦU TƯ'),
-        document.fonts.load('400 52px "Great Vibes"', 'Luong Truong')
-      ];
-      Promise.all(loads.map(p => p.catch(() => { }))).then(() => drawCertificate(data));
+      const fonts = ['700 40px "Baloo 2"', '800 56px "Nunito"', '400 52px "Great Vibes"'];
+      Promise.all(fonts.map(f => document.fonts.load(f).catch(() => { }))).then(() => drawCertificate(data));
       setTimeout(() => drawCertificate(data), 300);
     }
     function drawCertificate(d) {
@@ -8719,25 +9090,19 @@
       g.clearRect(0, 0, W, H); g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
       // bg tint
       const bg = g.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#F5F8FF'); bg.addColorStop(1, '#EEF2FF'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
-      // hoa văn guilloche chìm (rosette vòng tròn chồng, nền trang trí, không cản chữ)
-      drawSpiroBg(g, W / 2, 366, 300);
       // outer border
       g.strokeStyle = '#4F46E5'; g.lineWidth = 8; g.strokeRect(24, 24, W - 48, H - 48);
       g.strokeStyle = '#F59E0B'; g.lineWidth = 2; g.strokeRect(38, 38, W - 76, H - 76);
       // corner accents
       g.fillStyle = 'rgba(79,70,229,.12)'; g.beginPath(); g.moveTo(24, 24); g.lineTo(180, 24); g.lineTo(24, 180); g.fill();
       g.beginPath(); g.moveTo(W - 24, H - 24); g.lineTo(W - 180, H - 24); g.lineTo(W - 24, H - 180); g.fill();
-      // Huy hiệu ruy-băng (rosette) — góc trên bên trái, tông vàng/chàm khớp mẫu chứng nhận
-      drawAwardBadge(g, 92, 90, 32);
-      // Tem chống hàng giả (hologram) — góc trên bên phải
-      drawSecuritySeal(g, W - 84, 86, 28);
       g.textAlign = 'center';
       g.fillStyle = '#3730A3'; g.font = '800 52px "Baloo 2"'; g.fillText('GIẤY CHỨNG NHẬN', W / 2, 110);
       g.fillStyle = '#6A7184'; g.font = '600 16px "Be Vietnam Pro"';
       g.fillText('Học viện Đầu Tư Thông Minh · Toán 11 · Cấp số nhân & lãi kép · CT GDPT 2018', W / 2, 142);
       g.strokeStyle = '#F59E0B'; g.lineWidth = 2; g.beginPath(); g.moveTo(W / 2 - 140, 158); g.lineTo(W / 2 + 140, 158); g.stroke();
       g.fillStyle = '#141A2E'; g.font = '600 18px "Be Vietnam Pro"'; g.fillText('Trân trọng chứng nhận học sinh', W / 2, 205);
-      g.fillStyle = '#B45309'; g.font = '800 46px "Be Vietnam Pro"'; g.fillText(d.name.toUpperCase(), W / 2, 262);
+      g.fillStyle = '#B45309'; g.font = '800 50px "Nunito"'; g.fillText(d.name.toUpperCase(), W / 2, 262);
       g.fillStyle = '#374151'; g.font = '600 17px "Be Vietnam Pro"';
       g.fillText('Học sinh lớp ' + (d.cls || '—') + ' · Trường ' + (d.school || '—'), W / 2, 296);
       g.fillStyle = '#141A2E'; g.font = '500 15px "Be Vietnam Pro"';
@@ -8761,277 +9126,20 @@
       g.fillStyle = '#6A7184'; g.font = '500 14px "Be Vietnam Pro"';
       g.fillText('"Xuất sắc! Em đã hiểu sức mạnh của lãi kép và tư duy đầu tư dài hạn.', W / 2, 560);
       g.fillText('Hãy giữ ngọn lửa đam mê Toán học — bầu trời tài chính đang chờ em chinh phục!"', W / 2, 582);
-      // === Góc dưới trái: NGÀY (trên) -> SỐ CHỨNG NHẬN -> MÃ VẠCH (bỏ dòng 'Ngày trao tặng') ===
-      g.textAlign = 'left';
-      const dt = new Date();
-      // 1) Ngày tháng năm — đặt trên cùng
-      g.fillStyle = '#374151'; g.font = '600 14px "Be Vietnam Pro"';
-      g.fillText('Ngày ' + dt.getDate() + ' tháng ' + (dt.getMonth() + 1) + ' năm ' + dt.getFullYear(), 90, 602);
-      // 2) Số chứng nhận
-      const _cy = dt.getFullYear();
-      const _serial = certSerial(d);
-      const _digits = String(_cy) + _serial;               // 10 chữ số -> Code128-C
-      g.fillStyle = '#6A7184'; g.font = '700 10px "Be Vietnam Pro"';
-      const _clbl = 'Số: ';
-      g.fillText(_clbl, 90, 620);
-      const _clw = g.measureText(_clbl).width;
-      g.fillStyle = '#3730A3'; g.font = '800 12px "Be Vietnam Pro"';
-      g.fillText('DTTM-' + _cy + '-' + _serial, 90 + _clw, 620);
-      // 3) Mã vạch
-      drawBarcode(g, 90, 626, 168, 18, _digits);
+      // date bottom-left
+      g.textAlign = 'left'; g.fillStyle = '#374151'; g.font = '600 14px "Be Vietnam Pro"';
+      const dt = new Date(); g.fillText('Ngày ' + dt.getDate() + ' tháng ' + (dt.getMonth() + 1) + ' năm ' + dt.getFullYear(), 90, 636);
+      g.fillStyle = '#9098AC'; g.font = '500 11px "Be Vietnam Pro"'; g.fillText('Ngày trao tặng', 90, 654);
       // seal (scallop)
       drawSeal(g, W / 2, 630, 40);
-      // signature bottom-right — chữ ký viết tay (thu nhỏ để KHÔNG đè lên dòng trích dẫn phía trên)
+      // signature bottom-right — chữ ký viết tay thanh thoát
       g.textAlign = 'center';
-      g.fillStyle = '#1E3A8A'; g.font = '400 34px "Great Vibes"'; g.fillText('Luong Truong', W - 200, 618);
-      g.strokeStyle = '#9098AC'; g.lineWidth = 1; g.beginPath(); g.moveTo(W - 300, 630); g.lineTo(W - 100, 630); g.stroke();
-      // Tên giáo viên + chức danh trên CÙNG MỘT DÒNG: "LUÔNG TRƯƠNG - Giáo viên phụ trách"
-      const _nm = TEACHER_DEFAULT_NAME, _role = ' - Giáo viên phụ trách', _cx = W - 200;
-      g.font = '800 14px "Be Vietnam Pro"'; const _wNm = g.measureText(_nm).width;
-      g.font = '600 13px "Be Vietnam Pro"'; const _wRole = g.measureText(_role).width;
-      const _sx = _cx - (_wNm + _wRole) / 2;
-      g.textAlign = 'left';
-      g.fillStyle = '#141A2E'; g.font = '800 14px "Be Vietnam Pro"'; g.fillText(_nm, _sx, 650);
-      g.fillStyle = '#6A7184'; g.font = '600 13px "Be Vietnam Pro"'; g.fillText(_role, _sx + _wNm, 650);
-      g.textAlign = 'center';
-      // Dấu mộc tròn đỏ — đóng nghiêng lên giữa chữ ký và họ tên giáo viên phụ trách
-      drawStamp(g, W - 205, 606, 52, -0.23);
-    }
-    function drawStamp(g, cx, cy, r, rot) {
-      g.save(); g.translate(cx, cy); g.rotate(rot);
-      g.globalAlpha = 0.60;
-      const RED = '#C0272E';
-      g.strokeStyle = RED; g.fillStyle = RED; g.lineCap = 'round';
-      // ba vòng tròn viền
-      g.lineWidth = r * 0.055; g.beginPath(); g.arc(0, 0, r, 0, Math.PI * 2); g.stroke();
-      g.lineWidth = r * 0.030; g.beginPath(); g.arc(0, 0, r * 0.90, 0, Math.PI * 2); g.stroke();
-      g.lineWidth = r * 0.030; g.beginPath(); g.arc(0, 0, r * 0.60, 0, Math.PI * 2); g.stroke();
-      g.textAlign = 'center'; g.textBaseline = 'middle';
-      const ringR = r * 0.80;
-      function arc(text, centerA, fs, top) {
-        g.font = '700 ' + fs.toFixed(1) + 'px "Be Vietnam Pro"';
-        const step = (fs * 0.98) / ringR;
-        const start = centerA - step * (text.length - 1) / 2;
-        for (let i = 0; i < text.length; i++) {
-          const a = start + i * step;
-          g.save(); g.translate(Math.cos(a) * ringR, Math.sin(a) * ringR);
-          g.rotate(top ? a + Math.PI / 2 : a - Math.PI / 2);
-          g.fillText(text[i], 0, 0); g.restore();
-        }
-      }
-      function star(x, y, R, sp) {
-        g.beginPath();
-        for (let i = 0; i < sp * 2; i++) {
-          const rr = (i % 2) ? R * 0.42 : R;
-          const a = -Math.PI / 2 + i * Math.PI / sp;
-          const px = x + Math.cos(a) * rr, py = y + Math.sin(a) * rr;
-          i ? g.lineTo(px, py) : g.moveTo(px, py);
-        }
-        g.closePath(); g.fill();
-      }
-      arc('ĐẦU TƯ THÔNG MINH', -Math.PI / 2, r * 0.155, true);
-      arc('CHỨNG NHẬN', Math.PI / 2, r * 0.155, false);
-      star(Math.cos(0.33) * ringR, Math.sin(0.33) * ringR, r * 0.10, 5);
-      star(Math.cos(Math.PI - 0.33) * ringR, Math.sin(Math.PI - 0.33) * ringR, r * 0.10, 5);
-      star(0, -r * 0.13, r * 0.27, 5);
-      g.font = '800 ' + (r * 0.19).toFixed(1) + 'px "Be Vietnam Pro"';
-      g.fillText('TOÁN 11', 0, r * 0.26);
-      g.restore();
+      g.fillStyle = '#1E3A8A'; g.font = '400 52px "Great Vibes"'; g.fillText('Luong Truong', W - 200, 600);
+      g.strokeStyle = '#9098AC'; g.lineWidth = 1; g.beginPath(); g.moveTo(W - 300, 616); g.lineTo(W - 100, 616); g.stroke();
+      g.fillStyle = '#141A2E'; g.font = '800 15px "Nunito"'; g.fillText(TEACHER_DEFAULT_NAME, W - 200, 638);
+      g.fillStyle = '#6A7184'; g.font = '600 12px "Be Vietnam Pro"'; g.fillText('Giáo viên phụ trách', W - 200, 656);
     }
     function roundRect(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
-    function drawAwardBadge(g, cx, cy, R) {
-      g.save(); g.translate(cx, cy);
-      const bumps = 14, ringR = R * 0.84, bumpR = R * 0.19;
-      function starShape(x, y, rad, sp) {
-        g.beginPath();
-        for (let i = 0; i < sp * 2; i++) {
-          const rr = (i % 2) ? rad * 0.45 : rad;
-          const a = -Math.PI / 2 + i * Math.PI / sp;
-          const px = x + Math.cos(a) * rr, py = y + Math.sin(a) * rr;
-          i ? g.lineTo(px, py) : g.moveTo(px, py);
-        }
-        g.closePath(); g.fill();
-      }
-      function ribbon(dir) {
-        g.save(); g.rotate(dir * 0.26);
-        const w = R * 0.5, top = R * 0.25, len = R * 1.7;
-        g.fillStyle = '#B5810F';
-        g.beginPath(); g.moveTo(-w / 2 - 2.2, top); g.lineTo(w / 2 + 2.2, top);
-        g.lineTo(w / 2 + 2.2, len); g.lineTo(0, len - w * 0.55); g.lineTo(-w / 2 - 2.2, len);
-        g.closePath(); g.fill();
-        const rg = g.createLinearGradient(-w / 2, 0, w / 2, 0);
-        rg.addColorStop(0, '#C81212'); rg.addColorStop(0.5, '#FF2E2E'); rg.addColorStop(1, '#C81212');
-        g.fillStyle = rg;
-        g.beginPath(); g.moveTo(-w / 2, top); g.lineTo(w / 2, top);
-        g.lineTo(w / 2, len - 3); g.lineTo(0, len - w * 0.55 - 3); g.lineTo(-w / 2, len - 3);
-        g.closePath(); g.fill();
-        g.strokeStyle = '#8E0F0F'; g.lineWidth = 1; g.stroke();
-        g.restore();
-      }
-      ribbon(-1); ribbon(1);
-      g.fillStyle = '#8C6210';
-      for (let i = 0; i < bumps; i++) { const a = i / bumps * Math.PI * 2; g.beginPath(); g.arc(Math.cos(a) * ringR, Math.sin(a) * ringR, bumpR + 1.4, 0, 7); g.fill(); }
-      g.beginPath(); g.arc(0, 0, ringR + 1.4, 0, 7); g.fill();
-      const gg = g.createRadialGradient(-R * 0.35, -R * 0.4, R * 0.1, 0, 0, R * 1.1);
-      gg.addColorStop(0, '#FFFBD0'); gg.addColorStop(0.4, '#FFDC12'); gg.addColorStop(0.78, '#FFB300'); gg.addColorStop(1, '#F58A00');
-      g.fillStyle = gg;
-      for (let i = 0; i < bumps; i++) { const a = i / bumps * Math.PI * 2; g.beginPath(); g.arc(Math.cos(a) * ringR, Math.sin(a) * ringR, bumpR, 0, 7); g.fill(); }
-      g.beginPath(); g.arc(0, 0, ringR, 0, 7); g.fill();
-      // viền nét cho sắc gọn
-      g.strokeStyle = '#B26A06'; g.lineWidth = 1.2;
-      g.beginPath(); g.arc(0, 0, ringR, 0, 7); g.stroke();
-      g.strokeStyle = '#C9860E'; g.lineWidth = R * 0.05;
-      g.beginPath(); g.arc(0, 0, R * 0.66, 0, 7); g.stroke();
-      const cgrad = g.createRadialGradient(-R * 0.2, -R * 0.25, R * 0.05, 0, 0, R * 0.7);
-      cgrad.addColorStop(0, '#FFFEF0'); cgrad.addColorStop(0.5, '#FFE23A'); cgrad.addColorStop(1, '#FBA000');
-      g.fillStyle = cgrad;
-      g.beginPath(); g.arc(0, 0, R * 0.62, 0, 7); g.fill();
-      g.strokeStyle = '#E08A08'; g.lineWidth = 1; g.beginPath(); g.arc(0, 0, R * 0.62, 0, 7); g.stroke();
-      // hạt đỏ tươi trên vành huy chương (tông vàng–đỏ)
-      for (let i = 0; i < bumps; i++) {
-        const a = (i + 0.5) / bumps * Math.PI * 2;
-        const gx = Math.cos(a) * R * 0.66, gy = Math.sin(a) * R * 0.66;
-        g.beginPath(); g.arc(gx, gy, R * 0.05, 0, 7);
-        g.fillStyle = '#FF1F1F'; g.fill();
-        g.strokeStyle = '#B00000'; g.lineWidth = 0.7; g.stroke();
-        g.beginPath(); g.arc(gx - R * 0.017, gy - R * 0.017, R * 0.017, 0, 7);
-        g.fillStyle = 'rgba(255,255,255,.85)'; g.fill();
-      }
-      // vòng sao lấp lánh vàng sáng
-      const stars = 16, sr = R * 0.5;
-      for (let i = 0; i < stars; i++) { const a = -Math.PI / 2 + i / stars * Math.PI * 2; g.fillStyle = (i % 2) ? '#FFC400' : '#FFA000'; starShape(Math.cos(a) * sr, Math.sin(a) * sr, R * 0.06, 5); }
-      // ngôi sao trung tâm đỏ tươi viền nét
-      g.fillStyle = '#FF2020'; starShape(0, 0, R * 0.22, 5);
-      g.strokeStyle = '#B00000'; g.lineWidth = 1; g.stroke();
-      g.fillStyle = '#FFE83D'; starShape(0, 0, R * 0.12, 5);
-      // ánh sáng bóng loáng
-      g.fillStyle = 'rgba(255,255,255,.5)';
-      g.beginPath(); g.ellipse(-R * 0.15, -R * 0.28, R * 0.34, R * 0.17, -0.5, 0, 7); g.fill();
-      g.restore();
-    }
-    // ---- Nền chìm: rosette các vòng tròn chồng nhau (spirograph) ----
-    function drawSpiroBg(g, cx, cy, R) {
-      g.save(); g.translate(cx, cy); g.lineWidth = 0.7; g.lineJoin = 'round';
-      const pal = ['#4E9E8E', '#D98A5E', '#6E7FC0'];       // xanh ngọc · cam · lam (đậm hơn cho rõ nét)
-      const n = 40, rc = R * 0.53, cr = rc * 0.88;         // tâm trên vòng rc, bán kính cr → chừa lỗ nhỏ giữa
-      for (let i = 0; i < n; i++) {
-        const a = i / n * Math.PI * 2;
-        const x = Math.cos(a) * rc, y = Math.sin(a) * rc;
-        g.globalAlpha = 0.20; g.strokeStyle = pal[i % pal.length];
-        g.beginPath(); g.arc(x, y, cr, 0, 7); g.stroke();
-      }
-      // vòng nhỏ bên trong tạo lớp thứ hai (moiré tinh tế)
-      const n2 = 28, rc2 = R * 0.30, cr2 = rc2 * 0.9;
-      for (let i = 0; i < n2; i++) {
-        const a = i / n2 * Math.PI * 2 + 0.1;
-        g.globalAlpha = 0.17; g.strokeStyle = pal[(i + 1) % pal.length];
-        g.beginPath(); g.arc(Math.cos(a) * rc2, Math.sin(a) * rc2, cr2, 0, 7); g.stroke();
-      }
-      // đường bao ngoài mảnh
-      g.globalAlpha = 0.26; g.strokeStyle = '#6E7FC0'; g.lineWidth = 0.9;
-      g.beginPath(); g.arc(0, 0, rc + cr, 0, 7); g.stroke();
-      g.restore();
-    }
-    // ---- Chữ chạy theo cung tròn (cho tem) ----
-    function arcText(g, str, radius, base, spread, font, color, bottom) {
-      g.save(); g.font = font; g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'middle';
-      for (let i = 0; i < str.length; i++) {
-        const off = (i - (str.length - 1) / 2) * spread;
-        g.save();
-        if (bottom) { g.rotate(-off); g.translate(0, radius); g.rotate(Math.PI); }
-        else { g.rotate(off); g.translate(0, -radius); }
-        g.fillText(str[i], 0, 0); g.restore();
-      }
-      g.restore();
-    }
-    // ---- Tem chống hàng giả (guilloche rosette, tông xanh ngọc + vàng) ----
-    function drawSecuritySeal(g, cx, cy, R) {
-      g.save(); g.translate(cx, cy); g.rotate(-0.04);
-      g.lineJoin = 'round'; g.lineCap = 'round';
-      const teal = '#2F6E7E', teal2 = '#5AA0A8', gold = '#B8862F', gold2 = '#D8B25A';
-      // nền đĩa rất nhạt để hoa văn nổi
-      g.fillStyle = 'rgba(245,250,251,0.72)'; g.beginPath(); g.arc(0, 0, R, 0, 7); g.fill();
-      // đường bao ngoài
-      g.lineWidth = 1; g.strokeStyle = teal; g.globalAlpha = 0.9;
-      g.beginPath(); g.arc(0, 0, R * 0.98, 0, 7); g.stroke();
-      g.beginPath(); g.arc(0, 0, R * 0.93, 0, 7); g.stroke();
-      // vành cánh hoa guilloche (nhiều lớp lồng nhau)
-      const petals = 18;
-      g.lineWidth = 0.6;
-      for (let k = 0; k < 11; k++) {
-        const rad = R * (0.55 + k * 0.033), amp = 0.12;
-        g.strokeStyle = (k % 2) ? teal2 : teal; g.globalAlpha = 0.55;
-        g.beginPath();
-        for (let t = 0; t <= Math.PI * 2 + 0.02; t += 0.03) {
-          const rr = rad * (1 + amp * Math.cos(petals * t));
-          const x = Math.cos(t) * rr, y = Math.sin(t) * rr;
-          t ? g.lineTo(x, y) : g.moveTo(x, y);
-        }
-        g.closePath(); g.stroke();
-      }
-      // hoa sao ở giữa (nhiều lớp sao lồng nhau)
-      for (let k = 0; k < 6; k++) {
-        const outer = R * (0.30 + k * 0.028), inner = outer * 0.60;
-        g.strokeStyle = (k % 2) ? gold : teal2; g.globalAlpha = 0.5;
-        g.beginPath();
-        for (let i = 0; i <= petals * 2; i++) {
-          const rr = (i % 2) ? inner : outer;
-          const a = -Math.PI / 2 + i * Math.PI / petals;
-          const x = Math.cos(a) * rr, y = Math.sin(a) * rr;
-          i ? g.lineTo(x, y) : g.moveTo(x, y);
-        }
-        g.closePath(); g.stroke();
-      }
-      // tâm hoa văn (chỉ họa tiết, không chữ)
-      g.globalAlpha = 1;
-      const cg = g.createRadialGradient(-R * 0.06, -R * 0.08, R * 0.02, 0, 0, R * 0.2);
-      cg.addColorStop(0, '#FFFDF3'); cg.addColorStop(0.6, gold2); cg.addColorStop(1, gold);
-      g.beginPath(); g.arc(0, 0, R * 0.18, 0, 7); g.fillStyle = cg; g.fill();
-      g.lineWidth = 1; g.strokeStyle = teal; g.beginPath(); g.arc(0, 0, R * 0.18, 0, 7); g.stroke();
-      // ngôi sao nhỏ ở tâm
-      g.fillStyle = teal;
-      g.beginPath();
-      for (let i = 0; i < 10; i++) {
-        const rr = (i % 2) ? R * 0.05 : R * 0.11;
-        const a = -Math.PI / 2 + i * Math.PI / 5;
-        const x = Math.cos(a) * rr, y = Math.sin(a) * rr;
-        i ? g.lineTo(x, y) : g.moveTo(x, y);
-      }
-      g.closePath(); g.fill();
-      g.beginPath(); g.arc(0, 0, R * 0.03, 0, 7); g.fillStyle = gold; g.fill();
-      g.restore();
-    }
-    // ---- Mã vạch Code128-C (chỉ số) + số chứng nhận ----
-    const BC128 = ["212222", "222122", "222221", "121223", "121322", "131222", "122213", "122312", "132212", "221213", "221312", "231212", "112232", "122132", "122231", "113222", "123122", "123221", "223211", "221132", "221231", "213212", "223112", "312131", "311222", "321122", "321221", "312212", "322112", "322211", "212123", "212321", "232121", "111323", "131123", "131321", "112313", "132113", "132311", "211313", "231113", "231311", "112133", "112331", "132131", "113123", "113321", "133121", "313121", "211331", "231131", "213113", "213311", "213131", "311123", "311321", "331121", "312113", "312311", "332111", "314111", "221411", "431111", "111224", "111422", "121124", "121421", "141122", "141221", "112214", "112412", "122114", "122411", "142112", "142211", "241211", "221114", "413111", "241112", "134111", "111242", "121142", "121241", "114212", "124112", "124211", "411212", "421112", "421211", "212141", "214121", "412121", "111143", "111341", "131141", "114113", "114311", "411113", "411311", "113141", "114131", "311141", "411131", "211412", "211214", "211232", "2331112"];
-    function code128C(digits) {
-      if (digits.length % 2) digits = '0' + digits;
-      const codes = [105];
-      for (let i = 0; i < digits.length; i += 2) codes.push(parseInt(digits.substr(i, 2), 10));
-      let sum = 105;
-      for (let i = 1; i < codes.length; i++) sum += codes[i] * i;
-      codes.push(sum % 103); codes.push(106);
-      let mods = ''; for (let i = 0; i < codes.length; i++) mods += BC128[codes[i]];
-      return mods;
-    }
-    function certSerial(d) {
-      const s = (d.name || '') + '|' + (d.cls || '') + '|' + (d.school || '') + '|' + (d.score || 0) + '|' + (d.stars || 0) + '|' + (d.ws || 0) + '|' + (d.time || 0);
-      let h = 2166136261 >>> 0;
-      for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
-      return ('000000' + (h % 1000000)).slice(-6);
-    }
-    function drawBarcode(g, x, y, totalW, h, digits) {
-      const mods = code128C(digits);
-      let tot = 0; for (let i = 0; i < mods.length; i++) tot += (mods.charCodeAt(i) - 48);
-      const u = totalW / tot;
-      g.save(); g.fillStyle = '#12193A';
-      let cx = x, bar = true;
-      for (let i = 0; i < mods.length; i++) {
-        const w = (mods.charCodeAt(i) - 48) * u;
-        if (bar) g.fillRect(cx, y, Math.ceil(w * 100) / 100, h);
-        cx += w; bar = !bar;
-      }
-      g.restore();
-    }
     function drawSeal(g, cx, cy, r) {
       g.save(); g.translate(cx, cy);
       g.fillStyle = '#DC2626'; g.beginPath(); for (let i = 0; i < 24; i++) { const a = i / 24 * 2 * Math.PI, rr = i % 2 ? r : r * 0.86; g.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } g.closePath(); g.fill();
@@ -9220,25 +9328,49 @@
     /* =================== TOP BAR / BOTTOM BAR WIRING =================== */
     $('btnTheme').addEventListener('click', toggleTheme);
     $('btnMusic').addEventListener('click', toggleMusic);
-    $('btnSound').addEventListener('click', () => { $('btnSound').textContent = SFX.toggle() ? '🔇' : '🔊'; });
+    $('btnSound').addEventListener('click', () => { const _i = $('icSound'); const off = SFX.toggle(); if (_i) _i.textContent = off ? '🔇' : '🔊'; });
     $('btnBadges').addEventListener('click', openBadges);
     $('btnTeacher').addEventListener('click', openTeacher);
     $('btnDuel').addEventListener('click', openDuel);
     $('btnTest').addEventListener('click', openTestPicker);
     $('btnHistory').addEventListener('click', openHistory);
     $('btnVersion').addEventListener('click', openVersion);
+    if ($('btnHowto')) $('btnHowto').addEventListener('click', openHowto);
+
+    /* =================== HEADER MENUS (dropdown) =================== */
+    function closeMenus() {
+      document.querySelectorAll('.menu-wrap.open').forEach(w => w.classList.remove('open'));
+      const sc = $('menuScrim'); if (sc) sc.classList.remove('show');
+    }
+    function toggleMenu(id) {
+      const w = $(id); if (!w) return; const willOpen = !w.classList.contains('open');
+      closeMenus(); if (willOpen) { w.classList.add('open'); const sc = $('menuScrim'); if (sc) sc.classList.add('show'); }
+    }
+    document.querySelectorAll('.menu-btn[data-menu]').forEach(btn => {
+      btn.addEventListener('click', e => { e.stopPropagation(); toggleMenu(btn.getAttribute('data-menu')); });
+    });
+    /* Bấm một mục trong menu -> đóng menu (trừ khi cần giữ) */
+    document.querySelectorAll('.menu-panel .menu-item').forEach(it => {
+      it.addEventListener('click', () => { setTimeout(closeMenus, 60); });
+    });
+    const _scrim = $('menuScrim'); if (_scrim) _scrim.addEventListener('click', closeMenus);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenus(); });
+
+    /* =================== QR POPUP =================== */
+    function openQRPopup() {
+      const img = $('qrPopImg'); if (img) img.innerHTML = qrSVG(QR_URL, 240);
+      const u = $('qrPopUrl'); if (u) u.textContent = QR_URL;
+      $('qrPop').classList.add('show');
+    }
+    if ($('btnQR')) $('btnQR').addEventListener('click', openQRPopup);
+    if ($('qrPopClose')) $('qrPopClose').addEventListener('click', () => $('qrPop').classList.remove('show'));
+    if ($('qrPop')) $('qrPop').addEventListener('click', e => { if (e.target === $('qrPop')) $('qrPop').classList.remove('show'); });
+
     window.addEventListener('resize', () => { fit(); render(); });
     window.addEventListener('keydown', e => { if (e.key === 'Enter' && !$('toast').classList.contains('show') && !$('quiz').classList.contains('show') && !document.querySelector('.overlay.show')) confirmPlan(); });
 
     /* first interaction -> try autoplay music once */
     document.addEventListener('pointerdown', function once() { autoMusicOnce(); document.removeEventListener('pointerdown', once); }, { once: true });
-
-    /* Âm thanh khi click chuột (nhẹ) — tôn trọng nút 🔊/🔇, bỏ qua chuột phải & khi kéo thanh trượt. */
-    document.addEventListener('pointerdown', function (e) {
-      if (e.button && e.button !== 0) return;
-      if (e.target && e.target.closest && e.target.closest('input[type=range]')) return;
-      if (typeof SFX !== 'undefined' && SFX.click) SFX.click();
-    }, true);
 
     /* =================== BADGE STRIP (achievements inline) =================== */
     function renderBadgeStrip() {
