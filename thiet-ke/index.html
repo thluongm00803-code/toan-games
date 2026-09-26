@@ -1179,6 +1179,15 @@
             text-align: left
         }
 
+        /* Phần I (Phiếu Về Đích): 2 phương án / 1 dòng (A,B · C,D) — laptop & điện thoại */
+        #wI .qopts {
+            grid-template-columns: 1fr 1fr
+        }
+
+        #wI .qopts .opt {
+            min-width: 0
+        }
+
         .qexp {
             font-size: 13px;
             color: var(--indigo-d);
@@ -3436,6 +3445,17 @@
 
     <!-- Toast tự tắt (thông báo khôi phục tiến trình…) -->
     <div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+
+    <!-- ===== NHẠC NỀN: đặt 1 file .mp3 CÙNG THƯ MỤC với index.html, tên theo một trong các tên dưới ===== -->
+    <!-- Ưu tiên từ trên xuống; game tự nhận file đầu tiên có tồn tại. Không có file nào → dùng nhạc tổng hợp. -->
+    <audio id="bgm" loop preload="auto">
+        <source src="nhac-nen.mp3" type="audio/mpeg">
+        <source src="nhacnen.mp3" type="audio/mpeg">
+        <source src="nhac.mp3" type="audio/mpeg">
+        <source src="background-music.mp3" type="audio/mpeg">
+        <source src="music.mp3" type="audio/mpeg">
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- ===== Reinforcement quiz (full-screen modal) ===== -->
     <div class="toast qzmodal" id="quiz">
@@ -6842,26 +6862,47 @@ var qrcode = function () {
         })();
         window.__NTK.SFX = SFX;
 
-        /* ===== procedural background music ===== */
+        /* ===== background music: ưu tiên file .mp3 (<audio> nhiều <source>), nếu không có → nhạc tổng hợp ===== */
         const MUSIC = (function () {
-            let ac = null, timer = null, master = null, playing = false, step = 0;
-            // gentle ii–V–I-ish pad in A minor / C major
+            let ac = null, timer = null, master = null, playing = false, step = 0, audio = undefined;
+            // gentle ii–V–I-ish pad in A minor / C major (dùng khi KHÔNG có file .mp3)
             const prog = [
                 [220.00, 261.63, 329.63], [246.94, 293.66, 349.23],
                 [261.63, 329.63, 392.00], [196.00, 246.94, 329.63]
             ];
+            function getAudio() {
+                if (audio === undefined) {
+                    audio = document.getElementById('bgm') || null;
+                    if (audio) { try { audio.loop = true; if (!audio.volume || audio.volume === 1) audio.volume = 0.4; } catch (e) { } }
+                }
+                return audio;
+            }
+            function hasFile() { const a = getAudio(); return !!(a && a.currentSrc && !a.error); }
             function ensure() { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); master = ac.createGain(); master.gain.value = .05; master.connect(ac.destination); } catch (e) { } } if (ac && ac.state === 'suspended') ac.resume(); }
             function chord(freqs) {
                 if (!ac) return; const t = ac.currentTime;
                 freqs.forEach(f => { const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.5, t + .4); g.gain.linearRampToValueAtTime(0, t + 1.9); o.connect(g); g.connect(master); o.start(t); o.stop(t + 2); });
-                // soft bell
                 const b = ac.createOscillator(), bg = ac.createGain(); b.type = 'triangle'; b.frequency.value = freqs[0] * 2; bg.gain.setValueAtTime(.18, t + .05); bg.gain.exponentialRampToValueAtTime(.001, t + 1); b.connect(bg); bg.connect(master); b.start(t); b.stop(t + 1);
             }
             function tickM() { chord(prog[step % prog.length]); step++; }
+            function startSynth() { ensure(); if (!ac) return false; if (!timer) { tickM(); timer = setInterval(tickM, 2000); } return true; }
+            function stopSynth() { if (timer) { clearInterval(timer); timer = null; } }
             return {
-                start() { ensure(); if (!ac || playing) return; playing = true; tickM(); timer = setInterval(tickM, 2000); },
-                stop() { playing = false; if (timer) clearInterval(timer); timer = null; },
-                toggle() { if (playing) { this.stop(); return false; } this.start(); return true; }
+                hasFile,
+                start() {
+                    if (playing) return;
+                    const a = getAudio();
+                    if (a && a.currentSrc && !a.error) {         // có file .mp3 cùng thư mục → phát file
+                        try {
+                            const pr = a.play(); playing = true;
+                            if (pr && pr.catch) pr.catch(() => { playing = false; if (startSynth()) playing = true; });
+                            return;
+                        } catch (e) { }
+                    }
+                    if (startSynth()) playing = true;             // không có file → nhạc tổng hợp
+                },
+                stop() { playing = false; const a = getAudio(); if (a) { try { a.pause(); } catch (e) { } } stopSynth(); },
+                toggle() { if (playing) { this.stop(); return false; } this.start(); return playing; }
             };
         })();
 
@@ -9194,7 +9235,7 @@ var qrcode = function () {
                     if ($('btnHandbook')) $('btnHandbook').onclick = () => A.openHandbook();
                     if ($('btnStudy')) $('btnStudy').onclick = () => A.openStudy();
                     $('btnRank').onclick = () => A.openRank();
-                    $('btnMusic').onclick = () => { S.musicOn = A.MUSIC.toggle(); $('btnMusic').textContent = S.musicOn ? '🎶' : '🎵'; };
+                    $('btnMusic').onclick = () => { S.musicOn = A.MUSIC.toggle(); S._musicUserOff = !S.musicOn; $('btnMusic').textContent = S.musicOn ? '🎶' : '🎵'; if (A.syncMob) A.syncMob(); };
                     $('btnSound').onclick = () => { S.sfxOn = !S.sfxOn; $('btnSound').textContent = S.sfxOn ? '🔊' : '🔇'; };
                     $('btnVersion').onclick = () => A.openOv('ovVersion');
                     // ---- HEADER dropdown menus (desktop + mobile): chỉ chức năng chính hiển thị; phụ gom vào menu ----
@@ -9313,9 +9354,15 @@ var qrcode = function () {
                         // Toast tự tắt (thay cho khối cố định) — dùng chung cho mọi kích thước màn hình
                         if (A.snack) A.snack(`🔖 Đã khôi phục tiến trình: <b>${info}</b>`, 5000);
                     }
-                    // first interaction → start music if user enabled autoplay? keep off by default; enable on first pointer
+                    // TỰ PHÁT nhạc nền ở tương tác đầu tiên (trình duyệt chỉ cho phát nhạc sau khi người dùng chạm)
                     let musicKick = false;
-                    document.addEventListener('pointerdown', () => { if (!musicKick && S.musicOn) { musicKick = true; A.MUSIC.start(); } }, { once: false });
+                    document.addEventListener('pointerdown', () => {
+                        if (musicKick) return; musicKick = true;
+                        if (S._musicUserOff) return;                 // người dùng đã tắt → tôn trọng, không tự phát
+                        S.musicOn = A.MUSIC.toggle();                // bật nhạc (file .mp3 nếu có, không thì nhạc tổng hợp)
+                        const bm = $('btnMusic'); if (bm) bm.textContent = S.musicOn ? '🎶' : '🎵';
+                        if (A.syncMob) A.syncMob();
+                    }, { once: false });
                     // show welcome
                     A.openOv('ovWelcome');
                     updatePreState();
