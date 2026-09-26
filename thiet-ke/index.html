@@ -7710,7 +7710,8 @@ var qrcode = function () {
                 if (inst.sel < 0) { toastMini('Hãy chọn một đáp án!'); S.attempts--; return; }
                 ok = inst.sel === inst.rawc;
                 const area = $('mcArea'); area.dataset.done = ok ? '1' : '';
-                area.querySelectorAll('.opt').forEach((b, k) => { b.disabled = true; if (k === inst.rawc) b.classList.add('correct'); if (k === inst.sel && !ok) b.classList.add('wrong'); });
+                // Chỉ tô XANH đáp án đúng KHI trả lời ĐÚNG. Trả lời SAI: chỉ báo đỏ ô đã chọn, KHÔNG lộ đáp án đúng.
+                area.querySelectorAll('.opt').forEach((b, k) => { b.disabled = true; if (ok && k === inst.rawc) b.classList.add('correct'); if (k === inst.sel && !ok) b.classList.add('wrong'); });
             } else if (inst.type === 'sign') {
                 ok = inst.user.join('') === inst.signs.join('');
             } else if (inst.type === 'extrema') {
