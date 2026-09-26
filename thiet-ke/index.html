@@ -1179,9 +1179,9 @@
             text-align: left
         }
 
-        /* Phần I (Phiếu Về Đích): 2 phương án / 1 dòng (A,B · C,D) — laptop & điện thoại */
+        /* Phần I (Phiếu Về Đích): 1 phương án / 1 dòng — laptop & điện thoại */
         #wI .qopts {
-            grid-template-columns: 1fr 1fr
+            grid-template-columns: 1fr
         }
 
         #wI .qopts .opt {
@@ -9198,7 +9198,7 @@ var qrcode = function () {
                     const closingP = `<div class="rp-p"><b>Luồng học tập khép kín mỗi trạm:</b> làm <b>Kiểm tra đầu vào</b> (bắt buộc) → vào trạm → trả lời đúng → 🎁 <b>Quà bất ngờ</b> (kho 18 phần quà đa dạng: mẹo Toán, sự thật thú vị, lời khen, danh hiệu, điểm thưởng, câu nói hay… <b>không trùng nhau ở 10 trạm</b> và không đoán trước được, kèm hiệu ứng <b>pháo hoa</b> khi mở) → <b>Câu hỏi củng cố</b> (có lời giải) → bấm <b>Tiếp tục</b> sang trạm sau. Riêng trạm 10, sau câu hỏi củng cố, học sinh được dẫn thẳng vào <b>Phiếu Về Đích</b>. Cách này duy trì hứng thú và củng cố kiến thức ngay sau mỗi thử thách.</div>`;
 
                     const phieuTbl = `<table class="rp-tbl"><tr><th style="width:64px;text-align:center">Phần</th><th>Dạng</th><th style="width:74px;text-align:center">SL</th><th style="width:74px;text-align:center">Điểm</th></tr><tr><td style="text-align:center">I</td><td>Trắc nghiệm A/B/C/D</td><td style="text-align:center">12</td><td style="text-align:center">3đ</td></tr><tr><td style="text-align:center">II</td><td>Đúng – Sai (4 ý/câu)</td><td style="text-align:center">2×4</td><td style="text-align:center">2đ</td></tr><tr><td style="text-align:center">III</td><td>Nối cột (A ↔ B)</td><td style="text-align:center">6 ý</td><td style="text-align:center">3đ</td></tr><tr><td style="text-align:center">IV</td><td>Trả lời ngắn (thực tế)</td><td style="text-align:center">4</td><td style="text-align:center">2đ</td></tr></table>`;
-                    const phieuNote = `<div class="rp-note"><b>Bộ sinh đa đề:</b> mỗi lần mở là một đề khác (tính từ ngân hàng hàm số đã kiểm chứng nên toán luôn đúng); có phiếu trả lời &amp; trang đáp án riêng, mã QR &amp; mã vạch định danh.<br><b>Giao diện thân thiện:</b> Phần I bố trí <b>2 phương án trên một dòng</b> (A·B, C·D) cho cả máy tính lẫn điện thoại; Phần III (Nối cột) chọn đáp án bằng <b>menu hiển thị công thức chuẩn LaTeX</b> — học sinh thấy rõ giá trị từng đáp án khi chọn.<br><b>Nộp bài trực tiếp trên máy:</b> ngay khi bấm nộp, game <b>hiện bảng kết quả chi tiết</b> — điểm từng phần <b>I · II · III · IV</b>, <b>số ý đúng/sai</b> và tổng điểm /10 — kèm <b>nút xem lời giải</b> từng câu để học sinh tự đối chiếu và học lại. Ngoài ra có thể <b>Xuất PDF</b> phiếu để in.</div>`;
+                    const phieuNote = `<div class="rp-note"><b>Bộ sinh đa đề:</b> mỗi lần mở là một đề khác (tính từ ngân hàng hàm số đã kiểm chứng nên toán luôn đúng); có phiếu trả lời &amp; trang đáp án riêng, mã QR &amp; mã vạch định danh.<br><b>Giao diện thân thiện:</b> Phần I bố trí <b>mỗi phương án trên một dòng</b> (dễ đọc, không cắt chữ) cho cả máy tính lẫn điện thoại; Phần III (Nối cột) chọn đáp án bằng <b>menu hiển thị công thức chuẩn LaTeX</b> — học sinh thấy rõ giá trị từng đáp án khi chọn.<br><b>Nộp bài trực tiếp trên máy:</b> ngay khi bấm nộp, game <b>hiện bảng kết quả chi tiết</b> — điểm từng phần <b>I · II · III · IV</b>, <b>số ý đúng/sai</b> và tổng điểm /10 — kèm <b>nút xem lời giải</b> từng câu để học sinh tự đối chiếu và học lại. Ngoài ra có thể <b>Xuất PDF</b> phiếu để in.</div>`;
 
                     const condP = `<div class="rp-p">Đồng thời: ① Hoàn thành <b>≥ 80% số màn</b> (≥ 8/10 trạm); ② Đạt <b>trên 8/10 điểm</b> Phiếu Về Đích; ③ Hoàn thành <b>Kiểm tra đầu ra (8 câu)</b> để khảo sát mức tiếp thu. Khi đủ điều kiện, học sinh được dẫn thẳng tới màn cấp Giấy chứng nhận.</div>`;
 
