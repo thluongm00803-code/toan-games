@@ -1390,7 +1390,7 @@
       padding: 9px 12px;
       margin: 6px 0 12px;
       font-size: 13px;
-      line-height: 2
+      line-height: 2.1
     }
 
     .fs-bchip {
@@ -1398,13 +1398,19 @@
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 3px 9px;
-      margin: 2px 3px;
+      padding: 4px 10px;
+      margin: 3px 4px;
       font-weight: 600
     }
 
-    .fs-bchip b {
-      color: var(--emerald-d)
+    .fs-bchip .blab {
+      display: inline-block;
+      background: var(--indigo);
+      color: #fff;
+      font: 800 11px "Baloo 2";
+      border-radius: 6px;
+      padding: 1px 7px;
+      margin-right: 5px
     }
 
     .fs-ma {
@@ -1412,7 +1418,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 8px 0;
+      padding: 10px 0;
       border-top: 1px dashed var(--line)
     }
 
@@ -1425,20 +1431,119 @@
       color: var(--indigo)
     }
 
-    .fs-sel {
-      border: 1.5px solid var(--line);
-      border-radius: 10px;
-      padding: 8px 12px;
-      font: 600 13px "Be Vietnam Pro";
-      background: var(--card);
-      color: var(--ink);
-      cursor: pointer;
-      min-width: 120px
+    /* Custom dropdown Nối cột (hiện nội dung B + màu + LaTeX, chạy tốt trên điện thoại) */
+    .fs-selwrap {
+      position: relative;
+      flex: none
     }
 
-    .fs-sel:focus {
-      border-color: var(--indigo);
-      outline: none
+    .fs-selbtn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 12px;
+      font: 700 13px "Be Vietnam Pro";
+      background: var(--card);
+      color: var(--muted);
+      cursor: pointer;
+      min-width: 132px;
+      min-height: 42px;
+      justify-content: space-between
+    }
+
+    .fs-selbtn.chosen {
+      color: var(--ink);
+      border-color: var(--indigo)
+    }
+
+    .fs-selbtn .fs-caret {
+      font-size: 10px;
+      opacity: .7
+    }
+
+    .fs-blab {
+      display: inline-block;
+      background: var(--indigo);
+      color: #fff;
+      font: 800 11.5px "Baloo 2";
+      border-radius: 6px;
+      padding: 2px 8px;
+      flex: none
+    }
+
+    .fs-selpanel {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      z-index: 60;
+      min-width: 210px;
+      max-height: 270px;
+      overflow: auto;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 6px;
+      box-shadow: 0 20px 46px -14px rgba(0, 0, 0, .4);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px) scale(.98);
+      transform-origin: top right;
+      transition: .18s
+    }
+
+    .fs-selpanel.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1)
+    }
+
+    .fs-selopt {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 10px;
+      cursor: pointer;
+      text-align: left;
+      min-height: 46px;
+      font: 600 14px "Be Vietnam Pro";
+      color: var(--ink)
+    }
+
+    .fs-selopt:hover {
+      background: var(--soft)
+    }
+
+    .fs-selopt .fs-bval {
+      flex: 1;
+      line-height: 1.3
+    }
+
+    @media(max-width:620px) {
+      .fs-ma {
+        flex-wrap: wrap;
+        align-items: stretch
+      }
+
+      .fs-selwrap {
+        width: 100%
+      }
+
+      .fs-selbtn {
+        width: 100%;
+        min-width: 0
+      }
+
+      .fs-selpanel {
+        left: 0;
+        right: 0;
+        min-width: 0
+      }
     }
 
     .fs-fig {
@@ -4573,8 +4678,9 @@
       </div>
     </div>
 
-    <footer><span class="marquee"><span class="mq-txt">Nhà Đầu Tư Thông Minh · Toán 11 — Cấp số nhân &amp; lãi kép ·
-          Game học tập chạy offline · Giáo viên: LUÔNG TRƯƠNG</span></span></footer>
+    <footer><span class="marquee"><span class="mq-txt">✦ 💰 Nhà Đầu Tư Thông Minh · 📘 Toán 11 — Cấp số nhân &amp; lãi
+          kép · 🎮 Game học tập chạy offline · 👩‍🏫 Giáo viên: LUÔNG TRƯƠNG · 📈 Chúc các em học tốt &amp; chinh phục
+          thế giới tài chính! 🪙</span></span></footer>
   </div>
 
   <!-- OVERLAYS -->
@@ -7596,7 +7702,12 @@
       if (L.kind === "identify" || L.kind === "portfolio") {
         if (chosenOpt < 0) { SFX.buzz(); toast('Hãy chọn một phương án.'); return; }
         const ok = L.opts[chosenOpt].ok; const wrap = $('opts');
-        [...wrap.children].forEach((c, ci) => { c.classList.remove('on'); if (L.opts[ci].ok) c.classList.add('ok'); if (ci === chosenOpt && !ok) c.classList.add('no'); });
+        /* Chọn ĐÚNG: tô xanh đáp án đúng. Chọn SAI: chỉ đánh dấu đỏ ô đã chọn, KHÔNG lộ đáp án đúng. */
+        [...wrap.children].forEach((c, ci) => {
+          c.classList.remove('on', 'ok', 'no');
+          if (ok) { if (L.opts[ci].ok) c.classList.add('ok'); }
+          else if (ci === chosenOpt) c.classList.add('no');
+        });
         if (!ok) {
           confirmFails++; sessionFails[lvlIdx] = (sessionFails[lvlIdx] || 0) + 1; SFX.fail();
           showToast(false, '', 'Chưa đúng', 'Xem lại quy luật rồi thử lại nhé.', 'Thử lại', 'retry', () => setLevel(lvlIdx)); return;
@@ -7826,9 +7937,16 @@
       opts.forEach(o => {
         const b = document.createElement('button'); b.className = 'qopt'; b.dataset.opt = o; b.innerHTML = o;
         b.onclick = () => {
-          wrap.querySelectorAll('button').forEach(x => { x.disabled = true; if (x.dataset.opt === qz.correct) x.classList.add('correct'); });
-          const ok = (o === qz.correct); if (!ok) { b.classList.add('wrong'); SFX.buzz(); } else { quizCorrect++; score += 50; syncTop(); saveProgress(); SFX.ding(); }
-          expEl.style.display = 'block'; expEl.innerHTML = (ok ? '✅ Chính xác! +50 điểm. ' : '❌ Chưa đúng. ') + qz.exp;
+          const ok = (o === qz.correct);
+          if (!ok) { /* SAI: chỉ đánh dấu đỏ ô đã chọn, KHÔNG lộ đáp án đúng — cho chọn lại */
+            b.classList.add('wrong'); b.disabled = true; SFX.buzz();
+            expEl.style.display = 'block'; expEl.innerHTML = '❌ Chưa đúng — thử lại nhé!';
+            if (window.renderMath) renderMath(expEl); return;
+          }
+          /* ĐÚNG: tô xanh, cộng điểm, hiện lời giải và nút tiếp theo */
+          wrap.querySelectorAll('button').forEach(x => { x.disabled = true; }); b.classList.add('correct');
+          quizCorrect++; score += 50; syncTop(); saveProgress(); SFX.ding();
+          expEl.style.display = 'block'; expEl.innerHTML = '✅ Chính xác! +50 điểm. ' + qz.exp;
           if (window.renderMath) renderMath(expEl);
           nextBtn.style.display = 'block'; SCTreport();
         };
@@ -8308,12 +8426,14 @@
       // PHẦN III
       h += '<div class="fs-part c3"><span class="fs-rn">III</span> PHẦN III. Nối cột <span class="fs-pts">6 ý × 0,5 = 3đ</span></div>';
       h += '<div class="fs-q"><div class="fs-qt">' + W.partIII.stem + '</div>';
-      h += '<div class="fs-colb"><b>Cột B:</b> ' + W.partIII.bDisplay.map((b, bi) => '<span class="fs-bchip">(' + (bi + 1) + ') ' + b + '</span>').join(' ') + '</div>';
+      h += '<div class="fs-colb"><b>Cột B:</b> ' + W.partIII.bDisplay.map((b, bi) => '<span class="fs-bchip"><span class="blab">B' + (bi + 1) + '</span>' + b + '</span>').join(' ') + '</div>';
       W.partIII.aItems.forEach((a, ai) => {
         h += '<div class="fs-ma"><span class="fs-al"><b>A' + (ai + 1) + '.</b> ' + a + '</span>' +
-          '<select class="fs-sel" id="fsIII' + ai + '" onchange="fsAns.III[' + ai + ']=+this.value"><option value="0">— chọn B —</option>';
-        for (let k = 1; k <= W.partIII.bDisplay.length; k++) h += '<option value="' + k + '">B' + k + '</option>';
-        h += '</select></div>';
+          '<div class="fs-selwrap"><button class="fs-selbtn" id="fsSelB' + ai + '" onclick="fsSelToggle(' + ai + ')">— chọn B —<span class="fs-caret">▾</span></button>' +
+          '<div class="fs-selpanel" id="fsSelP' + ai + '">';
+        for (let k = 1; k <= W.partIII.bDisplay.length; k++)
+          h += '<button class="fs-selopt" onclick="fsSelPick(' + ai + ',' + k + ')"><span class="fs-blab">B' + k + '</span><span class="fs-bval">' + W.partIII.bDisplay[k - 1] + '</span></button>';
+        h += '</div></div></div>';
       });
       h += '</div>';
 
@@ -8335,13 +8455,29 @@
       if (window.renderMath) renderMath($('ovGeneric'));
       fsAns.I.forEach((v, i) => { if (v >= 0) markI(i, v); });
       fsAns.II.forEach((row, ti) => row.forEach((v, si) => { if (v != null) fsPickII(ti, si, v); }));
-      fsAns.III.forEach((v, i) => { if (v > 0) { const s = $('fsIII' + i); if (s) s.value = v; } });
+      fsAns.III.forEach((v, i) => { if (v > 0) fsSelSet(i, v); });
     }
 
     function esc(s) { return String(s).replace(/<[^>]+>/g, ' ').replace(/"/g, '&quot;').replace(/'/g, '\\u0027'); }
 
     function fsPickI(i, oi) { fsAns.I[i] = oi; markI(i, oi); SFX.tick && SFX.tick(); }
     function markI(i, oi) { const wrap = $('fsI' + i); if (!wrap) return; wrap.querySelectorAll('.fs-opt').forEach((b, bi) => b.classList.toggle('on', bi === oi)); }
+    function fsSelSet(ai, k) {
+      fsAns.III[ai] = k;
+      const btn = $('fsSelB' + ai);
+      if (btn) {
+        const val = (fsW && fsW.partIII && fsW.partIII.bDisplay[k - 1]) || '';
+        btn.innerHTML = '<span class="fs-blab">B' + k + '</span><span style="flex:1;text-align:left">' + val + '</span><span class="fs-caret">▾</span>';
+        btn.classList.add('chosen'); if (window.renderMath) renderMath(btn);
+      }
+    }
+    function fsSelPick(ai, k) { fsSelSet(ai, k); const p = $('fsSelP' + ai); if (p) p.classList.remove('open'); if (window.SFX && SFX.tick) SFX.tick(); }
+    function fsSelToggle(ai) {
+      const p = $('fsSelP' + ai); if (!p) return; const open = p.classList.contains('open');
+      document.querySelectorAll('.fs-selpanel.open').forEach(x => x.classList.remove('open')); if (!open) p.classList.add('open');
+    }
+    /* Bấm ra ngoài -> đóng panel chọn B */
+    document.addEventListener('click', e => { if (!e.target.closest('.fs-selwrap')) document.querySelectorAll('.fs-selpanel.open').forEach(x => x.classList.remove('open')); });
     function fsPickII(ti, si, val) {
       fsAns.II[ti][si] = val;
       const T = $('fsTF' + ti + '_' + si + '_T'), F = $('fsTF' + ti + '_' + si + '_F');
