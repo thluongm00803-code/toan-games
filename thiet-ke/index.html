@@ -2133,6 +2133,11 @@
             background: color-mix(in srgb, var(--indigo) 15%, var(--card))
         }
 
+        .msel-num {
+            color: var(--pink-d);
+            font-weight: 800
+        }
+
         /* ===== Resume bar ===== */
         .resumebar {
             display: flex;
@@ -8387,7 +8392,7 @@ var qrcode = function () {
             $('wII').innerHTML = ws.partII.map((ds, i) => `<div style="margin:8px 0;font-size:13px"><b>Câu ${13 + i}.</b> ${M(ds.header)}${ds.stmts.map((st, j) => `<div style="margin:5px 0 5px 8px;display:flex;gap:8px;align-items:center"><span style="flex:1"><b>${'abcd'[j]})</b> ${M(st.t)}</span><span data-i="${i}" data-j="${j}"><button class="miniact" data-v="1">Đ</button> <button class="miniact" data-v="0">S</button></span></div>`).join('')}</div>`).join('');
             $('wII').querySelectorAll('span[data-i]').forEach(sp => { const i = +sp.dataset.i, j = +sp.dataset.j; sp.querySelectorAll('button').forEach(b => b.onclick = () => { ans.II[i][j] = b.dataset.v === '1'; sp.querySelectorAll('button').forEach(x => x.style.background = ''); b.style.background = 'var(--indigo)'; b.style.color = '#fff'; }); });
             // III
-            $('wIII').innerHTML = `<div style="font-size:13px">${M(ws.partIII.header)}</div>` + ws.partIII.left.map((l, i) => `<div style="margin:8px 0;display:flex;gap:8px;align-items:center;font-size:13px"><span style="flex:1"><b>A${i + 1}.</b> ${M(l)}</span><div class="msel" data-i="${i}"><button type="button" class="msel-btn"><span class="msel-val muted">— Chọn —</span><span class="msel-cv">▾</span></button><div class="msel-pop"><div class="msel-opt" data-v=""><span class="muted">— Chọn —</span></div>${ws.partIII.right.map(r => `<div class="msel-opt" data-v="${r.label}"><b>${r.label}</b>&nbsp;=&nbsp;${M(r.text)}</div>`).join('')}</div></div></div>`).join('') + `<div style="font-size:11px;color:var(--muted);margin-top:6px">Cột B: ${ws.partIII.right.map(r => r.label + ' = ' + M(r.text)).join(' &nbsp; ')}</div>`;
+            $('wIII').innerHTML = `<div style="font-size:13px">${M(ws.partIII.header)}</div>` + ws.partIII.left.map((l, i) => `<div style="margin:8px 0;display:flex;gap:8px;align-items:center;font-size:13px"><span style="flex:1"><b>A${i + 1}.</b> ${M(l)}</span><div class="msel" data-i="${i}"><button type="button" class="msel-btn"><span class="msel-val muted">— Chọn —</span><span class="msel-cv">▾</span></button><div class="msel-pop"><div class="msel-opt" data-v=""><span class="muted">— Chọn —</span></div>${ws.partIII.right.map(r => `<div class="msel-opt" data-v="${r.label}"><b class="msel-num">${r.label}</b>&nbsp;&nbsp;${M(r.text)}</div>`).join('')}</div></div></div>`).join('') + `<div style="font-size:11px;color:var(--muted);margin-top:6px">Cột B: ${ws.partIII.right.map(r => '<b class="msel-num">' + r.label + '</b> ' + M(r.text)).join(' &nbsp; ')}</div>`;
             $('wIII').querySelectorAll('.msel').forEach(ms => {
                 const i = +ms.dataset.i, btn = ms.querySelector('.msel-btn'), valEl = ms.querySelector('.msel-val');
                 btn.onclick = (e) => { e.stopPropagation(); const willOpen = !ms.classList.contains('open'); $('wIII').querySelectorAll('.msel.open').forEach(o => o.classList.remove('open')); ms.classList.toggle('open', willOpen); };
