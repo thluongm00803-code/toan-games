@@ -7153,6 +7153,8 @@ var qrcode = function () {
             // Coi là "có file" khi phần tử <audio> tồn tại, có nguồn (src hoặc <source>) và chưa lỗi.
             function hasFile() { const a = getAudio(); return !!(a && !a.error && (a.currentSrc || a.src || a.querySelector('source'))); }
             function ensure() { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); master = ac.createGain(); master.gain.value = .06; master.connect(ac.destination); } catch (e) { } } if (ac && ac.state === 'suspended') { try { ac.resume(); } catch (e) { } } }
+            // Phát một xung IM LẶNG ngay trong cử chỉ để ép AudioContext sang trạng thái "running" (mobile cần).
+            function unlockCtx() { ensure(); if (!ac) return; try { const o = ac.createOscillator(), g = ac.createGain(); g.gain.value = 0; o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.03); } catch (e) { } }
             function chord(freqs) {
                 if (!ac) return; const t = ac.currentTime;
                 freqs.forEach(f => { const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.5, t + .4); g.gain.linearRampToValueAtTime(0, t + 1.9); o.connect(g); g.connect(master); o.start(t); o.stop(t + 2); });
@@ -7168,8 +7170,8 @@ var qrcode = function () {
                 start() {
                     if (playing && (fileOK || timer)) return;
                     const a = getAudio();
-                    // (1) LUÔN prime AudioContext NGAY trong cử chỉ người dùng (iOS/Android cần resume trong gesture)
-                    ensure();
+                    // (1) LUÔN mở khoá AudioContext NGAY trong cử chỉ người dùng (iOS/Android cần resume + tick trong gesture)
+                    unlockCtx();
                     // (2) Thử phát file <audio> trực tiếp trong cử chỉ (phát được cả khi máy im lặng — là media thật)
                     if (a) {
                         try {
@@ -9653,7 +9655,13 @@ var qrcode = function () {
                     if ($('btnHandbook')) $('btnHandbook').onclick = () => A.openHandbook();
                     if ($('btnStudy')) $('btnStudy').onclick = () => A.openStudy();
                     $('btnRank').onclick = () => A.openRank();
-                    $('btnMusic').onclick = () => { S.musicOn = A.MUSIC.toggle(); S._musicUserOff = !S.musicOn; $('btnMusic').textContent = S.musicOn ? '🎶' : '🎵'; if (A.syncMob) A.syncMob(); };
+                    $('btnMusic').onclick = () => {
+                        // Toggle THEO trạng thái hiển thị S.musicOn (không theo playing nội bộ) ⇒ luôn khớp nhãn, không bị lệch với tự phát
+                        if (S.musicOn) { A.MUSIC.stop(); S.musicOn = false; S._musicUserOff = true; }
+                        else { A.MUSIC.start(); S.musicOn = true; S._musicUserOff = false; }
+                        $('btnMusic').textContent = S.musicOn ? '🎶' : '🎵';
+                        if (A.syncMob) A.syncMob();
+                    };
                     $('btnSound').onclick = () => { S.sfxOn = !S.sfxOn; $('btnSound').textContent = S.sfxOn ? '🔊' : '🔇'; };
                     $('btnVersion').onclick = () => A.openOv('ovVersion');
                     // ---- HEADER dropdown menus (desktop + mobile): chỉ chức năng chính hiển thị; phụ gom vào menu ----
@@ -9779,19 +9787,17 @@ var qrcode = function () {
                         let armed = true;
                         const evs = ['pointerdown', 'touchend', 'touchstart', 'click', 'keydown'];
                         function teardown() { evs.forEach(ev => document.removeEventListener(ev, kick, true)); }
-                        function settle() {
-                            const on = A.MUSIC.isPlaying ? A.MUSIC.isPlaying() : true;
-                            S.musicOn = on;
-                            const bm = $('btnMusic'); if (bm) bm.textContent = on ? '🎶' : '🎵';
-                            if (A.syncMob) A.syncMob();
-                            if (on) { armed = false; teardown(); }                        // đã phát được → thôi lắng nghe
-                        }
-                        function kick() {
+                        function kick(e) {
                             if (!armed) return;
+                            // Bỏ qua cú chạm lên CHÍNH nút nhạc (để nút tự bật/tắt) — tránh xung đột "bật rồi bị toggle tắt".
+                            if (e && e.target && e.target.closest && e.target.closest('#btnMusic, #mMusic')) return;
                             if (S._musicUserOff) { armed = false; teardown(); return; }   // người dùng đã tắt → tôn trọng
-                            try { A.MUSIC.start(); } catch (e) { }                        // gọi play() ngay trong cử chỉ
-                            settle();                                                     // cập nhật ngay
-                            setTimeout(settle, 700);                                      // kiểm lại sau khi file/synth ổn định (>500ms)
+                            try { A.MUSIC.start(); } catch (e2) { }                       // CHỈ start (không toggle) ngay trong cử chỉ
+                            // Đặt hiển thị BẬT ngay để nhãn khớp trạng thái (tránh lệch với nút nhạc)
+                            S.musicOn = true;
+                            const bm = $('btnMusic'); if (bm) bm.textContent = '🎶';
+                            if (A.syncMob) A.syncMob();
+                            armed = false; teardown();                                    // đã kích hoạt phát → thôi lắng nghe
                         }
                         evs.forEach(ev => document.addEventListener(ev, kick, true));
                     })();
