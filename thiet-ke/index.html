@@ -1208,6 +1208,30 @@
             background: linear-gradient(135deg, #2563eb, #4f8bff)
         }
 
+        .bigbtn.dim {
+            opacity: .5;
+            filter: grayscale(.35);
+            box-shadow: none;
+            cursor: not-allowed;
+            pointer-events: none
+        }
+
+        .bigbtn.cta {
+            animation: ctaPulse 1.5s ease-in-out infinite
+        }
+
+        @keyframes ctaPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(91, 63, 191, .38)
+            }
+
+            50% {
+                box-shadow: 0 0 0 7px rgba(91, 63, 191, 0)
+            }
+        }
+
         .grid2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -7168,10 +7192,13 @@ var qrcode = function () {
             return {
                 hasFile,
                 start() {
-                    if (playing && (fileOK || timer)) return;
                     const a = getAudio();
-                    // (1) LUÔN mở khoá AudioContext NGAY trong cử chỉ người dùng (iOS/Android cần resume + tick trong gesture)
+                    // (0) LUÔN mở khoá AudioContext NGAY trong MỌI cử chỉ (kể cả khi đã 'playing') — mobile cần resume trong gesture.
                     unlockCtx();
+                    // Chỉ dừng nếu ĐANG phát THẬT ngay lúc này (không dựa vào cờ cũ). Nếu KHÔNG ⇒ reset & thử phát lại (watchdog gọi lại được).
+                    const reallyOn = (a && !a.paused && !a.error && a.currentTime > 0) || (timer && ac && ac.state === 'running');
+                    if (reallyOn) { playing = true; return; }
+                    fileOK = false;
                     // (2) Thử phát file <audio> trực tiếp trong cử chỉ (phát được cả khi máy im lặng — là media thật)
                     if (a) {
                         try {
@@ -8375,7 +8402,7 @@ var qrcode = function () {
                 if (kind === 'post' && S.pre) { const d = S.post.correct - S.pre.correct; cmp = `<div class="slope ${d > 0 ? 'pos' : d === 0 ? 'zero' : 'neg'}" style="margin-top:10px">📈 Tiến bộ: ${d > 0 ? '+' + d + ' câu' : d === 0 ? 'giữ nguyên' : d + ' câu'} so với đầu vào (đầu vào ${S.pre.correct}/${S.pre.total} → đầu ra ${S.post.correct}/${S.post.total})</div>`; }
                 const certReady = kind === 'post' && S.cleared.size >= 8 && (S.wsScore || 0) > 8 && S.post != null;
                 const certNote = certReady ? `<div class="slope zero" style="margin-top:10px">🎓 Em đã đủ điều kiện — nhận Giấy Chứng Nhận ngay nào!</div>` : '';
-                const btnLabel = kind === 'pre' ? 'Bắt đầu chơi 🚀' : (certReady ? '🎓 Nhận Giấy Chứng Nhận' : 'Đóng');
+                const btnLabel = kind === 'pre' ? '✓ Xong — về màn hình chính' : (certReady ? '🎓 Nhận Giấy Chứng Nhận' : 'Đóng');
                 // Ôn tập cuối bài: hiện đáp án đúng + lời giải TỪNG câu (đây mới là lúc lộ đáp án)
                 const review = items.map((it, qi) => {
                     const ch = chosen[qi], okA = ch === it.correctNew;
@@ -8397,7 +8424,11 @@ var qrcode = function () {
                 $('ptReviewBtn').onclick = () => { const r = $('ptReview'); const hidden = r.classList.toggle('hidden'); $('ptReviewBtn').textContent = hidden ? '📖 Xem lại lời giải từng câu' : '🙈 Ẩn lời giải'; };
                 $('ptDone').onclick = () => {
                     A.closeOv('ovRunner');
-                    if (kind === 'pre' && A._pendingStart) { A._pendingStart = false; A.startPlay(); }
+                    if (kind === 'pre') {
+                        // Đã có kết quả ĐẦU VÀO ⇒ quay lại màn chào, nút "Bắt đầu hành trình" nay SÁNG lên để vào chơi.
+                        A._pendingStart = false;
+                        A.openOv('ovWelcome'); A.updateWelcome && A.updateWelcome();
+                    }
                     A.updateFinish && A.updateFinish();
                     if (certReady) A.openCert();
                 };
@@ -9747,12 +9778,14 @@ var qrcode = function () {
                         S.pre = null; S.post = null;   // chơi lại từ đầu ⇒ bắt buộc làm lại Kiểm tra ĐẦU VÀO
                         try { A.SCT_done.clear(); } catch (e) { }
                         A.saveProgress(); A.setLevel(0); $('resumeBar').style.display = 'none'; renderBadgeStrip();
-                        A._pendingStart = true; openTestPicker();   // mở bảng chọn với ĐẦU VÀO sáng, bắt buộc trước khi chơi
+                        A._pendingStart = false;
+                        A.openOv('ovWelcome'); updateWelcome();     // về màn chào: nút "Bắt đầu" mờ, buộc làm lại Kiểm tra ĐẦU VÀO
                     };
                     // welcome
-                    // "Bắt đầu hành trình": chưa làm ĐẦU VÀO ⇒ vào THẲNG bài Kiểm tra đầu vào (bắt buộc); đã làm ⇒ vào chơi.
-                    $('wStart').onclick = () => { if (S.pre == null) { A._pendingStart = true; A.startTest('pre'); } else startPlay(); };
-                    $('wPre').onclick = () => { A._pendingStart = true; A.startTest('pre'); };
+                    // "Bắt đầu hành trình": KHOÁ (mờ) khi CHƯA có kết quả Kiểm tra đầu vào ⇒ bắt buộc làm đầu vào trước.
+                    //   Đã có kết quả đầu vào ⇒ nút sáng; bấm vào là vào THẲNG màn đang lưu (nếu có tiến trình) hoặc trạm 1.
+                    $('wStart').onclick = () => { if (S.pre == null) { A.updateWelcome(); return; } startPlay(); };
+                    $('wPre').onclick = () => { A._pendingStart = false; A.startTest('pre'); };   // làm đầu vào; xong sẽ quay lại màn chính (nút sáng lên)
                     // test picker
                     // history tabs
                     document.querySelectorAll('#ovHistory .tab').forEach(t => t.onclick = () => switchHTab(t.dataset.htab));
@@ -9781,36 +9814,39 @@ var qrcode = function () {
                         // Toast tự tắt (thay cho khối cố định) — dùng chung cho mọi kích thước màn hình
                         if (A.snack) A.snack(`🔖 Đã khôi phục tiến trình: <b>${info}</b>`, 5000);
                     }
-                    // TỰ PHÁT nhạc nền ở tương tác đầu (điện thoại chặn autoplay tới khi có chạm).
-                    // CHỈ dùng sự kiện KÍCH HOẠT hợp lệ (touchend/click/keydown/pointerup) — touchstart/pointerdown
-                    // KHÔNG được trình duyệt mobile tính là user-activation để phát audio ⇒ play() bị chặn (bật mà im).
-                    // Chỉ hiển thị "Bật" khi nhạc ĐÃ THỰC SỰ phát; nếu chưa, lần chạm hợp lệ sau sẽ thử lại.
+                    // ===== TỰ PHÁT NHẠC NỀN + WATCHDOG TỰ PHỤC HỒI =====
+                    // Mobile chặn autoplay tới khi có cử chỉ KÍCH HOẠT HỢP LỆ (touchend/click/keydown/pointerup)
+                    // — touchstart/pointerdown KHÔNG được tính là user-activation nên play() bị chặn.
+                    // Nhãn "Bật/Tắt" luôn bám theo PLAYBACK THẬT; nếu đang muốn bật mà nhạc bị dừng ⇒ TỰ phát lại
+                    // (tự động thay cho thao tác tắt→bật của người dùng) — hết cảnh "Bật mà im".
                     (function () {
-                        let armed = true;
+                        let unlocked = false;
                         const evs = ['touchend', 'click', 'keydown', 'pointerup'];
-                        function teardown() { evs.forEach(ev => document.removeEventListener(ev, kick, true)); }
-                        function reflect() {
-                            if (!armed) return;
-                            if (A.MUSIC.isPlaying && A.MUSIC.isPlaying()) {               // ĐÃ phát thật (file chạy hoặc synth + context running)
-                                S.musicOn = true;
-                                const bm = $('btnMusic'); if (bm) bm.textContent = '🎶';
-                                if (A.syncMob) A.syncMob();
-                                armed = false; teardown();
+                        function attempt() {
+                            if (S._musicUserOff) return;                                  // người dùng đã tắt → tôn trọng
+                            try { A.MUSIC.start(); } catch (e) { }                        // mở khoá + phát ngay trong cử chỉ hợp lệ
+                            unlocked = true;
+                        }
+                        function onGesture(e) {
+                            if (e && e.target && e.target.closest && e.target.closest('#btnMusic, #mMusic')) return; // để nút nhạc tự xử lý
+                            attempt();
+                        }
+                        evs.forEach(ev => document.addEventListener(ev, onGesture, true));
+                        // Watchdog ~1s: đồng bộ nhãn theo thực tế + tự phát lại nếu bị dừng ngoài ý muốn.
+                        setInterval(function () {
+                            if (!S._musicUserOff && unlocked && A.MUSIC.isPlaying && !A.MUSIC.isPlaying()) {
+                                try { A.MUSIC.start(); } catch (e) { }                      // context đã mở khoá ⇒ phát lại được không cần cử chỉ
                             }
-                        }
-                        function kick(e) {
-                            if (!armed) return;
-                            // Bỏ qua cú chạm lên CHÍNH nút nhạc (để nút tự bật/tắt) — tránh xung đột "bật rồi bị toggle tắt".
-                            if (e && e.target && e.target.closest && e.target.closest('#btnMusic, #mMusic')) return;
-                            if (S._musicUserOff) { armed = false; teardown(); return; }   // người dùng đã tắt → tôn trọng
-                            try { A.MUSIC.start(); } catch (e2) { }                       // gọi play()/resume() ngay trong cử chỉ hợp lệ
-                            [120, 500, 900, 1500].forEach(ms => setTimeout(reflect, ms)); // xác nhận thật sự phát rồi mới hiển thị Bật
-                        }
-                        evs.forEach(ev => document.addEventListener(ev, kick, true));
+                            const on = A.MUSIC.isPlaying ? A.MUSIC.isPlaying() : false;
+                            if (!S._musicUserOff) S.musicOn = on;                          // nhãn = PLAYBACK THẬT (khi chưa tắt tay)
+                            const bm = $('btnMusic'); if (bm) bm.textContent = S.musicOn ? '🎶' : '🎵';
+                            if (A.syncMob) A.syncMob();
+                        }, 1000);
                     })();
                     // show welcome
                     A.openOv('ovWelcome');
                     updatePreState();
+                    updateWelcome();
                     // expose test hook
                     window.__game = {
                         setLevel: A.setLevel, confirm: A.confirm, awardWin: A.awardWin,
@@ -9833,6 +9869,28 @@ var qrcode = function () {
                     };
                 }
                 A.openTestPicker = openTestPicker;
+                // Trạng thái màn chào: khoá "Bắt đầu hành trình" tới khi có kết quả Kiểm tra đầu vào.
+                function updateWelcome() {
+                    const ws = $('wStart'), wp = $('wPre');
+                    const need = S.pre == null;                                   // chưa làm Kiểm tra đầu vào
+                    const hasProg = (S.cleared && S.cleared.size > 0) || (S._resume || 0) > 0;
+                    if (ws) {
+                        // Chưa có đầu vào → mờ/khoá; đã có → sáng (nổi bật)
+                        ws.classList.toggle('dim', need);
+                        ws.classList.toggle('cta', !need);
+                        ws.disabled = need;
+                        ws.textContent = (!need && hasProg) ? 'Tiếp tục màn đang chơi 🚀' : 'Bắt đầu hành trình 🚀';
+                    }
+                    if (wp) {
+                        // Luôn hiển thị; chưa làm đầu vào → sáng (nổi bật), đã làm → mờ/khoá
+                        wp.style.display = '';
+                        wp.classList.toggle('dim', !need);
+                        wp.classList.toggle('cta', need);
+                        wp.disabled = !need;
+                        wp.textContent = need ? '📝 Làm Kiểm tra đầu vào (bắt buộc trước khi chơi)' : '✓ Đã làm Kiểm tra đầu vào';
+                    }
+                }
+                A.updateWelcome = updateWelcome;
                 function updatePreState() {
                     const pre = $('preState'), post = $('postState'), pp = $('pickPre'), pt = $('pickPost');
                     const postReady = S.pre != null && S.cleared.size >= 8;
