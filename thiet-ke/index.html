@@ -7174,7 +7174,8 @@ var qrcode = function () {
                     if (startSynth()) playing = true;             // không có file → nhạc tổng hợp
                 },
                 stop() { playing = false; const a = getAudio(); if (a) { try { a.pause(); } catch (e) { } } stopSynth(); },
-                toggle() { if (playing) { this.stop(); return false; } this.start(); return playing; }
+                toggle() { if (playing) { this.stop(); return false; } this.start(); return playing; },
+                isPlaying() { const a = getAudio(); if (a && a.currentSrc && !a.error) return !a.paused; return playing; }
             };
         })();
 
@@ -9754,15 +9755,25 @@ var qrcode = function () {
                         // Toast tự tắt (thay cho khối cố định) — dùng chung cho mọi kích thước màn hình
                         if (A.snack) A.snack(`🔖 Đã khôi phục tiến trình: <b>${info}</b>`, 5000);
                     }
-                    // TỰ PHÁT nhạc nền ở tương tác đầu tiên (trình duyệt chỉ cho phát nhạc sau khi người dùng chạm)
-                    let musicKick = false;
-                    document.addEventListener('pointerdown', () => {
-                        if (musicKick) return; musicKick = true;
-                        if (S._musicUserOff) return;                 // người dùng đã tắt → tôn trọng, không tự phát
-                        S.musicOn = A.MUSIC.toggle();                // bật nhạc (file .mp3 nếu có, không thì nhạc tổng hợp)
-                        const bm = $('btnMusic'); if (bm) bm.textContent = S.musicOn ? '🎶' : '🎵';
-                        if (A.syncMob) A.syncMob();
-                    }, { once: false });
+                    // TỰ PHÁT nhạc nền ở tương tác đầu (điện thoại chặn autoplay tới khi có chạm).
+                    // Thử lại trên NHIỀU loại chạm (pointerdown/touchend/touchstart/click/keydown, pha capture)
+                    // cho tới khi nhạc THỰC SỰ phát — khắc phục iOS/Android bỏ lỡ lần chạm đầu.
+                    (function () {
+                        let armed = true;
+                        const evs = ['pointerdown', 'touchend', 'touchstart', 'click', 'keydown'];
+                        function teardown() { evs.forEach(ev => document.removeEventListener(ev, kick, true)); }
+                        function kick() {
+                            if (!armed) return;
+                            if (S._musicUserOff) { armed = false; teardown(); return; }   // người dùng đã tắt → tôn trọng
+                            try { A.MUSIC.start(); } catch (e) { }                        // gọi play() ngay trong cử chỉ
+                            const on = A.MUSIC.isPlaying ? A.MUSIC.isPlaying() : true;
+                            S.musicOn = on;
+                            const bm = $('btnMusic'); if (bm) bm.textContent = on ? '🎶' : '🎵';
+                            if (A.syncMob) A.syncMob();
+                            if (on) { armed = false; teardown(); }                        // đã phát được → thôi lắng nghe
+                        }
+                        evs.forEach(ev => document.addEventListener(ev, kick, true));
+                    })();
                     // show welcome
                     A.openOv('ovWelcome');
                     updatePreState();
