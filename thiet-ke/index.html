@@ -7149,8 +7149,10 @@ var qrcode = function () {
                 }
                 return audio;
             }
-            function hasFile() { const a = getAudio(); return !!(a && a.currentSrc && !a.error); }
-            function ensure() { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); master = ac.createGain(); master.gain.value = .05; master.connect(ac.destination); } catch (e) { } } if (ac && ac.state === 'suspended') ac.resume(); }
+            // Trên MOBILE, <audio> thường CHƯA có currentSrc cho tới khi bắt đầu tải ⇒ đừng chặn theo currentSrc.
+            // Coi là "có file" khi phần tử <audio> tồn tại, có nguồn (src hoặc <source>) và chưa lỗi.
+            function hasFile() { const a = getAudio(); return !!(a && !a.error && (a.currentSrc || a.src || a.querySelector('source'))); }
+            function ensure() { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); master = ac.createGain(); master.gain.value = .06; master.connect(ac.destination); } catch (e) { } } if (ac && ac.state === 'suspended') { try { ac.resume(); } catch (e) { } } }
             function chord(freqs) {
                 if (!ac) return; const t = ac.currentTime;
                 freqs.forEach(f => { const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.5, t + .4); g.gain.linearRampToValueAtTime(0, t + 1.9); o.connect(g); g.connect(master); o.start(t); o.stop(t + 2); });
@@ -7159,23 +7161,38 @@ var qrcode = function () {
             function tickM() { chord(prog[step % prog.length]); step++; }
             function startSynth() { ensure(); if (!ac) return false; if (!timer) { tickM(); timer = setInterval(tickM, 2000); } return true; }
             function stopSynth() { if (timer) { clearInterval(timer); timer = null; } }
+            let fileOK = false, checkT = null;
+            function synthNow() { if (fileOK) return; if (startSynth()) playing = true; }   // AudioContext đã resume trong cử chỉ ⇒ bật được
             return {
                 hasFile,
                 start() {
-                    if (playing) return;
+                    if (playing && (fileOK || timer)) return;
                     const a = getAudio();
-                    if (a && a.currentSrc && !a.error) {         // có file .mp3 cùng thư mục → phát file
+                    // (1) LUÔN prime AudioContext NGAY trong cử chỉ người dùng (iOS/Android cần resume trong gesture)
+                    ensure();
+                    // (2) Thử phát file <audio> trực tiếp trong cử chỉ (phát được cả khi máy im lặng — là media thật)
+                    if (a) {
                         try {
-                            const pr = a.play(); playing = true;
-                            if (pr && pr.catch) pr.catch(() => { playing = false; if (startSynth()) playing = true; });
-                            return;
+                            a.loop = true; a.muted = false; if (!a.volume || a.volume === 1) a.volume = 0.4;
+                            if (!a.currentSrc && !a.src && a.querySelector('source')) { try { a.load(); } catch (e) { } }
+                            const pr = a.play();
+                            playing = true;
+                            if (pr && pr.then) pr.then(() => { fileOK = true; playing = true; stopSynth(); }).catch(() => { fileOK = false; });
                         } catch (e) { }
                     }
-                    if (startSynth()) playing = true;             // không có file → nhạc tổng hợp
+                    // (3) Kiểm tra sau 500ms: nếu file KHÔNG thực sự chạy ⇒ bật nhạc tổng hợp (context đã unlocked ở gesture)
+                    clearTimeout(checkT);
+                    checkT = setTimeout(() => {
+                        const el = getAudio();
+                        if (el && !el.paused && !el.error && el.currentTime > 0) { fileOK = true; playing = true; stopSynth(); }
+                        else { fileOK = false; synthNow(); }
+                    }, 500);
+                    // không có phần tử audio ⇒ bật synth ngay
+                    if (!a) synthNow();
                 },
-                stop() { playing = false; const a = getAudio(); if (a) { try { a.pause(); } catch (e) { } } stopSynth(); },
-                toggle() { if (playing) { this.stop(); return false; } this.start(); return playing; },
-                isPlaying() { const a = getAudio(); if (a && a.currentSrc && !a.error) return !a.paused; return playing; }
+                stop() { playing = false; fileOK = false; clearTimeout(checkT); const a = getAudio(); if (a) { try { a.pause(); } catch (e) { } } stopSynth(); },
+                toggle() { if (playing) { this.stop(); return false; } this.start(); return true; },
+                isPlaying() { const a = getAudio(); if (a && !a.paused && !a.error && a.currentTime > 0) return true; return !!timer; }
             };
         })();
 
@@ -9762,15 +9779,19 @@ var qrcode = function () {
                         let armed = true;
                         const evs = ['pointerdown', 'touchend', 'touchstart', 'click', 'keydown'];
                         function teardown() { evs.forEach(ev => document.removeEventListener(ev, kick, true)); }
-                        function kick() {
-                            if (!armed) return;
-                            if (S._musicUserOff) { armed = false; teardown(); return; }   // người dùng đã tắt → tôn trọng
-                            try { A.MUSIC.start(); } catch (e) { }                        // gọi play() ngay trong cử chỉ
+                        function settle() {
                             const on = A.MUSIC.isPlaying ? A.MUSIC.isPlaying() : true;
                             S.musicOn = on;
                             const bm = $('btnMusic'); if (bm) bm.textContent = on ? '🎶' : '🎵';
                             if (A.syncMob) A.syncMob();
                             if (on) { armed = false; teardown(); }                        // đã phát được → thôi lắng nghe
+                        }
+                        function kick() {
+                            if (!armed) return;
+                            if (S._musicUserOff) { armed = false; teardown(); return; }   // người dùng đã tắt → tôn trọng
+                            try { A.MUSIC.start(); } catch (e) { }                        // gọi play() ngay trong cử chỉ
+                            settle();                                                     // cập nhật ngay
+                            setTimeout(settle, 700);                                      // kiểm lại sau khi file/synth ổn định (>500ms)
                         }
                         evs.forEach(ev => document.addEventListener(ev, kick, true));
                     })();
