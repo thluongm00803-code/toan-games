@@ -7195,10 +7195,8 @@ var qrcode = function () {
                     const a = getAudio();
                     // (0) LUÔN mở khoá AudioContext NGAY trong MỌI cử chỉ (kể cả khi đã 'playing') — mobile cần resume trong gesture.
                     unlockCtx();
-                    // Chỉ dừng nếu ĐANG phát THẬT ngay lúc này (không dựa vào cờ cũ). Nếu KHÔNG ⇒ reset & thử phát lại (watchdog gọi lại được).
-                    const reallyOn = (a && !a.paused && !a.error && a.currentTime > 0) || (timer && ac && ac.state === 'running');
-                    if (reallyOn) { playing = true; return; }
-                    fileOK = false;
+                    // Chỉ dừng nếu ĐÃ THỰC SỰ phát (file đang chạy, hoặc synth VÀ context đang running). Nếu timer có mà context treo ⇒ vẫn thử lại.
+                    if (playing && (fileOK || (timer && ac && ac.state === 'running'))) return;
                     // (2) Thử phát file <audio> trực tiếp trong cử chỉ (phát được cả khi máy im lặng — là media thật)
                     if (a) {
                         try {
@@ -9814,34 +9812,34 @@ var qrcode = function () {
                         // Toast tự tắt (thay cho khối cố định) — dùng chung cho mọi kích thước màn hình
                         if (A.snack) A.snack(`🔖 Đã khôi phục tiến trình: <b>${info}</b>`, 5000);
                     }
-                    // ===== TỰ PHÁT NHẠC NỀN + WATCHDOG TỰ PHỤC HỒI =====
-                    // Mobile chặn autoplay tới khi có cử chỉ KÍCH HOẠT HỢP LỆ (touchend/click/keydown/pointerup)
-                    // — touchstart/pointerdown KHÔNG được tính là user-activation nên play() bị chặn.
-                    // Nhãn "Bật/Tắt" luôn bám theo PLAYBACK THẬT; nếu đang muốn bật mà nhạc bị dừng ⇒ TỰ phát lại
-                    // (tự động thay cho thao tác tắt→bật của người dùng) — hết cảnh "Bật mà im".
+                    // TỰ PHÁT nhạc nền ở tương tác đầu (điện thoại chặn autoplay tới khi có chạm).
+                    // CHỈ dùng sự kiện KÍCH HOẠT hợp lệ (touchend/click/keydown/pointerup) — touchstart/pointerdown
+                    // KHÔNG được trình duyệt mobile tính là user-activation để phát audio ⇒ play() bị chặn (bật mà im).
+                    // Chỉ hiển thị "Bật" khi nhạc ĐÃ THỰC SỰ phát; nếu chưa, lần chạm hợp lệ sau sẽ thử lại.
                     (function () {
-                        let unlocked = false;
+                        let armed = true;
+                        // CHỈ dùng sự kiện KÍCH HOẠT HỢP LỆ để phát audio: touchend · click · keydown · pointerup.
+                        // (touchstart/pointerdown KHÔNG được mobile tính là user-activation ⇒ play() bị chặn "bật mà im".)
                         const evs = ['touchend', 'click', 'keydown', 'pointerup'];
-                        function attempt() {
-                            if (S._musicUserOff) return;                                  // người dùng đã tắt → tôn trọng
-                            try { A.MUSIC.start(); } catch (e) { }                        // mở khoá + phát ngay trong cử chỉ hợp lệ
-                            unlocked = true;
-                        }
-                        function onGesture(e) {
-                            if (e && e.target && e.target.closest && e.target.closest('#btnMusic, #mMusic')) return; // để nút nhạc tự xử lý
-                            attempt();
-                        }
-                        evs.forEach(ev => document.addEventListener(ev, onGesture, true));
-                        // Watchdog ~1s: đồng bộ nhãn theo thực tế + tự phát lại nếu bị dừng ngoài ý muốn.
-                        setInterval(function () {
-                            if (!S._musicUserOff && unlocked && A.MUSIC.isPlaying && !A.MUSIC.isPlaying()) {
-                                try { A.MUSIC.start(); } catch (e) { }                      // context đã mở khoá ⇒ phát lại được không cần cử chỉ
+                        function teardown() { evs.forEach(ev => document.removeEventListener(ev, kick, true)); }
+                        function reflect() {
+                            if (!armed) return;
+                            if (A.MUSIC.isPlaying && A.MUSIC.isPlaying()) {               // ĐÃ phát thật (file chạy hoặc synth + context running)
+                                S.musicOn = true;
+                                const bm = $('btnMusic'); if (bm) bm.textContent = '🎶';
+                                if (A.syncMob) A.syncMob();
+                                armed = false; teardown();
                             }
-                            const on = A.MUSIC.isPlaying ? A.MUSIC.isPlaying() : false;
-                            if (!S._musicUserOff) S.musicOn = on;                          // nhãn = PLAYBACK THẬT (khi chưa tắt tay)
-                            const bm = $('btnMusic'); if (bm) bm.textContent = S.musicOn ? '🎶' : '🎵';
-                            if (A.syncMob) A.syncMob();
-                        }, 1000);
+                        }
+                        function kick(e) {
+                            if (!armed) return;
+                            // Bỏ qua cú chạm lên CHÍNH nút nhạc (để nút tự bật/tắt) — tránh xung đột "bật rồi bị toggle tắt".
+                            if (e && e.target && e.target.closest && e.target.closest('#btnMusic, #mMusic')) return;
+                            if (S._musicUserOff) { armed = false; teardown(); return; }   // người dùng đã tắt → tôn trọng
+                            try { A.MUSIC.start(); } catch (e2) { }                       // prime AudioContext + thử phát ngay trong cử chỉ
+                            [80, 250, 600, 1000, 1600].forEach(ms => setTimeout(reflect, ms)); // xác nhận thật sự phát rồi mới hiển thị Bật
+                        }
+                        evs.forEach(ev => document.addEventListener(ev, kick, true));
                     })();
                     // show welcome
                     A.openOv('ovWelcome');
